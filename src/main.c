@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 19:28:06 by srapin            #+#    #+#             */
-/*   Updated: 2023/05/11 23:23:52 by srapin           ###   ########.fr       */
+/*   Updated: 2023/05/13 04:52:45 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void link_nodes_with_ctrls_op(t_node *node, t_node *next, ctrl_op c)
 
 void link_nodes_with_redirections(t_node *node, t_node *next)
 {
-	node->red.out_type = pipeu;
+	node->red.out_type = cmds_node;
 	node->red.out_content = next;
 }
 
@@ -114,7 +114,7 @@ void make_cat_node(t_node *node, t_node *ls_node,t_file *f, char **envp)
 	
 	init_node(node, envp);
 	add_value_to_node(node, "cat");
-	add_out_redir_with_file_struct(node, f);
+	add_in_redir_with_file_struct(node, f);
 	
 	link_nodes_with_ctrls_op(node, ls_node, and);
 
@@ -124,15 +124,18 @@ void make_echo_node(t_node *node, char ** envp)
 {
 	init_node(node, envp);
 	add_value_to_node(node, "echo");
-	add_args_to_node(node, "hello world");
+	add_args_to_node(node, "echo hello world");
 }
 
-void make_wc_node(t_node * node,char ** envp)
+void make_wc_node(t_node * node, t_file *f_s, char ** envp)
 {
 	init_node(node, envp);
 	
 	add_value_to_node(node, "wc");
-	add_args_to_node(node, "-l");
+	add_args_to_node(node, "wc -l");
+	//init_file_struct_with_filename(f_s, "out");
+	//add_out_redir_with_file_struct(node, f_s);
+	
 }
 
 
@@ -142,16 +145,18 @@ void make_grep_node(t_node * node, t_node * wc_node, char ** envp)
 	init_node(node, envp);
 	
 	add_value_to_node(node, "grep");
-	add_args_to_node(node, "c");
+	add_args_to_node(node, "grep c");
 	link_nodes_with_redirections(node, wc_node);
 }
 
-void make_ls_node(t_node * node, t_node * grep_node,char ** envp)
+void make_ls_node(t_node * node, t_node * grep_node,t_file *f_s,  char ** envp)
 {
 	init_node(node, envp);
 	
 	add_value_to_node(node, "ls");
 	link_nodes_with_redirections(node, grep_node);
+	init_file_struct_with_filename(f_s, "in");
+	//add_in_redir_with_file_struct(node, f_s);
 }
 
 
@@ -159,6 +164,8 @@ int main(int ac, char **av, char **envp)
 {
 	
 	t_file cat_f;
+	t_file wc_f;
+	t_file ls_f;
 	
 	t_node cat_node;
 	t_node echo_node;
@@ -168,18 +175,20 @@ int main(int ac, char **av, char **envp)
 	
 	make_cat_node(&cat_node, &ls_node, &cat_f, envp);
 	make_echo_node(&echo_node, envp);
-	make_wc_node(&wc_node, envp);
+	
+	make_wc_node(&wc_node, &wc_f, envp);
+	
 	make_grep_node(&grep_node, &wc_node, envp);
-	make_ls_node(&ls_node, &grep_node, envp);
-	link_nodes_with_ctrls_op(&cat_node, &ls_node, and);
-	link_nodes_with_ctrls_op(&ls_node, &echo_node, or);
+	make_ls_node(&ls_node, &grep_node, &ls_f, envp);
+	link_nodes_with_ctrls_op(&cat_node, &ls_node, or);
+	link_nodes_with_ctrls_op(&ls_node, &echo_node, and);
 
-	exec_cmds(&wc_node);
+	exec_cmds(&cat_node);
 	return 0;
 }
 
 
-//    cat out && (ls |grep "c" | wc -l) || echo "hello world"
+//    cat out && (in < ls |grep "c" | wc -l > out) || echo "hello world"
  
 
 //    <in >out ls | wc -l >out2 2>out.err | cat out >out3 && echo coucou || cat out
