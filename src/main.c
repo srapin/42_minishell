@@ -75,6 +75,12 @@ void init_file_struct_with_filename(t_file *file_struct, char *filename)
 	file_struct->name = filename;
 }
 
+void init_file_struct_with_sep(t_file *file_struct, char *sep)
+{
+	init_file_struct(file_struct);
+	file_struct->sep = sep;
+}
+
 void init_file_struct_with_fd(t_file *file_struct, int fd)
 {
 	init_file_struct(file_struct);
@@ -131,8 +137,10 @@ void make_wc_node(t_node * node, t_file *f_s, char ** envp)
 {
 	init_node(node, envp);
 	
-	add_value_to_node(node, "wc");
-	add_args_to_node(node, "wc -l");
+	// add_value_to_node(node, "wc");
+	// add_args_to_node(node, "wc -l");
+	add_value_to_node(node, "cat");
+	add_args_to_node(node, "cat");
 	//init_file_struct_with_filename(f_s, "out");
 	//add_out_redir_with_file_struct(node, f_s);
 	
@@ -144,8 +152,10 @@ void make_grep_node(t_node * node, t_node * wc_node, char ** envp)
 {
 	init_node(node, envp);
 	
-	add_value_to_node(node, "grep");
-	add_args_to_node(node, "grep c");
+	// add_value_to_node(node, "grep");
+	// add_args_to_node(node, "grep c");
+	add_value_to_node(node, "cat");
+	add_args_to_node(node, "cat");
 	link_nodes_with_redirections(node, wc_node);
 }
 
@@ -153,10 +163,12 @@ void make_ls_node(t_node * node, t_node * grep_node,t_file *f_s,  char ** envp)
 {
 	init_node(node, envp);
 	
-	add_value_to_node(node, "ls");
+	add_value_to_node(node, "cat");
+	add_args_to_node(node, "cat");
 	link_nodes_with_redirections(node, grep_node);
-	init_file_struct_with_filename(f_s, "in");
-	//add_in_redir_with_file_struct(node, f_s);
+	// init_file_struct_with_filename(f_s, "in");
+	init_file_struct_with_sep(f_s, "in");
+	add_in_redir_with_file_struct(node, f_s);
 }
 
 
@@ -183,7 +195,7 @@ int main(int ac, char **av, char **envp)
 	link_nodes_with_ctrls_op(&cat_node, &ls_node, or);
 	link_nodes_with_ctrls_op(&ls_node, &echo_node, and);
 
-	exec_cmds(&cat_node);
+	exec_cmds(&ls_node);
 	return 0;
 }
 

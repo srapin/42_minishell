@@ -82,21 +82,35 @@ void set_fd(t_file * f_struct, int *fd, int flag)
 }
 
 
+bool check_end_of_heredoc(char *sep, char *line)
+{
+	char *with_backslash;
+	bool flag;
 
-void	heredoc_process(t_node *node)
+	with_backslash = NULL;
+	flag = false;
+	if ((line[ft_strlen(line) - 1] == '\n') && sep[ft_strlen(sep) - 1] != '\n')
+		with_backslash = ft_strjoin(sep, "\n");
+	flag = (ft_strisequal(sep, line)  || ft_strisequal(with_backslash, line));
+	free(with_backslash);
+	return flag;
+
+}
+
+void	heredoc_process(t_node *node, int here_fd)
 {
 	char	*line;
 
 	line = get_next_line(STDIN_FILENO);
-	dup2(fd, STDOUT_FILENO);
-	while (ft_strisequal(((t_file *) node->red.in_content)->sep, line))
+	dup2(here_fd, STDOUT_FILENO);
+	while (!check_end_of_heredoc(((t_file*) (node->red.in_content))->sep   ,  line ))
 	{
-		ft_printf(line);
+		dprintf(here_fd, "%s", line);
 		free(line);
 		line = get_next_line(STDIN_FILENO);
 	}
 	free(line);
-	unlink("tmp");
+	// unlink("tmp");
 	exit(0);
 }
 
@@ -105,24 +119,27 @@ int heredoc(t_node *node)
 {
 	int fd;
 	int pid;
+	int status;
 
 	fd = open("tmp", O_CREAT | O_RDWR);
 	pid = fork();
 	if (pid < 0)
-				fail_process();
+		fail_process();
 	if (pid == 0)
-		heredoc_process(node);
+		heredoc_process(node, fd);
+	wait(&status);
+	dprintf(STDOUT_FILENO, "befsleep");
+	sleep(5);
+	dprintf(STDOUT_FILENO, get_next_line(fd));
+	node->red.in_fd = fd;
 	return fd;
 }
 
 void open_node_files(t_node * node)
 {
-	if (node->red.in_type == fd)
+	if (node->red.in_type == fd && !((t_file *) (node->red.in_content))->sep)
 	{
-		if (! ((t_file *) (node->red.in_content))->sep)
-			set_fd(node->red.in_content, &(node->red.in_fd), O_RDONLY);
-		else
-			node->red.in_type =heredoc(node);
+		set_fd(node->red.in_content, &(node->red.in_fd), O_RDONLY);
 	}
 	if (node->red.out_type == fd)
 		set_fd(node->red.out_content, &(node->red.out_fd), O_WRONLY);
@@ -135,7 +152,11 @@ void safe_close_node_fd(t_node *node)
 {
 	safe_close(&(node->red.in_fd));
 	if (node->red.in_type == fd)
-		((t_file *) node->red.in_content)->fd = -1;	
+	{
+		((t_file *) node->red.in_content)->fd = -1;
+		if (((t_file *) node->red.in_content)->sep)
+			unlink("tmp");
+	}
 	safe_close(&(node->red.out_fd));
 	if (node->red.out_type == fd)
 		((t_file *) node->red.out_content)->fd = -1;
@@ -144,6 +165,7 @@ void safe_close_node_fd(t_node *node)
 		((t_file *) node->red.err_content)->fd = -1;
 }
 
+
 void	parent_process(t_node **node, int pipe_tab[2])
 {
 	
@@ -151,6 +173,8 @@ void	parent_process(t_node **node, int pipe_tab[2])
 	if (!node || !(*node))
 		return;
 	safe_close_node_fd(*node);
+	//if ((*node)->red.in_type == fd && ((t_file *) ((*node)->red.in_content))->sep)
+		//close
 	if ((*node)->red.out_type == cmds_node)
 		*node = (*node)->red.out_content;
 	//dprintf(STDOUT_FILENO, "parent pro %s\n", (*node)->val.value);
@@ -283,8 +307,11 @@ void	child_process(t_node *node, int pipe_tab[2], int *to_free)
 	// swap_io(param, data, i, to_free);
 	paths = get_path(node->env);
 	// data->arg = ft_split(param->cmds[i], ' ');
+	//dprintf(STDOUT_FILENO, "child_proc %s\n", node->val.value);
 	if (check_acces(paths, node))
+	{
 	 	execve(node->val.path, node->args, node->env);
+	}
 	perror("cmd not found");
 	free_tab(paths);
 	free_tab(node->args);
@@ -345,7 +372,7 @@ void exec_cmds(t_node *first_node)
 		pid = malloc(nb_cmds * sizeof(int));
 		next = node->next;
 		ret_node = node;
-		//dprintf(STDOUT_FILENO, "at beginig of big while %s\n", node->val.value);
+		dprintf(STDOUT_FILENO, "at beginig of big while %s\n", node->val.value);
 		while(i < nb_cmds)
 		{
 			if (i < nb_cmds - 1)
@@ -356,6 +383,9 @@ void exec_cmds(t_node *first_node)
 				pip_tab[1] = -1;
 			}
 			// dprintf(STDOUT_FILENO, "before fork %s\n", node->val.value);
+			if (node->red.in_type == fd && ((t_file *) (node->red.in_content))->sep)
+				heredoc(node);
+
 			pid[i] = fork();
 			if (pid[i] < 0)
 				fail_process();
