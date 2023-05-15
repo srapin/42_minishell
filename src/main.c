@@ -141,8 +141,8 @@ void make_wc_node(t_node * node, t_file *f_s, char ** envp)
 	// add_args_to_node(node, "wc -l");
 	add_value_to_node(node, "cat");
 	add_args_to_node(node, "cat");
-	//init_file_struct_with_filename(f_s, "out");
-	//add_out_redir_with_file_struct(node, f_s);
+	init_file_struct_with_filename(f_s, "out");
+	add_out_redir_with_file_struct(node, f_s);
 	
 }
 
