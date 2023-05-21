@@ -6,60 +6,65 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 19:28:06 by srapin            #+#    #+#             */
-/*   Updated: 2023/05/13 04:52:45 by srapin           ###   ########.fr       */
+/*   Updated: 2023/05/21 23:14:28 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-void add_value_to_node(t_node *node, char *val)
+void add_value_to_cmd(t_cmd *cmd, char *val) //do not use!
 {
-	node->val.value = val;
+	cmd->val.value = val;
 }
 
-void add_args_to_node(t_node *node, char *args)
+void add_args_to_cmd(t_cmd *cmd, char *args)//do not use!
 {
-	node->args = ft_split(args, ' ');
+	cmd->val.args = ft_split(args, ' ');
 }
 
-void link_nodes_with_ctrls_op(t_node *node, t_node *next, ctrl_op c)
+void add_cmdval_to_cmd(t_cmd *cmd, char *str)
+{
+	add_args_to_cmd(cmd, str);
+	if (cmd->args)
+		add_value_to_cmd(cmd, cmd->args[0]);
+}
+
+void link_cmds_with_ctrls_op(t_cmd *cmd, t_cmd *next, ctrl_op c)
 {
 	if (!c)
 		perror("bad ctrl add");
-	node->ctrl = c;
-	node->next = next;
+	cmd->ctrl = c;
+	cmd->next = next;
 }
 
-void link_nodes_with_redirections(t_node *node, t_node *next)
+void link_cmds_with_redirections(t_cmd *cmd, t_cmd *next)
 {
-	node->red.out_type = cmds_node;
-	node->red.out_content = next;
+	cmd->red.out_type = cmds_cmd;
+	cmd->red.out_content = next;
 }
 
-
-
-void add_in_redir_with_file_struct(t_node *node, t_file *file_struct)
+void add_in_redir_with_file_struct(t_cmd *cmd, t_file *file_struct)
 {
-	node->red.in_type = fd;
-	node->red.in_content = file_struct;
+	cmd->red.in_type = fd;
+	cmd->red.in_content = file_struct;
 	if (file_struct->fd > -1)
-		node->red.in_fd = file_struct->fd;
+		cmd->red.in_fd = file_struct->fd;
 }
 
-void add_out_redir_with_file_struct(t_node *node, t_file *file_struct)
+void add_out_redir_with_file_struct(t_cmd *cmd, t_file *file_struct)
 {
-	node->red.out_type = fd;
-	node->red.out_content = file_struct;
+	cmd->red.out_type = fd;
+	cmd->red.out_content = file_struct;
 	if (file_struct->fd > -1)
-		node->red.out_fd = file_struct->fd;
+		cmd->red.out_fd = file_struct->fd;
 }
 
-void add_err_redir_with_file_struct(t_node *node, t_file *file_struct)
+void add_err_redir_with_file_struct(t_cmd *cmd, t_file *file_struct)
 {
-	node->red.err_type = fd;
-	node->red.err_content = file_struct;
+	cmd->red.err_type = fd;
+	cmd->red.err_content = file_struct;
 	if (file_struct->fd > -1)
-		node->red.err_fd = file_struct->fd;
+		cmd->red.err_fd = file_struct->fd;
 }
 
 void init_file_struct(t_file *file_struct)
@@ -102,73 +107,84 @@ void init_redirections(t_redirect *red)
 	red->err_content = NULL;
 }
 
-void init_node(t_node *node, char **envp)
+void init_cmd(t_cmd *cmd, char **envp)
 {
-	add_value_to_node(node, NULL);
-	add_args_to_node(node, NULL);
-	init_redirections(&(node->red));
-	node->env = envp;
-	node->ctrl = none;	
-	node->next = NULL;
+	add_value_to_cmd(cmd, NULL);
+	add_args_to_cmd(cmd, NULL);
+	init_redirections(&(cmd->red));
+	cmd->env = envp;
+	cmd->ctrl = none;	
+	cmd->next = NULL;
 }
 
 
-void make_cat_node(t_node *node, t_node *ls_node,t_file *f, char **envp)
+
+void init_bag(t_bag *bag)
+{
+	bag->content = NULL;
+	bag->next = NULL;
+	bag->type = none;
+	bag->ctrl =none;
+	bag->ret = -1;
+	bag->already_exec = false;
+}
+
+void make_cat_cmd(t_cmd *cmd, t_cmd *ls_cmd,t_file *f, char **envp)
 {
 	init_file_struct_with_filename(f, "out");
 	
 	
-	init_node(node, envp);
-	add_value_to_node(node, "cat");
-	add_in_redir_with_file_struct(node, f);
+	init_cmd(cmd, envp);
+	add_value_to_cmd(cmd, "cat");
+	add_in_redir_with_file_struct(cmd, f);
 	
-	link_nodes_with_ctrls_op(node, ls_node, and);
+	link_cmds_with_ctrls_op(cmd, ls_cmd, and);
 
 }
 
-void make_echo_node(t_node *node, char ** envp)
+void make_echo_cmd(t_cmd *cmd, char ** envp)
 {
-	init_node(node, envp);
-	add_value_to_node(node, "echo");
-	add_args_to_node(node, "echo hello world");
+	init_cmd(cmd, envp);
+	add_value_to_cmd(cmd, "echo");
+	add_args_to_cmd(cmd, "echo hello world");
 }
 
-void make_wc_node(t_node * node, t_file *f_s, char ** envp)
+void make_wc_cmd(t_cmd * cmd, t_file *f_s, char ** envp)
 {
-	init_node(node, envp);
+	init_cmd(cmd, envp);
 	
-	// add_value_to_node(node, "wc");
-	// add_args_to_node(node, "wc -l");
-	add_value_to_node(node, "cat");
-	add_args_to_node(node, "cat");
+	// add_value_to_cmd(cmd, "wc");
+	// add_args_to_cmd(cmd, "wc -l");
+	add_value_to_cmd(cmd, "cat");
+	add_args_to_cmd(cmd, "cat");
 	init_file_struct_with_filename(f_s, "out");
-	add_out_redir_with_file_struct(node, f_s);
+	add_out_redir_with_file_struct(cmd, f_s);
 	
 }
 
 
 
-void make_grep_node(t_node * node, t_node * wc_node, char ** envp)
+void make_grep_cmd(t_cmd * cmd, t_cmd * wc_cmd, char ** envp)
 {
-	init_node(node, envp);
+	init_cmd(cmd, envp);
 	
-	// add_value_to_node(node, "grep");
-	// add_args_to_node(node, "grep c");
-	add_value_to_node(node, "cat");
-	add_args_to_node(node, "cat");
-	link_nodes_with_redirections(node, wc_node);
+	// add_value_to_cmd(cmd, "grep");
+	// add_args_to_cmd(cmd, "grep c");
+	add_value_to_cmd(cmd, "cat");
+	add_args_to_cmd(cmd, "cat");
+	link_cmds_with_redirections(cmd, wc_cmd);
 }
 
-void make_ls_node(t_node * node, t_node * grep_node,t_file *f_s,  char ** envp)
+void make_ls_cmd(t_cmd * cmd, t_cmd * grep_cmd,t_file *f_s,  char ** envp)
 {
-	init_node(node, envp);
+	init_cmd(cmd, envp);
 	
-	add_value_to_node(node, "cat");
-	add_args_to_node(node, "cat");
-	link_nodes_with_redirections(node, grep_node);
+	add_value_to_cmd(cmd, "cat");
+	add_args_to_cmd(cmd, "cat");
+	link_cmds_with_redirections(cmd, grep_cmd);
 	// init_file_struct_with_filename(f_s, "in");
 	init_file_struct_with_sep(f_s, "in");
-	add_in_redir_with_file_struct(node, f_s);
+	add_in_redir_with_file_struct(cmd, f_s);
 }
 
 
@@ -179,23 +195,23 @@ int main(int ac, char **av, char **envp)
 	t_file wc_f;
 	t_file ls_f;
 	
-	t_node cat_node;
-	t_node echo_node;
-	t_node ls_node;
-	t_node grep_node;
-	t_node wc_node;
+	t_cmd cat_cmd;
+	t_cmd echo_cmd;
+	t_cmd ls_cmd;
+	t_cmd grep_cmd;
+	t_cmd wc_cmd;
 	
-	make_cat_node(&cat_node, &ls_node, &cat_f, envp);
-	make_echo_node(&echo_node, envp);
+	make_cat_cmd(&cat_cmd, &ls_cmd, &cat_f, envp);
+	make_echo_cmd(&echo_cmd, envp);
 	
-	make_wc_node(&wc_node, &wc_f, envp);
+	make_wc_cmd(&wc_cmd, &wc_f, envp);
 	
-	make_grep_node(&grep_node, &wc_node, envp);
-	make_ls_node(&ls_node, &grep_node, &ls_f, envp);
-	link_nodes_with_ctrls_op(&cat_node, &ls_node, or);
-	link_nodes_with_ctrls_op(&ls_node, &echo_node, and);
+	make_grep_cmd(&grep_cmd, &wc_cmd, envp);
+	make_ls_cmd(&ls_cmd, &grep_cmd, &ls_f, envp);
+	link_cmds_with_ctrls_op(&cat_cmd, &ls_cmd, or);
+	link_cmds_with_ctrls_op(&ls_cmd, &echo_cmd, and);
 
-	exec_cmds(&ls_node);
+	exec_cmds(&ls_cmd);
 	return 0;
 }
 
