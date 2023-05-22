@@ -5,8 +5,18 @@ CC = cc
 #CFLAGS = -Wall -Wextra -Werror -g3 -g
 CFLAGS =-g3 -g
 
-FILES = main \
+FILES = cmd_private\
+		cmd_pub\
+		common_process\
 		exec_cmds \
+		file_struct_priv\
+		file_struct_pub\
+		here_doc\
+		main \
+		next\
+		redir_pub\
+		safer\
+		tools\
 
 
 SRCS_DIR = src
@@ -26,7 +36,12 @@ LIBFT = $(LIBFT_DIR)/libft.a
 
 
 INCLUDES_DIR = inc
-INCLUDES_FILES = minishell.h
+INCLUDES_FILES =lib.h \
+				minishell.h \
+				priv.h\
+				pub.h\
+				struct.h
+
 INCLUDES = $(addprefix $(INCLUDES_DIR)/, $(INCLUDES_FILES))
 
 all: $(NAME)

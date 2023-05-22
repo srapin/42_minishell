@@ -6,28 +6,11 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 19:28:06 by srapin            #+#    #+#             */
-/*   Updated: 2023/05/21 23:14:28 by srapin           ###   ########.fr       */
+/*   Updated: 2023/05/23 00:13:53 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-
-void add_value_to_cmd(t_cmd *cmd, char *val) //do not use!
-{
-	cmd->val.value = val;
-}
-
-void add_args_to_cmd(t_cmd *cmd, char *args)//do not use!
-{
-	cmd->val.args = ft_split(args, ' ');
-}
-
-void add_cmdval_to_cmd(t_cmd *cmd, char *str)
-{
-	add_args_to_cmd(cmd, str);
-	if (cmd->args)
-		add_value_to_cmd(cmd, cmd->args[0]);
-}
 
 void link_cmds_with_ctrls_op(t_cmd *cmd, t_cmd *next, ctrl_op c)
 {
@@ -43,79 +26,6 @@ void link_cmds_with_redirections(t_cmd *cmd, t_cmd *next)
 	cmd->red.out_content = next;
 }
 
-void add_in_redir_with_file_struct(t_cmd *cmd, t_file *file_struct)
-{
-	cmd->red.in_type = fd;
-	cmd->red.in_content = file_struct;
-	if (file_struct->fd > -1)
-		cmd->red.in_fd = file_struct->fd;
-}
-
-void add_out_redir_with_file_struct(t_cmd *cmd, t_file *file_struct)
-{
-	cmd->red.out_type = fd;
-	cmd->red.out_content = file_struct;
-	if (file_struct->fd > -1)
-		cmd->red.out_fd = file_struct->fd;
-}
-
-void add_err_redir_with_file_struct(t_cmd *cmd, t_file *file_struct)
-{
-	cmd->red.err_type = fd;
-	cmd->red.err_content = file_struct;
-	if (file_struct->fd > -1)
-		cmd->red.err_fd = file_struct->fd;
-}
-
-void init_file_struct(t_file *file_struct)
-{
-	file_struct->name = NULL;
-	file_struct->fd = -1;
-	file_struct->sep = NULL;
-}
-
-void init_file_struct_with_filename(t_file *file_struct, char *filename)
-{
-	init_file_struct(file_struct);
-	file_struct->name = filename;
-}
-
-void init_file_struct_with_sep(t_file *file_struct, char *sep)
-{
-	init_file_struct(file_struct);
-	file_struct->sep = sep;
-}
-
-void init_file_struct_with_fd(t_file *file_struct, int fd)
-{
-	init_file_struct(file_struct);
-	file_struct->fd = fd;
-}
-
-void init_redirections(t_redirect *red)
-{
-	red->in_type = noneu;
-	red->in_fd = -1;
-	red->in_content = NULL;
-	
-	red->out_type = noneu;
-	red->out_fd = -1;
-	red->out_content = NULL;
-	
-	red->err_type = noneu;
-	red->err_fd = -1;
-	red->err_content = NULL;
-}
-
-void init_cmd(t_cmd *cmd, char **envp)
-{
-	add_value_to_cmd(cmd, NULL);
-	add_args_to_cmd(cmd, NULL);
-	init_redirections(&(cmd->red));
-	cmd->env = envp;
-	cmd->ctrl = none;	
-	cmd->next = NULL;
-}
 
 
 
@@ -128,6 +38,11 @@ void init_bag(t_bag *bag)
 	bag->ret = -1;
 	bag->already_exec = false;
 }
+
+
+
+
+
 
 void make_cat_cmd(t_cmd *cmd, t_cmd *ls_cmd,t_file *f, char **envp)
 {
