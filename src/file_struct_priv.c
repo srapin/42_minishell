@@ -6,11 +6,11 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:08:04 by srapin            #+#    #+#             */
-/*   Updated: 2023/05/23 00:42:29 by srapin           ###   ########.fr       */
+/*   Updated: 2023/05/23 02:15:51 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/struct.h"
+#include "../inc/minishell.h"
 
 void init_file_struct(t_file *file_struct)
 {

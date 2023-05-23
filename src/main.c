@@ -6,11 +6,12 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 19:28:06 by srapin            #+#    #+#             */
-/*   Updated: 2023/05/23 00:13:53 by srapin           ###   ########.fr       */
+/*   Updated: 2023/05/23 02:18:24 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+#include "../inc/priv.h"
 
 void link_cmds_with_ctrls_op(t_cmd *cmd, t_cmd *next, ctrl_op c)
 {
@@ -29,15 +30,7 @@ void link_cmds_with_redirections(t_cmd *cmd, t_cmd *next)
 
 
 
-void init_bag(t_bag *bag)
-{
-	bag->content = NULL;
-	bag->next = NULL;
-	bag->type = none;
-	bag->ctrl =none;
-	bag->ret = -1;
-	bag->already_exec = false;
-}
+
 
 
 

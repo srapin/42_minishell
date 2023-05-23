@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:08:11 by srapin            #+#    #+#             */
-/*   Updated: 2023/05/23 01:57:02 by srapin           ###   ########.fr       */
+/*   Updated: 2023/05/23 02:23:08 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ t_file *create_file_struct_with_filename(char *filename)
 
 	file_struct = malloc(sizeof(t_file));
 	init_file_struct_with_filename(file_struct, filename);
+	return file_struct;
 }
 
 t_file * create_file_struct_with_sep(char *sep)
@@ -45,6 +46,7 @@ t_file * create_file_struct_with_sep(char *sep)
 
 	file_struct = malloc(sizeof(t_file));
 	init_file_struct_with_sep(file_struct, sep);
+	return file_struct;
 }
 
 t_file * create_file_struct_with_fd(int fd)

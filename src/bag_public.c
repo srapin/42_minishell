@@ -1,21 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lib.h                                              :+:      :+:    :+:   */
+/*   node_public.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/23 00:05:35 by srapin            #+#    #+#             */
-/*   Updated: 2023/05/23 02:17:44 by srapin           ###   ########.fr       */
+/*   Created: 2023/05/23 02:09:28 by srapin            #+#    #+#             */
+/*   Updated: 2023/05/23 02:11:35 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIB_H
-#define LIB_H
+#include "minishell.h"
+#include "priv.h"
 
+void init_node(t_node *node)
+{
+	node->content = NULL;
+	node->next = NULL;
+	node->type = none;
+	node->ctrl =none;
+	node->ret = -1;
+	node->already_exec = false;
+}
 
-# include "../libft/ft_printf.h"
-# include "../libft/gnl/get_next_line_bonus.h"
-# include "../libft/mylibft/libft.h"
+t_node *create_empty_node()
+{
+	t_node *node;
 
-#endif
+	node = malloc(sizeof(node));
+	return node;
+}

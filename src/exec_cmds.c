@@ -12,7 +12,6 @@
 
 #include "../inc/minishell.h"
 
-
 void exec_cmds(t_cmd *first_cmd)
 {
 	int		nb_cmds;

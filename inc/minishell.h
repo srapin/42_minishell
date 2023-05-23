@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 19:27:43 by srapin            #+#    #+#             */
-/*   Updated: 2023/05/23 01:54:39 by srapin           ###   ########.fr       */
+/*   Updated: 2023/05/23 02:12:59 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <wait.h>
-#include <stdbool.h>
+
 # include "lib.h"
 #include "struct.h"
 #include "pub.h"
