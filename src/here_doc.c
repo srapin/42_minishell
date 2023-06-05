@@ -45,7 +45,7 @@ void	heredoc_process(t_cmd *cmd, int *pipe_tab)
 
 	while (!check_end_of_heredoc(((t_file*) (cmd->red.in_content))->sep, line))
 	{
-		ft_printf("%s", line);
+		printf("%s", line);
 		free(line);
 		line = get_next_line(STDIN_FILENO);
 	}

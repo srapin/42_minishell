@@ -15,8 +15,9 @@
 
 void init_cmd_and_add_val(t_cmd *cmd, char **envp, char *args)
 {
+	char *test = ft_strdup(args);
 	init_cmd(cmd, envp);
-	add_cmdval_to_cmd(cmd, args);
+	add_cmdval_to_cmd(cmd, test);
 }
 
 t_cmd *create_cmd_with_val(char **envp, char *args)

@@ -18,7 +18,7 @@ char	*ft_strdup(const char *src)
 	char	*cpy;
 
 	len_src = 0;
-	while (src[len_src])
+	while (src && src[len_src])
 		len_src++;
 	cpy = (char *)ft_calloc(len_src + 1, sizeof(char));
 	if (!cpy)

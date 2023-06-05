@@ -28,8 +28,7 @@ typedef enum ctrl_op
 {
 	none,
 	and,
-	or
-	,
+	or,
 	pointvirgule
 }					ctrl_op;
 
@@ -75,7 +74,6 @@ typedef struct cmd
 {
 	//type_parse type;
 	t_cmd_value val; // nom de la commande
-	char			**args;
 	t_redirect red; 
 	char			**env;
 	// to move into node
