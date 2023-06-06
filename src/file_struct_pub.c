@@ -59,12 +59,46 @@ t_file * create_file_struct_with_fd(int fd)
 }
 
 
+void replace_fd(t_file *f_s, int *to_rep)
+{
+	int new_fd;
+
+	new_fd = *to_rep;
+	if (f_s->fd > -1)
+		new_fd = f_s->fd;
+	else if (f_s->name)
+		new_fd = open(f_s->name, f_s->flag);
+	if (new_fd > -1 && *to_rep > -1 && *to_rep!= new_fd)
+		safe_close(to_rep);
+	*to_rep = new_fd;
+}
+
 void open_cmd_files(t_cmd * cmd)
 {
-	if (cmd->red.in_type == fd && !((t_file *) (cmd->red.in_content))->sep)
+	t_list *tmp_lst;
+	t_file *tmp_file;
+
+	tmp_lst = cmd->red.in_list;
+	while(tmp_lst)
+	{
+		tmp_file = tmp_lst->content;
+		replace_fd(tmp_file, &(cmd->red.in_fd));
+		tmp_lst = tmp_lst->next;
+	}
+	tmp_lst = cmd->red.out_list;
+	while(tmp_lst)
+	{
+		tmp_file = tmp_lst->content;
+		replace_fd(tmp_file, &(cmd->red.out_fd));
+		tmp_lst = tmp_lst->next;
+	}
+
+	/*
+	if (cmd->red.in_type == fd)//&& !((t_file *) (cmd->red.in_content))->sep)
 		set_fd(cmd->red.in_content, &(cmd->red.in_fd), O_RDONLY);
 	if (cmd->red.out_type == fd)
 		set_fd(cmd->red.out_content, &(cmd->red.out_fd), O_WRONLY);
 	if (cmd->red.err_type == fd)
 		set_fd(cmd->red.err_content, &(cmd->red.err_fd), O_WRONLY);
+	*/
 }

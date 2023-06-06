@@ -57,8 +57,20 @@ typedef struct file
 	/* data */
 }					t_file;
 
+
+
+typedef struct cmd t_cmd;
+
 typedef struct redirect
 {
+	t_list *in_list;
+	t_list *out_list;
+	t_cmd	*next_cmd;
+	int in_fd;
+	int out_fd;
+
+
+	/*
 	type_redirect	in_type;
 	int				in_fd;
 	void *in_content; // soit un t_node soit un file_struct
@@ -68,6 +80,7 @@ typedef struct redirect
 	type_redirect	err_type;
 	int				err_fd;
 	void *err_content; // soit un t_node soit un file_struct
+	*/
 }					t_redirect;
 
 typedef struct cmd
@@ -82,16 +95,5 @@ typedef struct cmd
 
 }					t_cmd;
 
-typedef struct s_node
-{
-	ctrl_op			ctrl;
-	void			*next;
-	
-	type_parse		type;
-	void			*content;
-	
-	int				ret;
-	bool			already_exec;
-}					t_node;
 
 #endif

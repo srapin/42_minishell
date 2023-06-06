@@ -37,10 +37,10 @@ int count_cmds(t_cmd *first_cmd)
 	cmd = first_cmd;
 
 	nb = 1;
-	while(cmd->red.out_type == cmds_cmd)
+	while(cmd->red.next_cmd)
 	{
 		nb++;
-		cmd = cmd->red.out_content;
+		cmd = cmd->red.next_cmd;
 	}
 	//printf("%d\n",nb);
 	return nb;
@@ -64,11 +64,5 @@ void dup_cmd_file(t_cmd *cmd)
 
 		dup2(cmd->red.out_fd, STDOUT_FILENO);
 		safe_close(&(cmd->red.out_fd));
-	}
-	if (cmd->red.err_fd > -1)
-	{
-
-		dup2(cmd->red.err_fd, STDERR_FILENO);
-		safe_close(&(cmd->red.err_fd));
 	}
 }

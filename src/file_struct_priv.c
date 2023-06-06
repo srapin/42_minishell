@@ -17,6 +17,7 @@ void init_file_struct(t_file *file_struct)
 	file_struct->name = NULL;
 	file_struct->fd = -1;
 	file_struct->sep = NULL;
+	file_struct->flag = -1;
 }
 
 void set_fd(t_file * f_struct, int *fd, int flag)

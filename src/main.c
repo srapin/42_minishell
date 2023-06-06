@@ -23,8 +23,7 @@ void link_cmds_with_ctrls_op(t_cmd *cmd, t_cmd *next, ctrl_op c)
 
 void link_cmds_with_redirections(t_cmd *cmd, t_cmd *next)
 {
-	cmd->red.out_type = cmds_cmd;
-	cmd->red.out_content = next;
+	cmd->red.next_cmd = next;
 }
 
 

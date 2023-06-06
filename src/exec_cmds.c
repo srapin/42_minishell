@@ -39,8 +39,8 @@ void exec_cmds(t_cmd *first_cmd)
 				safe_pipe(pip_tab);
 			else
 				reset_pip_tab(pip_tab);
-			if (cmd->red.in_type == fd && ((t_file *) (cmd->red.in_content))->sep)
-				heredoc(cmd); //faire ca ailleurs
+			// if (cmd->red.in_type == fd && ((t_file *) (cmd->red.in_content))->sep)
+			// 	heredoc(cmd); //faire ca ailleurs
 
 			pid[i] = fork();
 			if (pid[i] < 0)

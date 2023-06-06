@@ -33,16 +33,7 @@ void	safe_pipe(int pipe_tab[2])
 void safe_close_cmd_fd(t_cmd *cmd)
 {
 	safe_close(&(cmd->red.in_fd));
-	if (cmd->red.in_type == fd)
-	{
-		((t_file *) cmd->red.in_content)->fd = -1;
-	}
 	safe_close(&(cmd->red.out_fd));
-	if (cmd->red.out_type == fd)
-		((t_file *) cmd->red.out_content)->fd = -1;
-	safe_close(&(cmd->red.err_fd));
-	if (cmd->red.err_type == fd)
-		((t_file *) cmd->red.err_content)->fd = -1;
 }
 
 bool	check_acces(char **paths, t_cmd *cmd)

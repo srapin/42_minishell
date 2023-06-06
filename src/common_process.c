@@ -22,8 +22,7 @@ void	parent_process(t_cmd **cmd, int pipe_tab[2])
 	safe_close_cmd_fd(*cmd);
 	//if ((*cmd)->red.in_type == fd && ((t_file *) ((*cmd)->red.in_content))->sep)
 		//close
-	if ((*cmd)->red.out_type == cmds_cmd)
-		*cmd = (*cmd)->red.out_content;
+	*cmd = (*cmd)->red.next_cmd;
 	//dprintf(STDOUT_FILENO, "parent pro %s\n", (*cmd)->val.value);
 	// if (!cmd || !(*cmd))
 	// 	return;

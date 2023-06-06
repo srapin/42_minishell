@@ -15,41 +15,33 @@
 //todo
 void add_in_redir_with_file_struct(t_cmd *cmd, t_file *file_struct)
 {
-	cmd->red.in_type = fd;
-	cmd->red.in_content = file_struct;
-	if (file_struct->fd > -1)
-		cmd->red.in_fd = file_struct->fd;
+	t_list *lst;
+	lst = ft_lstnew(file_struct);
+	ft_lstadd_back(&(cmd->red.in_list), lst);
 }
 
 void add_out_redir_with_file_struct(t_cmd *cmd, t_file *file_struct)
 {
-	cmd->red.out_type = fd;
-	cmd->red.out_content = file_struct;
-	if (file_struct->fd > -1)
-		cmd->red.out_fd = file_struct->fd;
+	t_list *lst;
+	lst = ft_lstnew(file_struct);
+	ft_lstadd_back(&(cmd->red.out_list), lst);
 }
 
-void add_err_redir_with_file_struct(t_cmd *cmd, t_file *file_struct)
-{
-	cmd->red.err_type = fd;
-	cmd->red.err_content = file_struct;
-	if (file_struct->fd > -1)
-		cmd->red.err_fd = file_struct->fd;
-}
+// void add_err_redir_with_file_struct(t_cmd *cmd, t_file *file_struct)
+// {
+// 	cmd->red.err_type = fd;
+// 	cmd->red.err_content = file_struct;
+// 	if (file_struct->fd > -1)
+// 		cmd->red.err_fd = file_struct->fd;
+// }
 
 void init_redirections(t_redirect *red)
 {
-	red->in_type = noneu;
+	red->in_list = NULL;
+	red->out_list = NULL;
 	red->in_fd = -1;
-	red->in_content = NULL;
-	
-	red->out_type = noneu;
 	red->out_fd = -1;
-	red->out_content = NULL;
-	
-	red->err_type = noneu;
-	red->err_fd = -1;
-	red->err_content = NULL;
+	red->next_cmd = NULL;
 }
 
 t_redirect *create_redir()
