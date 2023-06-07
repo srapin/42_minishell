@@ -3,198 +3,184 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/10 19:28:06 by srapin            #+#    #+#             */
-/*   Updated: 2023/05/23 02:18:24 by srapin           ###   ########.fr       */
+/*   Created: 2023/04/28 19:32:17 by Helene            #+#    #+#             */
+/*   Updated: 2023/06/05 16:07:23 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
-#include "../inc/priv.h"
+#include "minishell.h"
 
-void link_cmds_with_ctrls_op(t_cmd *cmd, t_cmd *next, ctrl_op c)
+t_ht_hash_table *ht_get_env(char **envp)
 {
-	if (!c)
-		perror("bad ctrl add");
-	cmd->ctrl = c;
-	cmd->next = next;
+    int i;
+    int j;
+    t_ht_hash_table *ht;
+
+    i = 0;
+    ht = ht_new(HT_INITIAL_SIZE);
+    if (!ht)
+        return (NULL);
+    while (envp[i])
+    {
+        j = 0;
+        while (envp[i][j] && envp[i][j] != '=')
+            j++;
+        // printf("j = %d\n", j);
+        // printf("ok, env[%d] = %s\n", i, envp[i]);
+        // printf("key = %s\n", ft_substr(envp[i], 0, j));
+        // printf("value = %s\n", ft_substr(envp[i], j + 1, ft_strlen(envp[i])));
+        ht_insert_item(ht, ft_substr(envp[i], 0, j), ft_substr(envp[i], j + 1, ft_strlen(envp[i])));
+        i++;
+    }
+    //printf("ok2\n");
+    return (ht);
 }
 
-void link_cmds_with_redirections(t_cmd *cmd, t_cmd *next)
+char *ft_strcpy(char *str)
 {
-	cmd->red.next_cmd = next;
+    int i;
+    char *cpy;
+    
+    if (!str)
+        return (NULL);
+    i = -1;
+    cpy = ft_calloc(sizeof(char), ft_strlen(str));
+    if (!cpy)
+        return (NULL);
+    while (str[++i])
+        cpy[i] = str[i];
+    cpy[i] = '\0';
+    return (cpy);
 }
 
-
-
-
-
-
-
-
-
-
-
-void make_cat_cmd(t_cmd *cmd, t_cmd *ls_cmd,t_file *f, char **envp)
+// seulement dans le cas env -i, ou aussi lorsque l'env passé au main est nul ? 
+t_ht_hash_table *get_minimal_env() // comment indiquer a quel niveau du shell se situe ? (pour la SHLVL variable de l'env)
 {
-	init_file_struct_with_filename(f, "out");
-	
-	
-	init_cmd(cmd, envp);
-	add_value_to_cmd(cmd, "cat");
-	add_in_redir_with_file_struct(cmd, f);
-	
-	link_cmds_with_ctrls_op(cmd, ls_cmd, and);
-
+    int             shell_lvl = 0; // juste histoire de pas me faire insulter par le compilateur, mais faut le faire autrement c'est inutile ça
+    size_t          size;
+    char            *pwd;
+    t_ht_hash_table *ht;
+    
+    ht = ht_new(HT_INITIAL_SIZE);
+    size = GETCWD_INITIAL_BUF_SIZE;
+    pwd = ft_calloc(sizeof(char), size);
+    if (!pwd)
+        return (NULL); // ?
+    getcwd(pwd, size);
+    while (!pwd)
+    {
+        free(pwd);
+        size *= 2;
+        pwd = ft_calloc(sizeof(char), size);
+        if (!pwd)
+            return (NULL); // ?
+        getcwd(pwd, size);
+    }
+    ht_insert_item(ht, ft_strcpy("SHLVL"),ft_itoa(shell_lvl));
+    ht_insert_item(ht, ft_strcpy("PWD"), pwd); // que mettre ? getcwd() ?
+    ht_insert_item(ht, ft_strcpy("_"), ft_strcpy("/usr/bin/env")); // que mettre ? 
+    return (ht);
 }
 
-void make_echo_cmd(t_cmd *cmd, char ** envp)
+/* Prints the hash map */
+void    print_ht(t_ht_hash_table *ht)
 {
-	init_cmd(cmd, envp);
-	add_value_to_cmd(cmd, "echo");
-	add_args_to_cmd(cmd, "echo hello world");
+    for (int i = 0; i < ht->size; i++)
+    {
+        if (ht->items[i])
+        {
+            printf("hash->items[%d] :\nkey = %s \nvalue = %s\n\n", \
+            i, ht->items[i]->key, ht->items[i]->value);
+        }
+    }
 }
 
-void make_wc_cmd(t_cmd * cmd, t_file *f_s, char ** envp)
+void    get_commands(t_ht_hash_table *ht, char *path)
 {
-	init_cmd(cmd, envp);
-	
-	add_value_to_cmd(cmd, "wc");
-	add_args_to_cmd(cmd, "wc -l");
-	// add_value_to_cmd(cmd, "cat");
-	// add_args_to_cmd(cmd, "cat");
-	init_file_struct_with_filename(f_s, "out");
-	add_out_redir_with_file_struct(cmd, f_s);
-	
+    int     fd;
+    char    *line;
+    t_token_list    *tk_list;
+
+    fd = open(path, O_RDONLY);
+    if (!fd)
+    {
+        perror("open ");
+        // return ; ?
+    }
+    line = get_next_line(fd);
+    tk_list = tokenise(ht, assign_type(line, ft_strlen(line)), ft_strlen(line), line);
+    parse(ht, tk_list);
+    
+    // normalement, n'a qu'une seule ligne !! car ne doit pas gerer les ';' dans minishell    
+    while (line)
+    {
+        free(line);
+        line = get_next_line(fd);
+    }
+
+    close(fd);
 }
 
-
-
-void make_grep_cmd(t_cmd * cmd, t_cmd * wc_cmd, char ** envp)
+int main (int argc, char **argv, char **envp)
 {
-	init_cmd(cmd, envp);
-	
-	add_value_to_cmd(cmd, "grep");
-	add_args_to_cmd(cmd, "grep c");
-	// add_value_to_cmd(cmd, "cat");
-	// add_args_to_cmd(cmd, "cat");
-	link_cmds_with_redirections(cmd, wc_cmd);
+    t_ht_hash_table *hash_map;
+    
+    if (argc > 2)
+    {
+        printf("error : too many arguments\n"); //idk
+        return (0);
+    }
+    
+    if (!envp)
+        hash_map = get_minimal_env();
+    else
+        hash_map = ht_get_env(envp);
+    if (!hash_map)
+        return (EXIT_FAILURE); // do we return ? which exit status ?
+
+    for (int i = 0; envp[i]; i++)
+        printf("envp[%d] = %s\n", i, envp[i]);
+    printf("\n---------------------------\n");
+    
+
+    if (argc == 1)
+        read_lines(hash_map);
+    else // peut avoir plus qu'un fichier ? part du principe que non ici ?
+        get_commands(hash_map, argv[1]);
+    
+    
+    
+    
+    //tokenise(hash_map, assign_type(argv[1], ft_strlen(argv[1])), ft_strlen(argv[1]), argv[1]);
+
+    /* 
+            ------------ Tests ------------
+    */
+    // if (argc != 2)
+    //     return (printf("Mauvais nombre d'args : argc = %d\n", argc), 0);
+    
+
+    // t_ht_hash_table *ht = ht_new(HT_INITIAL_SIZE);
+    // if (!envp)
+    //     return (printf("pas d'env\n"));
+    // int j;
+    // for (int i = 0; envp[i]; i++)
+    // {
+    //     j = 0;
+    //     while (envp[i][j] != '=')
+    //         j++;
+    //     ht_insert_item(ht, ft_substr(envp[i], 0, j), ft_substr(envp[i], j + 1, ft_strlen(envp[i])));
+    // }
+    
+    
+    // Print the envp variable */
+    // printf("\n---------------------------\n");
+
+    // for (int i = 0; envp[i]; i++)
+    //     printf("envp[%d] = %s\n", i, envp[i]);
+    
+
+    // printf("key = PATH, value = %s\n", ht_search(ht, "PATH"));
 }
-
-void make_ls_cmd(t_cmd * cmd, t_cmd * grep_cmd,t_file *f_s,  char ** envp)
-{
-	init_cmd(cmd, envp);
-	
-	add_value_to_cmd(cmd, "ls");
-	add_args_to_cmd(cmd, "ls");
-	link_cmds_with_redirections(cmd, grep_cmd);
-	// init_file_struct_with_filename(f_s, "in");
-	init_file_struct_with_sep(f_s, "in");
-	// add_in_redir_with_file_struct(cmd, f_s);
-}
-
-void make_echo_salut_node(t_cmd *cmd, t_cmd *next_cmd, t_file *f_s,  char ** envp)
-{
-
-	char *str;
-
-	str = ft_strdup("echo salut");
-	init_cmd_and_add_val(cmd, envp, str);
-	init_file_struct_with_filename(f_s, "out");
-	add_out_redir_with_file_struct(cmd, f_s);
-	link_cmds_with_ctrls_op(cmd, next_cmd, and);
-}
-
-
-void make_echo_youhou_node(t_cmd *cmd, char ** envp)
-{
-
-	init_cmd_and_add_val(cmd, envp, "echo youhou");
-	// init_file_struct_with_filename(f_s, "out");
-	// add_out_redir_with_file_struct(cmd, f_s);
-	// link_cmds_with_ctrls_op(cmd, next_cmd, and);
-}
-
-void make_echo_hello_node(t_cmd *cmd, t_cmd *next_cmd, char ** envp)
-{
-
-	init_cmd_and_add_val(cmd, envp, "echo hello world");
-	// init_file_struct_with_filename(f_s, "out");
-	// add_out_redir_with_file_struct(cmd, f_s);
-	link_cmds_with_ctrls_op(cmd, next_cmd, and);
-}
-
-void make_first_par_node(t_cmd *cmd, t_cmd *next_cmd, char ** envp)
-{
-
-	init_cmd_and_add_val(cmd, envp, "minishell 1");
-	link_cmds_with_ctrls_op(cmd, next_cmd, or);
-}
-
-void make_second_par_node(t_cmd *cmd, char ** envp)
-{
-
-	init_cmd_and_add_val(cmd, envp, "minishell 2");
-	// printf("coucou");
-}
-
-int main(int ac, char **av, char **envp)
-{
-	
-	t_file cat_f;
-	t_file wc_f;
-	t_file ls_f;
-	t_file echo_salut_fs;
-	
-	t_cmd cat_cmd;
-	
-	
-	t_cmd echo_salut_cmd;
-	
-	t_cmd first_par_cmd;
-
-	t_cmd ls_cmd;
-	t_cmd grep_cmd;
-	t_cmd wc_cmd;
-	
-	t_cmd seconde_par_cmd;
-	
-	t_cmd echo_world_cmd;
-	t_cmd echo_youhou_cmd;
-
-// echo salut > out || (ls |grep "c" | wc -l > out) && (echo "hello world" && echo "youhou")
-	if (ft_atoi(av[1])== 0)
-	{
-		// printf("deb\n");
-		make_echo_salut_node(&echo_salut_cmd, &first_par_cmd, &echo_salut_fs, envp);
-		// printf("next echo\n");
-		make_first_par_node(&first_par_cmd, &seconde_par_cmd, envp)	;
-		// printf("next first\n");
-		make_second_par_node(&seconde_par_cmd, envp);
-		// printf("next second\n");
-		exec_cmds(&echo_salut_cmd);
-	}
-	else if (ft_atoi(av[1]) == 1)
-	{
-		make_ls_cmd(&ls_cmd, &grep_cmd, &ls_f, envp);
-		make_grep_cmd(&grep_cmd, &wc_cmd, envp);
-		make_wc_cmd(&wc_cmd, &wc_f, envp);
-		exec_cmds(&ls_cmd);
-	}
-	else
-	{
-		make_echo_hello_node(&echo_world_cmd, &echo_youhou_cmd, envp);
-		make_echo_youhou_node(&echo_youhou_cmd, envp);
-		exec_cmds(&echo_world_cmd);
-	}
-
-
-	//exec_cmds(&ls_cmd);
-	return 0;
-}
-
-//    cat out && (in < ls |grep "c" | wc -l > out) || echo "hello world"
- 
-
-//    <in >out ls | wc -l >out2 2>out.err | cat out >out3 && echo coucou || cat out

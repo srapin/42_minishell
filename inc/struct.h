@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:03:15 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/07 19:20:03 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/07 20:50:00 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,9 @@ typedef enum type_parse
 
 typedef enum ctrl_op
 {
-	none,
+	pointvirgule,
 	and,
-	or,
-	pointvirgule
+	or
 }					ctrl_op;
 
 typedef enum type_redirect
