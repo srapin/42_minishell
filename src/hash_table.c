@@ -6,11 +6,11 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 16:09:20 by hlesny            #+#    #+#             */
-/*   Updated: 2023/06/07 15:41:40 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/08 15:40:43 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/hash_table.h"
+#include "hash_table.h"
 
 /*
 Open Addressing :
@@ -298,7 +298,7 @@ int    ht_modify_value(t_ht_hash_table *ht, const char *key, const char *new_val
             if (!ft_strcmp(current->key, key))
             {
                 free(current->value);
-                current->value = new_value; // new_value est deja malloc
+                current->value = (char *)new_value; // new_value est deja malloc
                 return (1);
             }
         }
@@ -384,20 +384,20 @@ void    ht_del_hash_table(t_ht_hash_table *ht)
     free(ht);
 }
 
-void free_tab(char **tab)
-{
-    int i;
+// void free_tab(char **tab)
+// {
+//     int i;
 
-    if (!tab)
-        return ;
-    i = 0;
-    while (tab[i])
-    {
-        free(tab[i]);
-        i++;
-    }
-    free(tab);
-}
+//     if (!tab)
+//         return ;
+//     i = 0;
+//     while (tab[i])
+//     {
+//         free(tab[i]);
+//         i++;
+//     }
+//     free(tab);
+// }
 
 char    **hash_map_to_tab(t_ht_hash_table *ht)
 {

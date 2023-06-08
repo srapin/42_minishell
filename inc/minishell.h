@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 19:27:43 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/07 23:37:45 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/08 15:03:50 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/wait.h>
-#include <wait.h>
+//#include <wait.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 

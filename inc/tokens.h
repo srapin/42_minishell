@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 18:15:56 by Helene            #+#    #+#             */
-/*   Updated: 2023/05/28 02:58:08 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/08 15:11:02 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # define WHITESPACES        " \t" // and '\n' ? and '\v' ?
 # define META_CHAR          "|&()<>\"\'"
 
-typedef enum e_t_types
+enum e_t_types
 {
     word, // anything that isn't one of the above
     simple_quote,
@@ -25,12 +25,12 @@ typedef enum e_t_types
     l_parenthesis,
     l_io_redirect, // '<'
     r_io_redirect, // '>' 
-    and, // '&'
-    or, // |
+    and_tk, // '&'
+    or_tk, // |
     whitespace // ' ', '\t', or '\n'
 };
 
-typedef enum e_quotes
+enum e_quotes
 {
     none,
     single,

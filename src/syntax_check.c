@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:10:18 by Helene            #+#    #+#             */
-/*   Updated: 2023/05/28 00:15:19 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/08 15:08:05 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,13 @@ void    check_first(t_token_list **first)
     if (!current)
         return ;
 ;   type = current->type;
-    if (type == and)
+    if (type == and_tk)
     {
         if ((*first)->length >= 2)
             display_se(first, "&&");
         display_se(first, "&");
     }
-    else if (type == or)
+    else if (type == or_tk)
     {
         if ((*first)->length >= 2)
             display_se(first, "||");
@@ -79,7 +79,7 @@ void    check_io_redirect(t_token_list **first, t_token_list **op)
 
 void    check_simple_command(t_token_list **first, t_token_list **current, int *parentheses_count, int *s_quotes, int *d_quotes)
 {
-    while ((*current) && (*current)->type != and && (*current)->type != or)
+    while ((*current) && (*current)->type != and_tk && (*current)->type != or_tk)
     {
         // if ((*current)->type == whitespace)
         //     (*current) = (*current)->next;
@@ -143,7 +143,7 @@ void    check_pipe(t_token_list **first, t_token_list **current)
         curr = curr->next;
     if ((*current)->next->type == r_parenthesis)
         display_se(first, ")");
-    if ((*current)->next->type == and)
+    if ((*current)->next->type == and_tk)
         display_se(first, ft_substr((*current)->next->content, 0, 2));
     
     (*current) = (*current)->next;
@@ -166,7 +166,7 @@ void    check_pipeline_list(t_token_list **first)
         //     s_quotes_count++;
         // if (current->type == double_quote)
         //     d_quotes_count++;
-        if (current->type == and || (current->type) == or && current->type > 1)
+        if (current->type == and_tk || (current->type) == or_tk && current->type > 1)
             check_control_op(first, &current);
         // else if (current->type == l_parenthesis)
         // {
@@ -184,9 +184,9 @@ void    check_pipeline_list(t_token_list **first)
         {
             check_first(&current);
             /* check simple commands one by one */
-            while (current && current->type != and && (current->type != or || current->length == 1))
+            while (current && current->type != and_tk && (current->type != or_tk || current->length == 1))
             {
-                if (current->type == or && current->length == 1) // ie si est un pipe
+                if (current->type == or_tk && current->length == 1) // ie si est un pipe
                 {
                     check_pipe(first, &current);
                 }

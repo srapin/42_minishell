@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 23:01:51 by srapin            #+#    #+#             */
-/*   Updated: 2023/05/23 02:15:24 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/08 15:40:34 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ void	free_tab(char **tab)
 {
 	int	i;
 
+	if (!tab) // rajouté par ln. utils ?
+		return ;
 	i = 0;
 	while (tab[i])
 	{

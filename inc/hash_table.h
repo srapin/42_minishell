@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 19:58:14 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/07 18:23:22 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/08 15:04:22 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 # define HASH_TABLE_H
 
 #include <stdlib.h>
-#include <string.h> // ?
-#include "libft.h"
+#include <string.h>
+#include "lib.h"
+//#include "libft.h"
 #include <math.h> // a tej apres
 
 #define HT_INITIAL_SIZE     50

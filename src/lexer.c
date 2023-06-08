@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 00:40:45 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/03 13:59:53 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/08 15:09:00 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,9 +147,9 @@ t_token    *assign_type(char *input, size_t stream_len)
         else if (input[i] == ')')
             token_stream[i].type = r_parenthesis;
         else if (input[i] == '&')
-            token_stream[i].type = and;
+            token_stream[i].type = and_tk;
         else if (input[i] == '|')
-            token_stream[i].type = or;
+            token_stream[i].type = or_tk;
         else if (input[i] == '\'')
             token_stream[i].type = simple_quote;
         else if (input[i] == '\"')

@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 21:44:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/07 23:23:09 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/08 15:22:43 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 /* Determine if the current token is a control operator, ie a "&&" or a "||" */
 int     is_a_ctrl_op(t_token_list *current)
 {
-    if (current->type == andd)
+    if (current->type == and_tk)
         return (1);
-    if (current->type == orr
+    if (current->type == or_tk
         && current->length == 2)
         return (1);
     return (0);
@@ -500,12 +500,12 @@ t_cmd   *get_commands_list(t_ht_hash_table *ht, t_token_list **first_tk)
         
         // tant que n'est ni un '&&' ni un '||'
         // ie peut avoir des pipes, mais ne touche ici pas à la variable next de t_cmd
-        while (pipeline_start_tk && pipeline_start_tk->type != and && (pipeline_start_tk->type != or || pipeline_start_tk->length == 1))
+        while (pipeline_start_tk && pipeline_start_tk->type != and_tk && (pipeline_start_tk->type != or_tk || pipeline_start_tk->length == 1))
         {
             cmd_start_tk = current_tk;
             args_count = 0;
             // tant que n'est ni un '|', '||', ou '&&'
-            while (current_tk && current_tk->type != and && current_tk->type != or)
+            while (current_tk && current_tk->type != and_tk && current_tk->type != or_tk)
             {
                 // creer et updated une t_cmd
                 
@@ -534,8 +534,20 @@ t_cmd   *get_commands_list(t_ht_hash_table *ht, t_token_list **first_tk)
                         current_tk = current_tk->next;
                     }
                     
-                    add_val_to_cmd(current_cmd, ft_strjoin("minishell ", subshell_filename));
-                    //current_cmd->val 
+                    //add_val_to_cmd(current_cmd, ft_strjoin("minishell ", subshell_filename));
+                    
+                    current_cmd->val.value = ft_strdup("minishell");
+                    
+                    current_cmd->val.args = malloc(sizeof(char *) * 3);
+                    if (!current_cmd->val.args)
+                    {
+                        perror("malloc ");
+                        // return ?
+                    }
+                    current_cmd->val.args[0] = ft_strdup("minishell");
+                    current_cmd->val.args[1] = ft_strdup(subshell_filename);
+                    current_cmd->val.args[2] = NULL;
+                    
                     free(subshell_filename);
                     subshell_filename = NULL;
                 }
@@ -560,7 +572,7 @@ t_cmd   *get_commands_list(t_ht_hash_table *ht, t_token_list **first_tk)
             }
             
             // si current_cmd est avant un pipe
-            if (current_tk && current_tk->type == or && current_tk->length == 1) // '|'
+            if (current_tk && current_tk->type == or_tk && current_tk->length == 1) // '|'
             {
                 set_pipe = 1;
                 
@@ -578,7 +590,7 @@ t_cmd   *get_commands_list(t_ht_hash_table *ht, t_token_list **first_tk)
         }
         if (is_a_ctrl_op(current_tk))
         {
-            current_cmd->ctrl = (current_tk->type == andd) * andd + (current_tk->type == orr) * orr;
+            current_cmd->ctrl = (current_tk->type == and_tk) * and + (current_tk->type == or_tk) * or;
             before_ctrl_op_cmd = pipeline_start_cmd;
             
             pipeline_start_cmd = init_new_cmd();

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export.c                                           :+:      :+:    :+:   */
+/*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 23:25:02 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/07 19:00:40 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/08 15:38:19 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,23 +122,23 @@ void    print_export_history(t_ht_hash_table *ht, t_list *export_hist)
     while (j < (ht->count + ft_lstsize(export_hist)))
     {
         i = 0;
-        current_var = export_list;
+        current_var = export_hist;
         while (i < ht->count)
         {
-            while (i < ht->count && ft_strcmp(to_insert, ht->items[i].key) < 0)
+            while (i < ht->count && ft_strcmp(to_insert, ht->items[i]->key) < 0)
                 i++;
             if (i < ht->count) // ie ft_strcmp(to_insert, current) > 0 (== 0 est impossible)
             {
                 if (!is_in_tab(sorted_history, to_insert))
-                    to_insert = ht->items[i].key;
+                    to_insert = ht->items[i]->key;
             }
             i++;
         }
-        while (current->var)
+        while (current_var)
         {
-            while (current->var && ft_strcmp(to_insert, current_var->content) < 0)
+            while (current_var && ft_strcmp(to_insert, current_var->content) < 0)
                 current_var = current_var->next;
-            if (current->var) // ie ft_strcmp(to_insert, current) > 0 (== 0 est impossible)
+            if (current_var) // ie ft_strcmp(to_insert, current) > 0 (== 0 est impossible)
             {
                 if (!is_in_tab(sorted_history, to_insert))
                     to_insert = current_var->content;
@@ -192,7 +192,7 @@ void    del_from_export_history(t_list **export_hist, char *var_name)
 }
 
 // var en plus dans export quand arrive dans un nouveau shell : OLDPWD 
-void    ft_export(t_list **export_history, t_ht_hash_table *ht, char **args)
+int    ft_export(t_list **export_history, t_ht_hash_table *ht, char **args)
 {
     int     i = 0;
     int     j = 0;
@@ -201,8 +201,8 @@ void    ft_export(t_list **export_history, t_ht_hash_table *ht, char **args)
 
     if (!args)
     {
-        print_export_history(ht, export_history);
-        return ;
+        print_export_history(ht, *export_history);
+        return (EXIT_OK);
     }
     while (args[i])
     {
@@ -224,7 +224,7 @@ void    ft_export(t_list **export_history, t_ht_hash_table *ht, char **args)
             else
             {
                 printf("export : `%s' : not a valid identifier\n", args[i]);
-                return (1);
+                return (INVALID_VAR_ID);
             }
         }
         else // ie est arrivé à la fin de args[i], sans avoir trouvé de 
@@ -232,17 +232,17 @@ void    ft_export(t_list **export_history, t_ht_hash_table *ht, char **args)
             var_name = args[i];
             if (valid_name(var_name))
             {
-                if (!is_in_export_history)
+                if (!is_in_export_history(*export_history, var_name))
                     ft_lstadd_back(export_history, ft_lstnew(var_name));
                 // si est deja dans export history, ne fait rien (vu que ne modifie pas sa valeur)
             }
             else
             {
                 printf("export : `%s' : not a valid identifier\n", args[i]);
-                return (1);
+                return (INVALID_VAR_ID);
             }
         }
         i++;
     }
-    return (0);
+    return (EXIT_OK);
 }

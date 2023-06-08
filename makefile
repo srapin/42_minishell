@@ -17,6 +17,21 @@ FILES = cmd_private\
 		redir_pub\
 		safer\
 		tools\
+		hash_table \
+		readline \
+		token_struct_utils \
+		lexer \
+		syntax_check \
+		parser \
+		quotes \
+		var_expansion \
+		wildcards \
+		split_io_redirect_and_cmds \
+		ast_heredocs \
+		ast \
+		ft_export \
+		ft_env \
+		ft_unset
 
 
 SRCS_DIR = src
@@ -44,11 +59,14 @@ INCLUDES_FILES =lib.h \
 
 INCLUDES = $(addprefix $(INCLUDES_DIR)/, $(INCLUDES_FILES))
 
+export C_INCLUDE_PATH = $(INCLUDES_DIR):$(LIBFT_DIR)
+export LIBRARY_PATH = $(LIBFT_DIR)
+
 all: $(NAME)
 
 $(NAME): $(LIBFT) $(OBJS)
 	rm -rf $(OBJS_DIR_BONUS)
-	$(CC) $(OBJS) $(LIBFT) $(CFLAGS) -o $@
+	$(CC) $(OBJS) $(LIBFT) $(CFLAGS) -o $@ -lreadline
 
 ${OBJS_DIR}/%.o: ${SRCS_DIR}/%.c $(INCLUDES)
 	@mkdir -p $(OBJS_DIR)
