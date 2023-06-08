@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:12:06 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/05 19:01:22 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/08 23:34:19 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,8 @@ void    perform_variable_exp(t_ht_hash_table *ht, t_token_list **first)
     current = *first;
     while (current)
     {
-        printf("current->content = %s\n", current->content);
-        printf("current->length = %zu\n", current->length);
+        //printf("current->content = %s\n", current->content);
+        //printf("current->length = %zu\n", current->length);
         if (current->type != simple_quote && (!current->prev 
             || current->prev->type != l_io_redirect || current->prev->length == 1)) // ie n'est pas dans le limiteur d'un here_doc
         {
@@ -117,8 +117,8 @@ void    perform_variable_exp(t_ht_hash_table *ht, t_token_list **first)
             while (dollar_start)
             {
                 dollar_index = current->length - ft_strlen(dollar_start);
-                printf("dollar start = %s\n", dollar_start);
-                printf("dollar index = %zu\n", dollar_index);
+                //printf("dollar start = %s\n", dollar_start);
+                //printf("dollar index = %zu\n", dollar_index);
                 // ne delete les quotes et merge les mots qu'apres l'expansion de variables
                 next_dollar_start = ft_strchr(dollar_start + 1, '$');
                 next_dollar_index = current->length - ft_strlen(next_dollar_start);

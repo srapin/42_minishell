@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:14:54 by Helene            #+#    #+#             */
-/*   Updated: 2023/05/27 21:23:50 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/09 00:17:45 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,20 +68,12 @@ void    tk_del_one(t_token_list **first, t_token_list *to_del)
         return;
 
     current = *first;
-    // if (current && current != to_del)
-    // {
-    //     while (current && current->next != to_del)
-    //         current = current->next;  
-    //     if (current)
-    //         tmp = current->next;;  
-    // }
-    // else
-    //     tmp = current;
 
     while (current && current != to_del)
         current = current->next;
     if (!current) // to_del ne se trouve pas dans la liste
         return ;
+
     
     if (current->prev)
         current->prev->next = current->next;

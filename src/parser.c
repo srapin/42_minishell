@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 02:12:27 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/05 18:59:15 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/08 23:34:51 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,13 +80,57 @@ void print_tokens(t_token_list *first)
     printf("----------------------\n\n");
 }
 
+void    print_ast(t_cmd *ast)
+{
+    t_cmd *current_pipeline;
+    t_cmd *current_simple_cmd;
+
+    current_pipeline = ast;
+    while (current_pipeline)
+    {
+        current_simple_cmd = current_pipeline;
+        while (current_simple_cmd)
+        {
+            // print command's name and arguments/options
+            printf("command : \n");
+            printf("\tname : %s\n\targs : \n", current_simple_cmd->val.value);
+            for (int i = 0; current_simple_cmd->val.args[i]; i++)
+                printf("\t\targ %d : %s\n", i, current_simple_cmd->val.args[i]);
+        
+            // print in and out streams 
+            // printf("instream :\n");
+            // for (t_list *curr_in = current_simple_cmd->red.in_list; curr_in; curr_in = curr_in->next)
+            //     printf("flag : %d\nfile name : %s\n", curr_in->content->flag, curr_in->content->name);
+            // printf("outstream : \n");
+            // for (t_list *curr_out = current_simple_cmd->red.out_list; curr_out; curr_out = curr_out->next)
+            //     printf("flag : %d\nfile name : %s\n", curr_out->content->flag, curr_out->content->name);
+            
+            // print if a pipe follows this command
+            printf("Pipe ? ");
+            if (current_simple_cmd->red.next_cmd)
+                printf("Yes\n");
+            else 
+                printf("No\n");
+            
+            current_simple_cmd = current_simple_cmd->red.next_cmd;
+        }
+        if (current_pipeline->ctrl == and)
+            printf("control_op = '&&' \n");
+        else if (current_pipeline->ctrl == or)
+            printf("control_op = '||' \n");
+        else
+            printf("control_op = ';' \n");
+        current_pipeline = current_pipeline->next;
+    }
+}
+
 void    parse(t_ht_hash_table *ht, t_token_list *first)
 {    
-    print_tokens(first);
+    //print_tokens(first);
     check_pipeline_list(&first);
     
     perform_variable_exp(ht, &first);
-    print_tokens(first);
+    //print_tokens(first);
     
     // tej les quotes en regroupant les <word> qui se suivent et ne sont pas 
     // séparés par des whitespaces ou des operateurs de controle autres que des quotes.
@@ -101,8 +145,12 @@ void    parse(t_ht_hash_table *ht, t_token_list *first)
     perform_wildcard_exp(ht, &first);
     //print_tokens(first);
     
+    
     set_here_docs(ht, &first);
     //print_tokens(first);
+
+    t_cmd *ast = get_ast(ht, &first);
+    print_ast(ast);
     
     // for (t_token_list *current = first; current; current = current->next)
     // {

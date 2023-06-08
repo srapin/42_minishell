@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 21:44:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/08 15:22:43 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/09 01:18:05 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,8 @@ void    update_redirect(t_cmd *cmd, t_token_list *current)
     {
         file->flag = O_RDONLY;
         add_in_redir_with_file_struct(cmd, file);
+        
+        printf("added new infile : %s\n", current->next->content);
     }
     else
     {
@@ -78,38 +80,11 @@ void    update_redirect(t_cmd *cmd, t_token_list *current)
         else // '>>'
             file->flag = O_WRONLY | O_CREAT | O_APPEND;
         add_out_redir_with_file_struct(cmd, file);
+
+        printf("added new outfile : %s\n", current->next->content);
     }
     
     
-    
-    // t_list ne suffit pas : doit avoir deux contents : le nom du fichier et les flags ? 
-    // doit aussi avoir 
-
-    // file = ft_calloc(sizeof(t_file), 1);
-    // if (!file)
-    //     return ;
-    
-    // red->in_type = fd;
-    // file->fd = -1;
-    
-    // file->name = ft_strdup(current->next->content);
-    // if (current->type == l_io_redirect) // '<'
-    // {
-    //     assess_and_free(red->in_content); // ou &(red->in_content) ?
-    //     red->in_type = fd;
-    //     file->flag = O_RDONLY;
-    //     red->in_content = file;
-    // }
-    // else  // '>' ou '>>'
-    // {
-    //     assess_and_free(red->out_content); // ou &(red->out_content) ?
-    //     red->out_type = fd;
-    //     if (current->type == r_io_redirect && current->length == 1) // '>'
-    //         file->flag = O_WRONLY | O_CREAT | O_TRUNC;
-    //     else // '>>'
-    //         file->flag = O_WRONLY | O_CREAT | O_APPEND;
-    //     red->out_content = file;
-    // }
 }
 
 
@@ -165,19 +140,34 @@ void    set_cmd_args(t_cmd **curr_cmd, t_token_list *curr_tk, int *i)
             k = 0;
             while (j < wd->length)
             {
-                if (wd->content[j] != ' ' && wd->content[j] != '\t')
+            // ca couille par ici (genre de boucle infinie ??)
+
+                while (wd->content[j] && (wd->content[j] == ' ' || wd->content[j] == '\t'))
+                    j++;
+                if (!wd->content[j])
+                    break;
+                k = j;
+                while (wd->content[j] && (wd->content[j] != ' ' && wd->content[j] != '\t'))
+                    j++;
+                if (j - k)
                 {
-                    k = j;
-                    while (wd->content[j] && (wd->content[j] != ' ' && wd->content[j] != '\t'))
-                        j++;
-                    (*curr_cmd)->val.args[*i] = ft_substr(curr_tk->content, k, j - k + 1);
+                    (*curr_cmd)->val.args[*i] = ft_substr(wd->content, k, j - k);
                     (*i)++;
                 }
-                else 
-                {
-                    while (wd->content[j] && (wd->content[j] == ' ' || wd->content[j] == '\t'))
-                        j++;
-                }
+
+                // if (wd->content[j] != ' ' && wd->content[j] != '\t')
+                // {
+                //     k = j;
+                //     while (wd->content[j] && (wd->content[j] != ' ' && wd->content[j] != '\t'))
+                //         j++;
+                //     (*curr_cmd)->val.args[*i] = ft_substr(curr_tk->content, k, j - k + 1);
+                //     (*i)++;
+                // }
+                // else 
+                // {
+                //     while (wd->content[j] && (wd->content[j] == ' ' || wd->content[j] == '\t'))
+                //         j++;
+                // }
             }
         }
         else
@@ -194,16 +184,15 @@ void    set_command_attributs(t_cmd **current, t_token_list **first_tk, t_token_
     int i;
 
     i = 0;
+    while (current_tk && (current_tk->type == l_io_redirect || current_tk->type == r_io_redirect))
+        current_tk = current_tk->next->next;
     (*current)->val.value = ft_strdup(current_tk->content);
     if (!(*current)->val.value)
     {
         perror("malloc ");
         return ;
     }
-    current_tk = current_tk->next;
-    tk_del_one(first_tk, current_tk->prev); // est-ce que current_tk pointe encore au bon endroit après ça ?
-    
-    (*current)->val.args = malloc(sizeof(char *) * args_count);
+    (*current)->val.args = malloc(sizeof(char *) * (args_count + 1));
     if (!(*current)->val.args)
     {
         perror("malloc ");
@@ -216,11 +205,17 @@ void    set_command_attributs(t_cmd **current, t_token_list **first_tk, t_token_
         return ;
     }
     i++;
-    while (i < args_count) //while (current_tk && current_tk->type != and && current_tk->type != or)
+    current_tk = current_tk->next;
+    while (current_tk && i < args_count) //while (current_tk && current_tk->type != and && current_tk->type != or)
     {
-        set_cmd_args(current, current_tk, &i);
-        tk_del_one(first_tk, current_tk); // est-ce que current_tk pointe encore au bon endroit après ça ?
-        current_tk = current_tk->next;
+        if (current_tk->type == l_io_redirect || current_tk->type == r_io_redirect)
+            current_tk = current_tk->next->next;
+        else 
+        {
+            set_cmd_args(current, current_tk, &i);
+            //tk_del_one(first_tk, current_tk); // est-ce que current_tk pointe encore au bon endroit après ça ?
+            current_tk = current_tk->next;
+        }
     }
     (*current)->val.args[i] = NULL;
 }
@@ -455,42 +450,52 @@ t_cmd *init_new_cmd(void)
     return (cmd);
 }
 
-t_cmd   *get_commands_list(t_ht_hash_table *ht, t_token_list **first_tk)
+t_cmd   *get_ast(t_ht_hash_table *ht, t_token_list **first_tk)
 {
     int             i;
-    int             set_pipe;
+    int             subshell;
     int             fd_subshell;
     int             args_count;
     char            *subshell_filename;
     t_token_list    *pipeline_start_tk;
     t_token_list    *cmd_start_tk;
     t_token_list    *current_tk;
-    t_cmd           *ast;
+    t_token_list    *tmp;
+    t_cmd           **ast;
     t_cmd           *pipeline_start_cmd;
     t_cmd           *current_cmd;
     t_cmd           *before_pipe_cmd;
     t_cmd           *before_ctrl_op_cmd;
 
-    ast = init_new_cmd();
-    if (!ast)
+    
+    ast = malloc(sizeof(t_cmd *));
+    *ast = init_new_cmd();
+    if (!*ast)
         return (NULL);
-    set_here_docs(ht, first_tk);
+    
+    //set_here_docs(ht, first_tk); // le faire ici ou dans parse() ?
 
     /* Ne modifie pas directement ast car il s'agit de la variable que renvoie à la fin,
     et veut ainsi que pointe encore sur la racine de l'arbre quand est récupéré par l'exec. */
-    current_cmd = ast; 
+    // ast = malloc(sizeof(t_cmd *));
+    // if (!ast)
+    //     perror("malloc ");
+    
+    pipeline_start_cmd = *ast;
 
-    set_pipe = 0;
+    subshell = 0;
+    fd_subshell = 0;
     before_pipe_cmd = NULL;
     before_ctrl_op_cmd = NULL;
+    subshell_filename = NULL;
     
     pipeline_start_tk = *first_tk; // le pointeur sur le premier token du premier pipeline est initialisé à pointeur que va renvoyer à l'exec à la fin
-    pipeline_start_cmd = init_new_cmd();
-    if (!pipeline_start_cmd)
-    {
-        perror("malloc ");
-        // free en cascade
-    }
+    // pipeline_start_cmd = init_new_cmd();
+    // if (!pipeline_start_cmd)
+    // {
+    //     perror("malloc ");
+    //     // free en cascade
+    // }
 
     // parcours la liste de tokens un par un
     while (pipeline_start_tk)
@@ -500,7 +505,7 @@ t_cmd   *get_commands_list(t_ht_hash_table *ht, t_token_list **first_tk)
         
         // tant que n'est ni un '&&' ni un '||'
         // ie peut avoir des pipes, mais ne touche ici pas à la variable next de t_cmd
-        while (pipeline_start_tk && pipeline_start_tk->type != and_tk && (pipeline_start_tk->type != or_tk || pipeline_start_tk->length == 1))
+        while (current_tk && current_tk->type != and_tk && (current_tk->type != or_tk || current_tk->length == 1))
         {
             cmd_start_tk = current_tk;
             args_count = 0;
@@ -513,26 +518,41 @@ t_cmd   *get_commands_list(t_ht_hash_table *ht, t_token_list **first_tk)
                 if (current_tk->type == l_io_redirect || current_tk->type == r_io_redirect)
                 {
                     update_redirect(current_cmd, current_tk);
-                    current_tk = current_tk->next->next; 
+                    // if (current_tk->next->next)
+                    // {
+                    //     current_tk = current_tk->next->next; 
+                        
+                    //     tk_del_one(first_tk, current_tk->prev->prev);
+                    //     tk_del_one(first_tk, current_tk->prev);
+                    // }
+                    // else
+                    // {
+                    //     //tmp = current_tk->next->next;
+                    //     tk_del_one(first_tk, current_tk);
+                    //     tk_del_one(first_tk, current_tk->next);
+                    //     current_tk = NULL;
+                    // }
+                    current_tk = current_tk->next->next;
                     
-                    // ca free bien comme il faut ?
-                    tk_del_one(first_tk, current_tk->next);
-                    tk_del_one(first_tk, current_tk);
                 }
                 else if (current_tk->type == l_parenthesis)
                 {
+                    subshell = 1;
                     subshell_filename = random_subshell_fname();
                     fd_subshell = open(subshell_filename, O_CREAT | O_WRONLY, 00700);
                     if (fd_subshell == -1)
                         perror("open ");
                     i = 0;
                     //cmd_start_tk = current_tk;
+                    current_tk = current_tk->next;
                     while (current_tk && current_tk->type != r_parenthesis)
                     {
                         if (write(fd_subshell, current_tk->content, current_tk->length) == -1) // vérifier si current_tk->length est bien à jour !
                             perror ("write ");
                         current_tk = current_tk->next;
                     }
+                    if (current_tk) // ie == ')'
+                        current_tk = current_tk->next;
                     
                     //add_val_to_cmd(current_cmd, ft_strjoin("minishell ", subshell_filename));
                     
@@ -558,52 +578,50 @@ t_cmd   *get_commands_list(t_ht_hash_table *ht, t_token_list **first_tk)
                 }
             }
             current_cmd->red.next_cmd = NULL;
-            set_command_attributs(&current_cmd, first_tk, cmd_start_tk, args_count);
-
-            // si current_cmd est après un pipe
-            if (set_pipe) 
-            {
-                if (before_pipe_cmd) // simple verification mais normalement, si set_pipe = 1 alors ne peut pas etre NULL
-                {
-                    before_pipe_cmd->red.next_cmd = current_cmd;
-                    before_pipe_cmd = NULL; // ne modifie pas la structure globale, si ?
-                }
-                set_pipe = 0;
-            }
+            if (!subshell)
+                set_command_attributs(&current_cmd, first_tk, cmd_start_tk, args_count);
+            // else
+            //      set_subshell_attributs(&current_cmd, subshell_filename);
             
+            subshell = 0; // le reset ici ?
             // si current_cmd est avant un pipe
             if (current_tk && current_tk->type == or_tk && current_tk->length == 1) // '|'
             {
-                set_pipe = 1;
-                
-                // garde en mémoire current_cmd pour pouvoir la linker à la commande suivante une fois qu'aura déclaré et rempli la variable correspondante
-                before_pipe_cmd = current_cmd;
-                
-                current_cmd = init_new_cmd();
-                if (!current_cmd)
+                //set_pipe = 1;
+
+                current_cmd->red.next_cmd = init_new_cmd();
+                if (!current_cmd->red.next_cmd)
                 {
-                    // tout free en cascade
+                    perror("malloc ");
+                    // free and return ?
                 }
-                
-                current_tk = current_tk->next; // faire ca ici ?
+                current_cmd = current_cmd->red.next_cmd;
+                current_tk = current_tk->next;
             }
         }
-        if (is_a_ctrl_op(current_tk))
+        if (current_tk && is_a_ctrl_op(current_tk))
         {
-            current_cmd->ctrl = (current_tk->type == and_tk) * and + (current_tk->type == or_tk) * or;
-            before_ctrl_op_cmd = pipeline_start_cmd;
+            pipeline_start_cmd->ctrl = (current_tk->type == and_tk) * and + (current_tk->type == or_tk) * or;
+            //before_ctrl_op_cmd = pipeline_start_cmd;
+
+            pipeline_start_cmd->next = init_new_cmd();
+            pipeline_start_cmd = pipeline_start_cmd->next;
             
-            pipeline_start_cmd = init_new_cmd();
-            if (!pipeline_start_cmd)
-            {
-                perror("malloc ");
-                // free en cascade
-            }
+            pipeline_start_tk = current_tk->next;
+            // pipeline_start_cmd = init_new_cmd();
+            // if (!pipeline_start_cmd)
+            // {
+            //     perror("malloc ");
+            //     // free en cascade
+            // }
         }
         else // ie est arrivé à la fin de la liste de tokens -> ctrl_op = ';'
+        {
             current_cmd->ctrl = pointvirgule;
+            pipeline_start_tk = NULL;
+        }
     }
-    return (ast);
+    return (*ast);
         
 
 
@@ -655,37 +673,3 @@ Dès que tombe sur un opérateur de controle :
 
 (echo un | (echo deux && echo trois))
 */
-
-// t_cmd  *get_commands(t_ht_hash_table *ht, t_token_list **first)
-// {
-//     t_token_list    *current_tk;
-//     t_cmd           *new_cmd;
-//     t_cmd           *current_cmd;
-//     t_cmd           *first_cmd;
-
-//     current_tk = (*first);
-    
-//     // first_cmd = ft_calloc(sizeof(t_cmd), 1);
-//     // if (!first_cmd)
-//     //     return (NULL);
-//     set_here_docs(ht, first);
-//     first_cmd = get_simple_command(ht, first, &current_tk);
-//     if (!first_cmd)
-//     {
-//         perror ("malloc ");
-//         return (NULL);
-//     }
-//     current_cmd = first_cmd;
-//     while (current_tk)
-//     {
-//         // parse la liste de tokens jusqu'à arriver à la fin d'un pipeline (ie un && ou un || i guess ?)
-//         new_cmd = get_simple_command(ht, first, &current_tk);
-//         if (!new_cmd)
-//         {
-//             perror ("malloc ");
-//             return (NULL); // ?
-//         }
-//         add_to_cmd_list(&current_cmd, new_cmd);
-//     }
-//     return (first_cmd);
-// }

@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:13:44 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/03 13:51:08 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/09 01:06:13 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void    delete_quotes(t_token_list **first)
                 free(current->content);
                 current->content = content_tmp;
                 current->type = word;
+                current->length -= 2;
             }
         }
         current = current->next;
@@ -132,14 +133,17 @@ void    group_words(t_token_list **first)
         }
         else if (current->type == whitespace) // deletes the token
         {
-            current2 = current;
-            current = current->prev;
-            current2->prev->next = current2->next; // fait pointer le précédent sur l'élément suivant celui qui va etre supprimé
-            current2->next->prev = current2->prev; // idem mais dans l'autre sens
+            current2 = current; 
+            current = current->next;
+            if (current2->prev) // vérifie qu'il ne s'agit pas du premier élément
+                current2->prev->next = current2->next; // fait pointer le précédent sur l'élément suivant celui qui va etre supprimé
+            if (current2->next) // vérifie qu'il ne s'agit pas du dernier élément
+                current2->next->prev = current2->prev; // idem mais dans l'autre sens
+            
             free(current2->content);
             free(current2);
 
-            current = current->next;
+            //current = current->next;
             //tk_del_one(&current);
         }
         else

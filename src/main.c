@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 19:32:17 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/05 16:07:23 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/09 00:22:13 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void    print_ht(t_ht_hash_table *ht)
     }
 }
 
-void    get_commands(t_ht_hash_table *ht, char *path)
+void    exec_script(t_ht_hash_table *ht, char *path)
 {
     int     fd;
     char    *line;
@@ -140,20 +140,18 @@ int main (int argc, char **argv, char **envp)
     if (!hash_map)
         return (EXIT_FAILURE); // do we return ? which exit status ?
 
-    for (int i = 0; envp[i]; i++)
-        printf("envp[%d] = %s\n", i, envp[i]);
-    printf("\n---------------------------\n");
+    // for (int i = 0; envp[i]; i++)
+    //     printf("envp[%d] = %s\n", i, envp[i]);
+    // printf("\n---------------------------\n");
     
 
-    if (argc == 1)
-        read_lines(hash_map);
-    else // peut avoir plus qu'un fichier ? part du principe que non ici ?
-        get_commands(hash_map, argv[1]);
+    // if (argc == 1)
+    //     read_lines(hash_map);
+    // else // peut avoir plus qu'un fichier ? part du principe que non ici ?
+    //     exec_script(hash_map, argv[1]);
     
     
-    
-    
-    //tokenise(hash_map, assign_type(argv[1], ft_strlen(argv[1])), ft_strlen(argv[1]), argv[1]);
+    parse(hash_map, tokenise(hash_map, assign_type(argv[1], ft_strlen(argv[1])), ft_strlen(argv[1]), argv[1]));
 
     /* 
             ------------ Tests ------------
