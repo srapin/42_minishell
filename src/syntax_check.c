@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:10:18 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/09 16:50:12 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/09 22:42:51 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,47 +154,31 @@ void    check_pipe(t_token_list **first, t_token_list **current)
     (*current) = (*current)->next;
 }
 
-void    check_pipeline_list(t_token_list **first)
+int    check_syntax(t_token_list **first)
 {
     int parentheses_count = 0;
-    int s_quotes_count = 0;
-    int d_quotes_count = 0;
+    int s_quotes_count = 0; // si non utilisée plus haut, à delete
+    int d_quotes_count = 0; // si non utilisée plus haut, à delete
     t_token_list    *current;
     
     current = *first; // part du principe qu'à au moins un élément ; sinon aurait déjà exit
+    
     check_first(first); // utile ? en a deja un dans le while 
+    
     /* check pipelines one by one */
     while (current)
     {
-        
-        // if (current->type == simple_quote)
-        //     s_quotes_count++;
-        // if (current->type == double_quote)
-        //     d_quotes_count++;
         if (current->type == and_tk || (current->type) == or_tk && current->type > 1)
             check_control_op(first, &current);
-        // else if (current->type == l_parenthesis)
-        // {
-        //     parentheses_count++; // c'est tout ?
-        //     current = current->next;
-        // }
-        // else if (current->type == r_parenthesis)
-        // {
-        //     if (!parentheses_count)
-        //         display_se(first, ")");
-        //     parentheses_count--;
-        //     current = current->next;
-        // }
         else
         {
             check_first(&current);
+            
             /* check simple commands one by one */
             while (current && current->type != and_tk && (current->type != or_tk || current->length == 1))
             {
                 if (current->type == or_tk && current->length == 1) // ie si est un pipe
-                {
                     check_pipe(first, &current);
-                }
                 else
                     check_simple_command(first, &current, &parentheses_count, &s_quotes_count, &d_quotes_count);
             }
@@ -205,9 +189,20 @@ void    check_pipeline_list(t_token_list **first)
         printf("Syntax error : Missing closing parenthesis\n");
         // free everything
     }
-    // if (s_quotes_count % 2 || d_quotes_count % 2) // ie si n'a pas un nombre pair de quotes
-    // {
-    //     printf("Syntax error : Missing closing quote\n");
-    //     // free everything
-    // }
+}
+
+int    ft_syntax(t_token_list **first)
+{
+    pid_t   pid;
+    int     wstatus;
+    
+    pid = fork();
+    if (pid == -1)
+        perror("fork ");
+    if (pid == 0) // ie s'agit du process enfant
+        check_syntax(first);
+    //if (waitpid(pid, &wstatus, 0) == -1)
+    if (wait(&wstatus) == -1)
+        perror("wait ");
+    return (wstatus);
 }

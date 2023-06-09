@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 19:27:43 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/08 15:53:11 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/09 17:20:30 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,8 @@ t_token         *assign_type(char *input, size_t stream_len);
 t_token_list    *tokenise(t_ht_hash_table *ht, t_token *token_stream, size_t stream_len, char *input);
 
 void            parse(t_ht_hash_table *ht, t_token_list *first);
-void            check_pipeline_list(t_token_list **first);
+int             ft_syntax(t_token_list **first);
+void            check_syntax(t_token_list **first);
 
 void            perform_variable_exp(t_ht_hash_table *ht, t_token_list **first);
 void            expand(t_ht_hash_table *ht, t_token_list **current, char *var, size_t dollar_index);

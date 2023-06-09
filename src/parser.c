@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 02:12:27 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/08 23:34:51 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/09 17:20:37 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,15 @@ void    print_ast(t_cmd *ast)
 void    parse(t_ht_hash_table *ht, t_token_list *first)
 {    
     //print_tokens(first);
-    check_pipeline_list(&first);
+    int wstatus;
+    
+    wstatus = ft_syntax(&first);
+    if (wstatus) // ie la syntaxe n'était pas bonne 
+    {
+        // met à jour le dernier exit status
+        return ;
+    }
+    //check_syntax(&first);
     
     perform_variable_exp(ht, &first);
     //print_tokens(first);
