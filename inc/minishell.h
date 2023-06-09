@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 19:27:43 by srapin            #+#    #+#             */
-/*   Updated: 2023/05/23 02:12:59 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/07 21:29:56 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,10 @@ void set_fd(t_file * f_struct, int *fd, int flag);
 void	parent_process(t_cmd **cmd, int pipe_tab[2]);
 void safe_close_cmd_fd(t_cmd *cmd);
 void dup_cmd_file(t_cmd *cmd);
+void try_to_exec_builtins(t_cmd *cmd);
+
 
 //todo
+
 
 #endif

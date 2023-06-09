@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 23:55:31 by srapin            #+#    #+#             */
-/*   Updated: 2023/05/23 02:22:41 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/07 21:08:46 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,11 @@ void init_cmd(t_cmd *cmd, char **envp)
 	cmd->val.path = NULL;
 	cmd->val.value = NULL;
 }
+
 void add_cmdval_to_cmd(t_cmd *cmd, char *str)
 {
 	// printf("1 add_cmdval, str=%s\n", str);
 	add_args_to_cmd(cmd, str);
 	if (cmd->val.args && *(cmd->val.args))
-		add_value_to_cmd(cmd, ft_strdup((cmd->val.args)[0]));
+		add_value_to_cmd(cmd, (cmd->val.args)[0]);
 }

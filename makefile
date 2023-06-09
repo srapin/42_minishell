@@ -8,6 +8,7 @@ CFLAGS =-g3 -g
 FILES = cmd_private\
 		cmd_pub\
 		common_process\
+		exec_builtins\
 		exec_cmds \
 		file_struct_priv\
 		file_struct_pub\
