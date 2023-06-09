@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 19:27:43 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/09 17:20:30 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/09 23:14:54 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	safe_close(int *fd);
 bool	ft_strisequal(char *s1, char *s2);
 void	free_tab(char **tab);
 void	add_slash(char **paths);
-char	**get_path(char **envp);
+char	**get_path(t_cmd *cmd);
 //complete
 void link_cmds_with_redirections(t_cmd *cmd, t_cmd *next);
 void link_cmds_with_ctrls_op(t_cmd *cmd, t_cmd *next, ctrl_op c);
@@ -111,10 +111,10 @@ void            remove_char(t_token_list *current, size_t index);
 void            set_here_docs(t_ht_hash_table *ht, t_token_list **first);
 
 t_cmd           *get_ast(t_ht_hash_table *ht, t_token_list **first_tk);
-
+char            **hash_map_to_tab(t_ht_hash_table *ht);
 
 void            print_tokens(t_token_list *first);
-
+void            print_ast(t_cmd *ast);
 
 //todo
 

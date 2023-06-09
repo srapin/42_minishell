@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_check.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:10:18 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/09 22:42:51 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/09 23:02:29 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,7 @@ void    check_pipe(t_token_list **first, t_token_list **current)
     (*current) = (*current)->next;
 }
 
-int    check_syntax(t_token_list **first)
+void    check_syntax(t_token_list **first)
 {
     int parentheses_count = 0;
     int s_quotes_count = 0; // si non utilisée plus haut, à delete
@@ -189,6 +189,7 @@ int    check_syntax(t_token_list **first)
         printf("Syntax error : Missing closing parenthesis\n");
         // free everything
     }
+    exit(EXIT_SUCCESS);
 }
 
 int    ft_syntax(t_token_list **first)
@@ -201,8 +202,8 @@ int    ft_syntax(t_token_list **first)
         perror("fork ");
     if (pid == 0) // ie s'agit du process enfant
         check_syntax(first);
-    //if (waitpid(pid, &wstatus, 0) == -1)
-    if (wait(&wstatus) == -1)
+    if (waitpid(pid, &wstatus, 0) == -1)
+    // if (wait(&wstatus) == -1)
         perror("wait ");
     return (wstatus);
 }

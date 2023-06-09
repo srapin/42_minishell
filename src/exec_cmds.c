@@ -41,12 +41,12 @@ void exec_cmds(t_cmd *first_cmd)
 				reset_pip_tab(pip_tab);
 			// if (cmd->red.in_type == fd && ((t_file *) (cmd->red.in_content))->sep)
 			// 	heredoc(cmd); //faire ca ailleurs
-
 			pid[i] = fork();
 			if (pid[i] < 0)
 				fail_process();
 			if (pid[i] == 0)
-				child_process(cmd, pip_tab, pid);
+				exit(0);
+				// child_process(cmd, pip_tab, pid);
 			if (pid[i] > 0)
 				parent_process(&cmd, pip_tab);
 			i++;

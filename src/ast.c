@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 21:44:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/09 16:25:31 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/09 23:16:12 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -436,7 +436,7 @@ t_cmd    *get_pipeline(t_token_list **first_tk, t_token_list **current_tk, t_cmd
 
 // -----------------------------------------------
 
-t_cmd *init_new_cmd(void)
+t_cmd *init_new_cmd(t_ht_hash_table *ht)
 {
     t_cmd *cmd;
     cmd = ft_calloc(sizeof(t_cmd), 1);
@@ -445,6 +445,8 @@ t_cmd *init_new_cmd(void)
         perror("malloc ");
         return (NULL);
     }
+    cmd->env = ht;
+    init_redirections(&(cmd->red));
     //init_cmd(cmd, envp); envp est en fait ht
     return (cmd);
 }
@@ -468,7 +470,7 @@ t_cmd   *get_ast(t_ht_hash_table *ht, t_token_list **first_tk)
 
     
     ast = malloc(sizeof(t_cmd *));
-    *ast = init_new_cmd();
+    *ast = init_new_cmd(ht);
     if (!*ast)
         return (NULL);
     
@@ -489,7 +491,7 @@ t_cmd   *get_ast(t_ht_hash_table *ht, t_token_list **first_tk)
     subshell_filename = NULL;
     
     pipeline_start_tk = *first_tk; // le pointeur sur le premier token du premier pipeline est initialisé à pointeur que va renvoyer à l'exec à la fin
-    // pipeline_start_cmd = init_new_cmd();
+    // pipeline_start_cmd = init_new_cmd(ht);
     // if (!pipeline_start_cmd)
     // {
     //     perror("malloc ");
@@ -588,7 +590,7 @@ t_cmd   *get_ast(t_ht_hash_table *ht, t_token_list **first_tk)
             {
                 //set_pipe = 1;
 
-                current_cmd->red.next_cmd = init_new_cmd();
+                current_cmd->red.next_cmd = init_new_cmd(ht);
                 if (!current_cmd->red.next_cmd)
                 {
                     perror("malloc ");
@@ -603,11 +605,11 @@ t_cmd   *get_ast(t_ht_hash_table *ht, t_token_list **first_tk)
             pipeline_start_cmd->ctrl = (current_tk->type == and_tk) * and + (current_tk->type == or_tk) * or;
             //before_ctrl_op_cmd = pipeline_start_cmd;
 
-            pipeline_start_cmd->next = init_new_cmd();
+            pipeline_start_cmd->next = init_new_cmd(ht);
             pipeline_start_cmd = pipeline_start_cmd->next;
             
             pipeline_start_tk = current_tk->next;
-            // pipeline_start_cmd = init_new_cmd();
+            // pipeline_start_cmd = init_new_cmd(ht);
             // if (!pipeline_start_cmd)
             // {
             //     perror("malloc ");

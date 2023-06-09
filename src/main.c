@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 19:32:17 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/09 16:32:53 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/09 23:51:48 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ t_ht_hash_table *get_minimal_env() // comment indiquer a quel niveau du shell se
 /* Prints the hash map */
 void    print_ht(t_ht_hash_table *ht)
 {
+    printf("ht->count = %ld\n\n", ht->count);
     for (int i = 0; i < ht->size; i++)
     {
         if (ht->items[i])
@@ -143,7 +144,11 @@ int main (int argc, char **argv, char **envp)
     // for (int i = 0; envp[i]; i++)
     //     printf("envp[%d] = %s\n", i, envp[i]);
     // printf("\n---------------------------\n");
-    
+
+    // for (int i = 0; envp[i]; i++)
+    //     printf("envp[%d] = %s\n", i, envp[i]);
+    // printf("\n\n\n\n\n\n\n");
+    // print_ht(hash_map);
 
     if (argc == 1)
         read_lines(hash_map);
@@ -176,8 +181,7 @@ int main (int argc, char **argv, char **envp)
     // Print the envp variable */
     // printf("\n---------------------------\n");
 
-    // for (int i = 0; envp[i]; i++)
-    //     printf("envp[%d] = %s\n", i, envp[i]);
+   
     
 
     // printf("key = PATH, value = %s\n", ht_search(ht, "PATH"));
