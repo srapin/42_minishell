@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 19:32:17 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/09 00:22:13 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/09 16:32:53 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,13 +145,13 @@ int main (int argc, char **argv, char **envp)
     // printf("\n---------------------------\n");
     
 
-    // if (argc == 1)
-    //     read_lines(hash_map);
-    // else // peut avoir plus qu'un fichier ? part du principe que non ici ?
-    //     exec_script(hash_map, argv[1]);
+    if (argc == 1)
+        read_lines(hash_map);
+    else // peut avoir plus qu'un fichier ? part du principe que non ici ?
+        exec_script(hash_map, argv[1]);
     
     
-    parse(hash_map, tokenise(hash_map, assign_type(argv[1], ft_strlen(argv[1])), ft_strlen(argv[1]), argv[1]));
+    //parse(hash_map, tokenise(hash_map, assign_type(argv[1], ft_strlen(argv[1])), ft_strlen(argv[1]), argv[1]));
 
     /* 
             ------------ Tests ------------

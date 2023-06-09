@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 21:44:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/09 01:18:05 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/09 16:25:31 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,6 @@ void    set_cmd_args(t_cmd **curr_cmd, t_token_list *curr_tk, int *i)
             k = 0;
             while (j < wd->length)
             {
-            // ca couille par ici (genre de boucle infinie ??)
 
                 while (wd->content[j] && (wd->content[j] == ' ' || wd->content[j] == '\t'))
                     j++;

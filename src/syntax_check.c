@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:10:18 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/08 15:08:05 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/09 16:50:12 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,11 @@ void    check_simple_command(t_token_list **first, t_token_list **current, int *
         else if ((*current)->type == l_parenthesis)
         {
             (*parentheses_count)++; // c'est tout ?
+            if ((*current)->next && (*current)->next->type == r_parenthesis)
+            {
+                display_se(first, ")");
+                // free everything
+            }
         }
         else if ((*current)->type == r_parenthesis)
         {

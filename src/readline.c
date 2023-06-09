@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 22:15:52 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/05 16:08:37 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/09 16:20:46 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,20 @@ This differs from clear_history because it frees private data Readline saves
 in the history list.
 */
 
+int     only_whitespaces(char *str)
+{
+    int i;
+
+    if (!str)
+        return (-1);
+    i = 0;
+    while (str[i] && (str[i] == ' ' || str[i] == '\t'))
+        i++;
+    if (str[i])
+        return (0);
+    return (1);
+}
+
 /*
 readline returns the text of the line read. 
 A blank line returns the empty string. 
@@ -72,9 +86,12 @@ void    read_lines(t_ht_hash_table *ht)
         stream_len = ft_strlen(input);
         if (!stream_len) // ie si input_str = '\0'.
             continue;
+        
+        add_history(input);
+        if (only_whitespaces(input))
+            continue;
         tk_list = tokenise(ht, assign_type(input, stream_len), stream_len, input);
         parse(ht, tk_list); // l'a mis ici et plus dans tokenise(). vérifier si marche encore !!
-        add_history(input);   
         
     }
 }

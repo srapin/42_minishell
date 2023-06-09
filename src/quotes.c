@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:13:44 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/09 01:06:13 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/09 16:29:35 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,8 @@ void    group_words(t_token_list **first)
         }
         else if (current->type == whitespace) // deletes the token
         {
+            if (current == *first)
+                *first = current->next;
             current2 = current; 
             current = current->next;
             if (current2->prev) // vérifie qu'il ne s'agit pas du premier élément
