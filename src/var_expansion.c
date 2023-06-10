@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:12:06 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/10 17:50:12 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/10 20:21:01 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void    expand(t_ht_hash_table *ht, t_token_list **current, char *var, size_t do
     //printf("var = %s\ndollar index = %zu\n", var, dollar_index);
 
     before_key = ft_substr((*current)->content, 0, dollar_index);
-    if (*var == '$') // expand_last_exit_status(current)
+    if (*var == '?') // expand_last_exit_status(current)
     {
         value = get_last_exit_status(); // le mettre direct dans l'env ?
         after_value = ft_substr((*current)->content, dollar_index + 2, (*current)->length);

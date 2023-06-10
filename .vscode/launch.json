@@ -9,7 +9,7 @@
 			"type": "cppdbg",
 			"request": "launch",
 			"program": "${workspaceFolder}/minishell",
-			"args": [" a        b"], // echo salut\"toi\" && (echo $PWD || echo lol_\"$PATH\") | echo *t // < in < in2 echo hello >out1 | cat && sleep 1 | ls
+			"args": ["echo \"lol$\n l\""], // echo salut\"toi\" && (echo $PWD || echo lol_\"$PATH\") | echo *t // < in < in2 echo hello >out1 | cat && sleep 1 | ls
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}",
 			"environment": [],
