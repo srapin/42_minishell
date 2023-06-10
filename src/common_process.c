@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   common_process.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:44:39 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/09 23:51:48 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/10 20:16:41 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,10 @@ void	child_process(t_cmd *cmd, int pipe_tab[2], int *to_free)
 		cmd->red.out_fd = pipe_tab[1];
 	}
 	dup_cmd_file(cmd);
-	dprintf(1, "child_proc");
-	paths = get_path(cmd);
+	paths = get_path(cmd->env);
 	if (check_acces(paths, cmd))
 	{
-	 	execve(cmd->val.path, cmd->val.args, cmd->val.env);
+	 	execve(cmd->val.path, cmd->val.args, cmd->env);
 	}
 	perror("cmd not found");
 	free_tab(paths);
