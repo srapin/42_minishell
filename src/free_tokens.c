@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/10 17:29:36 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/10 17:35:29 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/10 18:58:59 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void    free_tokens(t_token_list **first)
         current = current->next;
         
         free(tmp->content);
-        free_merged_words(tmp->wd);
+        free_merged_words(tmp->merged_words);
         free(tmp);
         tmp = NULL;
     }
