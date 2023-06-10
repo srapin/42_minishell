@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 02:12:27 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/10 18:50:22 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/10 20:36:29 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,9 @@ void    parse(t_ht_hash_table *ht, t_token_list *first)
     }
     //check_syntax(&first);
     
+    printf("avant var expansion\n");
     perform_variable_exp(ht, &first);
+    printf("après var expansion\n");
     //print_tokens(first);
     
     // tej les quotes en regroupant les <word> qui se suivent et ne sont pas 
@@ -149,7 +151,7 @@ void    parse(t_ht_hash_table *ht, t_token_list *first)
     delete_quotes(&first);
     group_words(&first);
     //print_tokens(first);
-
+    
     perform_wildcard_exp(ht, &first);
     //print_tokens(first);
     
