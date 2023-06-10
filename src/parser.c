@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 02:12:27 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/10 17:09:15 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/10 18:50:22 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,8 +158,9 @@ void    parse(t_ht_hash_table *ht, t_token_list *first)
     //print_tokens(first);
 
     t_cmd *ast = get_ast(ht, &first);
-    print_ast(ast);
     
+    //print_ast(ast);
+    exec_cmds(ast);
     // for (t_token_list *current = first; current; current = current->next)
     // {
     //     if (current->type == l_io_redirect && current->length == 2)

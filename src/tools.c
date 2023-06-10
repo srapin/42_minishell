@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 23:01:51 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/08 15:40:34 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/09 23:51:49 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,20 +63,22 @@ void	add_slash(char **paths)
 
 
 
-char	**get_path(char **envp)
+char	**get_path(t_cmd *cmd)
 {
 	int		i;
 	char	**paths;
+	dprintf(1, "if get peth");
+	cmd->val.env = hash_map_to_tab(cmd->env);
 
 	i = 0;
 	paths = NULL;
-	if (!envp)
+	if (!(cmd->val.env))
 		perror("envp recuparation prob");
-	while (envp[i])
+	while ((cmd->val.env)[i])
 	{
-		if (!ft_strncmp(envp[i], "PATH=", 5))
+		if (!ft_strncmp((cmd->val.env)[i], "PATH=", 5))
 		{
-			paths = ft_split(envp[i] + 5 * sizeof(char), ':');
+			paths = ft_split((cmd->val.env)[i] + 5 * sizeof(char), ':');
 			break ;
 		}
 		i++;

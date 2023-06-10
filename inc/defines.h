@@ -3,19 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   defines.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 17:25:15 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/08 15:38:40 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/09 23:02:49 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef DEFINES_H
 # define DEFINES_H
-
-// ?
-# define MAX_CHAR                   1000 /* Max number of characters to be supported */
-# define MAX_CMD                    100 /* Max number of commands to be supported */
 
 # define GETCWD_INITIAL_BUF_SIZE    50 /* Initial buffer size for getcwd()'s call*/
 

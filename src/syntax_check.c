@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:10:18 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/10 17:43:01 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/10 18:52:02 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,6 +183,7 @@ void    check_syntax(t_token_list **first)
         free_tokens(first);
         exit(SYNTAX_ERROR);
     }
+    exit(EXIT_SUCCESS);
 }
 
 int    ft_syntax(t_token_list **first)
@@ -195,8 +196,8 @@ int    ft_syntax(t_token_list **first)
         perror("fork ");
     if (pid == 0) // ie s'agit du process enfant
         check_syntax(first);
-    //if (waitpid(pid, &wstatus, 0) == -1)
-    if (wait(&wstatus) == -1)
+    if (waitpid(pid, &wstatus, 0) == -1)
+    // if (wait(&wstatus) == -1)
         perror("wait ");
     return (wstatus);
 }

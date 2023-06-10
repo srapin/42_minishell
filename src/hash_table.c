@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 16:09:20 by hlesny            #+#    #+#             */
-/*   Updated: 2023/06/10 17:47:05 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/10 18:53:39 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -337,30 +337,45 @@ void    ht_delete(t_ht_hash_table *ht, const char *key)
 char    **hash_map_to_tab(t_ht_hash_table *ht)
 {
     int i;
+    int j;
     char *tmp;
     char **env;
     
-    env = malloc(sizeof(char *) * (ht->count + 1));
+    env = ft_calloc(sizeof(char *), (ht->count + 1));
     if (!env)
     {
         perror("malloc ");
         return (NULL);
     }
     i = 0;
-    while (i < ht->count)
+    j = 0;
+    dprintf(1, "top of while %i \n", ht->count);
+    
+    while (i < ht->count && j < ht->size)
     {
-        env[i] = malloc(sizeof(char) * (ft_strlen(ht->items[i]->key) + 
-            ft_strlen(ht->items[i]->value) + 2)); // +2 : pour '=' et pour null-terminate
+        dprintf(1, "step 0\n");
+        
+        while (!ht->items[j] || ht->items[j] == &HT_DELETED_ITEM)
+            j++;
+        env[i] = ft_calloc(sizeof(char), (ft_strlen(ht->items[j]->key) + ft_strlen(ht->items[j]->value) + 5)); // +2 : pour '=' et pour null-terminate
+        dprintf(1, "step 1\n");
         if (!env[i])
         {
+            perror("malloc ");
             free_tab(env);
             return (NULL);
         }
-        tmp = ft_strjoin(ht->items[i]->key, "=");
-        env[i] = ft_strjoin(tmp, ht->items[i]->value);
+        dprintf(1, "step 2\n");
+        tmp = ft_strjoin(ht->items[j]->key, "=");
+        dprintf(1, "step 3\n");
+        env[i] = ft_strjoin(tmp, ht->items[j]->value);
+        dprintf(1, "step 4\n");
         free(tmp);
+        dprintf(1, "%i, %s \n",i,  env[i]);
         i++;
+        j++;
     }
     env[i] = NULL;
+    dprintf(1, "end of while");
     return (env);
 }

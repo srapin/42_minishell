@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 19:27:43 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/10 17:36:05 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/10 18:55:12 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	safe_close(int *fd);
 bool	ft_strisequal(char *s1, char *s2);
 void	free_tab(char **tab);
 void	add_slash(char **paths);
-char	**get_path(char **envp);
+char	**get_path(t_cmd *cmd);
 //complete
 void link_cmds_with_redirections(t_cmd *cmd, t_cmd *next);
 void link_cmds_with_ctrls_op(t_cmd *cmd, t_cmd *next, ctrl_op c);
@@ -116,7 +116,7 @@ void            ht_del_hash_table(t_ht_hash_table *ht);
 void            free_tokens(t_token_list **first);
 
 void            print_tokens(t_token_list *first);
-
+void            print_ast(t_cmd *ast);
 
 //todo
 
