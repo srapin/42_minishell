@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 19:27:43 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/09 17:20:30 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/10 17:36:05 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,8 @@ void            set_here_docs(t_ht_hash_table *ht, t_token_list **first);
 
 t_cmd           *get_ast(t_ht_hash_table *ht, t_token_list **first_tk);
 
+void            ht_del_hash_table(t_ht_hash_table *ht);
+void            free_tokens(t_token_list **first);
 
 void            print_tokens(t_token_list *first);
 

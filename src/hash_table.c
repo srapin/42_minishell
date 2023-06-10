@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 16:09:20 by hlesny            #+#    #+#             */
-/*   Updated: 2023/06/08 15:40:43 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/10 17:47:05 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,25 +41,7 @@ Resizing :  up if load > 0.7
  *   0  - not prime
  *   -1 - undefined (i.e. x < 2)
  */
-/* int is_prime(size_t x) // a remplacer par ma propre fonction de la piscine (C07)
-{
-    int i;
 
-    i = 2;
-    if (x < 2)
-        return -1;
-    if (x < 4)
-        return 1;
-    if ((x % 2) == 0)
-        return 0;
-    while (i <= floor(sqrt((double) x)))
-    {
-        if ((x % i) == 0)
-            return 0;
-        i++;
-    }
-    return 1;
-} */
 
 int	search(int low, int high, int nbr)
 {
@@ -117,15 +99,8 @@ int	next_prime(int nb)
 	else
 		return (next_prime(nb + 1));
 }
-/* int next_prime(size_t x)
-{
-    while (is_prime(x) != 1)
-        x++;
-    return x;
-} */
 
-
-// a le droit de declRER UNE STTic comme ca ?
+// a le droit de declarer une static comme ca ?
 static t_ht_item HT_DELETED_ITEM = {NULL, NULL};
 
 t_ht_hash_table    *ht_new(size_t size)
@@ -279,7 +254,7 @@ int     ft_strcmp(const char *s1, const char *s2)
 	return (((unsigned char *)s1)[i] - ((unsigned char *)s2)[i]);
 }
 
-/* Searchs the key in the hash map, and modify its value by the new_value.
+/* Searchs the key in the hash map, and replaces its value by the new_value.
 Returns 1 in case of success
 Returns 0 in case the key isn't in the hash map. */
 int    ht_modify_value(t_ht_hash_table *ht, const char *key, const char *new_value) // new_value est deja malloc ici
@@ -332,15 +307,7 @@ char    *ht_search(t_ht_hash_table *ht, const char *key)
     return (NULL);
 }
 
-void    ht_del_item(t_ht_item *item)
-{
-    if (!item)
-        return ;
-    free(item->key);
-    free(item->value);
-    free(item);
-}
-
+/* Deletes the key-value pair stored in the hash table */
 void    ht_delete(t_ht_hash_table *ht, const char *key)
 {
     size_t      attempts;
@@ -366,38 +333,6 @@ void    ht_delete(t_ht_hash_table *ht, const char *key)
         current = ht->items[index];
     }
 }
-
-void    ht_del_hash_table(t_ht_hash_table *ht)
-{
-    size_t     i;
-    t_ht_item   *current;
-    
-    i = 0;
-    while (i < ht->size)
-    {
-        current = ht->items[i];
-        if (current)
-            ht_del_item(current);
-        i++;
-    }
-    free(ht->items);
-    free(ht);
-}
-
-// void free_tab(char **tab)
-// {
-//     int i;
-
-//     if (!tab)
-//         return ;
-//     i = 0;
-//     while (tab[i])
-//     {
-//         free(tab[i]);
-//         i++;
-//     }
-//     free(tab);
-// }
 
 char    **hash_map_to_tab(t_ht_hash_table *ht)
 {

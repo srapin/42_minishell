@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 19:58:14 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/08 15:04:22 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/10 17:06:51 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ void                ht_resize(t_ht_hash_table *ht, size_t base_size);
 void                ht_insert_item(t_ht_hash_table *ht, char *key, char *value);
 char                *ht_search(t_ht_hash_table *ht, const char *key);
 int                 ht_modify_value(t_ht_hash_table *ht, const char *key, const char *new_value);
-void                ht_del_hash_table(t_ht_hash_table *ht);
 void                ht_delete(t_ht_hash_table *ht, const char *key);
 
 int                 ft_strcmp(const char *s1, const char *s2);

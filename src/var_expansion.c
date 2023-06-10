@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:12:06 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/08 23:34:19 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/10 17:50:12 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ void    expand(t_ht_hash_table *ht, t_token_list **current, char *var, size_t do
     free((*current)->content);
     (*current)->content = ft_strjoin(ft_strjoin(before_key, value), after_value);
     (*current)->length = ft_strlen((*current)->content);
+    free(var);
     free(before_key);
     free(after_value);
 }
@@ -127,7 +128,7 @@ void    perform_variable_exp(t_ht_hash_table *ht, t_token_list **first)
                 else if (current->type == double_quote)
                     expand(ht, &current, ft_substr(current->content, dollar_index + 1, current->length - dollar_index - 2), dollar_index);    
                 else
-                    expand(ht, &current, dollar_start + 1, dollar_index);
+                    expand(ht, &current, ft_strdup(dollar_start + 1), dollar_index);
                 dollar_start = next_dollar_start;
             }
         }

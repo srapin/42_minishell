@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:10:18 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/09 22:42:51 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/10 17:43:01 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,9 @@ Then, frees all data structures and returns the corresponding exit status (ie 2 
 void    display_se(t_token_list **first, char *token)
 {
     printf("Syntax error near unexpected token `%s\'\n", token);
-    // free everything 
-    exit(SYNTAX_ERROR); 
-    // CHANGER : doit juste retourner à la boucle de readline()
-    // sauf si fork avant de checker la syntaxe ; dans ce cas la peut exit sans soucis
+    free_tokens(first);
+    free(token);
+    exit(SYNTAX_ERROR);
 }
 
 void    check_first(t_token_list **first)
@@ -31,10 +30,7 @@ void    check_first(t_token_list **first)
     t_token_list *current;
 
     if (!first || !*first)
-    {
-        // free everything
-        exit(EXIT_OK);
-    }
+        exit(EXIT_OK); // rien a free dans ce cas, si ?
     current = (*first);
     while (current && current->type == whitespace)
         current = current->next;
@@ -44,17 +40,17 @@ void    check_first(t_token_list **first)
     if (type == and_tk)
     {
         if ((*first)->length >= 2)
-            display_se(first, "&&");
-        display_se(first, "&");
+            display_se(first, ft_strdup("&&"));
+        display_se(first, ft_strdup("&"));
     }
     else if (type == or_tk)
     {
         if ((*first)->length >= 2)
-            display_se(first, "||");
-        display_se(first, "|");
+            display_se(first, ft_strdup("||"));
+        display_se(first, ft_strdup("|"));
     }
     else if (type == r_parenthesis)
-        display_se(first, ")");
+        display_se(first, ft_strdup(")"));
 }
 
 /* Les tokens avec des '' ou "" doivent avoir le type word, et le content "\0" !!! */
@@ -71,7 +67,7 @@ void    check_io_redirect(t_token_list **first, t_token_list **op)
     while (current && current->type == whitespace)
         current = current->next;
     if (!current) // cas ou rien ne suit : ie syntax error near unexpected newline
-        display_se(first, "newline");
+        display_se(first, ft_strdup("newline"));
     else if (current->type != word && current->type != simple_quote
         && current->type != double_quote) // le fait que la variable soit expandable ou non, ou qu'un/des fichiers resultant du wildcard expansion existe ou non, est a gerer pendant l'execution (ou du moins apres la vérification de la syntaxe)
         display_se(first, ft_substr(current->content, 0, 2));
@@ -89,10 +85,7 @@ void    check_simple_command(t_token_list **first, t_token_list **current, int *
         {
             (*parentheses_count)++; // c'est tout ?
             if ((*current)->next && (*current)->next->type == r_parenthesis)
-            {
                 display_se(first, ")");
-                // free everything
-            }
         }
         else if ((*current)->type == r_parenthesis)
         {
@@ -105,16 +98,16 @@ void    check_simple_command(t_token_list **first, t_token_list **current, int *
             || (*current)->length == 1))
             {
                 printf("Syntax error : Missing closing quote\n");
-                // free everything
-                exit(0); // a tej
+                free_tokens(first);
+                exit(SYNTAX_ERROR);
             }
         else if ((*current)->type == double_quote
             && ((*current)->content[(*current)->length - 1] != '\"'
             || (*current)->length == 1))
             {
                 printf("Syntax error : Missing closing quote\n");
-                // free everything
-                exit(0); // a tej
+                free_tokens(first);
+                exit(SYNTAX_ERROR);
             }
         *current = (*current)->next;
     }
@@ -130,9 +123,9 @@ void    check_control_op(t_token_list **first, t_token_list **current) // ie "||
     while (curr && curr->type == whitespace)
         curr = curr->next;
     if (!curr) // faut-il redonner le prompt ?
-        display_se(first, "newline"); // ou ft_substr((*current)->content, 0, 2) ? 
+        display_se(first, ft_strdup("newline")); // ou ft_substr((*current)->content, 0, 2) ? 
     if (curr->type == r_parenthesis)
-        display_se(first, ")");
+        display_se(first, ft_strdup(")"));
     
     *current = (*current)->next; // ou simplement *current = curr ? skip les whitespaces ici comme ca c'est fait
 }
@@ -142,19 +135,19 @@ void    check_pipe(t_token_list **first, t_token_list **current)
     t_token_list    *curr;
     
     if (!(*current)->next) // faut-il redonner le prompt ?
-        display_se(first, "|");
+        display_se(first, ft_strdup("|"));
     curr = (*current)->next;
     while (curr && curr->type == whitespace)
         curr = curr->next;
     if ((*current)->next->type == r_parenthesis)
-        display_se(first, ")");
+        display_se(first, ft_strdup(")"));
     if ((*current)->next->type == and_tk)
         display_se(first, ft_substr((*current)->next->content, 0, 2));
     
     (*current) = (*current)->next;
 }
 
-int    check_syntax(t_token_list **first)
+void    check_syntax(t_token_list **first)
 {
     int parentheses_count = 0;
     int s_quotes_count = 0; // si non utilisée plus haut, à delete
@@ -187,7 +180,8 @@ int    check_syntax(t_token_list **first)
     if (parentheses_count) // ie toutes les parentheses ne sont pas fermees
     {
         printf("Syntax error : Missing closing parenthesis\n");
-        // free everything
+        free_tokens(first);
+        exit(SYNTAX_ERROR);
     }
 }
 

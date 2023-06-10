@@ -29,6 +29,8 @@ FILES = cmd_private\
 		split_io_redirect_and_cmds \
 		ast_heredocs \
 		ast \
+		free_after_exec \
+		free_exit_shell \
 		ft_export \
 		ft_env \
 		ft_unset

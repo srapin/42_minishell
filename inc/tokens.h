@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 18:15:56 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/08 15:11:02 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/10 18:01:37 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ typedef struct s_word_data
     struct s_word_data  *next;
 } t_word_data;
 
+// utilisé dans l'expansion de filenames (ie gestion des wildcards)
 typedef struct s_filename
 {
     char                *filename;

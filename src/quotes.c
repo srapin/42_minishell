@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:13:44 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/09 16:29:35 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/10 18:00:38 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void    delete_quotes(t_token_list **first)
     if (current->type == simple_quote || current->type == double_quote)
     {
         content_tmp = ft_substr(current->content, 1, current->length - 2);
-        if (!content_tmp && current->length - 2 > 0) // si le malloc ne fonctionne pas
+        if (!content_tmp) // && current->length - 2 > 0 // si le malloc ne fonctionne pas
             return ; // que faire ?
         free(current->content);
         current->content = content_tmp;
@@ -127,9 +127,6 @@ void    group_words(t_token_list **first)
                 current2->next->prev = current2->prev; // idem mais dans l'autre sens
             free(current2->content);
             free(current2);
-            
-            //tk_del_one(&current->next);
-            //current->next = current->next;
         }
         else if (current->type == whitespace) // deletes the token
         {

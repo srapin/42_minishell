@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 21:44:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/09 16:25:31 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/10 17:30:18 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -620,6 +620,9 @@ t_cmd   *get_ast(t_ht_hash_table *ht, t_token_list **first_tk)
             pipeline_start_tk = NULL;
         }
     }
+
+    free_tokens(first_tk);
+    
     return (*ast);
         
 

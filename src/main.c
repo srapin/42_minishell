@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 19:32:17 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/09 16:32:53 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/10 17:48:04 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,8 @@ t_ht_hash_table *get_minimal_env() // comment indiquer a quel niveau du shell se
         getcwd(pwd, size);
     }
     ht_insert_item(ht, ft_strcpy("SHLVL"),ft_itoa(shell_lvl));
-    ht_insert_item(ht, ft_strcpy("PWD"), pwd); // que mettre ? getcwd() ?
-    ht_insert_item(ht, ft_strcpy("_"), ft_strcpy("/usr/bin/env")); // que mettre ? 
+    ht_insert_item(ht, ft_strcpy("PWD"), pwd);
+    ht_insert_item(ht, ft_strcpy("_"), ft_strcpy("/usr/bin/env"));
     return (ht);
 }
 
