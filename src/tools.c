@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 23:01:51 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/09 23:51:49 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/10 21:04:58 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ char	**get_path(t_cmd *cmd)
 {
 	int		i;
 	char	**paths;
-	dprintf(1, "if get peth");
+	// dprintf(1, "if get peth");
 	cmd->val.env = hash_map_to_tab(cmd->env);
 
 	i = 0;

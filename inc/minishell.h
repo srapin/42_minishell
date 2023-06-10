@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 19:27:43 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/10 18:57:15 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/10 21:02:44 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ void	fail_process(void);
 //exec_cmd
 void exec_cmds(t_cmd *first_cmd); //to div
 
+void try_to_exec_builtins(t_cmd *cmd);
 
 //heredoc
 void heredoc(t_cmd *cmd);

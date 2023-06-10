@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 21:44:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/10 18:54:18 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/10 22:26:09 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,11 +80,12 @@ void    update_redirect(t_cmd *cmd, t_token_list *current)
         else // '>>'
             file->flag = O_WRONLY | O_CREAT | O_APPEND;
         add_out_redir_with_file_struct(cmd, file);
+        
+        cmd->red.out = file; // test
 
         printf("added new outfile : %s\n", current->next->content);
+        printf("added new outfile : %s\n", file->name);
     }
-    
-    
 }
 
 

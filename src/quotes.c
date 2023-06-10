@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:13:44 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/10 18:00:38 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/10 22:08:44 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void    delete_quotes(t_token_list **first)
     t_token_list *current;
     t_token_list *current_prev;
 
-    if (!first)
+    if (!first || !(*first))
         return ;
     current = *first;
     if (current->type == simple_quote || current->type == double_quote)
@@ -43,7 +43,7 @@ void    delete_quotes(t_token_list **first)
             if (current_prev->type != l_io_redirect || current_prev->length == 1) // si le token n'est pas le delimiteur d'un here_doc
             {
                 content_tmp = ft_substr(current->content, 1, current->length - 2);
-                if (!content_tmp && current->length - 2 > 0) // si le malloc ne fonctionne pas
+                if (!content_tmp) // si le malloc ne fonctionne pas
                     return ; // que faire ?
                 free(current->content);
                 current->content = content_tmp;

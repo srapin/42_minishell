@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:03:15 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/09 23:14:33 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/10 22:24:07 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,9 @@ typedef struct cmd t_cmd;
 
 typedef struct redirect
 {
-	t_list *in_list; 
-	t_list *out_list;
+	t_list 	*in_list; 
+	t_list 	*out_list;
+	t_file 	*out; // test
 	t_cmd	*next_cmd;
 	int in_fd;
 	int out_fd;

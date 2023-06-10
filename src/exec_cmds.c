@@ -24,7 +24,8 @@ void exec_cmds(t_cmd *first_cmd)
 	int ret;
 
 	cmd = first_cmd;
-
+	//dprintf(1, "coucou test\n");
+	dprintf(1, "in exec, first command name = %s\n", cmd->val.value);
 	
 	while(cmd)
 	{
@@ -35,6 +36,7 @@ void exec_cmds(t_cmd *first_cmd)
 		ret_cmd = cmd;
 		while(i < nb_cmds)
 		{
+			dprintf(1, "in exec while file name = %s\n", ((t_file *)(cmd->red.out_list)->content)->name);
 			if (i < nb_cmds - 1)
 				safe_pipe(pip_tab);
 			else
@@ -45,8 +47,8 @@ void exec_cmds(t_cmd *first_cmd)
 			if (pid[i] < 0)
 				fail_process();
 			if (pid[i] == 0)
-				exit(0);
-				// child_process(cmd, pip_tab, pid);
+				child_process(cmd, pip_tab, pid);
+				// exit(0);
 			if (pid[i] > 0)
 				parent_process(&cmd, pip_tab);
 			i++;

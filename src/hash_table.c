@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 16:09:20 by hlesny            #+#    #+#             */
-/*   Updated: 2023/06/10 18:53:39 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/10 21:03:44 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -349,33 +349,33 @@ char    **hash_map_to_tab(t_ht_hash_table *ht)
     }
     i = 0;
     j = 0;
-    dprintf(1, "top of while %i \n", ht->count);
+    // dprintf(1, "top of while %i \n", ht->count);
     
     while (i < ht->count && j < ht->size)
     {
-        dprintf(1, "step 0\n");
+        // dprintf(1, "step 0\n");
         
         while (!ht->items[j] || ht->items[j] == &HT_DELETED_ITEM)
             j++;
         env[i] = ft_calloc(sizeof(char), (ft_strlen(ht->items[j]->key) + ft_strlen(ht->items[j]->value) + 5)); // +2 : pour '=' et pour null-terminate
-        dprintf(1, "step 1\n");
+        // dprintf(1, "step 1\n");
         if (!env[i])
         {
             perror("malloc ");
             free_tab(env);
             return (NULL);
         }
-        dprintf(1, "step 2\n");
+        // dprintf(1, "step 2\n");
         tmp = ft_strjoin(ht->items[j]->key, "=");
-        dprintf(1, "step 3\n");
+        // dprintf(1, "step 3\n");
         env[i] = ft_strjoin(tmp, ht->items[j]->value);
-        dprintf(1, "step 4\n");
+        // dprintf(1, "step 4\n");
         free(tmp);
-        dprintf(1, "%i, %s \n",i,  env[i]);
+        // dprintf(1, "%i, %s \n",i,  env[i]);
         i++;
         j++;
     }
     env[i] = NULL;
-    dprintf(1, "end of while");
+    // dprintf(1, "end of while");
     return (env);
 }

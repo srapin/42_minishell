@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:12:06 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/10 20:21:01 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/10 22:07:57 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,6 @@ void    expand(t_ht_hash_table *ht, t_token_list **current, char *var, size_t do
     
     //printf("before key = %s\n", before_key);
     //printf("after key = %s\n", after_value);
-    
     
     
     free((*current)->content);
