@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 23:25:02 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/10 20:51:03 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/11 23:35:44 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,8 +129,11 @@ void    print_export_history(t_ht_hash_table *ht, t_list *export_hist)
                 i++;
             if (i < ht->count) // ie ft_strcmp(to_insert, current) > 0 (== 0 est impossible)
             {
-                if (!is_in_tab(sorted_history, to_insert))
+                if (ft_strcmp("_", ht->items[i]->key)) // fait le choix de ne pas print la variable "_" de l'env (undefined behaviour suite a mes tests)
+                {
+                    if (!is_in_tab(sorted_history, to_insert))
                     to_insert = ht->items[i]->key;
+                }
             }
             i++;
         }
@@ -194,57 +197,59 @@ void    del_from_export_history(t_list **export_hist, char *var_name)
 // var en plus dans export quand arrive dans un nouveau shell : OLDPWD 
 
 // modif : mettre la t_list **export_history dans la structure de t_cmd 
-int    ft_export(t_list **export_history, t_ht_hash_table *ht, char **args)
+int    ft_export(t_cmd *cmd, t_list **export_history, t_ht_hash_table *ht, char **args)
 {
-    int     i = 0;
+    int     i = 1;
     int     j = 0;
+    int     exit_status;
     char    *var_name;
     char    *var_value;
 
     if (!args)
     {
-        print_export_history(ht, *export_history);
+        print_export_history(cmd->env, cmd->export_history);
         return (EXIT_OK);
     }
-    while (args[i])
+    exit_status = EXIT_OK;
+    while (cmd->val.args[i])
     {
         j = 0;
-        while (args[i][j] && args[i][j] != '=')
+        while (cmd->val.args[i][j] && cmd->val.args[i][j] != '=')
             j++;
-        if (args[i][j]) // ie est tombé sur un '='
+        if (cmd->val.args[i][j]) // ie est tombé sur un '='
         {
-            var_name = ft_substr(args[i], 0, j);
+            var_name = ft_substr(cmd->val.args[i], 0, j);
             if (valid_name(var_name))
             {
-                if (is_in_export_history(*export_history, var_name))
-                    del_from_export_history(export_history, var_name);
-                var_value = ft_substr(args[i], j + 1, ft_strlen(args[i]));
-                if (!ht_modify_value(ht, var_name, var_value)) // ie si la variable n'est pas deja dans l'env
-                    ht_insert_item(ht, var_name, var_value);
+                if (is_in_export_history(cmd->export_history, var_name))
+                    del_from_export_history(&cmd->export_history, var_name);
+                var_value = ft_substr(cmd->val.args[i], j + 1, ft_strlen(cmd->val.args[i]));
+                if (!ht_modify_value(cmd->env, var_name, var_value)) // ie si la variable n'est pas deja dans l'env
+                    ht_insert_item(cmd->env, var_name, var_value);
                   
             }
             else
             {
-                printf("export : `%s' : not a valid identifier\n", args[i]);
-                return (INVALID_VAR_ID);
+                printf("export : `%s' : not a valid identifier\n", cmd->val.args[i]);
+                exit_status = INVALID_VAR_ID;
             }
         }
-        else // ie est arrivé à la fin de args[i], sans avoir trouvé de 
+        else // ie est arrivé à la fin de cmd->val.args[i], sans avoir trouvé de 
         {
-            var_name = args[i];
+            var_name = cmd->val.args[i];
             if (valid_name(var_name))
             {
-                if (!is_in_export_history(*export_history, var_name))
-                    ft_lstadd_back(export_history, ft_lstnew(var_name));
+                if (!is_in_export_history(cmd->export_history, var_name))
+                    ft_lstadd_back(&cmd->export_history, ft_lstnew(var_name));
                 // si est deja dans export history, ne fait rien (vu que ne modifie pas sa valeur)
             }
             else
             {
-                printf("export : `%s' : not a valid identifier\n", args[i]);
-                return (INVALID_VAR_ID);
+                printf("export : `%s' : not a valid identifier\n", cmd->val.args[i]);
+                exit_status = INVALID_VAR_ID;
             }
         }
         i++;
     }
-    return (EXIT_OK);
+    return (exit_status);
 }

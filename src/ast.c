@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 21:44:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/10 22:26:09 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/11 23:17:40 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,24 +21,6 @@ int     is_a_ctrl_op(t_token_list *current)
         && current->length == 2)
         return (1);
     return (0);
-}
-
-/* Détermine si un opérateur de redirection a déja été parsed pour une même commande.
-Si c'est le cas, free l'espace alloué.
-Utilisation : si plusieurs opérateurs identiques se suivent pour une même commande.
-Exemple : echo salut > out1 >out2 > out3. Dans ce cas, ne va retenir que les infos du dernier fichier,
-ie celui d'où on va lire / sur lequel on va écrire.
-*/
-void    assess_and_free(t_file *content)
-{
-    if (!content)
-        return ;
-    if (content->name)
-        free(content->name);
-    // else if (content->sep)
-    //     free(content->sep);
-    free(content);
-    content = NULL;
 }
 
 void    remove_char(t_token_list *current, size_t index)
@@ -274,53 +256,6 @@ void    add_to_cmd_list(t_cmd **last, t_cmd *new)
     }  
 }
 
-// t_cmd    *get_simple_command(t_ht_hash_table *ht, t_token_list **first_tk, t_token_list *tmp)
-// {
-//     t_cmd   *new_cmd;
-    
-//     new_cmd = ft_calloc(sizeof(t_cmd), 1);
-//     if (!new_cmd)
-//     {
-//         perror ("malloc ");
-//         return (NULL);
-//     }
-    
-//     /* Remplit t_redirect en supprimant les tokens io_redirect au fur et a mesure*/
-//     while (tmp && tmp->type != andd && tmp->type != orr)
-//     {
-//         if (tmp->type == r_io_redirect || tmp->type == l_io_redirect)
-//         {
-//             update_redirect(ht, &(new_cmd->red), tmp);
-//             //tmp2 = tmp;
-//             tmp = tmp->next->next; // current->next ne peut etre NULL, donc c'est ok d'écrire ça
-//             tk_del_one(first_tk, tmp->prev->prev);
-//             tk_del_one(first_tk, tmp->prev); 
-//         }
-//         // else if (tmp->type == l_parenthesis) // || tmp->type == l_parenthesis) // uniquement l_parenthesis : on parsera jusqu'à la deuxieme (ie ')' dans la fonction appelée dès qu'a lu '(' )
-//         // {
-//         //     // appel recursif a get_pipeline(), qui se termine quand lit une ')' ? 
-//         //     // (ie if (== ')' return(cmd); et ensuite linke comme il faut (ie si est précédé et/ou suivi par un '|', '||', ou '&&'))
-//         //     sub_cmd = get_pipeline(ht, first_tk, &tmp); // &tmp ou current_tk ? pointent au meme endroit ici ou pas ?
-//         //     if (set_pipe)
-//         //     {
-//         //         new_cmd->red.out_content = sub_cmd;
-//         //         new_cmd->red.out_type = cmds_cmd;
-//         //         new_cmd->red.out_fd = -1;
-//         //         // set_pipe = 0; ne pas mettre a 0 ici, car doit renseigner (plus bas, dans if(set_pipe)) le red->in_type
-//         //     }
-//         //     // si precédé par un pipe (ie set_pipe = 1), alors ajoute sub_cmd au void *out_content de t_redirect de la commande precedente, et remet set_pipe à 0
-//         // }
-//         // else if (tmp->type == r_parenthesis)
-//         // {
-//         //     break; 
-//         //     // return (new_cmd); il faut mettre a jour le ctrl_op avant de return 
-//         // }
-//         else // incrémente le nombre d'agruments à passer à execve 
-//             args_count += get_words_count(tmp); // two words are separated by successive whitespaces that aren't in quotes
-//     }
-//     return (new_cmd);
-// }
-
 char    *random_subshell_fname(void)
 {
     static size_t   files_count;
@@ -333,110 +268,6 @@ char    *random_subshell_fname(void)
     return (filename);
 }
 
-
-/* 
-//A modifier : les parenthèses ne sont pour l'instant pas gérées ! 
-t_cmd    *get_pipeline(t_token_list **first_tk, t_token_list **current_tk, t_cmd **ast)
-{
-    int             set_pipe;
-    int             args_count;
-    t_cmd           *tmp_cmd;
-    t_cmd           *new_cmd;
-    t_cmd           *prev_cmd;
-    t_cmd           *pipeline;
-    t_token_list    *tmp;
-    
-    set_pipe = 0;
-    
-    tmp = *current_tk; // utile ?
-    // allocates memory for the new t_cmd variable 
-    pipeline = ft_calloc(sizeof(t_cmd), 1);
-    if (!pipeline)
-    {
-        perror ("malloc ");
-        return (NULL);
-    }
-    
-    // parse the tokens simple command by simple command 
-    // parse tant que ce n'est ni un && ni un || (ok ou a modifier ?)
-    while (tmp && tmp->type != andd && (tmp->type != orr || tmp->length == 1))
-    {
-        args_count = 0;
-        tmp = *current_tk;
-        
-        // new_cmd = get_simple_command(ht, first_tk, tmp, new_cmd);
-        while (tmp && tmp->type != andd && tmp->type != orr)
-        {
-            if (tmp->type == r_io_redirect || tmp->type == l_io_redirect)
-            {
-                // ajoute la redirection à la liste de redirections pour la commande actuelle
-                update_redirect(&(new_cmd->red), tmp);
-                //tmp2 = tmp;
-                tmp = tmp->next->next; // current->next ne peut etre NULL, donc c'est ok d'écrire ça
-                tk_del_one(first_tk, tmp->prev->prev);
-                tk_del_one(first_tk, tmp->prev); 
-            }
-            else if (tmp->type == l_parenthesis)
-            {
-                int fd = open(random_subshell_fname(), O_WRONLY);
-                if (fd == -1)
-                {
-                    perror("open ");
-                }
-                t_token_list *
-                
-            }
-            else // il s'agit alors d'un nom ou d'un argument de commande
-            {
-                // incrémente le nombre d'arguments à passer à execve
-                args_count += get_words_count(tmp); // two words are separated by successive whitespaces that aren't in quotes
-                tmp = tmp->next;
-            }
-        }
-        
-        // if (set_pipe) // ie si avait un pipe avant cette commande
-        // {
-        //     new_cmd->red.in_type = pipeu;
-        //     // que faire pour red.in_content ?
-        //     set_pipe = 0;    
-        // }
-        
-        // chope nom + args de la commande
-        set_command_attributs(&new_cmd, first_tk, *current_tk, args_count);
-        
-        // tmp et *current_tk pointent à nouveau normalement sur le meme token à cet endroit 
-        if (tmp && tmp->type == orr && tmp->length == 1) // ie s'agit d'un pipe
-        {
-            set_pipe = 1;
-            // renseigne t_redirect pour le pipe
-            
-               
-            prev_cmd = new_cmd; // garde en mémoire la commande actuelle 
-            // new_cmd->red.out_content : doit pointer vers la commande suivante : comment faire ?
-            
-            *current_tk = (*current_tk)->next;
-        }
-        else 
-        {
-            
-        }
-    }
-    
-    if (is_a_ctrl_op(tmp))
-        new_cmd->ctrl = (tmp->type == andd) * andd + (tmp->type == orr) * orr;
-    else // ie est arrivé à la fin de la liste de tokens -> ctrl_op = ';'
-        new_cmd->ctrl = pointvirgule;
-    if (new_cmd->ctrl )
-    
-    return (new_cmd);
-}
-*/
-
-
-
-
-// -----------------------------------------------
-
 t_cmd *init_new_cmd(t_ht_hash_table *ht)
 {
     t_cmd *cmd;
@@ -447,11 +278,33 @@ t_cmd *init_new_cmd(t_ht_hash_table *ht)
         return (NULL);
     }
     cmd->env = ht;
+    cmd->export_history = init_export_history(ht);
     init_redirections(&(cmd->red));
     //init_cmd(cmd, envp); envp est en fait ht
     return (cmd);
 }
 
+
+/* Retourne une liste chainée de pipelines, avec chaque {commande + redirections} 
+regroupées dans un élément de type t_cmd.
+
+Parse le flux de tokens :
+
+Déclare et initialise une variable t_cmd.
+Tant que ne tombe pas sur un opérateur de controle (ie un && ou un ||), 
+met à jour cette commande avec les tokens que l'on lit :
+    -> Dès que tombe sur un opérateur de redirection, met à jour l'attribut t_redirect de t_cmd
+    -> Sinon, met à jour le nom et les arguments de la commande.
+Dès que tombe sur un opérateur de controle :
+    -> Met à jour l'attribut ctrl_op de la variable t_cmd actuelle.
+    -> Ajoute la variable t_cmd actuelle à la liste de commandes.
+    -> Déclare et initialise une nouvelle variable t_cmd.
+    -> Répète les opérations ci-dessus jusqu'à tomber à nouveau sur un opérateur de 
+       contrôle, ou jusqu'à être arrivé à la fin de la liste de tokens.
+
+
+(echo un | (echo deux && echo trois))
+*/
 t_cmd   *get_ast(t_ht_hash_table *ht, t_token_list **first_tk)
 {
     int             i;
@@ -492,13 +345,6 @@ t_cmd   *get_ast(t_ht_hash_table *ht, t_token_list **first_tk)
     subshell_filename = NULL;
     
     pipeline_start_tk = *first_tk; // le pointeur sur le premier token du premier pipeline est initialisé à pointeur que va renvoyer à l'exec à la fin
-    // pipeline_start_cmd = init_new_cmd(ht);
-    // if (!pipeline_start_cmd)
-    // {
-    //     perror("malloc ");
-    //     // free en cascade
-    // }
-
     // parcours la liste de tokens un par un
     while (pipeline_start_tk)
     {
@@ -582,20 +428,16 @@ t_cmd   *get_ast(t_ht_hash_table *ht, t_token_list **first_tk)
             current_cmd->red.next_cmd = NULL;
             if (!subshell)
                 set_command_attributs(&current_cmd, first_tk, cmd_start_tk, args_count);
-            // else
-            //      set_subshell_attributs(&current_cmd, subshell_filename);
             
             subshell = 0; // le reset ici ?
             // si current_cmd est avant un pipe
             if (current_tk && current_tk->type == or_tk && current_tk->length == 1) // '|'
             {
-                //set_pipe = 1;
-
                 current_cmd->red.next_cmd = init_new_cmd(ht);
                 if (!current_cmd->red.next_cmd)
                 {
                     perror("malloc ");
-                    // free and return ?
+                    // free and return. Quel exit status ?
                 }
                 current_cmd = current_cmd->red.next_cmd;
                 current_tk = current_tk->next;
@@ -604,18 +446,15 @@ t_cmd   *get_ast(t_ht_hash_table *ht, t_token_list **first_tk)
         if (current_tk && is_a_ctrl_op(current_tk))
         {
             pipeline_start_cmd->ctrl = (current_tk->type == and_tk) * and + (current_tk->type == or_tk) * or;
-            //before_ctrl_op_cmd = pipeline_start_cmd;
 
             pipeline_start_cmd->next = init_new_cmd(ht);
             pipeline_start_cmd = pipeline_start_cmd->next;
-            
+            if (!pipeline_start_cmd)
+            {
+                perror("malloc ");
+                // free en cascade. Quel exit status ?
+            }
             pipeline_start_tk = current_tk->next;
-            // pipeline_start_cmd = init_new_cmd(ht);
-            // if (!pipeline_start_cmd)
-            // {
-            //     perror("malloc ");
-            //     // free en cascade
-            // }
         }
         else // ie est arrivé à la fin de la liste de tokens -> ctrl_op = ';'
         {
@@ -623,58 +462,6 @@ t_cmd   *get_ast(t_ht_hash_table *ht, t_token_list **first_tk)
             pipeline_start_tk = NULL;
         }
     }
-
     free_tokens(first_tk);
-    
     return (*ast);
-        
-
-
-        
-        /*  get_pipeline() : 
-            Parse the tokens simple command by simple command, until an entire pipeline has been parsed
-            -> Parse the tokens' list until reading a control operator, ie a && or a || 
-        set_pipeline(first_tk, &pipeline_start_tk, &ast);
-        */
-        
-        // add_to_cmd_list(&ast, current_cmd); // passer le last plutot que ast (ie le first), car sinon doit entièrement reparcourir la liste a chaque fois que veut ajouter un élément à la fin 
-        //pipeline_start_tk = pipeline_start_tk->next; // le fait ici ou sera deja fait a la fin de get_pipeline() ?
 }
-
-
-/*
-
-N'utiliser que cette fonction pour écrire le nom + args d'une commande dans t_cmd
-
-void init_cmd_and_add_val(t_cmd *cmd, t_ht_hash_table *ht, char *args)
-{
-	char *test = ft_strdup(args);
-	// init_cmd(cmd, envp);
-	add_cmdval_to_cmd(cmd, test);
-}
-
-*/
-
-
-
-
-/* Retourne une liste chainée de pipelines, avec chaque {commande + redirections} 
-regroupées dans un élément de type t_cmd.
-
-Parse le flux de tokens :
-
-Déclare et initialise une variable t_cmd.
-Tant que ne tombe pas sur un opérateur de controle (ie un && ou un ||), 
-met à jour cette commande avec les tokens que l'on lit :
-    -> Dès que tombe sur un opérateur de redirection, met à jour l'attribut t_redirect de t_cmd
-    -> Sinon, met à jour le nom et les arguments de la commande.
-Dès que tombe sur un opérateur de controle :
-    -> Met à jour l'attribut ctrl_op de la variable t_cmd actuelle.
-    -> Ajoute la variable t_cmd actuelle à la liste de commandes.
-    -> Déclare et initialise une nouvelle variable t_cmd.
-    -> Répète les opérations ci-dessus jusqu'à tomber à nouveau sur un opérateur de 
-       contrôle, ou jusqu'à être arrivé à la fin de la liste de tokens.
-
-
-(echo un | (echo deux && echo trois))
-*/

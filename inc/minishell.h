@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 19:27:43 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/10 21:02:44 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/11 23:17:17 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@
 #include "defines.h"
 #include "tokens.h"
 
+extern int g_exit_status;
 
 void exec_cmds(t_cmd *cmd);
 
@@ -120,6 +121,7 @@ char            **hash_map_to_tab(t_ht_hash_table *ht);
 void            print_tokens(t_token_list *first);
 void            print_ast(t_cmd *ast);
 
-//todo
+// builtins
+t_list          *init_export_history(t_ht_hash_table *ht);
 
 #endif

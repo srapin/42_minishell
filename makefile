@@ -34,7 +34,8 @@ FILES = cmd_private\
 		free_exit_shell \
 		ft_export \
 		ft_env \
-		ft_unset
+		ft_unset \
+		signal
 
 
 SRCS_DIR = src

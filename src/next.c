@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:50:05 by srapin            #+#    #+#             */
-/*   Updated: 2023/05/23 01:57:33 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/11 23:50:55 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,17 @@ int	wait_childs(int size, int *childs_pid)
 
 	i = 0;
 	status = 0;
-	while (i < size)
+	while (i < size && __WIFSIGNALED(status))
 	{
 		waitpid(childs_pid[i], &status, 0);
+		//if ()
 		i++;
 	}
 	free(childs_pid);
+	// if (WIFEXITED(status) && __WIFSIGNALED(status))
+	// 	g_exit_status = WEXITSTATUS(status);
+
+		
 	return (WIFEXITED(status) && WEXITSTATUS(status));
 }
 
