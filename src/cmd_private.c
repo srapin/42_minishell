@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 23:55:31 by srapin            #+#    #+#             */
-/*   Updated: 2023/05/23 02:22:41 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/09 23:11:48 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void add_args_to_cmd(t_cmd *cmd, char *args)//do not use!
 	// printf("2 add_args_to_cmd cmd = %p, args= %p\n", cmd, cmd->val.args);
 }
 
-void init_cmd(t_cmd *cmd, char **envp)
+void init_cmd(t_cmd *cmd, t_ht_hash_table *envp)
 {
 	add_value_to_cmd(cmd, NULL);
 	add_args_to_cmd(cmd, NULL);
@@ -38,6 +38,7 @@ void init_cmd(t_cmd *cmd, char **envp)
 	cmd->next = NULL;
 	cmd->val.path = NULL;
 	cmd->val.value = NULL;
+	cmd->val.env = NULL;
 }
 void add_cmdval_to_cmd(t_cmd *cmd, char *str)
 {

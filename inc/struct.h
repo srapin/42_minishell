@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:03:15 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/07 19:20:03 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/10 22:24:07 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 # include "lib.h"
 #include <stdbool.h>
+
+typedef struct s_ht_hash_table t_ht_hash_table;
 
 typedef enum type_parse
 {
@@ -26,10 +28,9 @@ typedef enum type_parse
 
 typedef enum ctrl_op
 {
-	none,
+	pointvirgule,
 	and,
-	or,
-	pointvirgule
+	or
 }					ctrl_op;
 
 typedef enum type_redirect
@@ -46,6 +47,7 @@ typedef struct cmd_value
 	char			*value;
 	char			**args;
 	char			*path;
+	char			**env;
 }					t_cmd_value;
 
 typedef struct file
@@ -63,8 +65,9 @@ typedef struct cmd t_cmd;
 
 typedef struct redirect
 {
-	t_list *in_list; 
-	t_list *out_list;
+	t_list 	*in_list; 
+	t_list 	*out_list;
+	t_file 	*out; // test
 	t_cmd	*next_cmd;
 	int in_fd;
 	int out_fd;
@@ -88,7 +91,7 @@ typedef struct cmd
 	//type_parse type;
 	t_cmd_value val; // nom de la commande
 	t_redirect red; 
-	char			**env;
+	t_ht_hash_table *env;
 	// to move into node
 	ctrl_op			ctrl;
 	struct cmd		*next;
