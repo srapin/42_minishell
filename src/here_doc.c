@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:37:36 by srapin            #+#    #+#             */
-/*   Updated: 2023/05/23 01:57:13 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/11 22:01:09 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@
 // 		safe_close(&(pipe_tab[0]));
 // 		cmd->red.out_fd = pipe_tab[1];
 // 	}
-// 	// dprintf(5, "child_proc %s, in_fd =  %d\n", cmd->val.value, cmd->red.in_fd);
+// 	// //dprintf(5, "child_proc %s, in_fd =  %d\n", cmd->val.value, cmd->red.in_fd);
 // 	dup_cmd_file(cmd);
 
 // 	line = get_next_line(STDIN_FILENO);
@@ -74,9 +74,9 @@
 	
 // 	safe_close(&(pip_tab[1]));
 // 	// wait(&status);
-// 	// dprintf(STDOUT_FILENO, "here fd = %d\n", here_fd);
+// 	// //dprintf(STDOUT_FILENO, "here fd = %d\n", here_fd);
 // 	// // sleep(5);
 // 	// // int fd2 = open("out", O_WRONLY | O_CREAT | O_APPEND, S_IRWXU);
-// 	// // dprintf(fd2, get_next_line(fd));
+// 	// // //dprintf(fd2, get_next_line(fd));
 // 	cmd->red.in_fd = pip_tab[0];
 // }

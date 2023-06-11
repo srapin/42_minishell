@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   common_process.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:44:39 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/10 21:44:48 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/11 22:01:09 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	parent_process(t_cmd **cmd, int pipe_tab[2])
 	//if ((*cmd)->red.in_type == fd && ((t_file *) ((*cmd)->red.in_content))->sep)
 		//close
 	*cmd = (*cmd)->red.next_cmd;
-	//dprintf(STDOUT_FILENO, "parent pro %s\n", (*cmd)->val.value);
+	////dprintf(STDOUT_FILENO, "parent pro %s\n", (*cmd)->val.value);
 	if (!cmd || !(*cmd))
 		return;
 	(*cmd)->red.in_fd = pipe_tab[0];
@@ -39,9 +39,9 @@ void	child_process(t_cmd *cmd, int pipe_tab[2], int *to_free)
 		safe_close(&(pipe_tab[0]));
 		cmd->red.out_fd = pipe_tab[1];
 	}
-	dprintf(1, "in child proc outfile name = %s\n", ((t_file *)(cmd->red.out_list)->content)->name   );
+	//dprintf(1, "in child proc outfile name = %s\n", ((t_file *)(cmd->red.out_list)->content)->name   );
 	dup_cmd_file(cmd);
-	// dprintf(1, "child_proc");
+	// //dprintf(1, "child_proc");
 	paths = get_path(cmd);
 	if (check_acces(paths, cmd))
 	{

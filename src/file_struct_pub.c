@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:08:11 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/11 21:47:06 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/11 22:01:09 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,11 @@ void init_file_struct_with_fd(t_file *file_struct, int fd)
 t_file *create_file_struct_with_filename(char *filename)
 {
 	t_file *file_struct;
+	char *f;
 
+	f = ft_strdup(filename);
 	file_struct = malloc(sizeof(t_file));
-	init_file_struct_with_filename(file_struct, filename);
+	init_file_struct_with_filename(file_struct, f);
 	return file_struct;
 }
 
@@ -60,14 +62,16 @@ t_file * create_file_struct_with_fd(int fd)
 }
 
 
-void replace_fd(t_file *f_s, int *to_rep)
+void replace_fd(t_file *f_s, int *to_rep, bool out)
 {
 	int new_fd;
 
-	dprintf(1, "in replace_fd name = %s flag = %i, num = %i\n", f_s->name, f_s->flag, f_s->fd);
+	//dprintf(1, "in replace_fd name = %s flag = %i, num = %i\n", f_s->name, f_s->flag, f_s->fd);
 	new_fd = *to_rep;
 	if (f_s->fd > -1)
 		new_fd = f_s->fd;
+	else if (f_s->name && out)
+		new_fd = open(f_s->name, f_s->flag, S_IRWXU);
 	else if (f_s->name)
 		new_fd = open(f_s->name, f_s->flag);
 	if (new_fd > -1 && *to_rep > -1 && *to_rep!= new_fd)
@@ -83,24 +87,20 @@ void open_cmd_files(t_cmd * cmd)
 	tmp_lst = cmd->red.in_list;
 	while(tmp_lst)
 	{
-		dprintf(1, "in in boucle\n");
 		tmp_file = tmp_lst->content;
-		dprintf(1, "name = %s flag = %i\n", tmp_file->name, tmp_file->flag);
 		if (tmp_file)
-			replace_fd(tmp_file, &(cmd->red.in_fd));
+			replace_fd(tmp_file, &(cmd->red.in_fd), false);
 		tmp_lst = tmp_lst->next;
 	}
-	// tmp_lst = cmd->red.out_list;
-	// while(tmp_lst)
-	// {
-	// 	dprintf(1, "in out boucle\n");
-	// 	tmp_file = tmp_lst->content;
-	// 	dprintf(1, "´p = %p, name = %s\n", tmp_file,tmp_file->name);
-	// 	if (tmp_file)
-	// 		replace_fd(tmp_file, &(cmd->red.out_fd));
-	// 	tmp_lst = tmp_lst->next;
-	// }
-	replace_fd(cmd->red.out, &(cmd->red.out_fd));
+	tmp_lst = cmd->red.out_list;
+	while(tmp_lst)
+	{
+		tmp_file = tmp_lst->content;
+		if (tmp_file)
+			replace_fd(tmp_file, &(cmd->red.out_fd), true);
+		tmp_lst = tmp_lst->next;
+	}
+	// replace_fd(cmd->red.out, &(cmd->red.out_fd));
 
 	/*
 	if (cmd->red.in_type == fd)//&& !((t_file *) (cmd->red.in_content))->sep)
