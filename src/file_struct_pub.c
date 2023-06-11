@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   file_struct_pub.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:08:11 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/10 22:28:36 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/11 21:47:06 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ t_file *create_file_struct_with_filename(char *filename)
 	init_file_struct_with_filename(file_struct, filename);
 	return file_struct;
 }
+
 
 t_file * create_file_struct_with_sep(char *sep)
 {
