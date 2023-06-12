@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 23:25:02 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/12 00:43:39 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/12 13:13:25 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,6 +200,8 @@ int    ft_export(t_cmd *cmd)
     char    *var_name;
     char    *var_value;
 
+
+    printf("coucou depuis ft_export()\n");
     i = 1;
     exit_status = EXIT_OK;
     if (!cmd->val.args[i])

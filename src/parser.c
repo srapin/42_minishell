@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 02:12:27 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/11 23:18:16 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/12 13:09:43 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,8 +163,10 @@ void    parse(t_ht_hash_table *ht, t_token_list *first)
     t_cmd *ast = get_ast(ht, &first);
     
     //printf("apres get ast\n");
-    //print_ast(ast);
+    print_ast(ast);
     exec_cmds(ast);
+
+    // print le contenu d'un infile de type here_doc 
     // for (t_token_list *current = first; current; current = current->next)
     // {
     //     if (current->type == l_io_redirect && current->length == 2)

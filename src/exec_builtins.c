@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_builtins.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 20:57:20 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/10 20:40:15 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/12 13:02:59 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void (*get_builtins_foo(char *str))(t_cmd *)
     //     return ft_env;
     if (ft_strisequal(str, "exit"))
         return ft_exit;
-    return NULL;
+    return NULL; // return -1 plutot ? si les builtins retournent un int >= 0 
 }
 
 
@@ -118,7 +118,7 @@ void try_to_exec_builtins(t_cmd *cmd)
     //num = is_builtins(cmd->val.value);
     foo = get_builtins_foo(cmd->val.value);
     if (!foo)
-        return;
+        return; // return et pas exit comme en dessous ? quel exit status du coup ?
         
     foo(cmd);
     free_all();        

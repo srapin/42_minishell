@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 01:12:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/12 02:01:24 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/12 13:13:01 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int     ft_cd(t_cmd *cmd)
     char    *after_rel;
     char    *new_pwd;
 
+    dprintf(1, "coucou depuis ft_cd()\n");
     if (!cmd->val.args[1]) // si n'a aucun argument
         return (EXIT_OK);
     if (cmd->val.args[2]) // si il y a plus d'un argument. val.args est null-terminated

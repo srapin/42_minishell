@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 20:39:18 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/12 01:09:41 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/12 13:12:37 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,14 @@ void    print_env(t_ht_hash_table *ht)
 int    ft_env(t_cmd *cmd)
 {
     int i;
-    int exit_status;
 
     i = 1;
-    exit_status = 0;
+    dprintf(1, "coucou depuis ft_env()\n");
     if (!cmd->val.args[i])
     {
         print_env(cmd->env);
-        return (exit_status);
+        exit(EXIT_OK);
     }
+    // que faire dans le cas ou a des arguments ??
+    exit(EXIT_OK);
 }

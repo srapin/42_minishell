@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_private.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 23:55:31 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/09 23:11:48 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/12 12:58:41 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void init_cmd(t_cmd *cmd, t_ht_hash_table *envp)
 	add_args_to_cmd(cmd, NULL);
 	init_redirections(&(cmd->red));
 	cmd->env = envp;
-	cmd->ctrl = none;	
+	cmd->ctrl = pointvirgule;	
 	cmd->next = NULL;
 	cmd->val.path = NULL;
 	cmd->val.value = NULL;
