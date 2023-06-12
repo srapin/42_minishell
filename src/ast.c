@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 21:44:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/11 23:17:40 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/12 01:22:32 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,20 +136,6 @@ void    set_cmd_args(t_cmd **curr_cmd, t_token_list *curr_tk, int *i)
                     (*curr_cmd)->val.args[*i] = ft_substr(wd->content, k, j - k);
                     (*i)++;
                 }
-
-                // if (wd->content[j] != ' ' && wd->content[j] != '\t')
-                // {
-                //     k = j;
-                //     while (wd->content[j] && (wd->content[j] != ' ' && wd->content[j] != '\t'))
-                //         j++;
-                //     (*curr_cmd)->val.args[*i] = ft_substr(curr_tk->content, k, j - k + 1);
-                //     (*i)++;
-                // }
-                // else 
-                // {
-                //     while (wd->content[j] && (wd->content[j] == ' ' || wd->content[j] == '\t'))
-                //         j++;
-                // }
             }
         }
         else

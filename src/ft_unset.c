@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 21:52:36 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/11 23:41:05 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/12 00:35:29 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,11 @@ int ft_unset(t_cmd *cmd)
         return (EXIT_OK);
     while (cmd->val.args[i])
     {
-        
+        // détermine si la variable est dans l'environnement
+        if (ht_search(cmd->env, cmd->val.args[i]))
+            ht_delete(cmd->env, cmd->val.args[i]);
+        if (is_in_export_history(cmd->export_history, cmd->val.args[i]))
+            del_from_export_history(&cmd->export_history, cmd->val.args[i]);
+        i++;
     }
 }

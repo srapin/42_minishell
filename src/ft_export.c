@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 23:25:02 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/11 23:35:44 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/12 00:43:39 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,13 +61,6 @@ int     valid_name(char *name)
 }
 
 // !!!!!! When no arguments are given, the results are unspecified. !!!!!!
-
-/*
-bash-3.2$ export hola=bon(jour
-bash: syntax error near unexpected token `('
-*/
-
-
 
 
 // n'a au début qu'une variable en plus par rapport à l'env
@@ -169,6 +162,8 @@ int     is_in_export_history(t_list *export_hist, char *var_name)
     return (0);
 }
 
+/* Deletes var_name from export history. 
+Does nothing if the export_history does not contain var_name*/
 void    del_from_export_history(t_list **export_hist, char *var_name)
 {
     t_list  *current;
@@ -197,20 +192,21 @@ void    del_from_export_history(t_list **export_hist, char *var_name)
 // var en plus dans export quand arrive dans un nouveau shell : OLDPWD 
 
 // modif : mettre la t_list **export_history dans la structure de t_cmd 
-int    ft_export(t_cmd *cmd, t_list **export_history, t_ht_hash_table *ht, char **args)
+int    ft_export(t_cmd *cmd)
 {
-    int     i = 1;
-    int     j = 0;
+    int     i;
+    int     j;
     int     exit_status;
     char    *var_name;
     char    *var_value;
 
-    if (!args)
+    i = 1;
+    exit_status = EXIT_OK;
+    if (!cmd->val.args[i])
     {
         print_export_history(cmd->env, cmd->export_history);
-        return (EXIT_OK);
+        return (exit_status);
     }
-    exit_status = EXIT_OK;
     while (cmd->val.args[i])
     {
         j = 0;

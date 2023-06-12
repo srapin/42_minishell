@@ -32,9 +32,12 @@ FILES = cmd_private\
 		free_tokens \
 		free_after_exec \
 		free_exit_shell \
-		ft_export \
 		ft_env \
+		ft_export \
 		ft_unset \
+		ft_cd \
+		ft_pwd \
+		ft_exit \
 		signal
 
 

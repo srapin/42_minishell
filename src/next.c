@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   next.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:50:05 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/11 23:50:55 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/12 00:42:19 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	wait_childs(int size, int *childs_pid)
 
 	i = 0;
 	status = 0;
-	while (i < size && __WIFSIGNALED(status))
+	while (i < size && WIFSIGNALED(status))
 	{
 		waitpid(childs_pid[i], &status, 0);
 		//if ()

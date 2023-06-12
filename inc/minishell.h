@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 19:27:43 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/11 23:17:17 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/12 00:45:51 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/wait.h>
+#include <signal.h>
 //#include <wait.h>
 #include <readline/readline.h>
 #include <readline/history.h>
@@ -113,6 +114,7 @@ void            remove_char(t_token_list *current, size_t index);
 void            set_here_docs(t_ht_hash_table *ht, t_token_list **first);
 
 t_cmd           *get_ast(t_ht_hash_table *ht, t_token_list **first_tk);
+t_list          *init_export_history(t_ht_hash_table *ht);
 
 void            free_tokens(t_token_list **first);
 
@@ -121,7 +123,12 @@ char            **hash_map_to_tab(t_ht_hash_table *ht);
 void            print_tokens(t_token_list *first);
 void            print_ast(t_cmd *ast);
 
+
 // builtins
-t_list          *init_export_history(t_ht_hash_table *ht);
+int             ft_export(t_cmd *cmd);
+int             ft_unset(t_cmd *cmd);
+int             is_in_export_history(t_list *export_hist, char *var_name);
+void            del_from_export_history(t_list **export_hist, char *var_name);
+
 
 #endif
