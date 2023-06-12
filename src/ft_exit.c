@@ -6,13 +6,18 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 00:57:49 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/12 13:13:08 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/12 19:06:45 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int ft_exit(t_cmd *cmd)
+/* L'argument donné à exit */
+void ft_exit(t_cmd *cmd) // void ou int ?
 {
+    if (!cmd->val.args[1]) // ie aucun argument
+    {
+       ; // que faire
+    }
     
 }

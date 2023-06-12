@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 19:27:43 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/12 00:45:51 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/12 19:26:41 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,10 +125,18 @@ void            print_ast(t_cmd *ast);
 
 
 // builtins
+int             ft_env(t_cmd *cmd);
 int             ft_export(t_cmd *cmd);
 int             ft_unset(t_cmd *cmd);
 int             is_in_export_history(t_list *export_hist, char *var_name);
 void            del_from_export_history(t_list **export_hist, char *var_name);
 
+int             ft_cd(t_cmd *cmd);
+int             ft_pwd(t_cmd *cmd);
+void             ft_exit(t_cmd *cmd);
+
+
+// to del
+void    replace_prev_or_actual_dir(char *path);
 
 #endif

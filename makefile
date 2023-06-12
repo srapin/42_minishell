@@ -9,6 +9,7 @@ FILES = cmd_private\
 		cmd_pub\
 		common_process\
 		exec_cmds \
+		exec_builtins \
 		file_struct_priv\
 		file_struct_pub\
 		here_doc\

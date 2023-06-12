@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 02:12:27 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/12 13:09:43 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/12 19:30:29 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,12 @@ void    parse(t_ht_hash_table *ht, t_token_list *first)
     t_cmd *ast = get_ast(ht, &first);
     
     //printf("apres get ast\n");
-    print_ast(ast);
+    //print_ast(ast);
+
+    // teste la fonction qui met a jour le path dans cd
+    // char *test_path = ft_strdup("/Desktop/../../.");
+    // replace_prev_or_actual_dir(test_path);
+    
     exec_cmds(ast);
 
     // print le contenu d'un infile de type here_doc 

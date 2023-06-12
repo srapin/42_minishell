@@ -1,0 +1,3 @@
+Dans le cas des builtins, certains modifient l'environnement 
+-> ils doivent etre executés dans le processus PARENT
+    -> Checker 

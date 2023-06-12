@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   common_process.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:44:39 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/11 22:01:09 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/12 13:40:16 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "minishell.h"
 
 
 void	parent_process(t_cmd **cmd, int pipe_tab[2])
@@ -42,6 +42,10 @@ void	child_process(t_cmd *cmd, int pipe_tab[2], int *to_free)
 	//dprintf(1, "in child proc outfile name = %s\n", ((t_file *)(cmd->red.out_list)->content)->name   );
 	dup_cmd_file(cmd);
 	// //dprintf(1, "child_proc");
+	
+	// rajouté par ln
+	try_to_exec_builtins(cmd);
+	
 	paths = get_path(cmd);
 	if (check_acces(paths, cmd))
 	{

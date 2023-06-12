@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 17:25:15 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/12 01:18:30 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/12 16:02:42 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,6 @@
 // builtins
 # define CD_TOO_MANY_ARGS           1
 # define INVALID_VAR_ID             1 // "not a valid identifier"'s export error message
-
+# define CANNOT_ACCESS_DIR          1
 
 #endif

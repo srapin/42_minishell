@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 20:39:18 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/12 13:12:37 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/12 14:47:18 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,16 @@ void    print_env(t_ht_hash_table *ht)
     }
 }
 
+/* A gerer sans options et sans arguments */
 int    ft_env(t_cmd *cmd)
 {
-    int i;
-
-    i = 1;
     dprintf(1, "coucou depuis ft_env()\n");
-    if (!cmd->val.args[i])
+    if (cmd->val.args[1])
     {
-        print_env(cmd->env);
-        exit(EXIT_OK);
+        printf("Error : env : too many arguments given. Zero needed");
+        // free everything (?)
+        return (1); // quelle valeur retourner ?
     }
-    // que faire dans le cas ou a des arguments ??
-    exit(EXIT_OK);
+    print_env(cmd->env);
+    return (EXIT_OK);
 }
