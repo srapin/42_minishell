@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 20:39:18 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/12 14:47:18 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/12 22:57:27 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,10 @@ void    print_env(t_ht_hash_table *ht)
     int i;
 
     i = 0;
-    while (ht->items[i])
+    while (i < ht->count)
     {
-        printf("%s=%s\n", ht->items[i]->key, ht->items[i]->value);   
+        if (ht->items[i])
+            printf("%s=%s\n", ht->items[i]->key, ht->items[i]->value);   
         i++;
     }
 }

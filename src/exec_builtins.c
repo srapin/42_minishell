@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_builtins.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 20:57:20 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/12 16:43:11 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/12 22:46:25 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,13 @@ int ft_echo(t_cmd *cmd)
     char end[2];
     int i;
 
-    end[0] = '\0';
+    end[0] = '\n';
     end[1] = '\0';
     i = 1;
-    if (ft_strisequal(cmd->val.args[1], "-n"))
+    if (ft_strisequal(cmd->val.args[i], "-n"))
     {
         i++; 
-        end[0] = '\n';
+        end[0] = '\0';
     }
     while(cmd->val.args[i])
     {
@@ -78,19 +78,19 @@ int (*get_builtins_foo(char *str))(t_cmd *)
 {
     
     if (ft_strisequal(str, "echo"))
-        return ft_echo;
+        return &ft_echo;
     if (ft_strisequal(str, "cd"))
-        return ft_cd;
+        return &ft_cd;
     if (ft_strisequal(str, "pwd"))
-        return ft_pwd;
-    // if (ft_strisequal(str, "export"))
-    //     return ft_export;
+        return &ft_pwd;
+    if (ft_strisequal(str, "export"))
+        return &ft_export;
     if (ft_strisequal(str, "unset"))
-        return ft_unset;
-    // if (ft_strisequal(str, "env"))
-    //     return ft_env;
-    if (ft_strisequal(str, "exit"))
-        return ft_exit;
+        return &ft_unset;
+    if (ft_strisequal(str, "env"))
+        return ft_env;
+    // if (ft_strisequal(str, "exit"))
+    //     return &ft_exit;
     return NULL; // return -1 plutot ? si les builtins retournent un int >= 0 
 }
 
@@ -98,11 +98,11 @@ int (*get_builtins_foo(char *str))(t_cmd *)
 int is_builtins(char * str)
 {
     if (ft_strisequal(str, "echo"))
-        return 0;
+        return 1;
     if (ft_strisequal(str, "cd"))
         return 1;
     if (ft_strisequal(str, "pwd"))
-        return 2;
+        return 1;
     if (ft_strisequal(str, "export"))
         return 3;
     if (ft_strisequal(str, "unset"))
@@ -115,18 +115,25 @@ int is_builtins(char * str)
 }
 
 
-void try_to_exec_builtins(t_cmd *cmd)
+
+int try_to_exec_builtins(t_cmd *cmd, bool is_child)
 {
     int (*foo)(t_cmd *);
+    int ret;
 
-    dprintf(1, "in try_to_exec_builtins()\n");
+    // dprintf(1, "in try_to_exec_builtins()\n");
     //num = is_builtins(cmd->val.value);
-    foo = get_builtins_foo(cmd->val.value); // probleme ca retourne tout le temps NULL
-    dprintf(1, "get_builtins() return value : %p\n", foo);
+    ret = -1;
+    foo = get_builtins_foo(cmd->val.value); 
+    
+    // dprintf(1, "get_builtins() return value : %p\n", foo);
     if (!foo)
-        return;
-        
-    foo(cmd);
-    free_all(); // le faire dans le builtin ?  + quand mettre à jour le dernier exit_status ?
-    exit(0); // n'exit pas forcément avec 0 !! dépend de la valeur de retour du builtin
+        return ret;
+    ret = foo(cmd);
+    if (is_child)
+    {
+        free_all(); // le faire dans le builtin ?  + quand mettre à jour le dernier exit_status ?
+        exit(ret); // n'exit pas forcément avec 0 !! dépend de la valeur de retour du builtin
+    }
+    return ret;
 }

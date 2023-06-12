@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   common_process.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:44:39 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/12 13:40:16 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/12 22:40:34 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	parent_process(t_cmd **cmd, int pipe_tab[2])
 	(*cmd)->red.in_fd = pipe_tab[0];
 }
 
-void	child_process(t_cmd *cmd, int pipe_tab[2], int *to_free)
+void	child_process(t_cmd *cmd, int pipe_tab[2])
 {
 	char	**paths;
 
@@ -44,7 +44,7 @@ void	child_process(t_cmd *cmd, int pipe_tab[2], int *to_free)
 	// //dprintf(1, "child_proc");
 	
 	// rajouté par ln
-	try_to_exec_builtins(cmd);
+	try_to_exec_builtins(cmd, true);
 	
 	paths = get_path(cmd);
 	if (check_acces(paths, cmd))
@@ -54,7 +54,6 @@ void	child_process(t_cmd *cmd, int pipe_tab[2], int *to_free)
 	perror("cmd not found");
 	free_tab(paths);
 	free_tab(cmd->val.args);
-	free(to_free);
 	exit(EXIT_FAILURE);
 }
 

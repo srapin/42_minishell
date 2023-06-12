@@ -3,30 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   next.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:50:05 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/12 00:42:19 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/12 22:24:15 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "../inc/minishell.h"
 
-int	wait_childs(int size, int *childs_pid)
+int	wait_childs(t_cmd *origin)
 {
-	int	i;
 	int	status;
+	t_cmd *cmd;
 
-	i = 0;
-	status = 0;
-	while (i < size && WIFSIGNALED(status))
+	cmd = origin;
+
+	while (cmd)
 	{
-		waitpid(childs_pid[i], &status, 0);
-		//if ()
-		i++;
+		waitpid(cmd->pid, &status, 0);
+		cmd = cmd->red.next_cmd;
 	}
-	free(childs_pid);
 	// if (WIFEXITED(status) && __WIFSIGNALED(status))
 	// 	g_exit_status = WEXITSTATUS(status);
 

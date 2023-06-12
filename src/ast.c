@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 21:44:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/12 01:22:32 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/12 22:29:46 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void    update_redirect(t_cmd *cmd, t_token_list *current)
         file->flag = O_RDONLY;
         add_in_redir_with_file_struct(cmd, file);
         
-        printf("added new infile : %s\n", current->next->content);
+        // printf("added new infile : %s\n", current->next->content);
     }
     else
     {
@@ -65,8 +65,8 @@ void    update_redirect(t_cmd *cmd, t_token_list *current)
         
         cmd->red.out = file; // test
 
-        printf("added new outfile : %s\n", current->next->content);
-        printf("added new outfile : %s\n", file->name);
+        // printf("added new outfile : %s\n", current->next->content);
+        // printf("added new outfile : %s\n", file->name);
     }
 }
 

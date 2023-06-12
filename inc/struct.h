@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:03:15 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/11 23:16:32 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/12 22:15:23 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ typedef struct cmd
 	t_redirect 		red; 
 	t_ht_hash_table *env;
 	t_list 			*export_history;
+	int				pid;
 	//int 			is_minimal_env;
 	// to move into node
 	ctrl_op			ctrl;

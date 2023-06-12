@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 19:27:43 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/12 19:26:41 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/12 22:40:48 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,23 +43,23 @@ extern int g_exit_status;
 
 void exec_cmds(t_cmd *cmd);
 
-
+int (*get_builtins_foo(char *str))(t_cmd *);
 //common_process
 void	parent_process(t_cmd **cmd, int pipe_tab[2]);
-void	child_process(t_cmd *cmd, int pipe_tab[2], int *to_free);
+void	child_process(t_cmd *cmd, int pipe_tab[2]);
 void	fail_process(void);
 
 //exec_cmd
 void exec_cmds(t_cmd *first_cmd); //to div
 
-void try_to_exec_builtins(t_cmd *cmd);
+int try_to_exec_builtins(t_cmd *cmd, bool is_child);
 
 //heredoc
 void heredoc(t_cmd *cmd);
 
 //next
 bool check_ret(t_cmd *cmd, int ret);
-int	wait_childs(int size, int *childs_pid);
+int	wait_childs(t_cmd *cmd);
 
 //safer
 void reset_pip_tab(int pip_tab[2]);

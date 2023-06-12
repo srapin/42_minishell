@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_private.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 23:55:31 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/12 12:58:41 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/12 22:15:41 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ void init_cmd(t_cmd *cmd, t_ht_hash_table *envp)
 	cmd->env = envp;
 	cmd->ctrl = pointvirgule;	
 	cmd->next = NULL;
+	cmd->pid = -1;
 	cmd->val.path = NULL;
 	cmd->val.value = NULL;
 	cmd->val.env = NULL;

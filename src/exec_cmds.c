@@ -12,6 +12,27 @@
 
 #include "../inc/minishell.h"
 
+
+void launch_process(t_cmd **cmd, int *pip_tab, bool need_pip)
+{
+	if (need_pip)
+		safe_pipe(pip_tab);
+	else
+	{
+		if (try_to_exec_builtins(cmd, false)>= 0)
+			return;
+		reset_pip_tab(pip_tab);
+	}
+	(*cmd)->pid = fork();
+	if ((*cmd)->pid < 0)
+		fail_process();
+	if ((*cmd)->pid == 0)
+		child_process(*cmd, pip_tab);
+	if ((*cmd)->pid > 0)
+		parent_process(cmd, pip_tab);
+}
+
+
 void exec_cmds(t_cmd *first_cmd)
 {
 	int		nb_cmds;
@@ -22,6 +43,7 @@ void exec_cmds(t_cmd *first_cmd)
 	t_cmd *next;
 	t_cmd *ret_cmd;
 	int ret;
+	int foo(t_cmd *);
 
 	cmd = first_cmd;
 	////dprintf(1, "coucou test\n");
@@ -31,29 +53,15 @@ void exec_cmds(t_cmd *first_cmd)
 	{
 		i = 0;
 		nb_cmds = count_cmds(cmd);
-		pid = malloc(nb_cmds * sizeof(int));
 		next = cmd->next;
 		ret_cmd = cmd;
+
 		while(i < nb_cmds)
 		{
-			//dprintf(1, "in exec while file name = %s\n", ((t_file *)(cmd->red.out_list)->content)->name);
-			if (i < nb_cmds - 1)
-				safe_pipe(pip_tab);
-			else
-				reset_pip_tab(pip_tab);
-			// if (cmd->red.in_type == fd && ((t_file *) (cmd->red.in_content))->sep)
-			// 	heredoc(cmd); //faire ca ailleurs
-			pid[i] = fork();
-			if (pid[i] < 0)
-				fail_process();
-			if (pid[i] == 0)
-				child_process(cmd, pip_tab, pid);
-				// exit(0);
-			if (pid[i] > 0)
-				parent_process(&cmd, pip_tab);
+			launch_process(&cmd, pip_tab, (i < nb_cmds - 1));
 			i++;
 		}
-		ret = wait_childs(nb_cmds, pid);
+		ret = wait_childs(ret_cmd);
 		while (!check_ret(ret_cmd, ret))
 		{
 			cmd = next;

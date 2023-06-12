@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 23:25:02 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/12 13:13:25 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/12 23:06:25 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,6 +206,7 @@ int    ft_export(t_cmd *cmd)
     exit_status = EXIT_OK;
     if (!cmd->val.args[i])
     {
+        printf("");
         print_export_history(cmd->env, cmd->export_history);
         return (exit_status);
     }

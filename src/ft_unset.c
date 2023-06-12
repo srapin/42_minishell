@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 21:52:36 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/12 13:13:18 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/12 22:25:01 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// si la variable a unset n'a pas été export, ne fait rien et retourne 0
+// si la variable que veut unset n'a pas été export, ne fait rien et retourne 0
 int ft_unset(t_cmd *cmd)
 {
     int i;
