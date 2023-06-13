@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 19:27:43 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/12 22:40:48 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/13 01:44:54 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,10 @@ void	parent_process(t_cmd **cmd, int pipe_tab[2]);
 void	child_process(t_cmd *cmd, int pipe_tab[2]);
 void	fail_process(void);
 
+void handle_sigint(int sig);
+void handle_sigint2(int sig);
+void handle_sigquit(int sig);
+void handle_sigquit2(int sig);
 //exec_cmd
 void exec_cmds(t_cmd *first_cmd); //to div
 
@@ -133,10 +137,10 @@ void            del_from_export_history(t_list **export_hist, char *var_name);
 
 int             ft_cd(t_cmd *cmd);
 int             ft_pwd(t_cmd *cmd);
-void             ft_exit(t_cmd *cmd);
+int             ft_exit(t_cmd *cmd);
 
 
 // to del
-void    replace_prev_or_actual_dir(char *path);
+//void replace_prev_or_actual_dir(char *path);
 
 #endif

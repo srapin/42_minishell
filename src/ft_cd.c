@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 01:12:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/12 19:27:21 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/13 02:10:28 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ char    *get_full_path(t_ht_hash_table *env, char *arg_path)
 /* Parses the path, and replaces any occurence of 
 './', or '../'
 */
-void    replace_prev_or_actual_dir(char *path)
+char *replace_prev_or_actual_dir(char *path)
 {
     int     i;
     int     j;
@@ -97,6 +97,8 @@ void    replace_prev_or_actual_dir(char *path)
             i++;
         
     }
+    printf("in the end of replace_prev_or_actual(), path = %s\n", path);
+    return (path);
 }
 
 /* 
@@ -108,53 +110,51 @@ QUE FAIRE SI PWD EST UNSET ?
 int     ft_cd(t_cmd *cmd)
 {
     char    *full_path;
+    char    *tmp;
     char    *pwd;
     char    *after_rel;
     char    *new_pwd;
 
-    dprintf(1, "coucou depuis ft_cd()\n");
+    //dprintf(1, "coucou depuis ft_cd()\n");
     if (!cmd->val.args[1]) // si n'a aucun argument
         return (EXIT_OK);
     if (cmd->val.args[2]) // si il y a plus d'un argument. val.args est null-terminated
         return (CD_TOO_MANY_ARGS);
 
-    if (chdir(cmd->val.args[1]) == -1)
+    if (cmd->val.args[1][0] == '.') // chemin relatif)
+    {
+        tmp = ft_strjoin("/", cmd->val.args[1]);
+        full_path = get_full_path(cmd->env, tmp);
+        free(tmp);
+        tmp = NULL;
+    }
+    else // chemin absolu
+        full_path = get_full_path(cmd->env, cmd->val.args[1]);
+    printf("full path avant chdir : %s\n", full_path);
+    if (chdir(full_path) == -1)
     {
         perror("chdir ");
         exit(errno); // Quel code erreur ?
     }
     
-
     // si le dossier est accessible, et que s'y est bien déplacé :
 
-    full_path = get_full_path(cmd->env, cmd->val.args[1]);
-
-    replace_prev_or_actual_dir(full_path);
+    tmp = ft_strdup(full_path);
+    free(full_path);
+    full_path = replace_prev_or_actual_dir(tmp);
+    // free(tmp); pourquoi ce free() fait tout couiller ??
+    printf("path before last if = %s\n", full_path);
+    if (ft_strlen(full_path) > 1 && full_path[ft_strlen(full_path) - 1] == '/')
+    {
+        printf("dans le if, full_path = %s\n", full_path);
+        tmp = ft_substr(full_path, 0, ft_strlen(full_path) - 1);
+        free(full_path);
+        full_path = tmp;
+    }
+    printf("path after last if = %s\n", full_path);
     ht_modify_value(cmd->env, "PWD", full_path);
+    printf("dans export() : PWD apres ht_modify() = %s\n", ht_search(cmd->env, "PWD"));
     
-    // if (cmd->val.args[1][0] == '.') // chemin relatif
-    // {
-    //     if (cmd->val.args[1][1] && cmd->val.args[1][1] == '.')
-    //     {
-    //         // cas cd .. 
-    //         // peut avoir cd ../../../.. par ex !!!! A gérer !
-    //     }
-    //     else
-    //     {
-    //         pwd = ft_strdup(ht_search(cmd->env, "PWD"));
-    //         after_rel = ft_substr(cmd->val.args[1], 1, ft_strlen(cmd->val.args[1]));
-    //         new_pwd = ft_strjoin(pwd, after_rel);
-    //         ht_modify_value(cmd->env, "PWD", new_pwd);
-    //         free(pwd);
-    //         free(after_rel);
-    //         pwd = NULL;
-    //         after_rel = NULL;
-    //     }
-    // }
-    // else // chemin absolu
-    // {
-    //     new_pwd = ft_strdup(cmd->val.args[1]);
-    //     ht_modify_value(cmd->env, "PWD", new_pwd);
-    // }
+    
     return (EXIT_OK);
 }

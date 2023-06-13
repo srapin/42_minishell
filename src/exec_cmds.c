@@ -19,7 +19,8 @@ void launch_process(t_cmd **cmd, int *pip_tab, bool need_pip)
 		safe_pipe(pip_tab);
 	else
 	{
-		if (try_to_exec_builtins(cmd, false)>= 0)
+		
+		if (try_to_exec_builtins(*cmd, false)>= 0)
 			return;
 		reset_pip_tab(pip_tab);
 	}

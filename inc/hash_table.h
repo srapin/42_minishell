@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hash_table.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 19:58:14 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/10 18:57:57 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/13 00:51:20 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ t_ht_hash_table     *ht_new(size_t size);
 void                ht_resize(t_ht_hash_table *ht, size_t base_size);
 void                ht_insert_item(t_ht_hash_table *ht, char *key, char *value);
 char                *ht_search(t_ht_hash_table *ht, const char *key);
-int                 ht_modify_value(t_ht_hash_table *ht, const char *key, const char *new_value);
+int                 ht_modify_value(t_ht_hash_table *ht, const char *key, char *new_value);
 void                ht_delete(t_ht_hash_table *ht, const char *key);
 void                ht_del_item(t_ht_item *item);
 void                ht_del_hash_table(t_ht_hash_table *ht);

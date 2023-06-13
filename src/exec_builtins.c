@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 20:57:20 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/12 22:46:25 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/13 02:30:03 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int ft_echo(t_cmd *cmd)
 */
 int (*get_builtins_foo(char *str))(t_cmd *)
 {
-    
+  
     if (ft_strisequal(str, "echo"))
         return &ft_echo;
     if (ft_strisequal(str, "cd"))
@@ -88,7 +88,7 @@ int (*get_builtins_foo(char *str))(t_cmd *)
     if (ft_strisequal(str, "unset"))
         return &ft_unset;
     if (ft_strisequal(str, "env"))
-        return ft_env;
+        return &ft_env;
     // if (ft_strisequal(str, "exit"))
     //     return &ft_exit;
     return NULL; // return -1 plutot ? si les builtins retournent un int >= 0 
@@ -125,7 +125,6 @@ int try_to_exec_builtins(t_cmd *cmd, bool is_child)
     //num = is_builtins(cmd->val.value);
     ret = -1;
     foo = get_builtins_foo(cmd->val.value); 
-    
     // dprintf(1, "get_builtins() return value : %p\n", foo);
     if (!foo)
         return ret;

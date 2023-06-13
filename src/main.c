@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 19:32:17 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/11 23:18:06 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/13 02:43:27 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@ t_ht_hash_table *ht_get_env(char **envp)
         j = 0;
         while (envp[i][j] && envp[i][j] != '=')
             j++;
-        // printf("j = %d\n", j);
-        // printf("ok, env[%d] = %s\n", i, envp[i]);
-        // printf("key = %s\n", ft_substr(envp[i], 0, j));
-        // printf("value = %s\n", ft_substr(envp[i], j + 1, ft_strlen(envp[i])));
+        printf("j = %d\n", j);
+        printf("ok, env[%d] = %s\n", i, envp[i]);
+        printf("key = %s\n", ft_substr(envp[i], 0, j));
+        printf("value = %s\n", ft_substr(envp[i], j + 1, ft_strlen(envp[i])));
         ht_insert_item(ht, ft_substr(envp[i], 0, j), ft_substr(envp[i], j + 1, ft_strlen(envp[i])));
         i++;
     }
@@ -128,6 +128,8 @@ int main (int argc, char **argv, char **envp)
 {
     t_ht_hash_table *hash_map;
     
+    signal(SIGINT, handle_sigint);
+    signal(SIGQUIT, handle_sigquit);
     if (argc > 2)
     {
         printf("error : too many arguments\n"); //idk
@@ -150,6 +152,7 @@ int main (int argc, char **argv, char **envp)
     // printf("\n\n\n\n\n\n\n");
     // print_ht(hash_map);
 
+    //print_ht(hash_map);
     if (argc == 1)
         read_lines(hash_map);
     else // peut avoir plus qu'un fichier ? part du principe que non ici ?

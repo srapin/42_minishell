@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 16:09:20 by hlesny            #+#    #+#             */
-/*   Updated: 2023/06/11 22:01:09 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/13 00:53:23 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,7 +257,7 @@ int     ft_strcmp(const char *s1, const char *s2)
 /* Searchs the key in the hash map, and replaces its value by the new_value.
 Returns 1 in case of success
 Returns 0 in case the key isn't in the hash map. */
-int    ht_modify_value(t_ht_hash_table *ht, const char *key, const char *new_value) // new_value est deja malloc ici
+int    ht_modify_value(t_ht_hash_table *ht, const char *key, char *new_value) // new_value est deja malloc ici
 {
     size_t      attempts;
     size_t      index;
@@ -273,7 +273,9 @@ int    ht_modify_value(t_ht_hash_table *ht, const char *key, const char *new_val
             if (!ft_strcmp(current->key, key))
             {
                 free(current->value);
+                printf("current->key = %s, current->new_value = %s\n", key, new_value);
                 current->value = (char *)new_value; // new_value est deja malloc
+                printf("current->key = %s, current->new_value = %s\n", key, current->value);
                 return (1);
             }
         }

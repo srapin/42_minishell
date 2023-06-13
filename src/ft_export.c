@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 23:25:02 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/12 23:06:25 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/13 01:13:39 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ void    get_and_print_var(t_ht_hash_table *ht, t_list *export_list, char *name)
 {
     char    *value;
 
+    dprintf(1, "in get_and_print_var()\n");
     value = ht_search(ht, name);
     if (value) // ie name est dans l'env
         printf("export %s=\"%s\"\n", name, value);
@@ -104,6 +105,8 @@ void    print_export_history(t_ht_hash_table *ht, t_list *export_hist)
     t_list  *current_var;
     char    *to_insert;
     
+
+    dprintf(1, "in print_export_history()\n");
     j = 0;
     sorted_history = ft_calloc(sizeof(char *), ht->count + ft_lstsize(export_hist));
     if (!sorted_history)
@@ -114,6 +117,7 @@ void    print_export_history(t_ht_hash_table *ht, t_list *export_hist)
     to_insert = ht->items[0]->key; // choix arbitraire
     while (j < (ht->count + ft_lstsize(export_hist)))
     {
+        dprintf(1, "in while loop in print_export_history()\n");
         i = 0;
         current_var = export_hist;
         while (i < ht->count)
@@ -201,12 +205,14 @@ int    ft_export(t_cmd *cmd)
     char    *var_value;
 
 
-    printf("coucou depuis ft_export()\n");
     i = 1;
+    //printf("coucou depuis ft_export(), %s\n", cmd->val.args[i]);
     exit_status = EXIT_OK;
+    //printf("lol %s\n", cmd->val.args[i]);
     if (!cmd->val.args[i])
     {
-        printf("");
+        dprintf(1, "pas d'arg\n");
+        printf("test");
         print_export_history(cmd->env, cmd->export_history);
         return (exit_status);
     }
@@ -223,6 +229,7 @@ int    ft_export(t_cmd *cmd)
                 if (is_in_export_history(cmd->export_history, var_name))
                     del_from_export_history(&cmd->export_history, var_name);
                 var_value = ft_substr(cmd->val.args[i], j + 1, ft_strlen(cmd->val.args[i]));
+                printf("var_value = %s\n", var_value);
                 if (!ht_modify_value(cmd->env, var_name, var_value)) // ie si la variable n'est pas deja dans l'env
                     ht_insert_item(cmd->env, var_name, var_value);
                   
