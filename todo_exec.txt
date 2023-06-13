@@ -1,3 +1,9 @@
 Dans le cas des builtins, certains modifient l'environnement 
 -> ils doivent etre executés dans le processus PARENT
     -> Checker 
+
+
+
+$ echo un || echo deux && echo trois)
+Syntax error near unexpected token `)'
+munmap_chunk(): invalid pointer

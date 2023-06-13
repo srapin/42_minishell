@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_pub.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 23:56:51 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/07 22:54:12 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/13 23:33:11 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,4 +71,62 @@ void dup_cmd_file(t_cmd *cmd)
 		dup2(cmd->red.out_fd, STDOUT_FILENO);
 		safe_close(&(cmd->red.out_fd));
 	}
+}
+
+void	ft_lstfree(t_list **lst)
+{
+	t_list	*tmp;
+
+	while (lst && *lst)
+	{
+		tmp = *lst;
+		*lst = (*lst)->next;
+		free(tmp->content);
+		ft_lstdelone(tmp);
+	}
+	lst = NULL;
+}
+//attention ne free pas l env
+void free_cmd_value(t_cmd_value *val)
+{
+	free(val->value);
+	free_tab(val->args);
+	if (val->path)
+	{
+		val->path =NULL;	
+		free(val->path);
+	}
+}
+
+void free_cmd(t_cmd **cmd)
+{
+	
+	*cmd = NULL;
+}
+
+void free_common(t_cmd*cmd)
+{
+	if (!cmd)
+		return;
+	
+	
+}
+
+void rec_free_commands(t_cmd *cmd)
+{
+	t_cmd *next;
+	t_cmd *red;
+	
+	next = cmd->next;
+	red = cmd->red.next_cmd;
+	if (!red && !next)
+		return free_cmd(&cmd);
+	rec_free_commands(next);
+	rec_free_commands(red);
+}
+
+void free_commands(t_cmd *cmd)
+{
+	free_common(cmd);
+	rec_free_commands(cmd);
 }

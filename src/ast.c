@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 21:44:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/13 05:08:51 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/13 23:32:24 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -291,11 +291,63 @@ Dès que tombe sur un opérateur de controle :
 
 (echo un | (echo deux && echo trois))
 */
+
+
+
+void    set_subshell_attributs(t_cmd *current_cmd, t_token_list *current_tk)
+{
+    int     i;
+    int     fd_subshell;
+    char    *subshell_filename;
+    
+    subshell_filename = random_subshell_fname();
+    fd_subshell = open(subshell_filename, O_CREAT | O_WRONLY, 00700);
+    if (fd_subshell == -1)
+    {
+        perror("open ");
+        // free everything and return
+    }
+    i = 0;
+    
+    //cmd_start_tk = current_tk;
+    current_tk = current_tk->next;
+    while (current_tk && current_tk->type != r_parenthesis)
+    {
+        if (write(fd_subshell, current_tk->content, current_tk->length) == -1) // vérifier si current_tk->length est bien à jour !
+            perror ("write ");
+        current_tk = current_tk->next;
+        printf('in the while\n');
+    }
+    if (current_tk) // ie == ')'
+        current_tk = current_tk->next;
+    
+    //add_val_to_cmd(current_cmd, ft_strjoin("minishell ", subshell_filename));
+    
+    current_cmd->val.value = ft_strdup("minishell");
+    
+    current_cmd->val.args = malloc(sizeof(char *) * 3);
+    if (!current_cmd->val.args)
+    {
+        perror("malloc ");
+        // return ?
+    }
+    current_cmd->val.args[0] = ft_strdup("minishell");
+    current_cmd->val.args[1] = ft_strdup(subshell_filename);
+    current_cmd->val.args[2] = NULL;
+    
+    free(subshell_filename);
+    subshell_filename = NULL;
+}
+
+
+
 t_cmd   *get_ast(t_ht_hash_table *ht, t_token_list **first_tk, t_list *exp_hist)
 {
     int             i;
+
     int             subshell;
     int             fd_subshell;
+    
     int             args_count;
     char            *subshell_filename;
     t_token_list    *pipeline_start_tk;
@@ -309,19 +361,10 @@ t_cmd   *get_ast(t_ht_hash_table *ht, t_token_list **first_tk, t_list *exp_hist)
     t_cmd           *before_ctrl_op_cmd;
 
     
-    
     ast = malloc(sizeof(t_cmd *));
     *ast = init_new_cmd(ht, exp_hist);
     if (!*ast)
         return (NULL);
-    
-    //set_here_docs(ht, first_tk); // le faire ici ou dans parse() ?
-
-    /* Ne modifie pas directement ast car il s'agit de la variable que renvoie à la fin,
-    et veut ainsi que pointe encore sur la racine de l'arbre quand est récupéré par l'exec. */
-    // ast = malloc(sizeof(t_cmd *));
-    // if (!ast)
-    //     perror("malloc ");
     
     pipeline_start_cmd = *ast;
 
@@ -331,8 +374,7 @@ t_cmd   *get_ast(t_ht_hash_table *ht, t_token_list **first_tk, t_list *exp_hist)
     before_ctrl_op_cmd = NULL;
     subshell_filename = NULL;
     
-    pipeline_start_tk = *first_tk; // le pointeur sur le premier token du premier pipeline est initialisé à pointeur que va renvoyer à l'exec à la fin
-    // parcours la liste de tokens un par un
+    pipeline_start_tk = *first_tk; 
     while (pipeline_start_tk)
     {
         current_tk = pipeline_start_tk;
@@ -348,8 +390,6 @@ t_cmd   *get_ast(t_ht_hash_table *ht, t_token_list **first_tk, t_list *exp_hist)
             while (current_tk && current_tk->type != and_tk && current_tk->type != or_tk)
             {
                 // creer et updated une t_cmd
-                
-
                 if (current_tk->type == l_io_redirect || current_tk->type == r_io_redirect)
                 {
                     update_redirect(current_cmd, current_tk);
@@ -372,39 +412,11 @@ t_cmd   *get_ast(t_ht_hash_table *ht, t_token_list **first_tk, t_list *exp_hist)
                 }
                 else if (current_tk->type == l_parenthesis)
                 {
+
                     subshell = 1;
-                    subshell_filename = random_subshell_fname();
-                    fd_subshell = open(subshell_filename, O_CREAT | O_WRONLY, 00700);
-                    if (fd_subshell == -1)
-                        perror("open ");
-                    i = 0;
-                    //cmd_start_tk = current_tk;
-                    current_tk = current_tk->next;
-                    while (current_tk && current_tk->type != r_parenthesis)
-                    {
-                        if (write(fd_subshell, current_tk->content, current_tk->length) == -1) // vérifier si current_tk->length est bien à jour !
-                            perror ("write ");
-                        current_tk = current_tk->next;
-                    }
-                    if (current_tk) // ie == ')'
-                        current_tk = current_tk->next;
+                    set_subshell_attributs(current_cmd, current_tk);
                     
-                    //add_val_to_cmd(current_cmd, ft_strjoin("minishell ", subshell_filename));
                     
-                    current_cmd->val.value = ft_strdup("minishell");
-                    
-                    current_cmd->val.args = malloc(sizeof(char *) * 3);
-                    if (!current_cmd->val.args)
-                    {
-                        perror("malloc ");
-                        // return ?
-                    }
-                    current_cmd->val.args[0] = ft_strdup("minishell");
-                    current_cmd->val.args[1] = ft_strdup(subshell_filename);
-                    current_cmd->val.args[2] = NULL;
-                    
-                    free(subshell_filename);
-                    subshell_filename = NULL;
                 }
                 else // ie s'agit d'un nom ou option de commande 
                 {
