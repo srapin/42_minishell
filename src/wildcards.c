@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:13:13 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/13 10:17:54 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/13 19:06:13 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,6 @@ char    *search_from_end(char *d_name, char *suffix)
     j = ft_strlen(suffix) - 1;
     while (i >= 0 && j >= 0)
     {
-        // if (ft_rev_strchr(suffix + j, '*') && !is_in_quotes(wd, )) // implementer le calcul de l'index de suffix[i] dans le mot final : le garder en mémoire dès que calcule le suffix ? et le mettre dans une structure que passe en argument, avec tout le reste des variables ?
-        // {
-            
-        // }
         if (d_name[i] != suffix[j])
             return (NULL);
         i--;
@@ -49,10 +45,6 @@ char    *search_from_start(char *d_name, char *prefix)
     i = 0;
     while (d_name[i] && prefix[i])
     {
-        // if (prefix[i] == '*') // 
-        // {
-            
-        // }
         if (d_name[i] != prefix[i])
             return (NULL);
         i++;
@@ -114,10 +106,6 @@ int     is_a_hidden_dir(struct dirent *dir_content)
     if (ft_strlen(dir_content->d_name) 
         && *(dir_content->d_name) == '.') 
         return (1);
-    // if (ft_strlen(dir_content->d_name) == 2
-    //     && dir_content->d_name[0] == '.'
-    //     && dir_content->d_name[1] == '.')
-    //     return (1);
     return (0);
 }
 
@@ -327,15 +315,11 @@ void    free_filenames(t_filename **filenames)
     t_filename *current;
 
     current = (*filenames);
-    //printf("in free_filenames()\n");
     while (current)
     {
         current = (*filenames)->next;
         if ((*filenames)->filename)
-        {
-            //printf("(*filenames)->filename = %s\n", (*filenames)->filename);
             free((*filenames)->filename);
-        }
         free((*filenames));
     }
     //free(filenames); // POURQUOI ÇA MARCHE PAS ??
@@ -356,21 +340,15 @@ void    insert_filenames(t_token_list **first, t_token_list **current, t_filenam
         return ; // ?
     current_f = (*filenames);
     tmp = (*current);
-    
-    //tk_del_one(first, tmp);
-    
     while(current_f)
     {
-        tk_add_word_in_list(current, current_f->filename); // invalid read of size 1
+        tk_add_word_in_list(current, current_f->filename);
         //printf("%s inserted\n", (*filenames)->filename);
-        *current = (*current)->next; // current->next est le nouvel élément ajouté (il existe donc forcément)
+        *current = (*current)->next;
         current_f = current_f->next;
     }
-
-    
     tk_del_one(first, tmp);
 
-    
     // new_content = ft_strdup((*filenames)->filename);
     // while (current_f->next)
     // {
@@ -389,8 +367,6 @@ void    insert_filenames(t_token_list **first, t_token_list **current, t_filenam
 }
 
 
-//A faire APRES avoir regroupé les tokens mots n'étant pas séparés par des whitespaces ou des control_op 
-// (Et donc après avoir viré les quotes)
 
 /*
 Une fois qu'a choppé les prefix et suffix, fait un premier tri dans la liste des d_name
@@ -442,10 +418,7 @@ void    perform_wildcard_exp(t_ht_hash_table *ht, t_token_list **first)
                 }
                 insert_filenames(first, &current, &filenames); // passe deja au current->next ici
             }
-            // else
-            //     current = current->next;
         }
-        //else
         current = current->next;
     }
 }

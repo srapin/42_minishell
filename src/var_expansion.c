@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:12:06 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/10 22:07:57 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/13 16:59:36 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,16 +76,9 @@ void    expand(t_ht_hash_table *ht, t_token_list **current, char *var, size_t do
     else
     {
         value = ht_search(ht, var);
-        // if (!value)
-        //     printf("ht_search returned NULL\n\n");
         after_value = ft_substr((*current)->content, dollar_index + ft_strlen(var) + 1, 
             (*current)->length);
     }
-    
-    
-    //printf("before key = %s\n", before_key);
-    //printf("after key = %s\n", after_value);
-    
     
     free((*current)->content);
     (*current)->content = ft_strjoin(ft_strjoin(before_key, value), after_value);

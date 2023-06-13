@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:10:18 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/10 18:52:02 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/13 18:44:36 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,6 @@ void    check_first(t_token_list **first)
 /* Les tokens avec des '' ou "" doivent avoir le type word, et le content "\0" !!! */
 void    check_io_redirect(t_token_list **first, t_token_list **op)
 {
-    /*
-    Un operateur de redirection est TOUJOURS suivi par un <word>
-    */
     t_token_list    *current;
     
     if ((*op)->length > 2)
@@ -77,8 +74,6 @@ void    check_simple_command(t_token_list **first, t_token_list **current, int *
 {
     while ((*current) && (*current)->type != and_tk && (*current)->type != or_tk)
     {
-        // if ((*current)->type == whitespace)
-        //     (*current) = (*current)->next;
         if ((*current)->type == l_io_redirect || (*current)->type == r_io_redirect)
             check_io_redirect(first, current);
         else if ((*current)->type == l_parenthesis)

@@ -6,14 +6,14 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 18:15:56 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/10 18:49:31 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/13 19:02:46 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TOKENS_H
 # define TOKENS_H
 
-# define WHITESPACES        " \t" // and '\n' ? and '\v' ?
+# define WHITESPACES        " \t"
 
 enum e_t_types
 {

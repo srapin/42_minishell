@@ -28,8 +28,6 @@ FILES = cmd_private\
 		var_expansion \
 		wildcards \
 		split_io_redirect_and_cmds \
-		ast_heredocs \
-		ast \
 		free_tokens \
 		free_after_exec \
 		free_exit_shell \
@@ -39,11 +37,18 @@ FILES = cmd_private\
 		ft_cd \
 		ft_pwd \
 		ft_exit \
-		signal
+		signal \
+		ast_heredocs \
+		ast 
+
+#PARSING_FILES = 	ast \
+					ast_heredocs
 
 
 SRCS_DIR = src
-SRCS = $(addprefix $(SRCS_DIR)/, $(addsuffix .c, $(FILES)))
+#PARSING_DIR = $(SRCS_DIR)/parsing
+
+SRCS = $(addprefix $(SRCS_DIR)/, $(addsuffix .c, $(FILES)))#:$(addprefix $(PARSING_DIR)/, $(addsuffix .c, $(PARSING_FILES)))
 
 OBJS_DIR = obj
 OBJS = ${patsubst ${SRCS_DIR}/%.c, ${OBJS_DIR}/%.o, ${SRCS}}
