@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 20:57:20 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/13 05:49:08 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/13 05:54:30 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,8 @@ int try_to_exec_builtins(t_cmd *cmd, bool is_child)
 {
     int (*foo)(t_cmd *);
     int ret;
+    int old_in;
+    int old_out;
 
     // dprintf(1, "in try_to_exec_builtins()\n");
     //num = is_builtins(cmd->val.value);
@@ -128,13 +130,21 @@ int try_to_exec_builtins(t_cmd *cmd, bool is_child)
     // dprintf(1, "get_builtins() return value : %p\n", foo);
     if (!foo)
         return ret;
-    // if (!is_child)
-    //     dup_cmd_file(cmd);
+    if (!is_child)
+    {
+        old_in = dup(STDIN_FILENO); 
+        old_out = dup(STDOUT_FILENO); 
+        dup_cmd_file(cmd);
+    }
     ret = foo(cmd);
     if (is_child)
     {
         free_all(); // le faire dans le builtin ?  + quand mettre à jour le dernier exit_status ?
         exit(ret); // n'exit pas forcément avec 0 !! dépend de la valeur de retour du builtin
     }
+    dup2(old_in, STDIN_FILENO);
+    dup2(old_out, STDOUT_FILENO);
+    close(old_in);
+    close(old_out);
     return ret;
 }
