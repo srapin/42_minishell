@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hash_table.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 16:09:20 by hlesny            #+#    #+#             */
-/*   Updated: 2023/06/13 10:19:31 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/14 00:55:13 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,9 +141,10 @@ void    ht_resize(t_ht_hash_table *ht, size_t base_size)
     {
         current = ht->items[i];
         if (current && current != &HT_DELETED_ITEM)
-            ht_insert_item(new_ht, current->key, current->value);
+            ht_insert_item(new_ht, ft_strdup(current->key), ft_strdup(current->value));
         i++;
     }
+
     ht->base_size = base_size;
     ht->count = new_ht->count;
     

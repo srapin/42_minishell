@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 21:44:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/13 23:32:24 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/14 01:10:42 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -294,12 +294,15 @@ Dès que tombe sur un opérateur de controle :
 
 
 
-void    set_subshell_attributs(t_cmd *current_cmd, t_token_list *current_tk)
+void    set_subshell_attributs(t_cmd *current_cmd, t_token_list **curr_tk)
 {
-    int     i;
-    int     fd_subshell;
-    char    *subshell_filename;
+    int             i;
+    int             fd_subshell;
+    char            *subshell_filename;
+    t_token_list    *current_tk;
     
+    if (!current_cmd || !curr_tk)
+        return ;
     subshell_filename = random_subshell_fname();
     fd_subshell = open(subshell_filename, O_CREAT | O_WRONLY, 00700);
     if (fd_subshell == -1)
@@ -308,7 +311,7 @@ void    set_subshell_attributs(t_cmd *current_cmd, t_token_list *current_tk)
         // free everything and return
     }
     i = 0;
-    
+    current_tk = *curr_tk;
     //cmd_start_tk = current_tk;
     current_tk = current_tk->next;
     while (current_tk && current_tk->type != r_parenthesis)
@@ -316,11 +319,10 @@ void    set_subshell_attributs(t_cmd *current_cmd, t_token_list *current_tk)
         if (write(fd_subshell, current_tk->content, current_tk->length) == -1) // vérifier si current_tk->length est bien à jour !
             perror ("write ");
         current_tk = current_tk->next;
-        printf('in the while\n');
     }
     if (current_tk) // ie == ')'
         current_tk = current_tk->next;
-    
+    *curr_tk = current_tk;
     //add_val_to_cmd(current_cmd, ft_strjoin("minishell ", subshell_filename));
     
     current_cmd->val.value = ft_strdup("minishell");
@@ -414,7 +416,7 @@ t_cmd   *get_ast(t_ht_hash_table *ht, t_token_list **first_tk, t_list *exp_hist)
                 {
 
                     subshell = 1;
-                    set_subshell_attributs(current_cmd, current_tk);
+                    set_subshell_attributs(current_cmd, &current_tk);
                     
                     
                 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quotes.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:13:44 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/10 22:08:44 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/14 01:10:01 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,20 +38,30 @@ void    delete_quotes(t_token_list **first)
     current = current->next;
     while (current)
     {
-        if (current->type == simple_quote || current->type == double_quote)
+        if (current->type == l_parenthesis)
         {
-            if (current_prev->type != l_io_redirect || current_prev->length == 1) // si le token n'est pas le delimiteur d'un here_doc
-            {
-                content_tmp = ft_substr(current->content, 1, current->length - 2);
-                if (!content_tmp) // si le malloc ne fonctionne pas
-                    return ; // que faire ?
-                free(current->content);
-                current->content = content_tmp;
-                current->type = word;
-                current->length -= 2;
-            }
+            while (current && current->type != r_parenthesis)
+                current = current->next;
+            if (current)
+                current = current->next;
         }
-        current = current->next;
+        else 
+        {
+            if (current->type == simple_quote || current->type == double_quote)
+            {
+                if (current_prev->type != l_io_redirect || current_prev->length == 1) // si le token n'est pas le delimiteur d'un here_doc
+                {
+                    content_tmp = ft_substr(current->content, 1, current->length - 2);
+                    if (!content_tmp) // si le malloc ne fonctionne pas
+                        return ; // que faire ?
+                    free(current->content);
+                    current->content = content_tmp;
+                    current->type = word;
+                    current->length -= 2;
+                }
+            }
+            current = current->next;
+        }
     }
 }
 
@@ -110,7 +120,14 @@ void    group_words(t_token_list **first)
     current = *first;
     while (current)
     {
-        if (current->type == word && current->next && current->next->type == word)
+        if (current->type == l_parenthesis)
+        {
+            while (current && current->type != r_parenthesis)
+                current = current->next;
+            if (current)
+                current = current->next;
+        }
+        else if (current->type == word && current->next && current->next->type == word)
         {
             if (!current->merged_words) // ie le <word> n'a pas encore été merged avec un autre <word>
                 add_word_data(&current->merged_words, new_word_data(current));

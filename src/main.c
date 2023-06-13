@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 19:32:17 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/13 10:12:05 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/14 01:10:59 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,9 @@ t_ht_hash_table *ht_get_env(char **envp)
         j = 0;
         while (envp[i][j] && envp[i][j] != '=')
             j++;
-        // printf("j = %d\n", j);
-        // printf("ok, env[%d] = %s\n", i, envp[i]);
-        // printf("key = %s\n", ft_substr(envp[i], 0, j));
-        // printf("value = %s\n", ft_substr(envp[i], j + 1, ft_strlen(envp[i])));
+        //printf("ok, env[%d] = %s\n", i, envp[i]);
+        //printf("key = %s\n", ft_substr(envp[i], 0, j));
+        //printf("value = %s\n\n", ft_substr(envp[i], j + 1, ft_strlen(envp[i])));
         ht_insert_item(ht, ft_substr(envp[i], 0, j), ft_substr(envp[i], j + 1, ft_strlen(envp[i])));
         i++;
     }
@@ -98,6 +97,8 @@ void    print_ht(t_ht_hash_table *ht)
     }
 }
 
+
+
 void    exec_script(t_ht_hash_table *ht, char *path, t_list *exp_hist)
 {
     int     fd;
@@ -120,7 +121,7 @@ void    exec_script(t_ht_hash_table *ht, char *path, t_list *exp_hist)
         free(line);
         line = get_next_line(fd);
     }
-
+    unlink(path);
     close(fd);
 }
 
@@ -137,25 +138,18 @@ int main (int argc, char **argv, char **envp)
         return (0);
     }
     
+
     if (!envp)
         hash_map = get_minimal_env();
     else
         hash_map = ht_get_env(envp);
     if (!hash_map)
-        return (EXIT_FAILURE); // do we return ? which exit status ?
+        return (1); // do we return ? which exit status ?
 
     pwd = *get_pwd(hash_map);
     t_list *exp_hist = init_export_history(hash_map);
     
-    // for (int i = 0; envp[i]; i++)
-    //     printf("envp[%d] = %s\n", i, envp[i]);
-    // printf("\n---------------------------\n");
-
-    // for (int i = 0; envp[i]; i++)
-    //     printf("envp[%d] = %s\n", i, envp[i]);
-    // printf("\n\n\n\n\n\n\n");
-    // print_ht(hash_map);
-
+    
 
     if (argc == 1)
         read_lines(hash_map, exp_hist);

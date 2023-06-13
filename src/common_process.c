@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   common_process.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:44:39 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/13 05:02:25 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/14 01:10:23 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	child_process(t_cmd *cmd, int pipe_tab[2])
 	signal(SIGQUIT, SIG_DFL);
 	//dprintf(1, "in child proc outfile name = %s\n", ((t_file *)(cmd->red.out_list)->content)->name   );
 	dup_cmd_file(cmd);
-	// //dprintf(1, "child_proc");
+	//dprintf(1, "child_proc\n");
 	
 	// rajouté par ln
 	try_to_exec_builtins(cmd, true);
