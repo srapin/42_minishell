@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hash_table.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 16:09:20 by hlesny            #+#    #+#             */
-/*   Updated: 2023/06/13 04:27:55 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/13 10:19:31 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -274,9 +274,7 @@ int    ht_modify_value(t_ht_hash_table *ht, const char *key, char *new_value) //
             if (!ft_strcmp(current->key, key))
             {
                 free(current->value);
-                printf("current->key = %s, current->new_value = %s\n", key, new_value);
                 current->value = (char *)new_value; // new_value est deja malloc
-                printf("current->key = %s, current->new_value = %s\n", key, current->value);
                 return (1);
             }
         }
@@ -329,7 +327,11 @@ void    ht_delete(t_ht_hash_table *ht, const char *key)
         if (current != &HT_DELETED_ITEM)
         {
             if (!ft_strcmp(current->key, key))
+            {
                 ht_del_item(current);
+                ht->items[index] = &HT_DELETED_ITEM;  
+                ht->count--;   
+            }
         }
         attempts++;
         index = ht_get_hash(key, ht->size, attempts);

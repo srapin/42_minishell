@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 19:32:17 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/13 05:14:04 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/13 10:12:05 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,7 @@ void    exec_script(t_ht_hash_table *ht, char *path, t_list *exp_hist)
 
 int main (int argc, char **argv, char **envp)
 {
+    char            *pwd;
     t_ht_hash_table *hash_map;
     
     signal(SIGINT, handle_sigint);
@@ -143,7 +144,9 @@ int main (int argc, char **argv, char **envp)
     if (!hash_map)
         return (EXIT_FAILURE); // do we return ? which exit status ?
 
+    pwd = *get_pwd(hash_map);
     t_list *exp_hist = init_export_history(hash_map);
+    
     // for (int i = 0; envp[i]; i++)
     //     printf("envp[%d] = %s\n", i, envp[i]);
     // printf("\n---------------------------\n");

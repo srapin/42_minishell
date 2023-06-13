@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 00:59:44 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/13 02:37:51 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/13 10:08:30 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,26 @@
 /* Quel que soit le nombre d'arguments donnés, il printera dans
 tous les cas le chemin absolu vers le dossier courant */
 // quels cas d'erreur à gérer ?????
+path    *get_pwd(t_ht_hash_table *env)
+{
+    static path pwd = NULL;
+    if (!pwd)
+        pwd = ft_strdup(ht_search(env, "PWD"));
+    return (&pwd);
+}
+
+void    update_pwd(t_ht_hash_table *env, char *new_pwd)
+{
+    char **pwd;
+    pwd = get_pwd(env);
+    free (*pwd);
+    *pwd = ft_strdup(new_pwd); 
+}
+
+
+
 int     ft_pwd(t_cmd *cmd)
 {
-    dprintf(1, "coucou depuis ft_pwd()\n");
-    
-    printf("%s\n", ht_search(cmd->env, "PWD"));
+    printf("%s\n", *get_pwd(cmd->env));
     return (EXIT_OK);
 }

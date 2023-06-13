@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:14:54 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/09 00:17:45 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/13 10:18:29 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,6 @@ void    tk_add_word_in_list(t_token_list **current, char *content) // adds a tok
     initial_current_next = (*current)->next;
     new = tk_new_elem(content, ft_strlen(content), word, 0);
     
-    printf("before inserting new word\n");
     {
         
         (*current)->next = new;

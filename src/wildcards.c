@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:13:13 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/10 21:41:01 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/13 10:17:54 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -300,10 +300,10 @@ void    second_sort(t_filename **filenames, t_token_list *current, char *prefix)
             next_wcadr_index = get_next_wcard_index(current, i);
             if (next_wcadr_index >= 0) // get_next_wcard() renvoie -1 en cas d'échec
             {
-                printf("filename_pos : %s\n", filename_pos);
-                printf("current->content : %s\n", current->content);
-                printf("i : %d\nnext_wcadr_index : %d\nnext_wcadr_index - i : %d\n", i, next_wcadr_index, next_wcadr_index - i);
-                printf("substring to find : %s\n\n\n", ft_substr(current->content, i, next_wcadr_index - i));
+                // printf("filename_pos : %s\n", filename_pos);
+                // printf("current->content : %s\n", current->content);
+                // printf("i : %d\nnext_wcadr_index : %d\nnext_wcadr_index - i : %d\n", i, next_wcadr_index, next_wcadr_index - i);
+                // printf("substring to find : %s\n\n\n", ft_substr(current->content, i, next_wcadr_index - i));
                 filename_pos = ft_search_str_in_str(filename_pos, ft_substr(current->content, i, next_wcadr_index - i));
                 if (!filename_pos) // ft_search_str_in_str() renvoie NULL en cas d'échec
                 {
@@ -327,13 +327,13 @@ void    free_filenames(t_filename **filenames)
     t_filename *current;
 
     current = (*filenames);
-    printf("in free_filenames()\n");
+    //printf("in free_filenames()\n");
     while (current)
     {
         current = (*filenames)->next;
         if ((*filenames)->filename)
         {
-            printf("(*filenames)->filename = %s\n", (*filenames)->filename);
+            //printf("(*filenames)->filename = %s\n", (*filenames)->filename);
             free((*filenames)->filename);
         }
         free((*filenames));
@@ -359,12 +359,10 @@ void    insert_filenames(t_token_list **first, t_token_list **current, t_filenam
     
     //tk_del_one(first, tmp);
     
-    printf("in insert_filenames\n");
-
     while(current_f)
     {
         tk_add_word_in_list(current, current_f->filename); // invalid read of size 1
-        printf("%s inserted\n", (*filenames)->filename);
+        //printf("%s inserted\n", (*filenames)->filename);
         *current = (*current)->next; // current->next est le nouvel élément ajouté (il existe donc forcément)
         current_f = current_f->next;
     }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 01:12:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/13 02:10:28 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/13 11:55:51 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char    *get_full_path(t_ht_hash_table *env, char *arg_path)
 {
     char    *pwd;
 
-    pwd = ht_search(env, "PWD"); // que faire si pwd = NULL ?
+    pwd = *get_pwd(env); // que faire si pwd = NULL ?
     return (ft_strjoin(pwd, arg_path));
 }
 
@@ -44,8 +44,6 @@ char *replace_prev_or_actual_dir(char *path)
         // ne peux pas avoir path[0] == '.' car a récupéré pwd, donc path[0] = '/' obligatoirement
         if (path[i] == '.' && path[i - 1] == '/')
         {
-            printf("i = %d\n", i);
-            printf("path before : %s\n", path);
             // simply deletes the '.' or './'
             if ((!path[i + 1] || path[i + 1] == '/')) // '.' ou './'
             {
@@ -57,7 +55,6 @@ char *replace_prev_or_actual_dir(char *path)
                 free(after);
                 before = NULL;
                 after = NULL;
-                printf("path after : %s\n", path);
             }
             else if (path[i + 1] && path[i + 1] == '.')
             {
@@ -89,7 +86,6 @@ char *replace_prev_or_actual_dir(char *path)
                     free(after);
                     before = NULL;
                     after = NULL;
-                    printf("path after : %s\n", path);
                 }
             }
         }
@@ -97,7 +93,6 @@ char *replace_prev_or_actual_dir(char *path)
             i++;
         
     }
-    printf("in the end of replace_prev_or_actual(), path = %s\n", path);
     return (path);
 }
 
@@ -121,20 +116,22 @@ int     ft_cd(t_cmd *cmd)
     if (cmd->val.args[2]) // si il y a plus d'un argument. val.args est null-terminated
         return (CD_TOO_MANY_ARGS);
 
-    if (cmd->val.args[1][0] == '.') // chemin relatif)
+    if (cmd->val.args[1][0] == '/') // chemin absolu)
+        full_path = ft_strdup(cmd->val.args[1]);
+    else // chemin relatif
     {
-        tmp = ft_strjoin("/", cmd->val.args[1]);
+        tmp = ft_strdup(cmd->val.args[1]);
+        if (ft_strcmp(*get_pwd(cmd->env), "/")) // ie $PWD != "/"
+            tmp = ft_strjoin("/", cmd->val.args[1]);
         full_path = get_full_path(cmd->env, tmp);
         free(tmp);
         tmp = NULL;
     }
-    else // chemin absolu
-        full_path = get_full_path(cmd->env, cmd->val.args[1]);
-    printf("full path avant chdir : %s\n", full_path);
+        
     if (chdir(full_path) == -1)
     {
         perror("chdir ");
-        exit(errno); // Quel code erreur ?
+        return(errno); // Quel code erreur ?
     }
     
     // si le dossier est accessible, et que s'y est bien déplacé :
@@ -143,18 +140,15 @@ int     ft_cd(t_cmd *cmd)
     free(full_path);
     full_path = replace_prev_or_actual_dir(tmp);
     // free(tmp); pourquoi ce free() fait tout couiller ??
-    printf("path before last if = %s\n", full_path);
     if (ft_strlen(full_path) > 1 && full_path[ft_strlen(full_path) - 1] == '/')
     {
-        printf("dans le if, full_path = %s\n", full_path);
         tmp = ft_substr(full_path, 0, ft_strlen(full_path) - 1);
         free(full_path);
         full_path = tmp;
     }
-    printf("path after last if = %s\n", full_path);
     ht_modify_value(cmd->env, "PWD", full_path);
-    printf("dans export() : PWD apres ht_modify() = %s\n", ht_search(cmd->env, "PWD"));
-    
+    update_pwd(cmd->env, full_path);
+    //printf("dans export() : PWD apres ht_modify() = %s, %s\n", ht_search(cmd->env, "PWD"), *get_pwd(cmd->env));
     
     return (EXIT_OK);
 }
