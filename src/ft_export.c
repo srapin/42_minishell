@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 23:25:02 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/13 05:19:41 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/13 05:42:37 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,84 @@ void    get_and_print_var(t_ht_hash_table *ht, t_list *export_list, char *name)
         printf("export %s\n", name);
 }
 
+
+void insert_in_sorted_lst(t_list **head, t_list *elem)
+{
+    t_list *lst;
+    t_list *prev;
+    t_list *tmp;
+    char *new_key;
+
+    if (!head || !elem)
+        return;
+    lst = *head;
+    if (!lst)
+    {
+        *head= elem;
+        return; 
+    }
+    new_key = (char *)elem->content;
+    if (ft_strcmp((char*)lst->content, new_key) >= 0)
+        return ft_lstadd_front(head, elem);
+    while (lst && ft_strcmp((char*)lst->content, new_key) < 0)
+    {
+        prev = lst;
+        lst = lst->next;
+    }
+    if (!lst)
+    {
+        prev->next = elem;
+        return;
+    }
+    tmp = prev->next;
+    prev->next = elem;
+    elem->next = tmp;
+}
+
+t_list *get_sorted_hist(t_ht_hash_table *ht)
+{
+    char *to_insert;
+    t_list *lst;
+    t_list *current;
+    int i = 0;
+    
+    // dprintf(1, "hello\n");
+    lst = NULL;
+    // dprintf(1, "hey\n");
+    while (i < ht->size)
+    {
+        // dprintf(1, "hello 1\n");
+        while(i < ht->size && !ht->items[i])
+            i++;
+        if (!(i< ht->size))
+            break;
+        to_insert = ht->items[i]->key;
+        current = ft_lstnew(to_insert);
+        // dprintf(1, "hello 2, %s\n", (char *) to_insert);
+        insert_in_sorted_lst(&lst, current);
+        i++;
+    }
+    // while (lst)
+    // {
+    //     dprintf(1, "end of sort hist, %s\n", (char * )lst->content);
+    //     lst = lst->next;
+    //     /* code */
+    // }
+    
+    return lst;
+}
+
+bool ft_lst_in(t_list *lst, char *str)
+{
+    while (lst)
+    {
+        if (ft_strisequal((char *)lst->content, str))
+            return true;
+        lst = lst->next;
+    }
+    return false;
+}
+
 // print toutes les variables ayant été exportées, triées par ordre alphabétique
 void    print_export_history(t_ht_hash_table *ht, t_list *export_hist)
 {
@@ -104,64 +182,93 @@ void    print_export_history(t_ht_hash_table *ht, t_list *export_hist)
     int     j;
     char    **sorted_history;
     t_list  *current_var;
+    t_list *lst;
+    t_list *exp;
+    t_list *exp_next;
     char    *to_insert;
     
 
-    dprintf(1, "in print_export_history()\n");
-    j = 0;
-    sorted_history = ft_calloc(sizeof(char *), ht->count + ft_lstsize(export_hist));
-    if (!sorted_history)
+    lst = get_sorted_hist(ht);
+    exp = export_hist;
+    while(exp)
     {
-        perror("malloc ");
-        return ;
+        exp_next = exp->next;
+        insert_in_sorted_lst(&lst,ft_lstnew(exp->content));
+        exp = exp_next;
     }
-    to_insert = ht->items[0]->key; // choix arbitraire
-    while (j < (ht->count + ft_lstsize(export_hist)))
+    current_var = lst;
+    char *str;
+    while(current_var)
     {
-        printf("debut du while. to_insert = %s\n", to_insert);
-        i = 0;
-        current_var = export_hist;
-        while (i < ht->count)
+        str = ht_search(ht, current_var->content);
+        if (!str && is_in_export_history(export_hist,(char *) current_var->content))
+            printf("%s\n", (char *) current_var->content);
+        else if (str)
         {
-            while (i < ht->count && (!ht->items[i] || ft_strcmp(to_insert, ht->items[i]->key) < 0))
-                i++;
+
+            printf("%s=%s\n", (char *) current_var->content, str);
+        }
+       current_var = current_var->next; 
+    }
+    ft_lstclear(&lst);
+
+    // dprintf(1, "in print_export_history()\n");
+    // j = 0;
+    // i = 0;
+    // sorted_history = ft_calloc(sizeof(char *), ht->count + ft_lstsize(export_hist));
+    // if (!sorted_history)
+    // {
+    //     perror("malloc ");
+    //     return ;
+    // }
+    
+    // to_insert = ht->items[0]->key; // choix arbitraire
+    // while (j < (ht->count + ft_lstsize(export_hist)))
+    // {
+    //     printf("debut du while. to_insert = %s\n", to_insert);
+    //     i = 0;
+    //     current_var = export_hist;
+    //     while (i < ht->count)
+    //     {
+    //         while (i < ht->count && (!ht->items[i] || ft_strcmp(to_insert, ht->items[i]->key) < 0))
+    //             i++;
                 
-            if (i < ht->count) // ie ft_strcmp(to_insert, current) > 0 (== 0 est impossible)
-            {
-                printf("ht->items[i]->key = %s\n", ht->items[i]->key);
-                if (ft_strcmp("_", ht->items[i]->key)) // fait le choix de ne pas print la variable "_" de l'env (undefined behaviour suite a mes tests)
-                {
-                    if (!is_in_tab(sorted_history, to_insert))
-                    {
-                        printf("not already in tab\n");
-                        to_insert = ht->items[i]->key;
-                    }
-                }
-            }
-            i++;
-        }
-        while (current_var)
-        {
-            while (current_var && ft_strcmp(to_insert, current_var->content) < 0)
-                current_var = current_var->next;
-            if (current_var) // ie ft_strcmp(to_insert, current) > 0 (== 0 est impossible)
-            {
-                if (!is_in_tab(sorted_history, to_insert))
-                {
-                    printf("not already in tab\n");
-                    to_insert = current_var->content;
-                }
-                current_var = current_var->next;
-            }
-            //current_var = current_var->next;
-        }
-        printf("fin du while. to_insert = %s\n", to_insert);
-        get_and_print_var(ht, export_hist, to_insert);
-        sorted_history[j] = ft_strdup(to_insert);
-        printf("j = %d, sorted_history[%d] = %s\n\n", j, j, sorted_history[j]);
-        j++;
-    }
-    free_tab(sorted_history);
+    //         if (i < ht->count) // ie ft_strcmp(to_insert, current) > 0 (== 0 est impossible)
+    //         {
+    //             printf("ht->items[i]->key = %s\n", ht->items[i]->key);
+    //             if (!ft_strcmp("_", ht->items[i]->key)) // fait le choix de ne pas print la variable "_" de l'env (undefined behaviour suite a mes tests)
+    //             {
+    //                 if (!is_in_tab(sorted_history, to_insert))
+    //                 {
+    //                     printf("not already in tab\n");
+    //                     to_insert = ht->items[i]->key;
+    //                 }
+    //             }
+    //         }
+    //         i++;
+    //     }
+    //     while (current_var)
+    //     {
+    //         while (current_var && ft_strcmp(to_insert, current_var->content) < 0)
+    //             current_var = current_var->next;
+    //         if (current_var) // ie ft_strcmp(to_insert, current) > 0 (== 0 est impossible)
+    //         {
+    //             if (!is_in_tab(sorted_history, to_insert))
+    //             {
+    //                 printf("not already in tab\n");
+    //                 to_insert = current_var->content;
+    //             }
+    //             current_var = current_var->next;
+    //         }
+    //         //current_var = current_var->next;
+    //     }
+    //     printf("fin du while. to_insert = %s\n", to_insert);
+    //     get_and_print_var(ht, export_hist, to_insert);
+    //     sorted_history[j] = ft_strdup(to_insert);
+    //     printf("j = %d, sorted_history[%d] = %s\n\n", j, j, sorted_history[j]);
+    //     j++;
+    // }
+    // free_tab(sorted_history);
 }
 
 int     is_in_export_history(t_list *export_hist, char *var_name)
@@ -223,7 +330,7 @@ int    ft_export(t_cmd *cmd)
     //printf("lol %s\n", cmd->val.args[i]);
     if (!cmd->val.args[i])
     {
-        dprintf(1, "pas d'arg\n");
+        // dprintf(1, "pas d'arg\n");
         print_export_history(cmd->env, cmd->export_history);
         return (exit_status);
     }
@@ -240,7 +347,7 @@ int    ft_export(t_cmd *cmd)
                 if (is_in_export_history(cmd->export_history, var_name))
                     del_from_export_history(&cmd->export_history, var_name);
                 var_value = ft_substr(cmd->val.args[i], j + 1, ft_strlen(cmd->val.args[i]));
-                printf("var_value = %s\n", var_value);
+                // printf("var_value = %s\n", var_value);
                 if (!ht_modify_value(cmd->env, var_name, var_value)) // ie si la variable n'est pas deja dans l'env
                     ht_insert_item(cmd->env, var_name, var_value);
                   
@@ -256,8 +363,11 @@ int    ft_export(t_cmd *cmd)
             var_name = cmd->val.args[i];
             if (valid_name(var_name))
             {
+                
+                
                 if (!is_in_export_history(cmd->export_history, var_name))
-                    ft_lstadd_back(&cmd->export_history, ft_lstnew(var_name));
+                    ft_lstadd_back(&(cmd->export_history), ft_lstnew(var_name));
+                
                 // si est deja dans export history, ne fait rien (vu que ne modifie pas sa valeur)
             }
             else

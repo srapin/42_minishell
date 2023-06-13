@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 16:09:20 by hlesny            #+#    #+#             */
-/*   Updated: 2023/06/13 00:53:23 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/13 04:27:55 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,7 +249,8 @@ int     ft_strcmp(const char *s1, const char *s2)
     // if (ft_strlen(s1) != ft_strlen(s2))
     //     return (-1); 
 	i = 0;
-	while (s1[i] && s2[i] && s1[i] == s2[i])
+    
+	while (s1 && s2 && s1[i] && s2[i] && s1[i] == s2[i])
 		i++;
 	return (((unsigned char *)s1)[i] - ((unsigned char *)s2)[i]);
 }

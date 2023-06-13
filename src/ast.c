@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 21:44:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/12 22:29:46 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/13 05:08:51 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -254,7 +254,7 @@ char    *random_subshell_fname(void)
     return (filename);
 }
 
-t_cmd *init_new_cmd(t_ht_hash_table *ht)
+t_cmd *init_new_cmd(t_ht_hash_table *ht, t_list *exp_hist)
 {
     t_cmd *cmd;
     cmd = ft_calloc(sizeof(t_cmd), 1);
@@ -264,7 +264,7 @@ t_cmd *init_new_cmd(t_ht_hash_table *ht)
         return (NULL);
     }
     cmd->env = ht;
-    cmd->export_history = init_export_history(ht);
+    cmd->export_history = exp_hist;
     init_redirections(&(cmd->red));
     //init_cmd(cmd, envp); envp est en fait ht
     return (cmd);
@@ -291,7 +291,7 @@ Dès que tombe sur un opérateur de controle :
 
 (echo un | (echo deux && echo trois))
 */
-t_cmd   *get_ast(t_ht_hash_table *ht, t_token_list **first_tk)
+t_cmd   *get_ast(t_ht_hash_table *ht, t_token_list **first_tk, t_list *exp_hist)
 {
     int             i;
     int             subshell;
@@ -309,8 +309,9 @@ t_cmd   *get_ast(t_ht_hash_table *ht, t_token_list **first_tk)
     t_cmd           *before_ctrl_op_cmd;
 
     
+    
     ast = malloc(sizeof(t_cmd *));
-    *ast = init_new_cmd(ht);
+    *ast = init_new_cmd(ht, exp_hist);
     if (!*ast)
         return (NULL);
     
@@ -419,7 +420,7 @@ t_cmd   *get_ast(t_ht_hash_table *ht, t_token_list **first_tk)
             // si current_cmd est avant un pipe
             if (current_tk && current_tk->type == or_tk && current_tk->length == 1) // '|'
             {
-                current_cmd->red.next_cmd = init_new_cmd(ht);
+                current_cmd->red.next_cmd = init_new_cmd(ht, exp_hist);
                 if (!current_cmd->red.next_cmd)
                 {
                     perror("malloc ");
@@ -433,7 +434,7 @@ t_cmd   *get_ast(t_ht_hash_table *ht, t_token_list **first_tk)
         {
             pipeline_start_cmd->ctrl = (current_tk->type == and_tk) * and + (current_tk->type == or_tk) * or;
 
-            pipeline_start_cmd->next = init_new_cmd(ht);
+            pipeline_start_cmd->next = init_new_cmd(ht, exp_hist);
             pipeline_start_cmd = pipeline_start_cmd->next;
             if (!pipeline_start_cmd)
             {

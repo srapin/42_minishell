@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 20:57:20 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/13 02:30:03 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/13 05:49:08 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,8 @@ int (*get_builtins_foo(char *str))(t_cmd *)
         return &ft_unset;
     if (ft_strisequal(str, "env"))
         return &ft_env;
-    // if (ft_strisequal(str, "exit"))
-    //     return &ft_exit;
+    if (ft_strisequal(str, "exit"))
+        return &ft_exit;
     return NULL; // return -1 plutot ? si les builtins retournent un int >= 0 
 }
 
@@ -128,6 +128,8 @@ int try_to_exec_builtins(t_cmd *cmd, bool is_child)
     // dprintf(1, "get_builtins() return value : %p\n", foo);
     if (!foo)
         return ret;
+    // if (!is_child)
+    //     dup_cmd_file(cmd);
     ret = foo(cmd);
     if (is_child)
     {

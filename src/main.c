@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 19:32:17 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/13 04:54:41 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/13 05:14:04 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ void    print_ht(t_ht_hash_table *ht)
     }
 }
 
-void    exec_script(t_ht_hash_table *ht, char *path)
+void    exec_script(t_ht_hash_table *ht, char *path, t_list *exp_hist)
 {
     int     fd;
     char    *line;
@@ -112,7 +112,7 @@ void    exec_script(t_ht_hash_table *ht, char *path)
     }
     line = get_next_line(fd);
     tk_list = tokenise(ht, assign_type(line, ft_strlen(line)), ft_strlen(line), line);
-    parse(ht, tk_list);
+    parse(ht, tk_list, exp_hist);
     
     // normalement, n'a qu'une seule ligne !! car ne doit pas gerer les ';' dans minishell    
     while (line)
@@ -143,6 +143,7 @@ int main (int argc, char **argv, char **envp)
     if (!hash_map)
         return (EXIT_FAILURE); // do we return ? which exit status ?
 
+    t_list *exp_hist = init_export_history(hash_map);
     // for (int i = 0; envp[i]; i++)
     //     printf("envp[%d] = %s\n", i, envp[i]);
     // printf("\n---------------------------\n");
@@ -154,9 +155,9 @@ int main (int argc, char **argv, char **envp)
 
 
     if (argc == 1)
-        read_lines(hash_map);
+        read_lines(hash_map, exp_hist);
     else // peut avoir plus qu'un fichier ? part du principe que non ici ?
-        exec_script(hash_map, argv[1]);
+        exec_script(hash_map, argv[1], exp_hist);
     
     
     //parse(hash_map, tokenise(hash_map, assign_type(argv[1], ft_strlen(argv[1])), ft_strlen(argv[1]), argv[1]));

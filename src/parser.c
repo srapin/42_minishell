@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 02:12:27 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/12 19:30:29 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/13 05:11:50 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ void    print_ast(t_cmd *ast)
     }
 }
 
-void    parse(t_ht_hash_table *ht, t_token_list *first)
+void    parse(t_ht_hash_table *ht, t_token_list *first, t_list *exp_hist)
 {    
     //print_tokens(first);
     int wstatus;
@@ -160,7 +160,8 @@ void    parse(t_ht_hash_table *ht, t_token_list *first)
     //print_tokens(first);
 
     //printf("avant get ast\n");
-    t_cmd *ast = get_ast(ht, &first);
+    
+    t_cmd *ast = get_ast(ht, &first, exp_hist);
     
     //printf("apres get ast\n");
     //print_ast(ast);

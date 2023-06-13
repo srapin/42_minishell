@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 22:15:52 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/13 02:04:05 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/13 05:11:06 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ If EOF is encountered while reading a line, and the line is empty,
 NULL is returned. 
 If an EOF is read with a non-empty line, it is treated as a newline.
 */
-void    read_lines(t_ht_hash_table *ht)
+void    read_lines(t_ht_hash_table *ht, t_list *exp_hist)
 {
     char *input;
     size_t stream_len;
@@ -100,7 +100,7 @@ void    read_lines(t_ht_hash_table *ht)
         if (only_whitespaces(input))
             continue;
         tk_list = tokenise(ht, assign_type(input, stream_len), stream_len, input);
-        parse(ht, tk_list); // l'a mis ici et plus dans tokenise(). vérifier si marche encore !!
+        parse(ht, tk_list, exp_hist); // l'a mis ici et plus dans tokenise(). vérifier si marche encore !!
         
     }
 }
