@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 16:09:20 by hlesny            #+#    #+#             */
-/*   Updated: 2023/06/14 21:26:12 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/14 22:59:00 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,6 +146,23 @@ t_ht_item   *ht_new_item(char *key, char *value)
     return (new);
 }
 
+int    set_env_var(t_ht_item *item, char **env, int i)
+{
+    char *tmp;
+    
+    env[i] = ft_calloc(sizeof(char), (ft_strlen(item->key) + ft_strlen(item->value) + 5)); // +2 ou +5 ?
+    if (!env[i])
+    {
+        perror("malloc ");
+        free_tab(env);
+        return (0);
+    }
+    tmp = ft_strjoin(item->key, "=");
+    env[i] = ft_strjoin(tmp, item->value);
+    free(tmp);
+    return (1);
+}
+
 char    **hash_map_to_tab(t_ht_hash_table *ht)
 {
     int i;
@@ -164,9 +181,12 @@ char    **hash_map_to_tab(t_ht_hash_table *ht)
     
     while (i < ht->count && j < ht->size)
     {
-        while (!ht->items[j] || ht->items[j] == &HT_DELETED_ITEM)
+        while (j < ht->size && (!ht->items[j] || ht->items[j] == &HT_DELETED_ITEM))
             j++;
-        env[i] = ft_calloc(sizeof(char), (ft_strlen(ht->items[j]->key) + ft_strlen(ht->items[j]->value) + 5)); // +2 : pour '=' et pour null-terminate
+        
+        if (!set_env_var(ht->items[j], env, i))
+            return (NULL);
+        /* env[i] = ft_calloc(sizeof(char), (ft_strlen(ht->items[j]->key) + ft_strlen(ht->items[j]->value) + 5)); // +2 : pour '=' et pour null-terminate
         if (!env[i])
         {
             perror("malloc ");
@@ -175,7 +195,7 @@ char    **hash_map_to_tab(t_ht_hash_table *ht)
         }
         tmp = ft_strjoin(ht->items[j]->key, "=");
         env[i] = ft_strjoin(tmp, ht->items[j]->value);
-        free(tmp);
+        free(tmp); */
         i++;
         j++;
     }

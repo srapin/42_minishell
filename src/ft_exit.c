@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 00:57:49 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/14 21:47:33 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/14 22:28:07 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int ft_exit(t_cmd *cmd) // void ou int ?
     if (!arg) // ie aucun argument
     {
        // free all
+       free_pwd(cmd->env);
        ft_putstr_fd("exit\n", 1);
        exit(0); // a modifier !! returns the exit status of the last command
     }
@@ -36,7 +37,6 @@ int ft_exit(t_cmd *cmd) // void ou int ?
     {
         printf("exit\n");
         printf("minishell : exit : too many arguments\n");
-        // free pas all du coup ?
         return (1); 
         // !! n'exit pas le shell ici !!!
     }
@@ -47,6 +47,7 @@ int ft_exit(t_cmd *cmd) // void ou int ?
             printf("exit\n");
             printf("minishell : exit : %s : numeric argument required\n", arg);
             // free all
+            free_pwd(cmd->env);
             exit(NOT_A_NUM);
         }
         i++;

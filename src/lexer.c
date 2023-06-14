@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 00:40:45 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/14 17:21:42 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/14 23:04:27 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,14 +118,12 @@ t_token_list    *tokenise(t_ht_hash_table *ht, t_token *token_stream, size_t str
 t_token    *assign_type(char *input, size_t stream_len)
 {
     int i;
-    //size_t input_len;
     t_token *token_stream;
 
     i = 0;
-    //input_len = ft_strlen(input);
     token_stream = ft_calloc(sizeof(t_token), stream_len + 1);
     if (!token_stream)
-        return (NULL); // gérer autrement ?
+        return (NULL); // return ou exit ?
     while (i < stream_len)
     {
         if (ft_strchr(WHITESPACES, input[i])) // else { set_operator_token();}, fonction dans laquelle fait le reste des else if
@@ -146,12 +144,8 @@ t_token    *assign_type(char *input, size_t stream_len)
             token_stream[i].type = simple_quote;
         else if (input[i] == '\"')
             token_stream[i].type = double_quote;
-        /* else if (input[i] == '*')
-            token_stream[i].type = asterisk; */
-        /* else if (input[i] == '$')
-            token_stream[i].type = dollar; */
         else 
-            token_stream[i].type = word; // ie a letter, a number, '=', '$', '*', ...
+            token_stream[i].type = word;
         token_stream[i].content = input[i];
         i++;
     }

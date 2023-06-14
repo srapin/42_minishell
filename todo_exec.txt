@@ -1,5 +1,29 @@
 
 Ctrl + C non ok car on ne réecrit pas le prompt lorsqu'écrit ^C sur le terminal, alors qu'il faut
+Autre probleme (le c ne devrait pas etre reecrit sur les lignes suivantes)
+$ ^C
+$ ^C
+$ ^C
+$ ^C
+$ ^C
+$ ^C
+$ c^C
+$ c^C
+$ c^C
+$ c^C
+$ c^C
+$ c^C
+$ c^C
+$ cc^C
+$ cc^C
+$ cc^C
+$ cc^C
+$ cc^C
+$ cc^C
+$ cc^C
+$ cc^C
+
+
 
 
 $ echo un | (cat && echo deux)
@@ -16,3 +40,7 @@ binaire, alors print une erreur
 $ echo un || echo deux && echo trois)
 Syntax error near unexpected token `)'
 munmap_chunk(): invalid pointer ( meaning : passing a pointeur to free() n'ayant pas été obtenu via malloc)
+
+Malloc :
+que faire lorsqu'un malloc ne fonctionne pas (dans la creation de l'environnement ou un truc comme ca par exemple) ?
+doit exit non ? parce que sinon toutes les operations que l'on fera apres seront niquees

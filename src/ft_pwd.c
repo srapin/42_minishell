@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 00:59:44 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/13 10:08:30 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/14 22:26:59 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,14 @@ void    update_pwd(t_ht_hash_table *env, char *new_pwd)
     pwd = get_pwd(env);
     free (*pwd);
     *pwd = ft_strdup(new_pwd); 
+}
+
+void    free_pwd(t_ht_hash_table *env)
+{
+    char **pwd;
+    pwd = get_pwd(env);
+    free(*pwd);
+    *pwd = NULL;
 }
 
 

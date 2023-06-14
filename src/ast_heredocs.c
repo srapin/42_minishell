@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 23:24:33 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/14 22:04:36 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/14 22:30:49 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,10 +95,8 @@ void    hd_perform_expand(t_ht_hash_table *ht, char **str) // char * ou char ** 
     }
     
     free(*str);
-    *str = tmp;
-    //printf("hd_content = %s\n", *str);
-    
-    // free(t_list);
+    *str = tmp;    
+    free_tokens(&t_list);
 }
 
 void    get_here_doc_content(t_ht_hash_table *ht, int fd, char *limiter, int quotes)

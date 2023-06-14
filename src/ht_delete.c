@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 17:29:43 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/14 21:03:22 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/14 22:58:05 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,14 +65,12 @@ void    ht_delete(t_ht_hash_table *ht, const char *key)
     current = ht->items[index];
     while (current != NULL)
     {
-        if (current != &HT_DELETED_ITEM)
+        if (current != &HT_DELETED_ITEM && !ft_strcmp(current->key, key))
         {
-            if (!ft_strcmp(current->key, key))
-            {
-                ht_del_item(current);
-                ht->items[index] = &HT_DELETED_ITEM;  
-                ht->count--;   
-            }
+            ht_del_item(current);
+            ht->items[index] = &HT_DELETED_ITEM;  
+            ht->count--;
+            return ; // rajoute apres, a enlever ?
         }
         attempts++;
         index = ht_get_hash(key, ht->size, attempts);

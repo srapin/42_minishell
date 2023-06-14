@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 19:27:43 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/13 10:15:14 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/14 22:27:21 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,7 @@ int             ft_cd(t_cmd *cmd);
 int             ft_pwd(t_cmd *cmd);
 path            *get_pwd(t_ht_hash_table *env);
 void            update_pwd(t_ht_hash_table *env, char *new_pwd);
+void            free_pwd(t_ht_hash_table *env);
 int             ft_exit(t_cmd *cmd);
 
 

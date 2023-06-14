@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 17:25:42 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/14 22:18:20 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/14 23:03:33 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,27 @@ size_t  ht_get_hash(const char *key, const size_t num_buckets, size_t attempts)
     return ((hash_a + (attempts * (hash_b + 1))) % num_buckets); // hash_b + 1 in case hash_b returns 0 ; this would indeed result in an infinite loop
 }
 
+void    intervert_hts(t_ht_hash_table *ht, t_ht_hash_table *new_ht, int base_size)
+{
+    size_t      size_tmp;
+    t_ht_item   **tmp;
+
+    ht->base_size = base_size;
+    ht->count = new_ht->count;
+    
+    size_tmp = ht->size;
+    ht->size = new_ht->size;
+    new_ht->size = size_tmp;
+    
+    tmp = ht->items;
+    ht->items = new_ht->items;
+    new_ht->items = tmp;
+}
+
 // leaks : ht_new n'est apparamment pas free()
 void    ht_resize(t_ht_hash_table *ht, size_t base_size)
 {
     int         i;
-    size_t      size_tmp;
-    t_ht_item   **tmp;
     t_ht_item   *current;
     t_ht_hash_table *new_ht;
 
@@ -63,34 +78,8 @@ void    ht_resize(t_ht_hash_table *ht, size_t base_size)
             ht_insert_item(new_ht, ft_strdup(current->key), ft_strdup(current->value));
         i++;
     }
-    ht->base_size = base_size;
-    ht->count = new_ht->count;
-    
-    size_tmp = ht->size;
-    ht->size = new_ht->size;
-    new_ht->size = size_tmp;
-    
-    tmp = ht->items;
-    ht->items = new_ht->items;
-    new_ht->items = tmp;
+    intervert_hts(ht, new_ht, base_size);
     ht_del_hash_table(new_ht);
-
-/*     for (int j = 0; j < new_ht->size; j++)
-    {
-        t_ht_item *current = new_ht->items[j];
-        
-        if (current)
-        {
-            free(current->key);
-            free(current->value);
-        }
-        free(current);
-        current = NULL;
-    }
-    free(new_ht->items); // ca c'est ok
-    new_ht->items = NULL;
-    free(new_ht); // ca c'est ok
-    new_ht = NULL; */
 }
 
 void    ht_insert_item(t_ht_hash_table *ht, char *key, char *value)
