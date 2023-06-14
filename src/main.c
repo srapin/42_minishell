@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 19:32:17 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/14 22:21:18 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/15 01:12:04 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,7 @@ void    exec_script(t_ht_hash_table *ht, char *path, t_list *exp_hist)
         // return ; ?
     }
     line = get_next_line(fd);
+    dprintf(1, "in exec_script(), line = %s\n", line);
     tk_list = tokenise(ht, assign_type(line, ft_strlen(line)), ft_strlen(line), line);
     parse(ht, tk_list, exp_hist);
     

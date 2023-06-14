@@ -30,7 +30,6 @@ FILES = cmd_private\
 		quotes \
 		var_expansion \
 		wildcards \
-		split_io_redirect_and_cmds \
 		free_tokens \
 		ft_env \
 		ft_export \
@@ -40,7 +39,7 @@ FILES = cmd_private\
 		ft_exit \
 		signal \
 		ast_heredocs \
-		ast 
+		ast
 
 #PARSING_FILES = 	ast \
 					ast_heredocs

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 02:12:27 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/14 16:02:32 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/15 01:26:48 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,21 +91,10 @@ void    print_ast(t_cmd *ast)
         current_simple_cmd = current_pipeline;
         while (current_simple_cmd)
         {
-            // print command's name and arguments/options
             printf("command : \n");
             printf("\tname : %s\n\targs : \n", current_simple_cmd->val.value);
             for (int i = 0; current_simple_cmd->val.args[i]; i++)
                 printf("\t\targ %d : %s\n", i, current_simple_cmd->val.args[i]);
-        
-            // print in and out streams 
-            // printf("instream :\n");
-            // for (t_list *curr_in = current_simple_cmd->red.in_list; curr_in; curr_in = curr_in->next)
-            //     printf("flag : %d\nfile name : %s\n", curr_in->content->flag, curr_in->content->name);
-            // printf("outstream : \n");
-            // for (t_list *curr_out = current_simple_cmd->red.out_list; curr_out; curr_out = curr_out->next)
-            //     printf("flag : %d\nfile name : %s\n", curr_out->content->flag, curr_out->content->name);
-            
-            // print if a pipe follows this command
             printf("Pipe ? ");
             if (current_simple_cmd->red.next_cmd)
                 printf("Yes\n");
@@ -126,7 +115,6 @@ void    print_ast(t_cmd *ast)
 
 void    parse(t_ht_hash_table *ht, t_token_list *first, t_list *exp_hist)
 {    
-    //print_tokens(first);
     int wstatus;
     
     wstatus = ft_syntax(&first);
@@ -135,11 +123,8 @@ void    parse(t_ht_hash_table *ht, t_token_list *first, t_list *exp_hist)
         // met à jour le dernier exit status
         return ;
     }
-    //check_syntax(&first);
     
-
     perform_variable_exp(ht, &first);
-    //print_tokens(first);
     
     // tej les quotes en regroupant les <word> qui se suivent et ne sont pas 
     // séparés par des whitespaces ou des operateurs de controle autres que des quotes.
@@ -149,46 +134,13 @@ void    parse(t_ht_hash_table *ht, t_token_list *first, t_list *exp_hist)
     // séparé les tokens entre redirections et commandes
     delete_quotes(&first);
     group_words(&first);
-    //print_tokens(first);
-    
-    //printf("avant wildcard exp\n");
-    //print_tokens(first);
-    perform_wildcard_exp(ht, &first);
-    
-    //printf("avant set here docs\n");
-    set_here_docs(ht, &first);
-    //print_tokens(first);
 
-    //printf("avant get ast\n");
-    
+    perform_wildcard_exp(ht, &first);
+
+    set_here_docs(ht, &first);
+
     t_cmd *ast = get_ast(ht, &first, exp_hist);
-    
-    //printf("apres get ast\n");
     //print_ast(ast);
 
-    // teste la fonction qui met a jour le path dans cd
-    // char *test_path = ft_strdup("/Desktop/../../.");
-    // replace_prev_or_actual_dir(test_path);
-    
     exec_cmds(ast);
-
-    // print le contenu d'un infile de type here_doc 
-    // for (t_token_list *current = first; current; current = current->next)
-    // {
-    //     if (current->type == l_io_redirect && current->length == 2)
-    //     {
-    //         int fd = open(current->next->content, O_RDONLY);
-    //         if (fd == -1)
-    //             perror("open ");
-    //         char *line = get_next_line(fd);
-    //         while (line)
-    //         {
-    //             printf("%s\n", line);
-    //             free(line);
-    //             line = get_next_line(fd);
-    //         }
-    //         close(fd);
-    //     }
-    //     printf("\n\n");
-    // }
 }

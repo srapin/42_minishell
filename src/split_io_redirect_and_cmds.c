@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_io_redirect_and_cmds.c                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 13:06:50 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/14 16:53:38 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/14 23:47:28 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,25 +21,6 @@
 5) parenthesis
 */
 
-typedef struct  s_here_doc
-{
-    int     quotes;
-    char    *limiter;
-    int     open_flags;
-}               t_here_doc;
-
-typedef struct  s_simple_red
-{
-    int             open_flags; // différent selon si est un '<', '>', '>>'
-    int             redirected_fd; // 0, 1 ou 2
-    char            *filename; // file we're gonna be reading from/writing on
-}               t_simple_red;
-
-typedef struct  s_io_red
-{
-    void    *io_red; // soit un t_here_doc, soit un t_simple_red
-    struct s_io_red *next;
-}               t_io_red;
 
 t_here_doc    *io_hd_new(t_token_list *current)
 {

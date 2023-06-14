@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 21:44:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/14 19:02:00 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/15 01:26:58 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -250,6 +250,12 @@ char    *random_subshell_fname(void)
 
     count = ft_itoa(files_count);
     filename = ft_strjoin("/tmp/subshell_args_", count);
+    while (access(filename, F_OK | R_OK | W_OK) == 0)
+    {
+        files_count++;
+        count = ft_itoa(files_count);
+        filename = ft_strjoin("/tmp/subshell_args_", count);
+    }
     free(count);
     return (filename);
 }
@@ -297,6 +303,7 @@ Dès que tombe sur un opérateur de controle :
 void    set_subshell_attributs(t_cmd *current_cmd, t_token_list **curr_tk)
 {
     int             i;
+    int             open_parentheses;
     int             fd_subshell;
     char            *subshell_filename;
     t_token_list    *current_tk;
@@ -311,16 +318,24 @@ void    set_subshell_attributs(t_cmd *current_cmd, t_token_list **curr_tk)
         // free everything and return
     }
     i = 0;
+    open_parentheses = 1;
     current_tk = *curr_tk;
     //cmd_start_tk = current_tk;
     current_tk = current_tk->next;
-    while (current_tk && current_tk->type != r_parenthesis)
+    while (current_tk) // && current_tk->type != r_parenthesis
     {
+        if (current_tk->type == l_parenthesis)
+            open_parentheses++;
+        if (current_tk->type == r_parenthesis)
+            open_parentheses--;
+        //dprintf(1, "in set_subshell(), current_tk = %s\n", current_tk->content);
+        if (!open_parentheses)
+            break;
         if (write(fd_subshell, current_tk->content, current_tk->length) == -1) // vérifier si current_tk->length est bien à jour !
             perror ("write ");
         current_tk = current_tk->next;
     }
-    if (current_tk) // ie == ')'
+    if (current_tk)
         current_tk = current_tk->next;
     *curr_tk = current_tk;
     //add_val_to_cmd(current_cmd, ft_strjoin("minishell ", subshell_filename));

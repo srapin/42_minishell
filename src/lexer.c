@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 00:40:45 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/14 23:04:27 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/15 00:35:07 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ t_token_list    *tokenise(t_ht_hash_table *ht, t_token *token_stream, size_t str
     while (i < stream_len)
     {
         current = token_stream[i].type; // inutile un peu
+        
         if (i < stream_len && (current == r_parenthesis || current == l_parenthesis))
         {
             tk_add(&t_list, tk_new_elem(&input[i], 1, current, 0)); // stocke les parentheses token par token, et non en regroupant les memes types en un seul token (pourra donc avoir par ex 5 tokens de contenu "(", au lieu d'un unique token de contenu "(((((")
@@ -115,6 +116,29 @@ t_token_list    *tokenise(t_ht_hash_table *ht, t_token *token_stream, size_t str
     return (t_list);
 }
 
+int    set_token_operator(t_token *token, char input)
+{
+    if (input == '<')
+        token->type = l_io_redirect;
+    else if (input == '>')
+        token->type = r_io_redirect;
+    else if (input == '(')
+        token->type = l_parenthesis;
+    else if (input == ')')
+        token->type = r_parenthesis;
+    else if (input == '&')
+        token->type = and_tk;
+    else if (input == '|')
+        token->type = or_tk;
+    else if (input == '\'')
+        token->type = simple_quote;
+    else if (input == '\"')
+        token->type = double_quote;
+    else 
+        return (0);
+    return (1);
+}
+
 t_token    *assign_type(char *input, size_t stream_len)
 {
     int i;
@@ -128,22 +152,8 @@ t_token    *assign_type(char *input, size_t stream_len)
     {
         if (ft_strchr(WHITESPACES, input[i])) // else { set_operator_token();}, fonction dans laquelle fait le reste des else if
             token_stream[i].type = whitespace;
-        else if (input[i] == '<')
-            token_stream[i].type = l_io_redirect;
-        else if (input[i] == '>')
-            token_stream[i].type = r_io_redirect;
-        else if (input[i] == '(')
-            token_stream[i].type = l_parenthesis;
-        else if (input[i] == ')')
-            token_stream[i].type = r_parenthesis;
-        else if (input[i] == '&')
-            token_stream[i].type = and_tk;
-        else if (input[i] == '|')
-            token_stream[i].type = or_tk;
-        else if (input[i] == '\'')
-            token_stream[i].type = simple_quote;
-        else if (input[i] == '\"')
-            token_stream[i].type = double_quote;
+        else if (set_token_operator(&token_stream[i], input[i]))
+            ;
         else 
             token_stream[i].type = word;
         token_stream[i].content = input[i];
