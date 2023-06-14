@@ -19,6 +19,9 @@ FILES = cmd_private\
 		safer\
 		tools\
 		hash_table \
+		ht_insert \
+		ht_search_modify \
+		ht_delete \
 		readline \
 		token_struct_utils \
 		lexer \
@@ -29,8 +32,6 @@ FILES = cmd_private\
 		wildcards \
 		split_io_redirect_and_cmds \
 		free_tokens \
-		free_after_exec \
-		free_exit_shell \
 		ft_env \
 		ft_export \
 		ft_unset \

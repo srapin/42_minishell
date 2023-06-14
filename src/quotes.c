@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quotes.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:13:44 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/14 01:10:01 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/14 17:01:24 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,33 @@ void    add_word_data(t_word_data **first, t_word_data *to_add)
     }
 }
 
+void    set_merged_words(t_token_list **curr)
+{
+    char            *content_tmp;
+    t_token_list    *current;
+    t_token_list    *tmp;
+
+    current = *curr;
+    if (!current->merged_words) // ie le <word> n'a pas encore été merged avec un autre <word>
+        add_word_data(&current->merged_words, new_word_data(current));
+    add_word_data(&current->merged_words, new_word_data(current->next));
+    
+    content_tmp = ft_strjoin(current->content, current->next->content);
+    free(current->content);
+    current->content = content_tmp;
+    current->length = ft_strlen(content_tmp);
+    
+    tmp = current->next; // the one to delete
+    tmp->prev->next = tmp->next; // fait pointer le précédent sur l'élément suivant celui qui va etre supprimé
+    if (tmp->next)
+        tmp->next->prev = tmp->prev; // idem mais dans l'autre sens
+    free(tmp->content);
+    free(tmp);
+    tmp = NULL;
+
+    *curr = current;
+}
+
 /*
 Apres avoir enlevé les quotes, groupe deux <word> qui se suivent 
 (comprendre ne sont pas séparés par des whitespaces, ou un opérateur de controle autre que des quotes)
@@ -129,21 +156,24 @@ void    group_words(t_token_list **first)
         }
         else if (current->type == word && current->next && current->next->type == word)
         {
-            if (!current->merged_words) // ie le <word> n'a pas encore été merged avec un autre <word>
-                add_word_data(&current->merged_words, new_word_data(current));
-            add_word_data(&current->merged_words, new_word_data(current->next));
+            set_merged_words(&current);
             
-            content_tmp = ft_strjoin(current->content, current->next->content);
-            free(current->content);
-            current->content = content_tmp;
-            current->length = ft_strlen(content_tmp);
+            // if (!current->merged_words) // ie le <word> n'a pas encore été merged avec un autre <word>
+            //     add_word_data(&current->merged_words, new_word_data(current));
+            // add_word_data(&current->merged_words, new_word_data(current->next));
             
-            current2 = current->next; // the one to delete
-            current2->prev->next = current2->next; // fait pointer le précédent sur l'élément suivant celui qui va etre supprimé
-            if (current2->next)
-                current2->next->prev = current2->prev; // idem mais dans l'autre sens
-            free(current2->content);
-            free(current2);
+            // content_tmp = ft_strjoin(current->content, current->next->content);
+            // free(current->content);
+            // current->content = content_tmp;
+            // current->length = ft_strlen(content_tmp);
+            
+            // current2 = current->next; // the one to delete
+            // current2->prev->next = current2->next; // fait pointer le précédent sur l'élément suivant celui qui va etre supprimé
+            // if (current2->next)
+            //     current2->next->prev = current2->prev; // idem mais dans l'autre sens
+            // free(current2->content);
+            // free(current2);
+            // current2 = NULL;
         }
         else if (current->type == whitespace) // deletes the token
         {

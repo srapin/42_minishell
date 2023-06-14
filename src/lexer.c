@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 00:40:45 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/10 17:09:01 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/14 17:21:42 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,14 +100,6 @@ t_token_list    *tokenise(t_ht_hash_table *ht, t_token *token_stream, size_t str
                 i++;
             tk_add(&t_list, tk_new_elem(&input[j], i - j, current, 
                 (current == simple_quote) + (current == double_quote) * 2));
-            //i++;
-            // si est un whitespace ou un control_op (mais pas une quote !), devient un nouveau token 
-            // if (i < stream_len && (!ft_strchr(META_CHAR ,token_stream[i].content[0]) 
-            //     || ft_strchr("\"\'", token_stream[i].content[0])) 
-            //     && !ft_strchr(WHITESPACESecho un, token_stream[i].content[0])) // ie si ce qui suit est un mot ou une quote
-            //     {
-                    
-            //     }
         }
         else if (i < stream_len)
         {

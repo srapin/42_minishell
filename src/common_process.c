@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   common_process.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:44:39 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/14 01:10:23 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/14 17:15:59 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,14 @@ void	child_process(t_cmd *cmd, int pipe_tab[2])
 	{
 	 	execve(cmd->val.path, cmd->val.args, cmd->val.env);
 	}
-	perror("cmd not found");
+	//perror("cmd not found");
+	// TESTER SI LA COMMANDE EXISTE AVANT EXECVE !!!!!!! GENRE SI TROUVE OU NON LE PATH
+	if (errno == 2)
+		printf("minishell : %s : command not found\n", cmd->val.value);
+	//printf("errno value : %d\n", errno);
 	free_tab(paths);
 	free_tab(cmd->val.args);
-	exit(EXIT_FAILURE);
+	exit(CMD_NOT_FOUND);
 }
 
 void	fail_process(void)

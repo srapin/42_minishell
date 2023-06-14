@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:13:13 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/13 19:06:13 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/14 16:49:11 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,8 @@ int     is_a_hidden_dir(struct dirent *dir_content)
         return (1);
     return (0);
 }
+
+
 
 /*
 Retourne les filenames associes au wildcard, ou NULL lorsqu'aucun filename ne correspond 

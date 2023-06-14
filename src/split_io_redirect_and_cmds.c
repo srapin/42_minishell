@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 13:06:50 by Helene            #+#    #+#             */
-/*   Updated: 2023/05/29 23:47:48 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/14 16:53:38 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,40 +111,4 @@ void    io_add(t_io_red **first, t_token_list *current)
     while (curr->next)
         curr = curr->next;
     curr->next = new;
-}
-
-
-
-// ----------------------------------------------------
-
-
-void    del_remaining_tokens(t_token_list **first) // delete les whitespaces dans les tokens restant (sauf dans ceux étant initialement dans des quotes!)
-{
-    char *          tab_pos;
-    char *          space_pos;
-    size_t          tab_index;
-    size_t          space_index;
-    t_token_list    *current;
-
-    if (!first)
-        return ;
-    current = (*first);
-    while (current)
-    {
-        space_pos = ft_strchr(current->content, ' ');
-        tab_pos = ft_strchr(current->content, '\t');
-        while ((space_pos && *space_pos) 
-            || (tab_pos && *tab_pos))
-            {
-                space_index = current->length - ft_strlen(space_pos);
-                tab_index = current->length - ft_strlen(tab_pos);
-                if (space_pos && !is_in_quotes(current, space_index))
-                   remove_char(current, space_index);
-                else if (tab_pos && !is_in_quotes(current, tab_index))
-                    remove_char(current, tab_index);
-                space_pos = ft_strchr(current->content, ' ');
-                tab_pos = ft_strchr(current->content, '\t');
-            }
-        current = current->next;
-    }
 }
