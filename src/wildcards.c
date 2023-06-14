@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcards.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:13:13 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/14 16:49:11 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/14 20:12:21 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -423,4 +423,6 @@ void    perform_wildcard_exp(t_ht_hash_table *ht, t_token_list **first)
         }
         current = current->next;
     }
+    if (closedir(dir) == -1)
+        perror("closedir ");
 }

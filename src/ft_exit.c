@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 00:57:49 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/13 01:44:13 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/14 21:47:33 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,5 +53,6 @@ int ft_exit(t_cmd *cmd) // void ou int ?
     }
     nb = (unsigned char)ft_atoi(arg); // vérifier ce que ca fait si overflow le long long dans atoi
     // free all
+    printf("exit\n");
     exit(nb);
 }

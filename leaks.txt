@@ -1,0 +1,49 @@
+char **env (cree a partir de la hash map) n'est pas free 
+
+
+
+dans ht_resize(), new_ht n'est pas free (d'ou wesh)
+
+3,376 bytes in 1 blocks are still reachable in loss record 57 of 84
+==156216==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==156216==    by 0x409DDE: ft_calloc (ft_calloc.c:22)
+==156216==    by 0x403405: ht_new (hash_table.c:127)
+==156216==    by 0x403ACF: ht_resize (ht_insert.c:56)
+==156216==    by 0x403C5A: ht_insert_item (ht_insert.c:95)
+==156216==    by 0x4024C0: ht_get_env (main.c:33)
+==156216==    by 0x40293A: main (main.c:143)
+
+==156216== 3,008 bytes in 72 blocks are still reachable in loss record 56 of 84
+==156216==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==156216==    by 0x409DDE: ft_calloc (ft_calloc.c:22)
+==156216==    by 0x40A04B: ft_strdup (ft_strdup.c:23)
+==156216==    by 0x403B52: ht_resize (ht_insert.c:63)
+==156216==    by 0x403C5A: ht_insert_item (ht_insert.c:95)
+==156216==    by 0x4024C0: ht_get_env (main.c:33)
+==156216==    by 0x40293A: main (main.c:143)
+
+==156216== 1,152 bytes in 72 blocks are still reachable in loss record 51 of 84
+==156216==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==156216==    by 0x409DDE: ft_calloc (ft_calloc.c:22)
+==156216==    by 0x40346E: ht_new_item (hash_table.c:141)
+==156216==    by 0x403C10: ht_insert_item (ht_insert.c:90)
+==156216==    by 0x403B62: ht_resize (ht_insert.c:63)
+==156216==    by 0x403C5A: ht_insert_item (ht_insert.c:95)
+==156216==    by 0x4024C0: ht_get_env (main.c:33)
+==156216==    by 0x40293A: main (main.c:143)
+
+==156216== 1,030 bytes in 72 blocks are still reachable in loss record 50 of 84
+==156216==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==156216==    by 0x409DDE: ft_calloc (ft_calloc.c:22)
+==156216==    by 0x40A04B: ft_strdup (ft_strdup.c:23)
+==156216==    by 0x403B41: ht_resize (ht_insert.c:63)
+==156216==    by 0x403C5A: ht_insert_item (ht_insert.c:95)
+==156216==    by 0x4024C0: ht_get_env (main.c:33)
+==156216==    by 0x40293A: main (main.c:143)
+
+
+
+
+hash map doit etre free (pas deja le cas ?)
+dans ce qu'il faut aussi free a la fin de l'execution de l'arbre : le singleton, ie char *pwd
+

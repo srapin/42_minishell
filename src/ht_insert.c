@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 17:25:42 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/14 19:37:35 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/14 22:18:20 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ size_t  ht_get_hash(const char *key, const size_t num_buckets, size_t attempts)
     return ((hash_a + (attempts * (hash_b + 1))) % num_buckets); // hash_b + 1 in case hash_b returns 0 ; this would indeed result in an infinite loop
 }
 
+// leaks : ht_new n'est apparamment pas free()
 void    ht_resize(t_ht_hash_table *ht, size_t base_size)
 {
     int         i;
@@ -52,7 +53,7 @@ void    ht_resize(t_ht_hash_table *ht, size_t base_size)
     if (base_size < HT_INITIAL_SIZE)
         return ;
     i = 0;
-    new_ht = ht_new(base_size);
+    new_ht = ht_new(base_size); // not freed afterwards
     if (!new_ht)
         return ;
     while (i < ht->size)
@@ -73,6 +74,23 @@ void    ht_resize(t_ht_hash_table *ht, size_t base_size)
     ht->items = new_ht->items;
     new_ht->items = tmp;
     ht_del_hash_table(new_ht);
+
+/*     for (int j = 0; j < new_ht->size; j++)
+    {
+        t_ht_item *current = new_ht->items[j];
+        
+        if (current)
+        {
+            free(current->key);
+            free(current->value);
+        }
+        free(current);
+        current = NULL;
+    }
+    free(new_ht->items); // ca c'est ok
+    new_ht->items = NULL;
+    free(new_ht); // ca c'est ok
+    new_ht = NULL; */
 }
 
 void    ht_insert_item(t_ht_hash_table *ht, char *key, char *value)

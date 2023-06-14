@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ht_delete.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 17:29:43 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/14 17:34:10 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/14 21:03:22 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,29 +17,36 @@ static t_ht_item HT_DELETED_ITEM = {NULL, NULL};
 /* Free the memory allocated for the t_ht_item *item*/
 void    ht_del_item(t_ht_item *item)
 {
-    if (!item)
-        return ;
-    free(item->key);
-    free(item->value);
+    /* if (!item)
+        return ; */
+    if (item)
+    {
+        free(item->key); // verifier si est NULL ? ie si est un deleted item ?
+        free(item->value); // idem ?
+    }
+    
     free(item);
+    item = NULL;
 }
 
 /* Delete the entire hash table */
 void    ht_del_hash_table(t_ht_hash_table *ht)
 {
-    size_t     i;
+    size_t      i;
     t_ht_item   *current;
     
     i = 0;
     while (i < ht->size)
     {
         current = ht->items[i];
-        if (current)
-            ht_del_item(current);
+        //if (current)
+        ht_del_item(current);
         i++;
     }
     free(ht->items);
+    //ht->items = NULL;
     free(ht);
+    //ht = NULL;
 }
 
 /* Deletes the key-value pair stored in the hash table */
