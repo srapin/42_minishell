@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hash_table.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 19:58:14 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/14 17:36:33 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/14 19:36:52 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@
 
 #define HT_INITIAL_SIZE     50
 // prime factore must be smaller than the ht's size (which should also be a prime)
-#define HT_PRIME_FACTOR_A   23 // ?
-#define HT_PRIME_FACTOR_B   11 // ?
+#define HT_PRIME_FACTOR_A   419 // The variable a should be a prime number larger than the size of the alphabet. We're hashing ASCII strings, which has an alphabet size of 128, so we should choose a prime larger than that.
+#define HT_PRIME_FACTOR_B   311 // ?
 
 typedef struct  s_ht_item
 {

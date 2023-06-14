@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 19:32:17 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/14 01:10:59 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/14 19:37:50 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ t_ht_hash_table *ht_get_env(char **envp)
         ht_insert_item(ht, ft_substr(envp[i], 0, j), ft_substr(envp[i], j + 1, ft_strlen(envp[i])));
         i++;
     }
-    //printf("ok2\n");
     return (ht);
 }
 
@@ -138,13 +137,13 @@ int main (int argc, char **argv, char **envp)
         return (0);
     }
     
-
     if (!envp)
         hash_map = get_minimal_env();
     else
         hash_map = ht_get_env(envp);
     if (!hash_map)
         return (1); // do we return ? which exit status ?
+    
 
     pwd = *get_pwd(hash_map);
     t_list *exp_hist = init_export_history(hash_map);

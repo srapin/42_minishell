@@ -19,8 +19,8 @@ FILES = cmd_private\
 		safer\
 		tools\
 		hash_table \
-		ht_insert \
 		ht_search_modify \
+		ht_insert \
 		ht_delete \
 		readline \
 		token_struct_utils \
@@ -95,6 +95,10 @@ $(NAME_BONUS) : $(LIBFT) $(OBJS_BONUS)
 ${OBJS_DIR_BONUS}/%.o: ${SRCS_DIR_BONUS}/%.c $(INCLUDES)
 	@mkdir -p $(OBJS_DIR_BONUS)
 	$(CC)  -o $@ -c $<
+
+valgrind : $(NAME) # $(NAME) comme dependance ?
+	valgrind --suppressions=ignore_readline.txt --leak-check=full --show-leak-kinds=all \
+	--track-origins=yes --track-fds=yes ./$(NAME)
 
 clean: cleanlibs
 	rm -rf $(OBJS_DIR)

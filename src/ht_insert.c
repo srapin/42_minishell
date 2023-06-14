@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ht_insert.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 17:25:42 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/14 17:34:16 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/14 19:37:35 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ size_t  ht_get_hash(const char *key, const size_t num_buckets, size_t attempts)
 
     hash_a = ht_hash(key, HT_PRIME_FACTOR_A, num_buckets);
     hash_b = ht_hash(key, HT_PRIME_FACTOR_B, num_buckets);
-    return ((hash_a + attempts * hash_b + 1) % num_buckets); // hash_b + 1 in case hash_b returns 0 ; this would indeed result in an infinite loop
+    return ((hash_a + (attempts * (hash_b + 1))) % num_buckets); // hash_b + 1 in case hash_b returns 0 ; this would indeed result in an infinite loop
 }
 
 void    ht_resize(t_ht_hash_table *ht, size_t base_size)
@@ -62,7 +62,6 @@ void    ht_resize(t_ht_hash_table *ht, size_t base_size)
             ht_insert_item(new_ht, ft_strdup(current->key), ft_strdup(current->value));
         i++;
     }
-
     ht->base_size = base_size;
     ht->count = new_ht->count;
     

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   readline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 22:15:52 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/13 05:11:06 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/14 19:40:02 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,35 +72,41 @@ void    read_lines(t_ht_hash_table *ht, t_list *exp_hist)
     size_t stream_len;
     t_token_list  *tk_list;
 
-    input = NULL;
-    while (1) // ou while (true) 
+    input = readline("$ "); 
+    while (input) // readline ne renvoie NULL que dans le cas d'un Ctrl-D
     {
        	signal(SIGINT, handle_sigint);
        	signal(SIGQUIT, handle_sigquit);
-        if (input)
-        {
-            free(input);
-            input = NULL;
-        }
         // int i = read(STDIN_FILENO, NULL, 1);
-        input = readline("$ "); // "> " is when entering a multi line command : le print uniquement pour le here_doc
        	signal(SIGINT, handle_sigint2);
        	signal(SIGQUIT, handle_sigquit2);
         // if (i==0)
         //     ft_exit(NULL);
-        if (!input)
-            continue;
+        
         stream_len = ft_strlen(input);
         if (!stream_len) // ie si input_str = '\0'.
+        {
+            input = readline("$ ");
             continue;
+        }
         if (input && input[1] == 4)
             ft_exit(NULL);
         
         add_history(input);
         if (only_whitespaces(input))
+        {
+            input = readline("$ ");
             continue;
+        }
         tk_list = tokenise(ht, assign_type(input, stream_len), stream_len, input);
         parse(ht, tk_list, exp_hist); // l'a mis ici et plus dans tokenise(). vérifier si marche encore !!
         
+        if (input)
+        {
+            free(input);
+            input = NULL;
+        }
+        
+        input = readline("$ ");
     }
 }
