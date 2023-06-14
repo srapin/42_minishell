@@ -1,9 +1,12 @@
-Dans le cas des builtins, certains modifient l'environnement 
--> ils doivent etre executés dans le processus PARENT
-    -> Checker 
 
+Ctrl + C non ok car on ne réecrit pas le prompt lorsqu'écrit ^C sur le terminal, alors qu'il faut
+
+
+$ echo un | (cat && echo deux)
+un
+deuxo trois (comment supprimer this fucking fichier temporaire dans lequel ecrit le contenu entre parentheses ??)
 
 
 $ echo un || echo deux && echo trois)
 Syntax error near unexpected token `)'
-munmap_chunk(): invalid pointer
+munmap_chunk(): invalid pointer ( meaning : passing a pointeur to free() n'ayant pas été obtenu via malloc)

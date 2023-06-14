@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 20:39:18 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/14 00:04:03 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/14 16:04:17 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int    ft_env(t_cmd *cmd)
     //dprintf(1, "coucou depuis ft_env()\n");
     if (cmd->val.args[1])
     {
-        printf("Error : env : too many arguments given. Zero needed");
+        printf("Error : env : too many arguments given. Zero needed\n");
         // free everything (?)
         return (1); // quelle valeur retourner ?
     }

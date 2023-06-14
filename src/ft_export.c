@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 23:25:02 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/13 05:42:37 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/14 15:38:24 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,7 +206,7 @@ void    print_export_history(t_ht_hash_table *ht, t_list *export_hist)
         else if (str)
         {
 
-            printf("%s=%s\n", (char *) current_var->content, str);
+            printf("%s=\"%s\"\n", (char *) current_var->content, str);
         }
        current_var = current_var->next; 
     }

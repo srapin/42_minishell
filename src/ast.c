@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 21:44:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/14 01:10:42 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/14 16:06:22 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -342,41 +342,59 @@ void    set_subshell_attributs(t_cmd *current_cmd, t_token_list **curr_tk)
 }
 
 
+void    set_simple_command(t_cmd *current_cmd, t_token_list **first_tk, t_token_list **cmd_start_tk, t_token_list **curr_tk)
+{
+    int             subshell;
+    int             args_count;
+    t_token_list    *current_tk;
+
+    subshell = 0;
+    args_count = 0;
+    current_tk = *curr_tk;
+    
+    while (current_tk && current_tk->type != and_tk && current_tk->type != or_tk)
+    {
+        if (current_tk->type == l_io_redirect || current_tk->type == r_io_redirect)
+        {
+            update_redirect(current_cmd, current_tk);
+            current_tk = current_tk->next->next;
+        }
+        else if (current_tk->type == l_parenthesis)
+        {
+            subshell = 1;
+            set_subshell_attributs(current_cmd, &current_tk);
+        }
+        else
+        {
+            args_count += get_words_count(current_tk);
+            current_tk = current_tk->next;
+        }
+    }
+    current_cmd->red.next_cmd = NULL;
+    if (!subshell)
+        set_command_attributs(&current_cmd, first_tk, *cmd_start_tk, args_count);
+    *curr_tk = current_tk;
+}
 
 t_cmd   *get_ast(t_ht_hash_table *ht, t_token_list **first_tk, t_list *exp_hist)
 {
-    int             i;
-
     int             subshell;
-    int             fd_subshell;
-    
     int             args_count;
-    char            *subshell_filename;
     t_token_list    *pipeline_start_tk;
     t_token_list    *cmd_start_tk;
     t_token_list    *current_tk;
-    t_token_list    *tmp;
     t_cmd           **ast;
     t_cmd           *pipeline_start_cmd;
     t_cmd           *current_cmd;
-    t_cmd           *before_pipe_cmd;
-    t_cmd           *before_ctrl_op_cmd;
-
     
     ast = malloc(sizeof(t_cmd *));
     *ast = init_new_cmd(ht, exp_hist);
     if (!*ast)
         return (NULL);
-    
-    pipeline_start_cmd = *ast;
-
     subshell = 0;
-    fd_subshell = 0;
-    before_pipe_cmd = NULL;
-    before_ctrl_op_cmd = NULL;
-    subshell_filename = NULL;
-    
     pipeline_start_tk = *first_tk; 
+    pipeline_start_cmd = *ast;
+    
     while (pipeline_start_tk)
     {
         current_tk = pipeline_start_tk;
@@ -387,52 +405,9 @@ t_cmd   *get_ast(t_ht_hash_table *ht, t_token_list **first_tk, t_list *exp_hist)
         while (current_tk && current_tk->type != and_tk && (current_tk->type != or_tk || current_tk->length == 1))
         {
             cmd_start_tk = current_tk;
-            args_count = 0;
-            // tant que n'est ni un '|', '||', ou '&&'
-            while (current_tk && current_tk->type != and_tk && current_tk->type != or_tk)
-            {
-                // creer et updated une t_cmd
-                if (current_tk->type == l_io_redirect || current_tk->type == r_io_redirect)
-                {
-                    update_redirect(current_cmd, current_tk);
-                    // if (current_tk->next->next)
-                    // {
-                    //     current_tk = current_tk->next->next; 
-                        
-                    //     tk_del_one(first_tk, current_tk->prev->prev);
-                    //     tk_del_one(first_tk, current_tk->prev);
-                    // }
-                    // else
-                    // {
-                    //     //tmp = current_tk->next->next;
-                    //     tk_del_one(first_tk, current_tk);
-                    //     tk_del_one(first_tk, current_tk->next);
-                    //     current_tk = NULL;
-                    // }
-                    current_tk = current_tk->next->next;
-                    
-                }
-                else if (current_tk->type == l_parenthesis)
-                {
-
-                    subshell = 1;
-                    set_subshell_attributs(current_cmd, &current_tk);
-                    
-                    
-                }
-                else // ie s'agit d'un nom ou option de commande 
-                {
-                    args_count += get_words_count(current_tk); // two words are separated by successive whitespaces that aren't in quotes
-                    current_tk = current_tk->next;
-                }
-            }
-            current_cmd->red.next_cmd = NULL;
-            if (!subshell)
-                set_command_attributs(&current_cmd, first_tk, cmd_start_tk, args_count);
+            set_simple_command(current_cmd, first_tk, &cmd_start_tk, &current_tk);
             
-            subshell = 0; // le reset ici ?
-            // si current_cmd est avant un pipe
-            if (current_tk && current_tk->type == or_tk && current_tk->length == 1) // '|'
+            if (current_tk && current_tk->type == or_tk && current_tk->length == 1)
             {
                 current_cmd->red.next_cmd = init_new_cmd(ht, exp_hist);
                 if (!current_cmd->red.next_cmd)
@@ -447,7 +422,6 @@ t_cmd   *get_ast(t_ht_hash_table *ht, t_token_list **first_tk, t_list *exp_hist)
         if (current_tk && is_a_ctrl_op(current_tk))
         {
             pipeline_start_cmd->ctrl = (current_tk->type == and_tk) * and + (current_tk->type == or_tk) * or;
-
             pipeline_start_cmd->next = init_new_cmd(ht, exp_hist);
             pipeline_start_cmd = pipeline_start_cmd->next;
             if (!pipeline_start_cmd)
