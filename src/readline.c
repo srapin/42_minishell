@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   readline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 22:15:52 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/14 19:40:02 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/14 23:52:12 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,11 +75,7 @@ void    read_lines(t_ht_hash_table *ht, t_list *exp_hist)
     input = readline("$ "); 
     while (input) // readline ne renvoie NULL que dans le cas d'un Ctrl-D
     {
-       	signal(SIGINT, handle_sigint);
-       	signal(SIGQUIT, handle_sigquit);
         // int i = read(STDIN_FILENO, NULL, 1);
-       	signal(SIGINT, handle_sigint2);
-       	signal(SIGQUIT, handle_sigquit2);
         // if (i==0)
         //     ft_exit(NULL);
         
@@ -99,8 +95,13 @@ void    read_lines(t_ht_hash_table *ht, t_list *exp_hist)
             continue;
         }
         tk_list = tokenise(ht, assign_type(input, stream_len), stream_len, input);
+       	// signal(SIGINT, handle_sigint2);
+       	// signal(SIGQUIT, handle_sigquit2);
+       	signal(SIGINT, handle_sigint2);
+       	signal(SIGQUIT, handle_sigquit2);
         parse(ht, tk_list, exp_hist); // l'a mis ici et plus dans tokenise(). vérifier si marche encore !!
-        
+        signal(SIGINT, handle_sigint);
+       	signal(SIGQUIT, handle_sigquit);
         if (input)
         {
             free(input);
@@ -108,5 +109,7 @@ void    read_lines(t_ht_hash_table *ht, t_list *exp_hist)
         }
         
         input = readline("$ ");
+       	// signal(SIGINT, handle_sigint2);
+       	// signal(SIGQUIT, handle_sigquit2);
     }
 }
