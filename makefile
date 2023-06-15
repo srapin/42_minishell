@@ -95,7 +95,7 @@ ${OBJS_DIR_BONUS}/%.o: ${SRCS_DIR_BONUS}/%.c $(INCLUDES)
 	@mkdir -p $(OBJS_DIR_BONUS)
 	$(CC)  -o $@ -c $<
 
-valgrind : $(NAME) # $(NAME) comme dependance ?
+leaks :
 	valgrind --suppressions=ignore_readline_aurele.txt --leak-check=full --show-leak-kinds=all \
 	--track-origins=yes --track-fds=yes ./$(NAME) 
 # --trace-children=yes
