@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 02:12:27 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/15 01:26:48 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/15 14:11:00 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ void    parse(t_ht_hash_table *ht, t_token_list *first, t_list *exp_hist)
     set_here_docs(ht, &first);
 
     t_cmd *ast = get_ast(ht, &first, exp_hist);
-    //print_ast(ast);
+    print_ast(ast);
 
     exec_cmds(ast);
 }

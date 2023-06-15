@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 18:15:56 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/13 19:02:46 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/15 14:26:51 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,12 @@ typedef struct s_filename
 
 typedef struct  s_token_list
 {
-    int         type; /* Token type. */
-    char        *content; /* Zero terminated string. */
-    size_t      length; /* Content length. Useful ? */
-    int         quotes; // 0 : token does not contain quotes. 1 : token contains single quotes. 2 : contains double quotes
-    t_word_data *merged_words; // lien vers les <word> suivants parmi ceux ayant été merged ; est à NULL s'il s'agit d'un token "individuel" (ie pas un <word> ayant été merged avec d'autres <word>)
+    int             type; /* Token type. */
+    char            *content; /* Zero terminated string. */
+    size_t          length; /* Content length. Useful ? */
+    int             quotes; // 0 : token does not contain quotes. 1 : token contains single quotes. 2 : contains double quotes
+    t_word_data     *merged_words; // lien vers les <word> suivants parmi ceux ayant été merged ; est à NULL s'il s'agit d'un token "individuel" (ie pas un <word> ayant été merged avec d'autres <word>)
+    //t_list          *before_exp;
     
     struct s_token_list *prev;
     struct s_token_list *next;

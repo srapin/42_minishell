@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:12:06 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/13 16:59:36 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/15 14:26:44 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,15 @@ void    perform_variable_exp(t_ht_hash_table *ht, t_token_list **first)
     {
         //printf("current->content = %s\n", current->content);
         //printf("current->length = %zu\n", current->length);
-        if (current->type != simple_quote && (!current->prev 
+        if (current->type == l_parenthesis) // n'expand pas ce qui est entre parenthèses, le fera dans le subshell
+        {
+            while (current && current->type != r_parenthesis)
+                current = current->next;
+            if (current) // ie current = ')'
+                current = current->next;
+            continue ;
+        }
+        else if (current->type != simple_quote && (!current->prev 
             || current->prev->type != l_io_redirect || current->prev->length == 1)) // ie n'est pas dans le limiteur d'un here_doc
         {
             dollar_start = ft_strchr(current->content, '$');

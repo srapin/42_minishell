@@ -6,9 +6,12 @@ makefile
 minishell
 obj
 out
-out2
 out.export
+out2
 src
+tocheck_parsing.txt
+todo_builtins.txt
 todo_exec.txt
-un
+todo_parsing.txt
+tofix_parsing.txt
 un test
