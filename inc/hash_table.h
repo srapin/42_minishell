@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hash_table.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 19:58:14 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/14 22:22:41 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/15 18:19:10 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ int                 ft_strcmp(const char *s1, const char *s2);
 void                free_tab(char **tab);
 
 size_t              ht_get_hash(const char *key, const size_t num_buckets, size_t attempts);
+
 
 // ------ temporaire : a mettre dans la libft ici
 

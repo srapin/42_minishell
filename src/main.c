@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 19:32:17 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/15 01:12:04 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/15 18:30:09 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,33 @@ t_ht_hash_table *get_minimal_env() // comment indiquer a quel niveau du shell se
     return (ht);
 }
 
+void    set_shell_level(t_ht_hash_table *ht)
+{
+    int     nb;
+    int     i;
+    char    *shlvl;
+    char    *new_shlvl;
+
+    shlvl = ht_search(ht, "SHLVL");
+    if (!shlvl) // ie n'existe pas
+        ht_insert_item(ht, ft_strdup("SHLVL"), ft_strdup("1"));
+    else
+    {
+        i = 0;
+        while (shlvl[i])
+        {
+            if (!ft_isdigit(shlvl[i]))
+            {
+                ht_modify_value(ht, "SHLVL", ft_strdup("1"));
+                return;
+            }
+            i++;
+        }
+        new_shlvl = ft_itoa(ft_atoi(shlvl) + 1);
+        ht_modify_value(ht, "SHLVL", new_shlvl);
+    }
+}
+
 /* Prints the hash map */
 void    print_ht(t_ht_hash_table *ht)
 {
@@ -95,8 +122,6 @@ void    print_ht(t_ht_hash_table *ht)
         }
     }
 }
-
-
 
 void    exec_script(t_ht_hash_table *ht, char *path, t_list *exp_hist)
 {
@@ -142,14 +167,12 @@ int main (int argc, char **argv, char **envp)
         hash_map = get_minimal_env();
     else
         hash_map = ht_get_env(envp);
+    set_shell_level(hash_map);
     if (!hash_map)
         return (1); // do we return ? which exit status ?
-    
 
-    pwd = *get_pwd(hash_map);
+    pwd = *get_pwd(hash_map); // initialise le singleton
     t_list *exp_hist = init_export_history(hash_map);
-    
-    
 
     if (argc == 1)
         read_lines(hash_map, exp_hist);

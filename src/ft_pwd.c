@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 00:59:44 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/14 22:26:59 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/15 18:22:55 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 /* Quel que soit le nombre d'arguments donnés, il printera dans
 tous les cas le chemin absolu vers le dossier courant */
 // quels cas d'erreur à gérer ?????
+
+// !!!!! juste utiliser getcwd() !!!!! bcp plus simple que le singleton
 path    *get_pwd(t_ht_hash_table *env)
 {
     static path pwd = NULL;
