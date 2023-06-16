@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:13:44 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/16 19:41:21 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/17 00:44:44 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ t_word_data     *new_word_data(t_token_list *token)
     wd->quotes = token->quotes;
     wd->length = token->length;
     wd->next = NULL;
-    dprintf(1, "in new_word_data(), wd = %s, quotes = %d, wd->quotes = %d, length = %zu, wd->length = %zu\n", wd->content, token->quotes, wd->quotes, token->length, wd->length);
+    //dprintf(1, "in new_word_data(), wd = %s, quotes = %d, wd->quotes = %d, length = %zu, wd->length = %zu\n", wd->content, token->quotes, wd->quotes, token->length, wd->length);
     return (wd);
 }
 
@@ -95,7 +95,7 @@ void    add_word_data(t_word_data **first, t_word_data *to_add)
 
     if (!first)
         return ;
-    dprintf(1, "in add_wd(), quotes = %d\n", to_add->quotes);
+    //dprintf(1, "in add_wd(), quotes = %d\n", to_add->quotes);
     word_end_index = 0;
     if (!(*first))
         *first = to_add;

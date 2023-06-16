@@ -1,13 +1,18 @@
-
-$ ((echo coucou))
-command : 
-        name : minishell
-        args : 
-                arg 0 : minishell
-                arg 1 : /tmp/subshell_args_0
-Pipe ? No
-control_op = ';' 
-Syntax error : Missing closing parenthesis
+avec export b="ls -la > out" :
+        on a :
+$ $b$b
+ls: -la: No such file or directory
+ls: >: No such file or directory
+ls: >: No such file or directory
+ls: outls: No such file or directory
+-rwxr-xr-x  1 Helene  staff  144 16 jui 16:54 out
+        on devrait avoir :
+bash-5.1$ $b$b
+ls: cannot access '>': No such file or directory
+ls: cannot access 'outls': No such file or directory
+ls: cannot access '>': No such file or directory
+ls: cannot access 'out': No such file or directory
+-> le deuxieme -la est chez nous considéré comme un fichier, pourquoi ?
 
 
 $ ((cat out) && ls | (wc -l)) || echo "hello world"
