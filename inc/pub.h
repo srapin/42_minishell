@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pub.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:15:39 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/07 19:46:08 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/16 11:49:38 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void init_file_struct_with_filename(t_file *file_struct, char *filename);
 void init_file_struct_with_sep(t_file *file_struct, char *sep);
 void init_file_struct_with_fd(t_file *file_struct, int fd);
 t_file *create_file_struct_with_filename(char *filename);
-t_file * create_file_struct_with_sep(char *sep);
+// t_file * create_file_struct_with_sep(char *sep);
 t_file * create_file_struct_with_fd(int fd);
 void set_fd(t_file * f_struct, int *fd, int flag);
 

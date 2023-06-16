@@ -39,7 +39,8 @@ FILES = cmd_private\
 		ft_exit \
 		signal \
 		ast_heredocs \
-		ast
+		ast\
+		free_cmds
 
 #PARSING_FILES = 	ast \
 					ast_heredocs

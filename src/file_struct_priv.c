@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   file_struct_priv.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:08:04 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/10 21:37:47 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/15 18:25:23 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void init_file_struct(t_file *file_struct)
 {
 	file_struct->name = NULL;
 	file_struct->fd = -1;
-	file_struct->sep = NULL;
+	// file_struct->sep = NULL;
 	file_struct->flag = -1;
 }
 

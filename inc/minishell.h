@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 19:27:43 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/14 22:27:21 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/15 17:31:26 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ void            read_lines(t_ht_hash_table *ht, t_list *exp_hist);
 t_token         *assign_type(char *input, size_t stream_len);
 t_token_list    *tokenise(t_ht_hash_table *ht, t_token *token_stream, size_t stream_len, char *input);
 
-void            parse(t_ht_hash_table *ht, t_token_list *first, t_list *exp_hist);
+t_cmd *            parse(t_ht_hash_table *ht, t_token_list *first, t_list *exp_hist);
 int             ft_syntax(t_token_list **first);
 void            check_syntax(t_token_list **first);
 
@@ -144,6 +144,9 @@ void            free_pwd(t_ht_hash_table *env);
 int             ft_exit(t_cmd *cmd);
 
 
+void free_cmd(t_cmd **cmd);
+void free_cmds(t_cmd **cmd, bool common);
+void	ft_lstfree(t_list **lst,void free_foo(void *));
 // to del
 
 void        print_ht(t_ht_hash_table *ht);

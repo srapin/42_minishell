@@ -6,18 +6,11 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 20:57:20 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/13 05:54:30 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/16 11:58:08 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-
-
-void free_all()
-{
-    
-}
-
 
 int ft_echo(t_cmd *cmd)
 {
@@ -139,7 +132,6 @@ int try_to_exec_builtins(t_cmd *cmd, bool is_child)
     ret = foo(cmd);
     if (is_child)
     {
-        free_all(); // le faire dans le builtin ?  + quand mettre à jour le dernier exit_status ?
         exit(ret); // n'exit pas forcément avec 0 !! dépend de la valeur de retour du builtin
     }
     dup2(old_in, STDIN_FILENO);

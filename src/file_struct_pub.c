@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:08:11 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/11 22:01:09 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/16 12:13:25 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,11 @@ void init_file_struct_with_filename(t_file *file_struct, char *filename)
 	file_struct->name = filename;
 }
 
-void init_file_struct_with_sep(t_file *file_struct, char *sep)
-{
-	init_file_struct(file_struct);
-	file_struct->sep = sep;
-}
+// void init_file_struct_with_sep(t_file *file_struct, char *sep)
+// {
+// 	init_file_struct(file_struct);
+// 	file_struct->sep = sep;
+// }
 
 void init_file_struct_with_fd(t_file *file_struct, int fd)
 {
@@ -43,14 +43,14 @@ t_file *create_file_struct_with_filename(char *filename)
 }
 
 
-t_file * create_file_struct_with_sep(char *sep)
-{
-	t_file *file_struct;
+// t_file * create_file_struct_with_sep(char *sep)
+// {
+// 	t_file *file_struct;
 
-	file_struct = malloc(sizeof(t_file));
-	init_file_struct_with_sep(file_struct, sep);
-	return file_struct;
-}
+// 	file_struct = malloc(sizeof(t_file));
+// 	init_file_struct_with_sep(file_struct, sep);
+// 	return file_struct;
+// }
 
 t_file * create_file_struct_with_fd(int fd)
 {

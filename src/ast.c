@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 21:44:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/15 01:26:58 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/16 12:15:43 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,6 @@ void    update_redirect(t_cmd *cmd, t_token_list *current)
             file->flag = O_WRONLY | O_CREAT | O_APPEND;
         add_out_redir_with_file_struct(cmd, file);
         
-        cmd->red.out = file; // test
-
         // printf("added new outfile : %s\n", current->next->content);
         // printf("added new outfile : %s\n", file->name);
     }
@@ -453,5 +451,7 @@ t_cmd   *get_ast(t_ht_hash_table *ht, t_token_list **first_tk, t_list *exp_hist)
         }
     }
     free_tokens(first_tk);
-    return (*ast);
+    t_cmd * test = *ast;
+    free(ast);
+    return (test);
 }

@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 22:15:52 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/14 23:52:12 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/16 11:53:57 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,11 @@ void    read_lines(t_ht_hash_table *ht, t_list *exp_hist)
     char *input;
     size_t stream_len;
     t_token_list  *tk_list;
+    t_cmd *cmd;
 
     input = readline("$ "); 
+    cmd = NULL;
+    tk_list = NULL;
     while (input) // readline ne renvoie NULL que dans le cas d'un Ctrl-D
     {
         // int i = read(STDIN_FILENO, NULL, 1);
@@ -99,7 +102,7 @@ void    read_lines(t_ht_hash_table *ht, t_list *exp_hist)
        	// signal(SIGQUIT, handle_sigquit2);
        	signal(SIGINT, handle_sigint2);
        	signal(SIGQUIT, handle_sigquit2);
-        parse(ht, tk_list, exp_hist); // l'a mis ici et plus dans tokenise(). vérifier si marche encore !!
+        cmd = parse(ht, tk_list, exp_hist); // l'a mis ici et plus dans tokenise(). vérifier si marche encore !!
         signal(SIGINT, handle_sigint);
        	signal(SIGQUIT, handle_sigquit);
         if (input)
@@ -108,8 +111,18 @@ void    read_lines(t_ht_hash_table *ht, t_list *exp_hist)
             input = NULL;
         }
         
+        free_cmds(&cmd, false);
         input = readline("$ ");
        	// signal(SIGINT, handle_sigint2);
        	// signal(SIGQUIT, handle_sigquit2);
     }
+    if (!cmd)
+    {
+        free_pwd(ht); 
+        ht_del_hash_table(ht);
+        ft_lstfree(&exp_hist, free);
+    }
+    // free_tokens(&tk_list);
+    free_cmds(&cmd, true);
+    free(input);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   common_process.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:44:39 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/14 17:15:59 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/16 11:56:58 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 void	parent_process(t_cmd **cmd, int pipe_tab[2])
 {
-	char **test = hash_map_to_tab((*cmd)->env);
 	
 	safe_close(&(pipe_tab[1]));
 	if (!cmd || !(*cmd))
@@ -23,7 +22,10 @@ void	parent_process(t_cmd **cmd, int pipe_tab[2])
 	safe_close_cmd_fd(*cmd);
 	//if ((*cmd)->red.in_type == fd && ((t_file *) ((*cmd)->red.in_content))->sep)
 		//close
+	// t_cmd ** tmp;
+	// tmp = cmd;
 	*cmd = (*cmd)->red.next_cmd;
+	// free_cmd(tmp);
 	////dprintf(STDOUT_FILENO, "parent pro %s\n", (*cmd)->val.value);
 	if (!cmd || !(*cmd))
 		return;

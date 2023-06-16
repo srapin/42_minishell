@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 00:40:45 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/15 00:35:07 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/15 16:48:58 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,19 +76,19 @@ t_token_list    *tokenise(t_ht_hash_table *ht, t_token *token_stream, size_t str
     int i;
     int j;
     int current;
-    t_token_list *t_list;
+    t_token_list *tk_list;
     
     if (!token_stream)
         return (NULL); // gerer autrement ?
     i = 0;
-    t_list = NULL;
+    tk_list = NULL;
     while (i < stream_len)
     {
         current = token_stream[i].type; // inutile un peu
         
         if (i < stream_len && (current == r_parenthesis || current == l_parenthesis))
         {
-            tk_add(&t_list, tk_new_elem(&input[i], 1, current, 0)); // stocke les parentheses token par token, et non en regroupant les memes types en un seul token (pourra donc avoir par ex 5 tokens de contenu "(", au lieu d'un unique token de contenu "(((((")
+            tk_add(&tk_list, tk_new_elem(&input[i], 1, current, 0)); // stocke les parentheses token par token, et non en regroupant les memes types en un seul token (pourra donc avoir par ex 5 tokens de contenu "(", au lieu d'un unique token de contenu "(((((")
             i++;
         }
         else if (i < stream_len && (current == simple_quote || current == double_quote))
@@ -99,7 +99,7 @@ t_token_list    *tokenise(t_ht_hash_table *ht, t_token *token_stream, size_t str
                 i++;
             if (i < stream_len) // ie si n'est pas arrivé en fin de commande sans trouver de closing quote (peut arriver dans le cas d'une quote non fermée )
                 i++;
-            tk_add(&t_list, tk_new_elem(&input[j], i - j, current, 
+            tk_add(&tk_list, tk_new_elem(&input[j], i - j, current, 
                 (current == simple_quote) + (current == double_quote) * 2));
         }
         else if (i < stream_len)
@@ -107,13 +107,13 @@ t_token_list    *tokenise(t_ht_hash_table *ht, t_token *token_stream, size_t str
             j = i;
             while (i < stream_len && token_stream[i].type == current)
                 i++;
-            tk_add(&t_list, tk_new_elem(&input[j], i - j, current, 0));
+            tk_add(&tk_list, tk_new_elem(&input[j], i - j, current, 0));
         }
     }
     free(token_stream);
     token_stream = NULL;
     
-    return (t_list);
+    return (tk_list);
 }
 
 int    set_token_operator(t_token *token, char input)

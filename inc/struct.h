@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:03:15 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/12 22:15:23 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/15 18:25:11 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ typedef struct file
 {
 	char *name; //dans parsing
 	int fd;     //si deja ouvert. dans parsing -> mettre a -1
-	char *sep;  //mettre a null si pas heredoc
+	// char *sep;  //mettre a null si pas heredoc
 	int				flag;
 	/* data */
 }					t_file;

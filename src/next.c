@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:50:05 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/12 22:24:15 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/15 16:46:26 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int	wait_childs(t_cmd *origin)
 
 	cmd = origin;
 
+	status = 0;
 	while (cmd)
 	{
 		waitpid(cmd->pid, &status, 0);
