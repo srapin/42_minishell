@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 19:32:17 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/15 01:12:04 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/16 21:22:43 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,7 @@ int main (int argc, char **argv, char **envp)
     
     signal(SIGINT, handle_sigint);
     signal(SIGQUIT, handle_sigquit);
+    
     if (argc > 2)
     {
         printf("error : too many arguments\n"); //idk
@@ -157,7 +158,7 @@ int main (int argc, char **argv, char **envp)
         exec_script(hash_map, argv[1], exp_hist);
     
     
-    //parse(hash_map, tokenise(hash_map, assign_type(argv[1], ft_strlen(argv[1])), ft_strlen(argv[1]), argv[1]));
+    //parse(hash_map, tokenise(hash_map, assign_type(argv[1], ft_strlen(argv[1])), ft_strlen(argv[1]), argv[1]), exp_hist);
 
     /* 
             ------------ Tests ------------

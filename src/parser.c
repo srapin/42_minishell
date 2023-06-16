@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 02:12:27 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/15 17:06:17 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/16 20:36:04 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,12 +135,17 @@ t_cmd  *   parse(t_ht_hash_table *ht, t_token_list *first, t_list *exp_hist)
     delete_quotes(&first);
     group_words(&first);
 
+    dprintf(1, "in parse(), after delete_quotes() and group_words()\n");
+
     perform_wildcard_exp(ht, &first);
+    
+    dprintf(1, "in parse(), after perform_wildcard_exp()\n");
 
     set_here_docs(ht, &first);
+    dprintf(1, "in parse(), after set_here_docs()\n");
 
     t_cmd *ast = get_ast(ht, &first, exp_hist);
-    // print_ast(ast);
+    print_ast(ast);
 
     exec_cmds(ast);
     return ast;

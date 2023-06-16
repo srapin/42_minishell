@@ -9,10 +9,10 @@
 			"type": "cppdbg",
 			"request": "launch",
 			"program": "${workspaceFolder}/minishell",
-			"args": ["export"], // echo salut\"toi\" && (echo $PWD || echo lol_\"$PATH\") | echo *t // < in < in2 echo hello >out1 | cat && sleep 1 | ls
+			"args": ["$a\" lol\""], // echo salut\"toi\" && (echo $PWD || echo lol_\"$PATH\") | echo *t // < in < in2 echo hello >out1 | cat && sleep 1 | ls
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}",
-			"environment": [],
+			"environment": [{"name" : "a", "value": "     un test "}],
 			"externalConsole": false,
 			"MIMode": "lldb"
 		},

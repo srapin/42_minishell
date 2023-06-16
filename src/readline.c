@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   readline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 22:15:52 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/16 11:53:57 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/16 18:04:58 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ void    read_lines(t_ht_hash_table *ht, t_list *exp_hist)
        	// signal(SIGQUIT, handle_sigquit2);
        	signal(SIGINT, handle_sigint2);
        	signal(SIGQUIT, handle_sigquit2);
-        cmd = parse(ht, tk_list, exp_hist); // l'a mis ici et plus dans tokenise(). vérifier si marche encore !!
+        cmd = parse(ht, tk_list, exp_hist);
         signal(SIGINT, handle_sigint);
        	signal(SIGQUIT, handle_sigquit);
         if (input)

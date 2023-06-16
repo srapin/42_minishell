@@ -3,7 +3,7 @@ NAME_BONUS = pipex_bonus # ???
 
 CC = cc
 #CFLAGS = -Wall -Wextra -Werror -g3 -g
-CFLAGS =-g3 -g
+CFLAGS = -g3 -g
 
 FILES = cmd_private\
 		cmd_pub\

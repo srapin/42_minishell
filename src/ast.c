@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 21:44:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/16 12:15:43 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/16 21:27:09 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,76 +72,111 @@ void    update_redirect(t_cmd *cmd, t_token_list *current)
 /* Returns the substring starting at the first encountered whitespace in the initial string.
 When no whitespace is encountered, NULL is returned.
 If the string is either empty or null, NULL is returned. */
-char    *get_whtsp_pos(char *str)
+int     get_whtsp_pos(char *str)
 {
     int i;
     
-    if (!str || !(*str))
-        return (NULL);
+    if (!str)
+        return (-1);
     i = 0;
     while (str[i])
     {
         if (str[i] == ' ' || str[i] == '\t')
-            return (str + i);
+            return (i);
         i++;
     }
-    return (NULL);
+    return (-1);
 }
 
 /*
 Dès que tombe sur une succession de whitespaces en parsant le token 
 -> tout ce qui venait avant devient un mot (ie token) individuel 
+
+1) des que tombe sur un mot n'étant pas entre quotes :
+    s'il n'y a pas de whitespaces, le garde dans un buffer et passe au mot suivant
+    sinon, cherche la position du premier whitespace, garde le sous-mot jusqu'a l'index dans un buffer,
+    join ce buffer avec le buffer du/des mots précédents si ce dernier buffer est non nul,
+    puis ajoute à la liste d'arguments de la commande.
+    ensuite, recherche s'il y a un autre whitespace qui suit :
+        si non, garde la fin du mot dans un buffer et passe au mot suivant
+        si oui, répète l'opération jusqu'à arriver a la fin du mot ou jusqu'à 
+        ne plus avoir de whitespaces dans le mot
+
 */
 void    set_cmd_args(t_cmd **curr_cmd, t_token_list *curr_tk, int *i)
 {
     int             j;
-    int             k;
-    int             get_word;
-    size_t          whitespace_index;
-    size_t          next_whitespace_index;
-    char            *whitespace_pos;
-    char            *next_whitespace_pos;
+    int             whitespace_pos;
+    int             prev_whitespace_pos;
+    char            *buffer;
+    char            *tmp;
+    char            *substr;
     t_word_data     *wd;
     
     // removes the whitespaces that aren't in quotes in the current token 
     //  (whitespaces that could for example be a result of a variable expansion)
     if (!curr_tk->merged_words)
     {
+        //dprintf(1, "current = %s, quotes = %d\n", curr_tk->content, curr_tk->quotes);
         (*curr_cmd)->val.args[*i] = ft_strdup(curr_tk->content);
         (*i)++;
         return ;
     }
-    get_word = 0;
+    
+    //dprintf(1, "in set_cmd_args()\n");
+    // 16/06, 20h : rentre pas dans la boucle ?
     wd = curr_tk->merged_words;
+    buffer = NULL;
     while (wd)
     {
+        //dprintf(1, "\twd = %s, quotes = %d\n", wd->content, wd->quotes);
         if (!wd->quotes)
         {
-            j = 0;
-            k = 0;
-            while (j < wd->length)
+            prev_whitespace_pos = 0;
+            whitespace_pos = get_whtsp_pos(wd->content);
+            //dprintf(1, "\twd = %s, whitespace_pos = %d\n", wd->content, whitespace_pos);
+            while (whitespace_pos != -1)
             {
-
+                tmp = buffer;
+                substr = ft_substr(wd->content, prev_whitespace_pos, whitespace_pos - prev_whitespace_pos);
+                buffer = ft_strjoin(tmp, substr);
+                if (*buffer) // ie si il n'est pas vide
+                {
+                    (*curr_cmd)->val.args[*i] = ft_strdup(buffer);
+                    (*i)++;
+                    free(buffer);
+                    buffer = NULL;
+                }
+                free(substr);
+                substr = NULL;
+                j = whitespace_pos;
                 while (wd->content[j] && (wd->content[j] == ' ' || wd->content[j] == '\t'))
                     j++;
-                if (!wd->content[j])
-                    break;
-                k = j;
-                while (wd->content[j] && (wd->content[j] != ' ' && wd->content[j] != '\t'))
-                    j++;
-                if (j - k)
-                {
-                    (*curr_cmd)->val.args[*i] = ft_substr(wd->content, k, j - k);
-                    (*i)++;
-                }
+                prev_whitespace_pos = j;
+                whitespace_pos = get_whtsp_pos(wd->content + prev_whitespace_pos + 1);
+                //dprintf(1, "\twd = %s, whitespace_pos = %d\n", wd->content, whitespace_pos);
+            }
+            if (whitespace_pos == -1) // pas opti
+            {
+                tmp = buffer;
+                substr = ft_substr(wd->content, prev_whitespace_pos, wd->length);
+                buffer = ft_strjoin(tmp, substr);
             }
         }
         else
         {
-            (*curr_cmd)->val.args[*i] = ft_strdup(wd->content);
-            (*i)++;
+            tmp = buffer;
+            buffer = ft_strjoin(tmp, wd->content);
+            free(tmp);
         }
         wd = wd->next;
+    }
+    if (buffer && *buffer)
+    {
+        (*curr_cmd)->val.args[*i] = ft_strdup(buffer);
+        (*i)++;
+        free(buffer);
+        buffer = NULL;
     }
 }
 
@@ -150,79 +185,105 @@ void    set_command_attributs(t_cmd **current, t_token_list **first_tk, t_token_
     int i;
 
     i = 0;
-    while (current_tk && (current_tk->type == l_io_redirect || current_tk->type == r_io_redirect))
-        current_tk = current_tk->next->next;
-    (*current)->val.value = ft_strdup(current_tk->content);
-    if (!(*current)->val.value)
-    {
-        perror("malloc ");
+    if (!args_count)
         return ;
-    }
+    //dprintf(1, "in set_command_attributs\n");
+    
     (*current)->val.args = malloc(sizeof(char *) * (args_count + 1));
     if (!(*current)->val.args)
     {
         perror("malloc ");
         return ;
     }
-    (*current)->val.args[i] = ft_strdup(current_tk->content);
-    if (!(*current)->val.args[i])
-    {
-        perror("malloc ");
-        return ;
-    }
-    i++;
-    current_tk = current_tk->next;
     while (current_tk && i < args_count) //while (current_tk && current_tk->type != and && current_tk->type != or)
     {
         if (current_tk->type == l_io_redirect || current_tk->type == r_io_redirect)
             current_tk = current_tk->next->next;
         else 
         {
+            //dprintf(1, "before set_cmd_args()\n");
+            //dprintf(1, "args_count = %d\n", args_count);
             set_cmd_args(current, current_tk, &i);
+            //dprintf(1, "after set_cmd_args()\n");
             //tk_del_one(first_tk, current_tk); // est-ce que current_tk pointe encore au bon endroit après ça ?
             current_tk = current_tk->next;
         }
     }
     (*current)->val.args[i] = NULL;
+    if (args_count)
+        (*current)->val.value = ft_strdup((*current)->val.args[0]);
 }
 
 int get_words_count(t_token_list *current)
 {
     int             i;
     int             count;
+    int             buffer; // 0 when empty, 1 when not
+    int             whitespace_pos;
+    int             prev_whitespace_pos;
     t_word_data     *wd;
 
     i = 0;
-    count = 1;
+    buffer = 0;
+    count = 0; // 0 ou 1 ?
     wd = current->merged_words;
     if (!wd)
-        return (current->length > 0); // pas la peine de check pour les whitespaces dans ce cas car cela a deja ete fait avant l'expansion des filenames
+        return (current->length > 0);
     while (wd)
     {
+        //dprintf(1, "in get_words_count(), wd = %s\n", wd->content);
         if (!wd->quotes)
         {
-            while (i < wd->length) // ou wd->content[i] ?
+            prev_whitespace_pos = 0;
+            whitespace_pos = get_whtsp_pos(wd->content);
+            while (whitespace_pos != -1)
             {
-                if (wd->content[i] == ' ' || wd->content[i] == '\t')
+                //dprintf(1, "in while (whitespace_pos != -1)\n");
+                if (whitespace_pos - prev_whitespace_pos) // ie si le buffer n'est pas vide
                 {
-                    while (wd->content[i] 
-                        && (wd->content[i] == ' ' || wd->content[i] == '\t'))
-                        i++;
-                    if (wd->content[i])
-                        count++;
+                    count++;
+                    buffer = 0;
                 }
-                else
-                {
-                    //count++;
-                    while (wd->content[i] 
-                        && (wd->content[i] != ' ' && wd->content[i] != '\t')) 
-                        i++;
-                }
+                
+                while (wd->content[whitespace_pos] && (wd->content[whitespace_pos] == ' ' || wd->content[whitespace_pos] == '\t'))
+                    whitespace_pos++;
+                //dprintf(1, "whitespace_pos = %d, prev_shitespace_pos = %d\n", whitespace_pos, prev_whitespace_pos);
+                prev_whitespace_pos = whitespace_pos;
+                //dprintf(1, "\twd = %s, prev_whitespace_pos = %d\n", wd->content, prev_whitespace_pos);
+                whitespace_pos = get_whtsp_pos(&wd->content[prev_whitespace_pos]);
+                //dprintf(1, "\twd = %s, whitespace_pos = %d\n", wd->content, whitespace_pos);
             }
+            if (whitespace_pos == -1) // pas opti
+                buffer = 1;
         }
         else
-            count++;
+            buffer = 1;
         wd = wd->next;
+    }
+    // while (wd)
+    // {
+    //     if (!wd->quotes)
+    //     {
+    //         prev_whitespace_pos = 0;
+    //         whitespace_pos = get_whtsp_pos(wd->content);
+    //         while (whitespace_pos != -1)
+    //         {
+    //             count++;
+    //             buffer = 0;
+    //             prev_whitespace_pos = whitespace_pos;
+    //             whitespace_pos = get_whtsp_pos(wd->content + prev_whitespace_pos + 1);
+    //         }
+    //         if (whitespace_pos == -1) // utile pour compter le nombre de mots ?
+    //             buffer = 1;
+    //     }
+    //     else
+    //         buffer = 1;
+    //     wd = wd->next;
+    // }
+    if (buffer)
+    {
+        count++;
+        buffer = 0;
     }
     return (count);
 }
@@ -367,6 +428,7 @@ void    set_simple_command(t_cmd *current_cmd, t_token_list **first_tk, t_token_
     
     while (current_tk && current_tk->type != and_tk && current_tk->type != or_tk)
     {
+        //dprintf(1, "in set_simple_command(), current_tk = %s\n", current_tk->content);
         if (current_tk->type == l_io_redirect || current_tk->type == r_io_redirect)
         {
             update_redirect(current_cmd, current_tk);
@@ -379,11 +441,14 @@ void    set_simple_command(t_cmd *current_cmd, t_token_list **first_tk, t_token_
         }
         else
         {
+            //dprintf(1, "in set_simple_command(), before calling get_words_count()\n");
             args_count += get_words_count(current_tk);
+            //dprintf(1, "in set_simple_command(), after calling get_words_count()\n");
             current_tk = current_tk->next;
         }
     }
     current_cmd->red.next_cmd = NULL;
+    //dprintf(1, "in set_simple_command(), just before calling set_command_attributs()\n");
     if (!subshell)
         set_command_attributs(&current_cmd, first_tk, *cmd_start_tk, args_count);
     *curr_tk = current_tk;
@@ -407,9 +472,12 @@ t_cmd   *get_ast(t_ht_hash_table *ht, t_token_list **first_tk, t_list *exp_hist)
     subshell = 0;
     pipeline_start_tk = *first_tk; 
     pipeline_start_cmd = *ast;
+
+    //dprintf(1, "in get_ast(), before the while(pipeline_start_tk)\n");
     
     while (pipeline_start_tk)
     {
+        //dprintf(1, "in get_ast(), in the while(pipeline_start_tk)\n");
         current_tk = pipeline_start_tk;
         current_cmd = pipeline_start_cmd;
         
@@ -417,6 +485,7 @@ t_cmd   *get_ast(t_ht_hash_table *ht, t_token_list **first_tk, t_list *exp_hist)
         // ie peut avoir des pipes, mais ne touche ici pas à la variable next de t_cmd
         while (current_tk && current_tk->type != and_tk && (current_tk->type != or_tk || current_tk->length == 1))
         {
+            //dprintf(1, "in get_ast(), in the  while(not && and not ||), before calling set_simple_command()\n");
             cmd_start_tk = current_tk;
             set_simple_command(current_cmd, first_tk, &cmd_start_tk, &current_tk);
             
