@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 21:44:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/16 21:27:09 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/16 22:44:57 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,13 +72,13 @@ void    update_redirect(t_cmd *cmd, t_token_list *current)
 /* Returns the substring starting at the first encountered whitespace in the initial string.
 When no whitespace is encountered, NULL is returned.
 If the string is either empty or null, NULL is returned. */
-int     get_whtsp_pos(char *str)
+int     get_whtsp_pos(char *str, int whtsp_pos)
 {
     int i;
     
     if (!str)
         return (-1);
-    i = 0;
+    i = whtsp_pos;
     while (str[i])
     {
         if (str[i] == ' ' || str[i] == '\t')
@@ -133,7 +133,7 @@ void    set_cmd_args(t_cmd **curr_cmd, t_token_list *curr_tk, int *i)
         if (!wd->quotes)
         {
             prev_whitespace_pos = 0;
-            whitespace_pos = get_whtsp_pos(wd->content);
+            whitespace_pos = get_whtsp_pos(wd->content, prev_whitespace_pos);
             //dprintf(1, "\twd = %s, whitespace_pos = %d\n", wd->content, whitespace_pos);
             while (whitespace_pos != -1)
             {
@@ -153,7 +153,7 @@ void    set_cmd_args(t_cmd **curr_cmd, t_token_list *curr_tk, int *i)
                 while (wd->content[j] && (wd->content[j] == ' ' || wd->content[j] == '\t'))
                     j++;
                 prev_whitespace_pos = j;
-                whitespace_pos = get_whtsp_pos(wd->content + prev_whitespace_pos + 1);
+                whitespace_pos = get_whtsp_pos(wd->content, prev_whitespace_pos + 1);
                 //dprintf(1, "\twd = %s, whitespace_pos = %d\n", wd->content, whitespace_pos);
             }
             if (whitespace_pos == -1) // pas opti
@@ -235,7 +235,7 @@ int get_words_count(t_token_list *current)
         if (!wd->quotes)
         {
             prev_whitespace_pos = 0;
-            whitespace_pos = get_whtsp_pos(wd->content);
+            whitespace_pos = get_whtsp_pos(wd->content, prev_whitespace_pos);
             while (whitespace_pos != -1)
             {
                 //dprintf(1, "in while (whitespace_pos != -1)\n");
@@ -250,7 +250,7 @@ int get_words_count(t_token_list *current)
                 //dprintf(1, "whitespace_pos = %d, prev_shitespace_pos = %d\n", whitespace_pos, prev_whitespace_pos);
                 prev_whitespace_pos = whitespace_pos;
                 //dprintf(1, "\twd = %s, prev_whitespace_pos = %d\n", wd->content, prev_whitespace_pos);
-                whitespace_pos = get_whtsp_pos(&wd->content[prev_whitespace_pos]);
+                whitespace_pos = get_whtsp_pos(wd->content, prev_whitespace_pos + 1);
                 //dprintf(1, "\twd = %s, whitespace_pos = %d\n", wd->content, whitespace_pos);
             }
             if (whitespace_pos == -1) // pas opti
