@@ -14,3 +14,26 @@ bash: : command not found
 bash-5.1$ cat ""
 cat: '': No such file or directory
 
+A repliquer pour le builtin cd :
+bash-5.1$ cd /
+bash-5.1$ pwd
+/
+bash-5.1$ cd //
+bash-5.1$ pwd
+//
+bash-5.1$ cd /////
+bash-5.1$ pwd     
+/
+bash-5.1$ cd /////User
+bash: cd: /////User: No such file or directory
+bash-5.1$ pwd         
+/
+bash-5.1$ cd ///////////
+bash-5.1$ ls
+bin   home	      lib32	  media  root  sys  vmlinuz
+boot  initrd.img      lib64	  mnt	 run   tmp  vmlinuz.old
+dev   initrd.img.old  libx32	  opt	 sbin  usr
+etc   lib	      lost+found  proc	 srv   var
+bash-5.1$ cd ///////////usr
+bash-5.1$ pwd              
+/usr

@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 02:12:27 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/17 19:05:30 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/17 19:42:09 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ void    print_ast(t_cmd *ast)
     }
 }
 
-t_cmd  *   parse(t_ht_hash_table *ht, t_token_list *first, t_list *exp_hist)
+t_cmd  *parse(t_ht_hash_table *ht, t_token_list *first, t_list *exp_hist)
 {    
     int wstatus;
     

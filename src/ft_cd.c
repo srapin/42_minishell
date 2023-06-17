@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 01:12:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/13 11:55:51 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/17 20:18:33 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,11 @@ char *replace_prev_or_actual_dir(char *path)
     char    *after;
 
     i = 0;
+    if (path[0] && path[0] == '/' && path[1] && path[1] == '/' && !path[2]) // ie a juste '//'
+    {
+        //printf("ok. returning, path = %s\n", path);
+        return (path);
+    }
     while (path[i])
     {
         // ne peux pas avoir path[0] == '.' car a récupéré pwd, donc path[0] = '/' obligatoirement
@@ -93,6 +98,29 @@ char *replace_prev_or_actual_dir(char *path)
             i++;
         
     }
+
+    // tej les '/' successifs
+    i = 0;
+    j = 0;
+    char *tmp;        
+    while (path[i])
+    {
+        if (path[i] == '/')
+        {
+            j = i;
+            //i++;
+            while (path[j] && path[j] == '/')
+                j++;
+            before = ft_substr(path, 0, i + 1);
+            after = ft_substr(path, j, ft_strlen(path));
+            free(path);
+            path = ft_strjoin(before, after);
+            free(before);
+            free(after);
+        }
+        i++;
+    }
+    //printf("returning, path = %s\n", path);
     return (path);
 }
 
@@ -140,15 +168,60 @@ int     ft_cd(t_cmd *cmd)
     free(full_path);
     full_path = replace_prev_or_actual_dir(tmp);
     // free(tmp); pourquoi ce free() fait tout couiller ??
-    if (ft_strlen(full_path) > 1 && full_path[ft_strlen(full_path) - 1] == '/')
-    {
-        tmp = ft_substr(full_path, 0, ft_strlen(full_path) - 1);
-        free(full_path);
-        full_path = tmp;
-    }
-    ht_modify_value(cmd->env, "PWD", full_path);
+    //printf("full path = %s\n", full_path);
+    if (ft_strlen(full_path) > 1 && full_path[ft_strlen(full_path) - 1] == '/'
+        && full_path[1] != '/')
+        {
+            tmp = ft_substr(full_path, 0, ft_strlen(full_path) - 1);
+            free(full_path);
+            full_path = tmp;
+        }
+    if (!ht_modify_value(cmd->env, "PWD", full_path)) // ie si PWD n'est dans l'env
+        ht_insert_item(cmd->env, ft_strdup("PWD"), full_path);
     update_pwd(cmd->env, full_path);
     //printf("dans export() : PWD apres ht_modify() = %s, %s\n", ht_search(cmd->env, "PWD"), *get_pwd(cmd->env));
     
     return (EXIT_OK);
 }
+
+/*
+getcwd() returns a null-terminated string containing an
+absolute pathname that is the current working directory of the
+calling process.
+*/
+// char *getpwd()
+// {
+//     size_t  size;
+//     char    *path;
+
+//     size = GETCWD_INITIAL_BUF_SIZE;
+//     getcwd(path, size);
+//     while (!path && errno == ERANGE)
+//     {
+//         size *= 2;
+//         getcwd(path, size);
+//     }
+//     return (path);
+// }
+
+// int     ft_cd(t_cmd *cmd)
+// {
+//     char    *path;
+//     char    *new_pwd;
+
+//     if (!cmd->val.args[1]) // si n'a aucun argument
+//         return (EXIT_OK);
+//     if (cmd->val.args[2]) // si il y a plus d'un argument. val.args est null-terminated
+//         return (CD_TOO_MANY_ARGS);
+//     path = cmd->val.args[1];
+//     printf("path = %s\n", path);
+//     if (chdir(path) == -1)
+//     {
+//         perror("chdir ");
+//         return(errno); // Quel code erreur ?
+//     }
+//     new_pwd = getpwd();
+//     printf("new pwd = %s\n", new_pwd);
+//     ht_modify_value(cmd->env, "PWD", new_pwd);
+//     return (EXIT_OK);
+// }
