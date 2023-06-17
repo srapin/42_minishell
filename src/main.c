@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 19:32:17 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/17 02:01:11 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/17 20:42:26 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ char *ft_strcpy(char *str)
 // seulement dans le cas env -i, ou aussi lorsque l'env passé au main est nul ? 
 t_ht_hash_table *get_minimal_env() // comment indiquer a quel niveau du shell se situe ? (pour la SHLVL variable de l'env)
 {
-    int             shell_lvl = 0; // juste histoire de pas me faire insulter par le compilateur, mais faut le faire autrement c'est inutile ça
     size_t          size;
     char            *pwd;
     t_ht_hash_table *ht;
@@ -76,7 +75,7 @@ t_ht_hash_table *get_minimal_env() // comment indiquer a quel niveau du shell se
             return (NULL); // ?
         getcwd(pwd, size);
     }
-    ht_insert_item(ht, ft_strcpy("SHLVL"),ft_itoa(shell_lvl));
+    ht_insert_item(ht, ft_strcpy("SHLVL"),ft_strdup("1"));
     ht_insert_item(ht, ft_strcpy("PWD"), pwd);
     ht_insert_item(ht, ft_strcpy("_"), ft_strcpy("/usr/bin/env"));
     return (ht);
@@ -127,6 +126,7 @@ void    exec_script(t_ht_hash_table *ht, char *path, t_list *exp_hist)
 
 int main (int argc, char **argv, char **envp)
 {
+    
     char            *pwd;
     t_ht_hash_table *hash_map;
     
@@ -139,7 +139,7 @@ int main (int argc, char **argv, char **envp)
         return (0);
     }
     
-    if (!envp)
+    if (!envp || !envp[0])
         hash_map = get_minimal_env();
     else
         hash_map = ht_get_env(envp);

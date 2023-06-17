@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 21:44:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/17 18:02:48 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/17 20:49:55 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -351,6 +351,8 @@ void    add_to_cmd_list(t_cmd **last, t_cmd *new)
     }  
 }
 
+// peut regrouper cette fonction et random_filename() utilisée dans les here docs en une seule,
+// en passant comme argument a la fonction si veut ecrire "/tmp/subshell_args_" ou "/tmp/here_doc_tmp_"
 char    *random_subshell_fname(void)
 {
     static size_t   files_count;

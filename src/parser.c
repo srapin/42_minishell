@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 02:12:27 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/17 19:42:09 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/17 21:02:29 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,8 +143,6 @@ t_cmd  *parse(t_ht_hash_table *ht, t_token_list *first, t_list *exp_hist)
 
     set_here_docs(ht, &first);
     //dprintf(1, "in parse(), after set_here_docs()\n");
-
-    print_tokens(first);
 
     t_cmd *ast = get_ast(ht, &first, exp_hist);
     //print_ast(ast);

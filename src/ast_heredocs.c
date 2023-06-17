@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_heredocs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 23:24:33 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/14 22:30:49 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/17 20:48:46 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,20 @@
 // tf do i do that in a simple way ?
 char    *random_filename()
 {
-    char            *nb;
-    char            *file_name;
-    static size_t   count; // a le droit d'utiliser des variables statiques ?
-    
-    nb = ft_itoa(count);
-    count++;
-    file_name = ft_strjoin("/tmp/here_doc_tmp", nb);
-    free(nb);
-    return (file_name);
+    static size_t   files_count;
+    char            *count;
+    char            *filename;
+
+    count = ft_itoa(files_count);
+    filename = ft_strjoin("/tmp/here_doc_tmp_", count);
+    while (access(filename, F_OK | R_OK | W_OK) == 0)
+    {
+        files_count++;
+        count = ft_itoa(files_count);
+        filename = ft_strjoin("/tmp/here_doc_tmp_", count);
+    }
+    free(count);
+    return (filename);
 }
 
 int	is_limiter(char *line, char *limiter)

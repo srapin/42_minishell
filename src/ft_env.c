@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 20:39:18 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/14 16:04:17 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/17 20:38:43 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,8 @@ int    ft_env(t_cmd *cmd)
     if (cmd->val.args[1])
     {
         printf("Error : env : too many arguments given. Zero needed\n");
-        // free everything (?)
         return (1); // quelle valeur retourner ?
     }
-    if (!cmd->val.args[1])
-        print_env(cmd->env);
+    print_env(cmd->env);
     return (EXIT_OK);
 }

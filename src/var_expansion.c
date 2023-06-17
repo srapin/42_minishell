@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:12:06 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/17 16:44:09 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/17 20:59:05 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,8 @@ void    perform_variable_exp(t_ht_hash_table *ht, t_token_list **first)
     {
         //printf("current->content = %s\n", current->content);
         //printf("current->length = %zu\n", current->length);
+        while (current && current->type == whitespace)
+            current = current->next;
         if (current->type == l_parenthesis) // n'expand pas ce qui est entre parenthèses, le fera dans le subshell
         {
             while (current && current->type != r_parenthesis)
@@ -113,7 +115,6 @@ void    perform_variable_exp(t_ht_hash_table *ht, t_token_list **first)
         else if (current->type != simple_quote && (!current->prev 
             || current->prev->type != l_io_redirect || current->prev->length == 1)) // ie n'est pas dans le limiteur d'un here_doc
         {
-            //dprintf(1, "current = %s\n", current->content);
             dollar_start = ft_strchr(current->content, '$');
             if (dollar_start + 1) // ie qqch suit le $
                 ; // fait ce qui suit
@@ -137,6 +138,7 @@ void    perform_variable_exp(t_ht_hash_table *ht, t_token_list **first)
                 //dprintf(1, "fin de while, ok ici\n");
                 dollar_start = next_dollar_start;
             }
+            //dprintf(1, "current = %s\n", current->content);
         }
         current = current->next;
     }
