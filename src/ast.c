@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 21:44:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/17 20:49:55 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/17 22:36:46 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,7 @@ void    set_cmd_args(t_cmd **curr_cmd, t_token_list *curr_tk, int *i)
     if (!curr_tk->content[0])
     {
         (*curr_cmd)->val.args[*i] = ft_strdup("\0");
+        (*i)++;
         return ;
     }
     if (!curr_tk->merged_words)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 23:25:02 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/14 15:38:24 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/18 00:33:41 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -319,6 +319,7 @@ int    ft_export(t_cmd *cmd)
 {
     int     i;
     int     j;
+    int     nb;
     int     exit_status;
     char    *var_name;
     char    *var_value;
@@ -347,6 +348,16 @@ int    ft_export(t_cmd *cmd)
                 if (is_in_export_history(cmd->export_history, var_name))
                     del_from_export_history(&cmd->export_history, var_name);
                 var_value = ft_substr(cmd->val.args[i], j + 1, ft_strlen(cmd->val.args[i]));
+                if (!strcmp(var_name, "SHLVL"))
+                {
+                    nb = ft_atoi(var_value);
+                    if (nb > 999)
+                    {
+                        printf("minishell : warning : shell level too high (%d), resetting to 1\n", nb);
+                        free(var_value);
+                        var_value = ft_strdup("1");
+                    }
+                }
                 // printf("var_value = %s\n", var_value);
                 if (!ht_modify_value(cmd->env, var_name, var_value)) // ie si la variable n'est pas deja dans l'env
                     ht_insert_item(cmd->env, var_name, var_value);

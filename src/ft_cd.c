@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 01:12:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/17 20:18:33 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/18 00:00:28 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,6 @@ char *replace_prev_or_actual_dir(char *path)
 Implements the cd builtin with only a relative or absolute path.
 Returns 0 IF directory is successfully changed
 
-QUE FAIRE SI PWD EST UNSET ?
 */
 int     ft_cd(t_cmd *cmd)
 {
@@ -139,8 +138,17 @@ int     ft_cd(t_cmd *cmd)
     char    *new_pwd;
 
     //dprintf(1, "coucou depuis ft_cd()\n");
+    
+    
     if (!cmd->val.args[1]) // si n'a aucun argument
+    {
+        if (!ht_search(cmd->env, "HOME"))
+        {
+            printf("minishell : cd : HOME not set\n");
+            return (HOME_NOT_SET);
+        }
         return (EXIT_OK);
+    }
     if (cmd->val.args[2]) // si il y a plus d'un argument. val.args est null-terminated
         return (CD_TOO_MANY_ARGS);
 

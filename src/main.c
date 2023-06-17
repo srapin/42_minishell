@@ -3,14 +3,45 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 19:32:17 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/17 20:42:26 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/18 00:31:30 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+// peut avoir un shell level maximal de 999 (ie export SHLVL=1000)
+// si excede : bash: warning: shell level (1099) too high, resetting to 1 (avec export SHLVL=1100 ici)
+void    set_shell_level(t_ht_hash_table *ht)
+{
+    int     i;
+    int     nb;
+    char    *shlvl;
+    char    *new_shlvl;
+
+    shlvl = ht_search(ht, "SHLVL");
+    if (!shlvl)
+        ht_modify_value(ht, ft_strdup("SHLVL"), ft_strdup("1"));
+    else
+    {
+        i = 0;
+        while (shlvl[i])
+        {
+            if (!ft_isdigit(shlvl[i]))
+            {
+                ht_modify_value(ht, ft_strdup("SHLVL"), ft_strdup("1"));
+                return;
+            }
+            i++;
+        }
+        nb = ft_atoi(shlvl);
+        new_shlvl = ft_itoa(ft_atoi(shlvl) + 1);
+        ht_modify_value(ht, ft_strdup("SHLVL"), new_shlvl);
+        printf("new shell level = %s\n", new_shlvl);
+    }
+}
 
 t_ht_hash_table *ht_get_env(char **envp)
 {
@@ -33,6 +64,7 @@ t_ht_hash_table *ht_get_env(char **envp)
         ht_insert_item(ht, ft_substr(envp[i], 0, j), ft_substr(envp[i], j + 1, ft_strlen(envp[i])));
         i++;
     }
+    set_shell_level(ht);
     return (ht);
 }
 
@@ -145,7 +177,6 @@ int main (int argc, char **argv, char **envp)
         hash_map = ht_get_env(envp);
     if (!hash_map)
         return (1); // do we return ? which exit status ?
-    
 
     pwd = *get_pwd(hash_map);
     t_list *exp_hist = init_export_history(hash_map);

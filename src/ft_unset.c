@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 21:52:36 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/12 22:25:01 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/17 23:19:05 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ int ft_unset(t_cmd *cmd)
 {
     int i;
 
-    dprintf(1, "coucou depuis ft_unset()\n");
     i = 1; // args[0] est le nom de la commande
     if (!cmd->val.args[i])
         return (EXIT_OK);
@@ -30,4 +29,5 @@ int ft_unset(t_cmd *cmd)
             del_from_export_history(&cmd->export_history, cmd->val.args[i]);
         i++;
     }
+    return (EXIT_OK); // dans auel cas retourne autre chose que 0 ?
 }

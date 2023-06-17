@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 00:59:44 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/17 19:44:03 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/17 23:35:58 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int     ft_pwd(t_cmd *cmd)
     // getcwd(path);
     // printf("%s\n", path);
     
-    //printf("%s\n", *get_pwd(cmd->env));
-    printf("%s\n", ht_search(cmd->env, "PWD"));
+    printf("%s\n", *get_pwd(cmd->env));
+    //printf("%s\n", ht_search(cmd->env, "PWD"));
     return (EXIT_OK);
 }

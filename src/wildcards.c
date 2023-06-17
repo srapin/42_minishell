@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcards.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:13:13 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/17 19:02:33 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/17 23:30:11 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -388,7 +388,7 @@ void    perform_wildcard_exp(t_ht_hash_table *ht, t_token_list **first)
     t_filename      *filenames;
 
     // faire une fonction auxiliaire open_current_dir() pour simplifier le code de cette fonction ?
-    current_dir = ht_search(ht, "PWD");
+    current_dir = *get_pwd(ht);
     if (!current_dir)
         return ; // ?
     dir = opendir(current_dir);

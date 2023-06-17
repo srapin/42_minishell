@@ -1,11 +1,43 @@
-$ $
-[1]    37563 segmentation fault  ./minishell
-Aussi à tester : $$$ (ie succession de plusieurs $)
+
+
+Quand affiche l'env entier, SHLVL = n. Si fait env | grep SHLVL dans le meme shell sans modifier la variable entre temps, SHLVL = n - 1. d'ou ???
+
+
 
 export l="ls -la"
 $ cat $l$l
 cat: ls: No such file or directory
 -> ca boucle, pourquoi ? ca marche avec juste cat $l
+
+
+$ unset PWD
+$ 
+free(): invalid pointer
+
+
+
+
+------------------------ EN DESSOUS : DEJA GERE --------------------------------
+
+
+pwd
+/mnt/nfs/homes/hlesny/42/42cursus/42_minimichel
+$ cd ..
+$ pwd
+/mnt/nfs/homes/hlesny/42/42cursus
+$ unset PWD
+coucou depuis ft_unset()
+$ owd
+[1]    201146 segmentation fault (core dumped)  ./minishell
+
+
+$ $
+[1]    37563 segmentation fault  ./minishell
+Aussi à tester : $$$ (ie succession de plusieurs $)
+
+
+$ $bb$khvlvkj$
+minishell : $khvlvkj$ : command not found
 
 
 A repliquer : (pour l'instant "" ou '' redonne juste le prompt)

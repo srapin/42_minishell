@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 02:12:27 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/17 21:02:29 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/17 23:11:43 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void    print_ast(t_cmd *ast)
         while (current_simple_cmd)
         {
             printf("command : \n");
-            printf("\tname : %s\n\targs : \n", current_simple_cmd->val.value);
+            printf("\tname : %s. empty string ? %d\n\targs : \n", current_simple_cmd->val.value, *current_simple_cmd->val.value == '\0');
             for (int i = 0; current_simple_cmd->val.args[i]; i++)
                 printf("\t\targ %d : %s\n", i, current_simple_cmd->val.args[i]);
             printf("Pipe ? ");
@@ -138,6 +138,8 @@ t_cmd  *parse(t_ht_hash_table *ht, t_token_list *first, t_list *exp_hist)
     //dprintf(1, "in parse(), after delete_quotes() and group_words()\n");
 
     perform_wildcard_exp(ht, &first);
+
+    //print_tokens(first);
     
     //dprintf(1, "in parse(), after perform_wildcard_exp()\n");
 

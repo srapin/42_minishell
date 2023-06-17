@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ht_search_mofidy.c                                 :+:      :+:    :+:   */
+/*   ht_search_modify.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 17:22:28 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/14 17:34:21 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/17 23:37:43 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int    ht_modify_value(t_ht_hash_table *ht, const char *key, char *new_value) //
     current = ht->items[index];
     while (current)
     {
-        if (current != &HT_DELETED_ITEM)
+        if (current->key && current->value)
         {
             if (!ft_strcmp(current->key, key))
             {

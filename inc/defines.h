@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   defines.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 17:25:15 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/12 23:50:08 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/17 23:58:56 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # define CD_TOO_MANY_ARGS           1
 # define INVALID_VAR_ID             1 // "not a valid identifier"'s export error message
 # define CANNOT_ACCESS_DIR          1 // chdir error 
+# define HOME_NOT_SET               1
 # define NOT_A_NUM                  2 // "numeric argument required" error in exit()
 
 #endif

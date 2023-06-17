@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 17:29:43 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/14 22:58:05 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/18 00:25:59 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void    ht_del_item(t_ht_item *item)
 {
     /* if (!item)
         return ; */
-    if (item)
+    if (item && item->key && item->value)
     {
         free(item->key); // verifier si est NULL ? ie si est un deleted item ?
         free(item->value); // idem ?
