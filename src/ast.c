@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 21:44:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/17 01:53:43 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/17 18:02:48 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,11 @@ void    set_cmd_args(t_cmd **curr_cmd, t_token_list *curr_tk, int *i)
     //  (whitespaces that could for example be a result of a variable expansion)
     wd = curr_tk->merged_words;
     buffer = NULL;
+    if (!curr_tk->content[0])
+    {
+        (*curr_cmd)->val.args[*i] = ft_strdup("\0");
+        return ;
+    }
     if (!curr_tk->merged_words)
     {
         if (!curr_tk->quotes)
@@ -229,7 +234,6 @@ void    set_command_attributs(t_cmd **current, t_token_list **first_tk, t_token_
     if (!args_count)
         return ;
     //dprintf(1, "in set_command_attributs\n");
-    
     (*current)->val.args = malloc(sizeof(char *) * (args_count + 1));
     if (!(*current)->val.args)
     {
@@ -251,7 +255,7 @@ void    set_command_attributs(t_cmd **current, t_token_list **first_tk, t_token_
         }
     }
     (*current)->val.args[i] = NULL;
-    if (args_count)
+    if (args_count) // le if est-il obligatoire ?
         (*current)->val.value = ft_strdup((*current)->val.args[0]);
 }
 
@@ -267,6 +271,8 @@ int get_words_count(t_token_list *current)
     i = 0;
     buffer = 0;
     count = 0; // 0 ou 1 ?
+    if (!current->content[0]) // si avait juste "" ou ''
+        return (1);
     wd = current->merged_words;
     if (!wd)
     {
@@ -327,31 +333,8 @@ int get_words_count(t_token_list *current)
             buffer = 1;
         wd = wd->next;
     }
-    // while (wd)
-    // {
-    //     if (!wd->quotes)
-    //     {
-    //         prev_whitespace_pos = 0;
-    //         whitespace_pos = get_whtsp_pos(wd->content);
-    //         while (whitespace_pos != -1)
-    //         {
-    //             count++;
-    //             buffer = 0;
-    //             prev_whitespace_pos = whitespace_pos;
-    //             whitespace_pos = get_whtsp_pos(wd->content + prev_whitespace_pos + 1);
-    //         }
-    //         if (whitespace_pos == -1) // utile pour compter le nombre de mots ?
-    //             buffer = 1;
-    //     }
-    //     else
-    //         buffer = 1;
-    //     wd = wd->next;
-    // }
     if (buffer)
-    {
         count++;
-        buffer = 0;
-    }
     return (count);
 }
 
@@ -496,6 +479,7 @@ void    set_simple_command(t_cmd *current_cmd, t_token_list **first_tk, t_token_
     while (current_tk && current_tk->type != and_tk && current_tk->type != or_tk)
     {
         //dprintf(1, "in set_simple_command(), current_tk = %s\n", current_tk->content);
+        
         if (current_tk->type == l_io_redirect || current_tk->type == r_io_redirect)
         {
             update_redirect(current_cmd, current_tk);

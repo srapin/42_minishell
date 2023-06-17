@@ -1,8 +1,16 @@
 $ $
 [1]    37563 segmentation fault  ./minishell
+Aussi à tester : $$$ (ie succession de plusieurs $)
 
-A tester : $$$ (ie succession de plusieurs $)
+export l="ls -la"
+$ cat $l$l
+cat: ls: No such file or directory
+-> ca boucle, pourquoi ? ca marche avec juste cat $l
 
 
-
+A repliquer : (pour l'instant "" ou '' redonne juste le prompt)
+bash-5.1$ ''
+bash: : command not found
+bash-5.1$ cat ""
+cat: '': No such file or directory
 

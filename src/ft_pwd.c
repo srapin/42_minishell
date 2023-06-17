@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 00:59:44 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/14 22:26:59 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/17 18:01:08 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,10 @@ void    free_pwd(t_ht_hash_table *env)
 
 int     ft_pwd(t_cmd *cmd)
 {
+    //char        *path;
+    //getcwd(path);
+    //printf("%s\n", path);
+    
     printf("%s\n", *get_pwd(cmd->env));
     return (EXIT_OK);
 }
