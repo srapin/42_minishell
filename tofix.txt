@@ -1,0 +1,8 @@
+$ $
+[1]    37563 segmentation fault  ./minishell
+
+A tester : $$$ (ie succession de plusieurs $)
+
+
+
+

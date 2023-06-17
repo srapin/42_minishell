@@ -15,21 +15,9 @@ ls: cannot access 'out': No such file or directory
 -> le deuxieme -la est chez nous considéré comme un fichier, pourquoi ?
 
 
-$ ((cat out) && ls | (wc -l)) || echo "hello world"
-wc: invalid option -- 'o'
-Try 'wc --help' for more information.
-
-
 $ echo un | (cat && echo deux)
 un
 deuxo trois (comment supprimer this fucking fichier temporaire dans lequel ecrit le contenu entre parentheses ??)
-
-
-$ coucou"comment"cava
-cmd not found: No such file or directory
--> A CHANGER : doit préciser le nom de la commande, et tej le "no such file or directory"
-AUSSI A CHANGER : doit afficher "command not found" AVANT d'appeler execve non ??? genre si trouve pas le path vers le
-binaire, alors print une erreur 
 
 $ echo un || echo deux && echo trois)
 Syntax error near unexpected token `)'
