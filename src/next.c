@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:50:05 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/15 16:46:26 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/18 23:46:23 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	wait_childs(t_cmd *origin)
 	// if (WIFEXITED(status) && __WIFSIGNALED(status))
 	// 	g_exit_status = WEXITSTATUS(status);
 
-		
+	g_exit_status = status % 255;	
 	return (WIFEXITED(status) && WEXITSTATUS(status));
 }
 

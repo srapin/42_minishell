@@ -1,0 +1,17 @@
+d
+g
+ignore_readline_aurele.txt
+ignore_readline.txt
+inc
+k
+leaks.txt
+libft
+ls
+makefile
+minishell
+obj
+s
+sleep
+src
+todo_exec.txt
+tofix.txt

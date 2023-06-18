@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   common_process.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:44:39 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/17 23:50:52 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/18 23:31:42 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../inc/minishell.h"
 
 
 void	parent_process(t_cmd **cmd, int pipe_tab[2])
@@ -24,9 +24,6 @@ void	parent_process(t_cmd **cmd, int pipe_tab[2])
 		//close
 	// t_cmd ** tmp;
 	// tmp = cmd;
-	*cmd = (*cmd)->red.next_cmd;
-	// free_cmd(tmp);
-	////dprintf(STDOUT_FILENO, "parent pro %s\n", (*cmd)->val.value);
 	if (!cmd || !(*cmd))
 		return;
 	(*cmd)->red.in_fd = pipe_tab[0];

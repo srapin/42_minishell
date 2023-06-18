@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 19:27:43 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/18 22:53:47 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/18 23:34:14 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@
 #include "defines.h"
 #include "tokens.h"
 
+#define EXIT_SIG_INT = 130;
 extern int g_exit_status;
 
 void exec_cmds(t_cmd *cmd);

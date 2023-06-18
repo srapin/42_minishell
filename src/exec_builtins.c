@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 20:57:20 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/16 11:58:08 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/18 23:48:07 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,7 @@ int try_to_exec_builtins(t_cmd *cmd, bool is_child)
     {
         exit(ret); // n'exit pas forcément avec 0 !! dépend de la valeur de retour du builtin
     }
+    g_exit_status = ret;
     dup2(old_in, STDIN_FILENO);
     dup2(old_out, STDOUT_FILENO);
     close(old_in);

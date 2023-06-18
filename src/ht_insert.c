@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ht_insert.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 17:25:42 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/14 23:03:33 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/18 23:29:50 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../inc/minishell.h"
 
 static t_ht_item HT_DELETED_ITEM = {NULL, NULL};
 

@@ -62,8 +62,8 @@ void exec_cmds(t_cmd *first_cmd)
 			launch_process(&cmd, pip_tab, (i < nb_cmds - 1));
 			i++;
 		}
-		ret = wait_childs(ret_cmd);
-		while (!check_ret(ret_cmd, ret))
+		wait_childs(ret_cmd);
+		while (!check_ret(ret_cmd, g_exit_status))
 		{
 			cmd = next;
 			if (cmd)

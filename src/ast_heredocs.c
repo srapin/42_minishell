@@ -6,11 +6,11 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 23:24:33 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/18 22:57:16 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/18 23:49:53 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../inc/minishell.h"
 
 // tf do i do that in a simple way ?
 char	*random_filename()
@@ -214,13 +214,15 @@ void hd_sigint(int i)
 	// dprintf(1, "sig press \n");
     g_exit_status = 130;
     close(0);
+    close(1);
+    close(2);
 }
 
 void hd_child_process(t_ht_hash_table *ht, t_token_list *current)
 {
 	g_exit_status = 0;
     signal(SIGINT, hd_sigint);
-    while (current&& g_exit_status != 130)
+    while (current && g_exit_status != 130)
 	{
 	// dprintf(1, "c est louche");
 		// dprintf(1, "c est louche, %s, %s\n", current->content, current->next->content);
@@ -233,7 +235,6 @@ void hd_child_process(t_ht_hash_table *ht, t_token_list *current)
 			set_here_doc(ht, current);
 			// dprintf(1, "after set hd, %s, %s\n", current->content, current->next->content);
 		}	
-			
 		current = current->next;
 	}
     exit(g_exit_status);
@@ -242,7 +243,6 @@ void hd_child_process(t_ht_hash_table *ht, t_token_list *current)
 bool hd_parent_process(int pid, t_token_list *current)
 {
 	int status;
-	
 	
     waitpid(pid, &status, 0);
 	while (current)
@@ -257,7 +257,7 @@ bool hd_parent_process(int pid, t_token_list *current)
 		}
 		current = current->next;
 	}
-	// dprintf(1, "%i\n", status);
+	dprintf(1, "%i\n", status);
 	return (!(WIFEXITED(status) && WEXITSTATUS(status)));
 	return true;
 }
