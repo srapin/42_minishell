@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 23:25:02 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/18 00:33:41 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/18 13:58:46 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,10 +143,10 @@ t_list *get_sorted_hist(t_ht_hash_table *ht)
     // dprintf(1, "hey\n");
     while (i < ht->size)
     {
-        // dprintf(1, "hello 1\n");
-        while(i < ht->size && !ht->items[i])
+        // ln : a rajouté une condition pour si la variable a été delete de la hash_map (ie on a item->key = NULL et item->value = NULL)
+        while(i < ht->size && (!ht->items[i] || (!ht->items[i]->key && !ht->items[i]->value))) // (i < ht->size && !ht->items[i])
             i++;
-        if (!(i< ht->size))
+        if (!(i< ht->size) || (!ft_strcmp("_", ht->items[i]->key))) // fait le choix de ne pas print la var d'env "_" (undef behaviour, et posix ne le fait pas non plus)
             break;
         to_insert = ht->items[i]->key;
         current = ft_lstnew(to_insert);
@@ -205,7 +205,6 @@ void    print_export_history(t_ht_hash_table *ht, t_list *export_hist)
             printf("%s\n", (char *) current_var->content);
         else if (str)
         {
-
             printf("%s=\"%s\"\n", (char *) current_var->content, str);
         }
        current_var = current_var->next; 

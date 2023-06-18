@@ -15,6 +15,10 @@ $
 free(): invalid pointer
 
 
+$ export a=coucou
+$ unset a
+$ export
+[1]    52672 segmentation fault  env -i ./minishell
 
 
 ------------------------ EN DESSOUS : DEJA GERE --------------------------------
