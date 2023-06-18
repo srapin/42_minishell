@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 19:27:43 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/15 17:31:26 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/18 22:53:47 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void exec_cmds(t_cmd *first_cmd); //to div
 int try_to_exec_builtins(t_cmd *cmd, bool is_child);
 
 //heredoc
-void heredoc(t_cmd *cmd);
+// void heredoc(t_cmd *cmd);
 
 //next
 bool check_ret(t_cmd *cmd, int ret);
@@ -115,7 +115,7 @@ int             is_in_quotes(t_token_list *current, size_t index);
 
 void            remove_char(t_token_list *current, size_t index);
 
-void            set_here_docs(t_ht_hash_table *ht, t_token_list **first);
+bool set_here_docs(t_ht_hash_table *ht, t_token_list **first);
 
 t_cmd           *get_ast(t_ht_hash_table *ht, t_token_list **first_tk, t_list *exp_hist);
 t_list          *init_export_history(t_ht_hash_table *ht);

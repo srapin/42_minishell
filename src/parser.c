@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 02:12:27 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/17 23:11:43 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/18 23:19:30 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,10 +143,14 @@ t_cmd  *parse(t_ht_hash_table *ht, t_token_list *first, t_list *exp_hist)
     
     //dprintf(1, "in parse(), after perform_wildcard_exp()\n");
 
-    set_here_docs(ht, &first);
+    t_cmd *ast = NULL;
     //dprintf(1, "in parse(), after set_here_docs()\n");
 
-    t_cmd *ast = get_ast(ht, &first, exp_hist);
+
+    if (set_here_docs(ht, &first))
+        ast = get_ast(ht, &first, exp_hist);
+    // else 
+    //     free_tokens()
     //print_ast(ast);
 
     exec_cmds(ast);
