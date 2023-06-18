@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 17:22:28 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/17 23:37:43 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/18 21:50:46 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ char    *ht_search(t_ht_hash_table *ht, const char *key)
     current = ht->items[index];
     while (current)
     {
-        if (current != &HT_DELETED_ITEM)
+        if (current->key || current->value) // (current != &HT_DELETED_ITEM)
         {
             if (!ft_strcmp(current->key, key))
                 return (current->value);

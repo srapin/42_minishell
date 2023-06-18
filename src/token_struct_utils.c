@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_struct_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:14:54 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/13 17:00:09 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/18 20:05:55 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,13 +93,10 @@ void    tk_add_word_in_list(t_token_list **current, char *content) // adds a tok
     initial_current_next = (*current)->next;
     new = tk_new_elem(content, ft_strlen(content), word, 0);
     
-    {
-        
-        (*current)->next = new;
-        new->next = initial_current_next;
-        
-        if (initial_current_next)
-            initial_current_next->prev = new; // segfault ici 
-        new->prev = (*current);   
-    }
+    (*current)->next = new;
+    new->next = initial_current_next;
+    
+    if (initial_current_next)
+        initial_current_next->prev = new;
+    new->prev = (*current);
 }
