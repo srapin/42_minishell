@@ -1,6 +1,5 @@
 
 
-Quand affiche l'env entier, SHLVL = n. Si fait env | grep SHLVL dans le meme shell sans modifier la variable entre temps, SHLVL = n - 1. d'ou ???
 
 
 
@@ -10,12 +9,41 @@ cat: ls: No such file or directory
 -> ca boucle, pourquoi ? ca marche avec juste cat $l
 
 
-$ unset PWD
-$ 
-free(): invalid pointer
+$ cd
+$ pwd
+/mnt/nfs/homes/hlesny
+$ cd 42/
+42cursus/       42piscine/      Cours_suz/      adventOfCode22/ 
+$ cd 42/
+42cursus/       42piscine/      Cours_suz/      adventOfCode22/ 
+$ cd 42/c
+chdir : No such file or directory
+$ pwd
+/mnt/nfs/homes/hlesny
+$ cd 42
+$ cd ../../
+$ pwd
+/mnt/nfs/homes
+$ cd /
+$ pwd
+/
+$ cd ..
+$ pwd
+/
+$ cd
+chdir : No such file or directory
+$ echo $HOME
+cd ../../
+$ exit
+exit
 
 
 ------------------------ EN DESSOUS : DEJA GERE --------------------------------
+
+
+$ unset PWD
+$ 
+free(): invalid pointer
 
 
 $ export a=coucou
@@ -37,21 +65,24 @@ $ owd
 
 $ $
 [1]    37563 segmentation fault  ./minishell
-Aussi à tester : $$$ (ie succession de plusieurs $)
+Aussi à tester : $$$ (ie succession de pluQuand affiche l'env entier, SHLVL = n. Si fait env | grep SHLVL dans le meme shell sans modifier la variable entre temps, SHLVL = n - 1. d'ou ???
+sieurs $)
 
 
 $ $bb$khvlvkj$
 minishell : $khvlvkj$ : command not found
 
 
-A repliquer : (pour l'instant "" ou '' redonne juste le prompt)
+A repliquer : (pour l'instant "" ou '' redQuand affiche l'env entier, SHLVL = n. Si fait env | grep SHLVL dans le meme shell sans modifier la variable entre temps, SHLVL = n - 1. d'ou ???
+onne juste le prompt)
 bash-5.1$ ''
 bash: : command not found
 bash-5.1$ cat ""
 cat: '': No such file or directory
 
 A repliquer pour le builtin cd :
-bash-5.1$ cd /
+bash-5.1$ cd /Quand affiche l'env entier, SHLVL = n. Si fait env | grep SHLVL dans le meme shell sans modifier la variable entre temps, SHLVL = n - 1. d'ou ???
+
 bash-5.1$ pwd
 /
 bash-5.1$ cd //
@@ -73,3 +104,7 @@ etc   lib	      lost+found  proc	 srv   var
 bash-5.1$ cd ///////////usr
 bash-5.1$ pwd              
 /usr
+
+
+
+Quand affiche l'env entier, SHLVL = n. Si fait env | grep SHLVL dans le meme shell sans modifier la variable entre temps, SHLVL = n - 1. d'ou ???

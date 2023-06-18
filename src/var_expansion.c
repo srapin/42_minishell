@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:12:06 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/17 23:10:35 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/18 19:51:51 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,8 @@ void    perform_variable_exp(t_ht_hash_table *ht, t_token_list **first)
         //printf("current->length = %zu\n", current->length);
         while (current && current->type == whitespace)
             current = current->next;
+        if (!current)
+            break;
         if (current->type == l_parenthesis) // n'expand pas ce qui est entre parenthèses, le fera dans le subshell
         {
             while (current && current->type != r_parenthesis)
@@ -127,7 +129,7 @@ void    perform_variable_exp(t_ht_hash_table *ht, t_token_list **first)
                 //dprintf(1, "ok ici, next_dollar_start = %s\n", next_dollar_start);
                 next_dollar_index = current->length - ft_strlen(next_dollar_start);
                 //printf("next dollar index = %zu\n", next_dollar_index);
-                if (next_dollar_start)
+                if (next_dollar_start && *next_dollar_start)
                     expand(ht, &current, ft_substr(current->content, dollar_index + 1, next_dollar_index - dollar_index - 1), dollar_index);
                 else if (current->type == double_quote)
                     expand(ht, &current, ft_substr(current->content, dollar_index + 1, current->length - dollar_index - 2), dollar_index);    

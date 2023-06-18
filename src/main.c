@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 19:32:17 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/18 00:31:30 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/18 22:29:15 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ void    set_shell_level(t_ht_hash_table *ht)
         nb = ft_atoi(shlvl);
         new_shlvl = ft_itoa(ft_atoi(shlvl) + 1);
         ht_modify_value(ht, ft_strdup("SHLVL"), new_shlvl);
-        printf("new shell level = %s\n", new_shlvl);
     }
 }
 
@@ -161,6 +160,8 @@ int main (int argc, char **argv, char **envp)
     
     char            *pwd;
     t_ht_hash_table *hash_map;
+
+    // rajouter une condition avec isatty pour gerer le cas ./minishell | ./minishell
     
     signal(SIGINT, handle_sigint);
     signal(SIGQUIT, handle_sigquit);

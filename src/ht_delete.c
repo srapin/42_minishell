@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 17:29:43 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/18 00:25:59 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/18 19:01:04 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,13 @@ static t_ht_item HT_DELETED_ITEM = {NULL, NULL};
 /* Free the memory allocated for the t_ht_item *item*/
 void    ht_del_item(t_ht_item *item)
 {
-    /* if (!item)
-        return ; */
-    if (item && item->key && item->value)
+    if (item != &HT_DELETED_ITEM) // item->key && item->value
     {
-        free(item->key); // verifier si est NULL ? ie si est un deleted item ?
-        free(item->value); // idem ?
+        free(item->key);
+        free(item->value);
+        free(item);
+        item = NULL;
     }
-    
-    free(item);
-    item = NULL;
 }
 
 /* Delete the entire hash table */
@@ -39,8 +36,8 @@ void    ht_del_hash_table(t_ht_hash_table *ht)
     while (i < ht->size)
     {
         current = ht->items[i];
-        //if (current)
-        ht_del_item(current);
+        if (current && current != &HT_DELETED_ITEM)
+            ht_del_item(current);
         i++;
     }
     free(ht->items);
@@ -68,12 +65,14 @@ void    ht_delete(t_ht_hash_table *ht, const char *key)
         if (current != &HT_DELETED_ITEM && !ft_strcmp(current->key, key))
         {
             ht_del_item(current);
-            ht->items[index] = &HT_DELETED_ITEM;  
+            ht->items[index] = &HT_DELETED_ITEM;
+           /*  ht->items[index]->key = NULL;
+            ht->items[index]->value = NULL; */ // = &HT_DELETED_ITEM; 
             ht->count--;
             return ; // rajoute apres, a enlever ?
         }
-        attempts++;
         index = ht_get_hash(key, ht->size, attempts);
         current = ht->items[index];
+        attempts++;
     }
 }
