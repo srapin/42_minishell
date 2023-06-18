@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 01:12:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/18 23:29:50 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/18 23:55:28 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,18 +153,21 @@ int     ft_cd(t_cmd *cmd)
             return (HOME_NOT_SET);
         }
         // pourquoi le code qui suit fait tout couiller ?? ca unset le HOME, d'ou ??
-        /* full_path = ht_search(cmd->env, "HOME");
+        full_path = ft_strdup(ht_search(cmd->env, "HOME"));
         if (chdir(full_path) == -1)
         {
             perror("chdir ");
+            free(full_path);
             return (CANNOT_ACCESS_DIR);
         }
-        printf("after chdir and before modifying PWD value in ht, HOME = %s\n", full_path);
+        //print_ht(cmd->env);
+        //printf("after chdir and before modifying PWD value in ht, HOME = %s\n", full_path);
         if (!ht_modify_value(cmd->env, "PWD", full_path)) // ie si PWD n'est dans l'env
             ht_insert_item(cmd->env, ft_strdup("PWD"), full_path);
-        printf("after chdir and after modifying PWD value in ht, HOME = %s\n", full_path);
+        //print_ht(cmd->env);
+        //printf("after chdir and after modifying PWD value in ht, HOME = %s\n", full_path);
         update_pwd(cmd->env, full_path);
-        printf("after modifying PWD value in singleton, HOME = %s\n", full_path); */
+        //printf("after modifying PWD value in singleton, HOME = %s\n", full_path);
         return (EXIT_OK);
     }
     if (cmd->val.args[2]) // si il y a plus d'un argument. val.args est null-terminated
