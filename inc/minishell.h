@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 19:27:43 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/19 16:19:16 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/19 18:08:16 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,29 +97,30 @@ void dup_cmd_file(t_cmd *cmd);
 
 // ------------ Parsing ------------------
 
-void            read_lines(t_ht_hash_table *ht, t_list *exp_hist);
+void            read_lines(t_data *data);
 
 t_token         *assign_type(char *input, size_t stream_len);
-t_token_list    *tokenise(t_ht_hash_table *ht, t_token *token_stream, size_t stream_len, char *input);
+// t_token_list    *tokenise(t_data *data, t_token *token_stream, size_t stream_len, char *input);
+t_token_list    *tokenise(t_token *token_stream, size_t stream_len, char *input);
 
-t_cmd *            parse(t_ht_hash_table *ht, t_token_list *first, t_list *exp_hist);
-int             ft_syntax(t_token_list **first);
-void            check_syntax(t_token_list **first);
+t_cmd *         parse(t_data *data);
+int             ft_syntax(t_data *data);
+void            check_syntax(t_data *data);
 
-void            perform_variable_exp(t_ht_hash_table *ht, t_token_list **first);
+void            perform_variable_exp(t_data *data);
 int             valid_name(char *name);
 void            expand(t_ht_hash_table *ht, t_token_list **current, char *var, size_t dollar_index);
-void            delete_quotes(t_token_list **first);
-void            group_words(t_token_list **first);
-void            perform_wildcard_exp(t_ht_hash_table *ht, t_token_list **first);
+void            delete_quotes(t_data *data);
+void            group_words(t_data *data);
+void            perform_wildcard_exp(t_data *data);
 
 int             is_in_quotes(t_token_list *current, size_t index);
 
 void            remove_char(t_token_list *current, size_t index);
 
-bool set_here_docs(t_ht_hash_table *ht, t_token_list **first, t_list *exp_hist);
+bool set_here_docs(t_data *data);
 
-t_cmd           *get_ast(t_ht_hash_table *ht, t_token_list **first_tk, t_list *exp_hist);
+t_cmd           *get_ast(t_data *data);
 t_list          *init_export_history(t_ht_hash_table *ht);
 
 void            free_tokens(t_token_list **first);
@@ -146,11 +147,13 @@ void            free_pwd(t_ht_hash_table *env);
 int             ft_exit(t_cmd *cmd);
 
 
-void free_cmd(t_cmd **cmd);
-void free_cmds(t_cmd **cmd, bool common);
-void	ft_lstfree(t_list **lst,void free_foo(void *));
-// to del
+void            free_parsing_data(t_data *data);
+void            free_cmd(t_cmd **cmd);
+void            free_cmds(t_cmd **cmd, bool common);
+void	        ft_lstfree(t_list **lst,void free_foo(void *));
 
+
+// to del
 void        print_ht(t_ht_hash_table *ht);
 
 #endif

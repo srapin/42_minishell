@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quotes.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:13:44 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/19 04:05:37 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/19 18:10:33 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,15 @@
 Après l'expansion de variables. 
 Enleve les quotes de début et de fin, et remplace le token <quote> par <word>
 */
-void    delete_quotes(t_token_list **first)
+void    delete_quotes(t_data *data)
 {
     char *content_tmp;
     t_token_list *current;
     t_token_list *current_prev;
 
-    if (!first || !(*first))
+    if (!data->first || !(*(data->first)))
         return ;
-    current = *first;
+    current = *(data->first);
     if (current->type == simple_quote || current->type == double_quote)
     {
         content_tmp = ft_substr(current->content, 1, current->length - 2);
@@ -71,14 +71,6 @@ t_word_data     *new_word_data(t_token_list *token)
     if (!wd)
         return (NULL);
     wd->content = ft_strdup(token->content);
-    // wd->quotes = 0;
-    // if (token->quotes == 1)
-    //     wd->quotes = 1;
-    // else if (token->quotes == 2)
-    // {
-    //     //dprintf(1, "est rentré dans le if quotes == 2\n");
-    //     wd->quotes = 2;
-    // }
     wd->quotes = token->quotes;
     wd->length = token->length;
     wd->next = NULL;
@@ -143,15 +135,15 @@ Apres avoir enlevé les quotes, groupe deux <word> qui se suivent
 (comprendre ne sont pas séparés par des whitespaces, ou un opérateur de controle autre que des quotes)
 -> il est alors obligatoire d'avoir gardé les tokens <whitespace> jusque là
 */
-void    group_words(t_token_list **first)
+void    group_words(t_data *data)
 {
     t_token_list    *current;
     t_token_list    *current2;
     char *content_tmp;
 
-    if (!first)
+    if (!data->first)
         return ; // ?
-    current = *first;
+    current = *(data->first);
     while (current)
     {
         if (current->type == l_parenthesis)
@@ -162,30 +154,11 @@ void    group_words(t_token_list **first)
                 current = current->next;
         }
         else if (current->type == word && current->next && current->next->type == word)
-        {
             set_merged_words(&current);
-            
-            // if (!current->merged_words) // ie le <word> n'a pas encore été merged avec un autre <word>
-            //     add_word_data(&current->merged_words, new_word_data(current));
-            // add_word_data(&current->merged_words, new_word_data(current->next));
-            
-            // content_tmp = ft_strjoin(current->content, current->next->content);
-            // free(current->content);
-            // current->content = content_tmp;
-            // current->length = ft_strlen(content_tmp);
-            
-            // current2 = current->next; // the one to delete
-            // current2->prev->next = current2->next; // fait pointer le précédent sur l'élément suivant celui qui va etre supprimé
-            // if (current2->next)
-            //     current2->next->prev = current2->prev; // idem mais dans l'autre sens
-            // free(current2->content);
-            // free(current2);
-            // current2 = NULL;
-        }
         else if (current->type == whitespace) // deletes the token
         {
-            if (current == *first)
-                *first = current->next;
+            if (current == *(data->first))
+                *(data->first) = current->next;
             current2 = current; 
             current = current->next;
             if (current2->prev) // vérifie qu'il ne s'agit pas du premier élément

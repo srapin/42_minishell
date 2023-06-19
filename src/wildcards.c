@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcards.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:13:13 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/19 04:10:57 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/19 18:11:13 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -378,7 +378,7 @@ et essayant cette fois ci de trouver des matchs pour les wildcards a l'interieur
 Si on arrive au dernier index du current d_name sans etre arrivé à la fin du mot, alors supprime ce d_name
 de la liste de d_name résultant du premier tri.
 */
-void    perform_wildcard_exp(t_ht_hash_table *ht, t_token_list **first)
+void    perform_wildcard_exp(t_data *data)
 {
     char            *wildcard_start;
     size_t          wildcard_index;
@@ -388,7 +388,7 @@ void    perform_wildcard_exp(t_ht_hash_table *ht, t_token_list **first)
     t_filename      *filenames;
 
     // faire une fonction auxiliaire open_current_dir() pour simplifier le code de cette fonction ?
-    current_dir = *get_pwd(ht);
+    current_dir = *get_pwd(data->env);
     if (!current_dir)
         return ; // ?
     dir = opendir(current_dir);
@@ -397,7 +397,7 @@ void    perform_wildcard_exp(t_ht_hash_table *ht, t_token_list **first)
         perror("opendir ");
         return ; // ?
     }
-    current = (*first);
+    current = (*(data->first));
     while (current)
     {
         if (current->type == l_parenthesis) // n'expand pas ce qui est entre parenthèses, le fera dans le subshell
@@ -426,7 +426,7 @@ void    perform_wildcard_exp(t_ht_hash_table *ht, t_token_list **first)
                     filenames = first_sort(dir, prefix, suffix);
                     second_sort(&filenames, current, prefix); // on peut sans doute merge les first_sort et second_sort ensembles : le deuxieme fait deja le premier, en plus approfondi
                 }
-                insert_filenames(first, &current, &filenames); // passe deja au current->next ici
+                insert_filenames(data->first, &current, &filenames); // passe deja au current->next ici
             }
         }
         current = current->next;

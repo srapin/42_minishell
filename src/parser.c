@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 02:12:27 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/19 17:30:31 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/19 18:06:18 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,22 +113,24 @@ void    print_ast(t_cmd *ast)
     }
 }
 
-t_cmd  *parse(t_ht_hash_table *ht, t_token_list *first, t_list *exp_hist)
+t_cmd  *parse(t_data *data)
 {    
     int wstatus;
     
-    wstatus = ft_syntax(&first);
+    wstatus = ft_syntax(data->first);
     if (wstatus) // ie la syntaxe n'était pas bonne 
     {
         // met à jour le dernier exit status
-        free_tokens(&first);
+
+        free_parsing_data(data);
+        /* free_tokens(&first);
         ht_del_hash_table(ht);
-        ft_lstfree(&exp_hist, free);
+        ft_lstfree(&exp_hist, free); */
         
         return NULL;
     }
     
-    perform_variable_exp(ht, &first);
+    perform_variable_exp(data);
     
     // tej les quotes en regroupant les <word> qui se suivent et ne sont pas 
     // séparés par des whitespaces ou des operateurs de controle autres que des quotes.
@@ -136,12 +138,12 @@ t_cmd  *parse(t_ht_hash_table *ht, t_token_list *first, t_list *exp_hist)
     // dans un <word>, apparus suite à l'expansion de variables.
     // On ne fait cela (traites les chaines de caractères  qu'après avoir géré les wildcards et avoir
     // séparé les tokens entre redirections et commandes
-    delete_quotes(&first);
-    group_words(&first);
+    delete_quotes(data);
+    group_words(data);
 
     ////dprintf(1, "in parse(), after delete_quotes() and group_words()\n");
 
-    perform_wildcard_exp(ht, &first);
+    perform_wildcard_exp(data);
 
     //print_tokens(first);
     
@@ -151,8 +153,8 @@ t_cmd  *parse(t_ht_hash_table *ht, t_token_list *first, t_list *exp_hist)
     ////dprintf(1, "in parse(), after set_here_docs()\n");
 
 
-    if (set_here_docs(ht, &first, exp_hist))
-        ast = get_ast(ht, &first, exp_hist);
+    if (set_here_docs(data))
+        ast = get_ast(data);
     // else 
     //     free_tokens()
     print_ast(ast);

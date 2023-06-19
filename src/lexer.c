@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 00:40:45 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/18 23:29:50 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/19 18:04:32 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ Meme si le limiteur du here_doc est entre quotes, ne doit PAS expandre de variab
 
 */
 
-t_token_list    *tokenise(t_ht_hash_table *ht, t_token *token_stream, size_t stream_len, char *input)
+t_token_list    *tokenise(t_token *token_stream, size_t stream_len, char *input)
 {
     int i;
     int j;
@@ -113,7 +113,7 @@ t_token_list    *tokenise(t_ht_hash_table *ht, t_token *token_stream, size_t str
     free(token_stream);
     token_stream = NULL;
     
-    return (tk_list);
+    return (&tk_list);
 }
 
 int    set_token_operator(t_token *token, char input)

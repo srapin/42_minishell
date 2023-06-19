@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_tokens.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/10 17:29:36 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/18 23:29:50 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/19 17:56:53 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,4 +46,12 @@ void    free_tokens(t_token_list **first)
         free(tmp);
         tmp = NULL;
     }
+}
+
+void    free_parsing_data(t_data *data)
+{
+    free_tokens(data->first);
+    free_pwd(data->env);
+    ht_del_hash_table(data->env);
+    ft_lstfree(data->exp_history, free);
 }

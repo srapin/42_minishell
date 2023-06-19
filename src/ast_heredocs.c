@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_heredocs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 23:24:33 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/19 04:10:57 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/19 18:18:34 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,8 @@ int	set_quotes(t_token_list *current)
 4) replace the initial tokens "<<" "LIM" by "<" "heredoc_file_path" in the token list   
 */
 
-void	set_hd_filenames(t_ht_hash_table *ht, t_token_list *current)
+// void	set_hd_filenames(t_ht_hash_table *ht, t_token_list *current)
+void	set_hd_filenames(t_token_list *current)
 {
     char	*file_name;
     while (current)
@@ -218,11 +219,13 @@ void hd_sigint(int i)
     close(2);
 }
 
-void hd_child_process(t_ht_hash_table *ht, t_token_list *current, t_list *exp_hist)
+void hd_child_process(t_data *data)
 {
-	t_token_list *first;
+	//t_token_list *first;
+	t_token_list 	*current;
 
-	first = current;
+	//first = current;
+	current = *(data->first);
 	g_exit_status = 0;
     signal(SIGINT, hd_sigint);
     while (current && g_exit_status != 130)
@@ -230,15 +233,16 @@ void hd_child_process(t_ht_hash_table *ht, t_token_list *current, t_list *exp_hi
 		if(current->type == l_io_redirect && current->length == 2 )
 		{
 			current = current->next;	
-			set_here_doc(ht, current);
+			set_here_doc(data->env, current);
 		}	
 		current = current->next;
 	}
 	// ft_lstfree(&first, free);
-	free_pwd(ht);
+	free_parsing_data(data);
+	/* free_pwd(ht);
 	ht_del_hash_table(ht);
 	free_tokens(&first);
-	ft_lstfree(&exp_hist, free);
+	ft_lstfree(&exp_hist, free); */
     exit(g_exit_status);
 }
 
@@ -264,14 +268,17 @@ bool hd_parent_process(int pid, t_token_list *current)
 
 /* Gives the prompt back to the user for here_doc contents, 
 deleting the later from the tokens' list while doing so */
-bool	set_here_docs(t_ht_hash_table *ht, t_token_list **first, t_list *exp_hist)
+bool	set_here_docs(t_data *data)
 {
-	t_token_list	*current;
+	//t_token_list	*current;
+	t_token_list 	*first;
     int pid;
     int status;
 
-	current = *first;
-    set_hd_filenames(ht, current);
+	//current = *first;
+	first = *(data->first);
+	// set_hd_filenames(ht, current);
+    set_hd_filenames(first);
     // //dprintf(1, "heyyyy\n");
     pid = fork();
     if (pid < 0)
@@ -279,11 +286,12 @@ bool	set_here_docs(t_ht_hash_table *ht, t_token_list **first, t_list *exp_hist)
     else if (pid == 0)
     {
 		//dprintf(1, "hd child proc \n");
-        hd_child_process(ht, *first, exp_hist);
+		// hd_child_process(ht, first, exp_hist);
+        hd_child_process(data);
     }
     else
     {
-		return hd_parent_process(pid, *first);
+		return hd_parent_process(pid, first);
 		// wait(&status);
 	}
 	return true;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokens.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 18:15:56 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/15 14:26:51 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/19 17:52:58 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,13 @@ typedef struct  s_token_list
     struct s_token_list *prev;
     struct s_token_list *next;
 }               t_token_list;
+
+typedef struct  s_data
+{
+    t_ht_hash_table *env;
+    t_token_list    **first;
+    t_list          *exp_history;
+}               t_data;
 
 
 t_token_list    *tk_new_elem(char *t_stream, size_t t_len, int t_type, int is_quote);

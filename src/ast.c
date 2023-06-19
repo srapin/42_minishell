@@ -372,7 +372,7 @@ char    *random_subshell_fname(void)
     return (filename);
 }
 
-t_cmd *init_new_cmd(t_ht_hash_table *ht, t_list *exp_hist)
+t_cmd *init_new_cmd(t_data *data)
 {
     t_cmd *cmd;
     cmd = ft_calloc(sizeof(t_cmd), 1);
@@ -381,8 +381,8 @@ t_cmd *init_new_cmd(t_ht_hash_table *ht, t_list *exp_hist)
         perror("malloc ");
         return (NULL);
     }
-    cmd->env = ht;
-    cmd->export_history = exp_hist;
+    cmd->env = data->env;
+    cmd->export_history = data->exp_history;
     init_redirections(&(cmd->red));
     //init_cmd(cmd, envp); envp est en fait ht
     return (cmd);
@@ -514,7 +514,7 @@ void malloc_error()
 }
 
 
-t_cmd   *get_ast(t_ht_hash_table *ht, t_token_list **first_tk, t_list *exp_hist)
+t_cmd   *get_ast(t_data *data)
 {
     int             subshell;
     int             args_count;
@@ -531,11 +531,11 @@ t_cmd   *get_ast(t_ht_hash_table *ht, t_token_list **first_tk, t_list *exp_hist)
         malloc_error();
         return NULL;
     }
-    *ast = init_new_cmd(ht, exp_hist);
+    *ast = init_new_cmd(data);
     if (!*ast)
         return (NULL);
     subshell = 0;
-    pipeline_start_tk = *first_tk; 
+    pipeline_start_tk = *(data->first); 
     pipeline_start_cmd = *ast;
 
     ////dprintf(1, "in get_ast(), before the while(pipeline_start_tk)\n");
@@ -552,11 +552,11 @@ t_cmd   *get_ast(t_ht_hash_table *ht, t_token_list **first_tk, t_list *exp_hist)
         {
             ////dprintf(1, "in get_ast(), in the  while(not && and not ||), before calling set_simple_command()\n");
             cmd_start_tk = current_tk;
-            set_simple_command(current_cmd, first_tk, &cmd_start_tk, &current_tk);
+            set_simple_command(current_cmd, data->first, &cmd_start_tk, &current_tk);
             
             if (current_tk && current_tk->type == or_tk && current_tk->length == 1)
             {
-                current_cmd->red.next_cmd = init_new_cmd(ht, exp_hist);
+                current_cmd->red.next_cmd = init_new_cmd(data);
                 if (!current_cmd->red.next_cmd)
                 {
                     perror("malloc ");
@@ -569,7 +569,7 @@ t_cmd   *get_ast(t_ht_hash_table *ht, t_token_list **first_tk, t_list *exp_hist)
         if (current_tk && is_a_ctrl_op(current_tk))
         {
             pipeline_start_cmd->ctrl = (current_tk->type == and_tk) * and + (current_tk->type == or_tk) * or;
-            pipeline_start_cmd->next = init_new_cmd(ht, exp_hist);
+            pipeline_start_cmd->next = init_new_cmd(data);
             pipeline_start_cmd = pipeline_start_cmd->next;
             if (!pipeline_start_cmd)
             {
@@ -584,7 +584,7 @@ t_cmd   *get_ast(t_ht_hash_table *ht, t_token_list **first_tk, t_list *exp_hist)
             pipeline_start_tk = NULL;
         }
     }
-    free_tokens(first_tk);
+    free_tokens(data->first);
     t_cmd * test = *ast;
     free(ast);
     return (test);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   readline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 22:15:52 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/19 02:15:12 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/19 18:04:55 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ If EOF is encountered while reading a line, and the line is empty,
 NULL is returned. 
 If an EOF is read with a non-empty line, it is treated as a newline.
 */
-void    read_lines(t_ht_hash_table *ht, t_list *exp_hist)
+void    read_lines(t_data *data)
 {
     char *input;
     size_t stream_len;
@@ -97,12 +97,12 @@ void    read_lines(t_ht_hash_table *ht, t_list *exp_hist)
             input = readline("$ ");
             continue;
         }
-        tk_list = tokenise(ht, assign_type(input, stream_len), stream_len, input);
+        data->first = tokenise(assign_type(input, stream_len), stream_len, input);
        	// signal(SIGINT, sigint_next_prompt);
        	// signal(SIGQUIT, handle_sigquit2);
        	// signal(SIGQUIT, handle_sigquit2);
         signal(SIGINT, sigint_during_cmd_exec);
-        cmd = parse(ht, tk_list, exp_hist);
+        cmd = parse(data);
        	signal(SIGINT, sigint_next_prompt);
        	// signal(SIGQUIT, handle_sigquit);
         if (input)
@@ -118,9 +118,10 @@ void    read_lines(t_ht_hash_table *ht, t_list *exp_hist)
     }
     if (!cmd)
     {
-        free_pwd(ht); 
+        free_parsing_data(data);
+        /* free_pwd(ht); 
         ht_del_hash_table(ht);
-        ft_lstfree(&exp_hist, free);
+        ft_lstfree(&exp_hist, free); */
     }
     // free_tokens(&tk_list);
     free_cmds(&cmd, true);
