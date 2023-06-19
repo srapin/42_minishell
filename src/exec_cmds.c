@@ -13,14 +13,14 @@
 #include "../inc/minishell.h"
 
 
-void launch_process(t_cmd **cmd, int *pip_tab, bool need_pip)
+void launch_process(t_cmd **cmd, t_cmd *first, int *pip_tab, bool need_pip)
 {
 	if (need_pip)
 		safe_pipe(pip_tab);
 	else
 	{
 		
-		if (try_to_exec_builtins(*cmd, false)>= 0)
+		if (try_to_exec_builtins(*cmd, first, false)>= 0)
 			return;
 		reset_pip_tab(pip_tab);
 	}
@@ -28,7 +28,7 @@ void launch_process(t_cmd **cmd, int *pip_tab, bool need_pip)
 	if ((*cmd)->pid < 0)
 		fail_process();
 	if ((*cmd)->pid == 0)
-		child_process(*cmd, pip_tab);
+		child_process(*cmd, first,pip_tab);
 	if ((*cmd)->pid > 0)
 		parent_process(cmd, pip_tab);
 }
@@ -47,8 +47,8 @@ void exec_cmds(t_cmd *first_cmd)
 	int foo(t_cmd *);
 
 	cmd = first_cmd;
-	////dprintf(1, "coucou test\n");
-	//dprintf(1, "in exec, first command name = %s\n", cmd->val.value);
+	//////dprintf(1, "coucou test\n");
+	////dprintf(1, "in exec, first command name = %s\n", cmd->val.value);
 	
 	while(cmd)
 	{
@@ -59,7 +59,7 @@ void exec_cmds(t_cmd *first_cmd)
 
 		while(i < nb_cmds)
 		{
-			launch_process(&cmd, pip_tab, (i < nb_cmds - 1));
+			launch_process(&cmd,first_cmd, pip_tab, (i < nb_cmds - 1));
 			i++;
 		}
 		wait_childs(ret_cmd);

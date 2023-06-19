@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 22:15:52 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/18 23:29:50 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/19 02:15:12 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,13 +98,13 @@ void    read_lines(t_ht_hash_table *ht, t_list *exp_hist)
             continue;
         }
         tk_list = tokenise(ht, assign_type(input, stream_len), stream_len, input);
-       	// signal(SIGINT, handle_sigint2);
+       	// signal(SIGINT, sigint_next_prompt);
        	// signal(SIGQUIT, handle_sigquit2);
-       	signal(SIGINT, handle_sigint2);
-       	signal(SIGQUIT, handle_sigquit2);
+       	// signal(SIGQUIT, handle_sigquit2);
+        signal(SIGINT, sigint_during_cmd_exec);
         cmd = parse(ht, tk_list, exp_hist);
-        signal(SIGINT, handle_sigint);
-       	signal(SIGQUIT, handle_sigquit);
+       	signal(SIGINT, sigint_next_prompt);
+       	// signal(SIGQUIT, handle_sigquit);
         if (input)
         {
             free(input);
@@ -113,7 +113,7 @@ void    read_lines(t_ht_hash_table *ht, t_list *exp_hist)
         
         free_cmds(&cmd, false);
         input = readline("$ ");
-       	// signal(SIGINT, handle_sigint2);
+       	// signal(SIGINT, sigint_next_prompt);
        	// signal(SIGQUIT, handle_sigquit2);
     }
     if (!cmd)

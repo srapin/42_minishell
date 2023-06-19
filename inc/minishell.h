@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 19:27:43 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/18 23:34:14 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/19 04:10:57 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,21 +43,21 @@
 extern int g_exit_status;
 
 void exec_cmds(t_cmd *cmd);
-
+void malloc_error();
 int (*get_builtins_foo(char *str))(t_cmd *);
 //common_process
 void	parent_process(t_cmd **cmd, int pipe_tab[2]);
-void	child_process(t_cmd *cmd, int pipe_tab[2]);
+void	child_process(t_cmd *cmd, t_cmd *first, int pipe_tab[2]);
 void	fail_process(void);
 
-void handle_sigint(int sig);
-void handle_sigint2(int sig);
-void handle_sigquit(int sig);
-void handle_sigquit2(int sig);
+void sigint_during_cmd_exec(int sig);
+void sigint_next_prompt(int sig);
+// void handle_sigquit(int sig);
+// void handle_sigquit2(int sig);
 //exec_cmd
 void exec_cmds(t_cmd *first_cmd); //to div
 
-int try_to_exec_builtins(t_cmd *cmd, bool is_child);
+int try_to_exec_builtins(t_cmd *cmd, t_cmd *first, bool is_child);
 
 //heredoc
 // void heredoc(t_cmd *cmd);
@@ -116,7 +116,7 @@ int             is_in_quotes(t_token_list *current, size_t index);
 
 void            remove_char(t_token_list *current, size_t index);
 
-bool set_here_docs(t_ht_hash_table *ht, t_token_list **first);
+bool set_here_docs(t_ht_hash_table *ht, t_token_list **first, t_list *exp_hist);
 
 t_cmd           *get_ast(t_ht_hash_table *ht, t_token_list **first_tk, t_list *exp_hist);
 t_list          *init_export_history(t_ht_hash_table *ht);

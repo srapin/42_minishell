@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:44:39 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/18 23:31:42 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/19 04:17:51 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,40 +29,64 @@ void	parent_process(t_cmd **cmd, int pipe_tab[2])
 	(*cmd)->red.in_fd = pipe_tab[0];
 }
 
-void	child_process(t_cmd *cmd, int pipe_tab[2])
+void print_err(int e, t_cmd *cmd)
+{
+	
+	// 2 : cmd not found. 13 : permission denied
+	char *mess;
+	char *tmp;
+
+	mess = NULL;
+	tmp = ft_strjoin(mess, "minishell : ");
+	free(mess);
+	mess = ft_strjoin(tmp, cmd->val.value);
+	free(tmp);
+	perror(mess);
+	free(mess);
+	// if (e == 2)
+	// 	printf("minishell : %s : command not found\n", cmd->val.value);
+	// else if (e == 13)
+	// 	printf("minishell : %s : permission denied\n", cmd->val.value);
+}
+
+void	child_process(t_cmd *cmd, t_cmd *first,  int pipe_tab[2])
 {
 	char	**paths;
+	char	*path;
+	char ** args;
+	char **env;
+	char **tmp;
 
+	//dprintf(1, "exec child proc \n");
 	if (pipe_tab[0] > -1)
 	{
 		safe_close(&(pipe_tab[0]));
 		cmd->red.out_fd = pipe_tab[1];
 	}
 	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
-	//dprintf(1, "in child proc outfile name = %s\n", ((t_file *)(cmd->red.out_list)->content)->name   );
 	dup_cmd_file(cmd);
-	//dprintf(1, "child_proc\n");
 	
-	// rajouté par ln
-	try_to_exec_builtins(cmd, true);
+	try_to_exec_builtins(cmd, first, true);
 	
 	paths = get_path(cmd);
 	if (check_acces(paths, cmd))
 	{
-	 	execve(cmd->val.path, cmd->val.args, cmd->val.env);
+		path = cmd->val.path;
+		env = cmd->val.env;
+		args = cmd->val.args;
+		cmd->val.args = NULL;
+		cmd->val.path = NULL;
+		cmd->val.env = NULL;
+		free_tab(paths);
+		free_cmds(&first, true);
+	 	execve(path, args, env);
 	}
-	//perror("cmd not found");
-	if (errno) // 2 : cmd not found. 13 : permission denied
-	{
-		if (errno == 2)
-			printf("minishell : %s : command not found\n", cmd->val.value);
-		else if (errno == 13)
-			printf("minishell : %s : permission denied\n", cmd->val.value);
-	}
-	//printf("errno value : %d\n", errno);
+	cmd->val.args = args;
+	cmd->val.path = path;
+	cmd->val.env = env;
+	print_err(errno, cmd);
 	free_tab(paths);
-	free_tab(cmd->val.args);
+	free_cmds(&first, true);
 	exit(CMD_NOT_FOUND);
 }
 

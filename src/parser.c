@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 02:12:27 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/18 23:59:59 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/19 04:07:35 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,10 @@ t_cmd  *parse(t_ht_hash_table *ht, t_token_list *first, t_list *exp_hist)
     if (wstatus) // ie la syntaxe n'était pas bonne 
     {
         // met à jour le dernier exit status
+        free_tokens(&first);
+        ht_del_hash_table(ht);
+        ft_lstfree(&exp_hist, free);
+        
         return NULL;
     }
     
@@ -135,19 +139,19 @@ t_cmd  *parse(t_ht_hash_table *ht, t_token_list *first, t_list *exp_hist)
     delete_quotes(&first);
     group_words(&first);
 
-    //dprintf(1, "in parse(), after delete_quotes() and group_words()\n");
+    ////dprintf(1, "in parse(), after delete_quotes() and group_words()\n");
 
     perform_wildcard_exp(ht, &first);
 
     //print_tokens(first);
     
-    //dprintf(1, "in parse(), after perform_wildcard_exp()\n");
+    ////dprintf(1, "in parse(), after perform_wildcard_exp()\n");
 
     t_cmd *ast = NULL;
-    //dprintf(1, "in parse(), after set_here_docs()\n");
+    ////dprintf(1, "in parse(), after set_here_docs()\n");
 
 
-    if (set_here_docs(ht, &first))
+    if (set_here_docs(ht, &first, exp_hist))
         ast = get_ast(ht, &first, exp_hist);
     // else 
     //     free_tokens()

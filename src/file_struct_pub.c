@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:08:11 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/16 12:13:25 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/19 04:05:37 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void replace_fd(t_file *f_s, int *to_rep, bool out)
 {
 	int new_fd;
 
-	//dprintf(1, "in replace_fd name = %s flag = %i, num = %i\n", f_s->name, f_s->flag, f_s->fd);
+	////dprintf(1, "in replace_fd name = %s flag = %i, num = %i\n", f_s->name, f_s->flag, f_s->fd);
 	new_fd = *to_rep;
 	if (f_s->fd > -1)
 		new_fd = f_s->fd;

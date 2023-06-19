@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 23:01:51 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/11 22:01:09 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/19 04:10:57 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ char	**get_path(t_cmd *cmd)
 {
 	int		i;
 	char	**paths;
-	// //dprintf(1, "if get peth");
+	// ////dprintf(1, "if get peth");
 	cmd->val.env = hash_map_to_tab(cmd->env);
 
 	i = 0;
@@ -84,5 +84,6 @@ char	**get_path(t_cmd *cmd)
 		i++;
 	}
 	add_slash(paths);
+	// free_tab(cmd->val.env);
 	return (paths);
 }

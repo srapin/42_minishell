@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:13:44 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/18 23:29:50 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/19 04:05:37 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,13 +76,13 @@ t_word_data     *new_word_data(t_token_list *token)
     //     wd->quotes = 1;
     // else if (token->quotes == 2)
     // {
-    //     dprintf(1, "est rentré dans le if quotes == 2\n");
+    //     //dprintf(1, "est rentré dans le if quotes == 2\n");
     //     wd->quotes = 2;
     // }
     wd->quotes = token->quotes;
     wd->length = token->length;
     wd->next = NULL;
-    //dprintf(1, "in new_word_data(), wd = %s, quotes = %d, wd->quotes = %d, length = %zu, wd->length = %zu\n", wd->content, token->quotes, wd->quotes, token->length, wd->length);
+    ////dprintf(1, "in new_word_data(), wd = %s, quotes = %d, wd->quotes = %d, length = %zu, wd->length = %zu\n", wd->content, token->quotes, wd->quotes, token->length, wd->length);
     return (wd);
 }
 
@@ -93,7 +93,7 @@ void    add_word_data(t_word_data **first, t_word_data *to_add)
 
     if (!first)
         return ;
-    //dprintf(1, "in add_wd(), quotes = %d\n", to_add->quotes);
+    ////dprintf(1, "in add_wd(), quotes = %d\n", to_add->quotes);
     word_end_index = 0;
     if (!(*first))
         *first = to_add;

@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:10:18 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/18 23:29:50 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/19 04:05:46 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void    check_simple_command(t_token_list **first, t_token_list **current, int *
         else if ((*current)->type == double_quote
             && ((*current)->content[(*current)->length - 1] != '\"'
             || (*current)->length == 1))
-            {
+            {free_tokens(first);
                 printf("Syntax error : Missing closing quote\n");
                 free_tokens(first);
                 exit(SYNTAX_ERROR);
@@ -178,6 +178,7 @@ void    check_syntax(t_token_list **first)
         free_tokens(first);
         exit(SYNTAX_ERROR);
     }
+    //dprintf(1, "syntax \n");
     exit(EXIT_SUCCESS);
 }
 
@@ -192,7 +193,6 @@ int    ft_syntax(t_token_list **first)
     if (pid == 0) // ie s'agit du process enfant
         check_syntax(first);
     if (waitpid(pid, &wstatus, 0) == -1)
-    // if (wait(&wstatus) == -1)
         perror("wait ");
     return (wstatus);
 }

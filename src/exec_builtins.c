@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 20:57:20 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/18 23:48:07 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/19 04:10:57 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,18 +109,18 @@ int is_builtins(char * str)
 
 
 
-int try_to_exec_builtins(t_cmd *cmd, bool is_child)
+int try_to_exec_builtins(t_cmd *cmd, t_cmd *first, bool is_child)
 {
     int (*foo)(t_cmd *);
     int ret;
     int old_in;
     int old_out;
 
-    // dprintf(1, "in try_to_exec_builtins()\n");
+    // //dprintf(1, "in try_to_exec_builtins()\n");
     //num = is_builtins(cmd->val.value);
     ret = -1;
     foo = get_builtins_foo(cmd->val.value); 
-    // dprintf(1, "get_builtins() return value : %p\n", foo);
+    // //dprintf(1, "get_builtins() return value : %p\n", foo);
     if (!foo)
         return ret;
     if (!is_child)
@@ -132,6 +132,7 @@ int try_to_exec_builtins(t_cmd *cmd, bool is_child)
     ret = foo(cmd);
     if (is_child)
     {
+        free_cmds(&first, true);
         exit(ret); // n'exit pas forcément avec 0 !! dépend de la valeur de retour du builtin
     }
     g_exit_status = ret;
