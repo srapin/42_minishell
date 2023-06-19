@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 02:12:27 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/19 04:07:35 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/19 17:30:31 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,7 @@ t_cmd  *parse(t_ht_hash_table *ht, t_token_list *first, t_list *exp_hist)
         ast = get_ast(ht, &first, exp_hist);
     // else 
     //     free_tokens()
-    //print_ast(ast);
+    print_ast(ast);
 
     exec_cmds(ast);
     return ast;

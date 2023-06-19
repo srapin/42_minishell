@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 19:27:43 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/19 04:10:57 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/19 16:19:16 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ int             ft_syntax(t_token_list **first);
 void            check_syntax(t_token_list **first);
 
 void            perform_variable_exp(t_ht_hash_table *ht, t_token_list **first);
+int             valid_name(char *name);
 void            expand(t_ht_hash_table *ht, t_token_list **current, char *var, size_t dollar_index);
 void            delete_quotes(t_token_list **first);
 void            group_words(t_token_list **first);

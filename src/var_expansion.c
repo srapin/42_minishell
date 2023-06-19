@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   var_expansion.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:12:06 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/19 04:05:37 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/19 16:27:04 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ void    perform_variable_exp(t_ht_hash_table *ht, t_token_list **first)
 {
     char            *next_dollar_start;
     char            *dollar_start;
+    char            *var_name;
     size_t          next_dollar_index;
     size_t          dollar_index;
     t_token_list    *current;
@@ -132,7 +133,19 @@ void    perform_variable_exp(t_ht_hash_table *ht, t_token_list **first)
                 if (next_dollar_start && *next_dollar_start)
                     expand(ht, &current, ft_substr(current->content, dollar_index + 1, next_dollar_index - dollar_index - 1), dollar_index);
                 else if (current->type == double_quote)
-                    expand(ht, &current, ft_substr(current->content, dollar_index + 1, current->length - dollar_index - 2), dollar_index);    
+                {
+                    int k = 2;
+                    char *var_name;
+                    var_name = ft_substr(current->content, dollar_index + 1, current->length - dollar_index - k);
+                    while (k + dollar_index <= current->length && !valid_name(var_name))
+                    {
+                        free(var_name);
+                        k++;
+                        var_name = ft_substr(current->content, dollar_index + 1, current->length - dollar_index - k);
+                    }
+                    if (k + dollar_index <= current->length) // ie valid_name() == 1
+                        expand(ht, &current, var_name, dollar_index);    
+                }
                 else
                     expand(ht, &current, ft_strdup(dollar_start + 1), dollar_index);
                 ////dprintf(1, "fin de while, ok ici\n");

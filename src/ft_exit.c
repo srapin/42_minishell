@@ -3,23 +3,46 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 00:57:49 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/18 23:29:50 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/19 17:28:59 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
+/* Returns the number in a long long if the later is in the interval [0, LONG_LONG_MAX].
+Returns -1 in case it exceeds LONG_LONG_MAX.
+The number sent as argument has to be a positive integer*/
+long long is_numeric(char *str_nb)
+{
+    int                 i;
+    unsigned long long  nb;
+    
+    i = 0;
+    nb = 0;
+    while (str_nb[i] && nb <= LLONG_MAX)
+    {
+        nb = nb * 10 + (str_nb[i] - '0');
+        i++;
+    }
+    if (nb > LLONG_MAX)
+        return (-1);
+    return (nb);
+}
+
 /* Exit retourne 0 lorsqu'aucun argument n'est donné.
-Si trop d'arguments sont donnés, il affiche une erreur et retourne 1
-Sinon, il retourne l'argument donné, modulo 255 
+Si le premier argument n'est pas numerique, il affiche une erreur et exit le shell en retournant 1.
+Si non, il analyse le nomnre d'arguments.
+Si trop d'arguments sont donnés (ie plus qu'un), il affiche une erreur et retourne 1, sans exit le shell.
+Sinon, il retourne l'argument donné, modulo 255.
 */
-int ft_exit(t_cmd *cmd) // void ou int ?
+int ft_exit(t_cmd *cmd)
 {
     int             i;
-    unsigned char   nb;
+    unsigned char   exit_status;
+    long long       initial_nb;
     char            *arg;
     
     i = 0;
@@ -33,13 +56,6 @@ int ft_exit(t_cmd *cmd) // void ou int ?
        ft_putstr_fd("exit\n", 1);
        exit(0); // a modifier !! returns the exit status of the last command
     }
-    if (cmd->val.args[2]) // ie a au moins deux arguments
-    {
-        printf("exit\n");
-        printf("minishell : exit : too many arguments\n");
-        return (1); 
-        // !! n'exit pas le shell ici !!!
-    }
     while (arg[i])
     {
         if (!ft_isdigit(arg[i]))
@@ -52,8 +68,23 @@ int ft_exit(t_cmd *cmd) // void ou int ?
         }
         i++;
     }
-    nb = (unsigned char)ft_atoi(arg); // vérifier ce que ca fait si overflow le long long dans atoi
+    initial_nb = is_numeric(arg);
+    if (initial_nb == -1)
+    {
+        printf("minishell : exit : %s : numeric argument required\n", arg);
+        // free all
+        free_pwd(cmd->env);
+        exit(NOT_A_NUM);
+    }
+    if (cmd->val.args[2]) // ie a au moins deux arguments
+    {
+        printf("exit\n");
+        printf("minishell : exit : too many arguments\n");
+        return (1); 
+    }
+    exit_status = (unsigned char)initial_nb;
     // free all
+    free_pwd(cmd->env);
     printf("exit\n");
-    exit(nb);
+    exit(exit_status);
 }
