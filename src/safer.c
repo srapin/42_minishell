@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:36:03 by srapin            #+#    #+#             */
-/*   Updated: 2023/05/23 01:57:43 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/19 17:43:48 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ bool	check_acces(char **paths, t_cmd *cmd)
 	}
 	if (access(cmd->val.value, X_OK) != 0)
 		return (false);
-	cmd->val.path = cmd->val.value;
+	cmd->val.path = ft_strdup(cmd->val.value);
 	return (true);
 }
 
