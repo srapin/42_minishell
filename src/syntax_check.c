@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_check.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:10:18 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/19 04:05:46 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/19 04:22:49 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,6 +179,7 @@ void    check_syntax(t_token_list **first)
         exit(SYNTAX_ERROR);
     }
     //dprintf(1, "syntax \n");
+    free_tokens(first);
     exit(EXIT_SUCCESS);
 }
 
