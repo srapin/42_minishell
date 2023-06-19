@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   safer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rapi <rapi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:36:03 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/19 17:43:48 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/20 01:33:24 by rapi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ bool	check_acces(char **paths, t_cmd *cmd)
 	i = 0;
 	while (paths && paths[i])
 	{
-		path = ft_strjoin(paths[i], get_cmd_value(cmd));
+		path = ft_strjoin(paths[i], cmd->val.value);
 		if (path && access(path, X_OK) == 0)
 		{
 			cmd->val.path = path;

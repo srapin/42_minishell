@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/10 17:29:36 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/19 17:56:53 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/20 00:19:17 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void    free_tokens(t_token_list **first)
     t_token_list    *current;
     t_token_list    *tmp;
 
-    if (!first)
+    if (!first || !(*first))
         return ;
     current = *first;
     while (current)
@@ -46,6 +46,7 @@ void    free_tokens(t_token_list **first)
         free(tmp);
         tmp = NULL;
     }
+    free(first);
 }
 
 void    free_parsing_data(t_data *data)
@@ -53,5 +54,5 @@ void    free_parsing_data(t_data *data)
     free_tokens(data->first);
     free_pwd(data->env);
     ht_del_hash_table(data->env);
-    ft_lstfree(data->exp_history, free);
+    ft_lstfree(&data->exp_history, free);
 }

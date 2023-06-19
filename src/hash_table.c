@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hash_table.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 16:09:20 by hlesny            #+#    #+#             */
-/*   Updated: 2023/06/19 04:03:10 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/20 01:44:44 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,7 @@ int    set_env_var(t_ht_item *item, char **env, int i)
 {
     char *tmp;
     
-    env[i] = ft_calloc(sizeof(char), (ft_strlen(item->key) + ft_strlen(item->value) + 5)); // +2 ou +5 ?
+    env[i] = ft_calloc(sizeof(char), (ft_strlen(item->key) + ft_strlen(item->value) + 2)); // +2 ou +5 ?
     if (!env[i])
     {
         perror("malloc ");

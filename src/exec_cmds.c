@@ -53,7 +53,7 @@ void exec_cmds(t_cmd *first_cmd)
 	while(cmd)
 	{
 		i = 0;
-		nb_cmds = count_cmds(cmd);
+		nb_cmds = count_cmds_linked_by_pipe(cmd);
 		next = cmd->next;
 		ret_cmd = cmd;
 

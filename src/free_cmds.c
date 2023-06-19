@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_cmds.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 16:39:50 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/19 04:10:56 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/20 01:51:26 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,18 +55,18 @@ void free_cmd_value(t_cmd_value *val)
 	free(val->value);
 	free_tab(val->args);
 	// free(val->args);
-	
+	dprintf(1,"freecmdvalue\n");
 	if (val->path)
 	{
 		val->path =NULL;	
 		free(val->path);
 	}
-	if (val->env)
-		free_tab(val->env);
+	// if (val->env)
+	// 	free_tab(val->env);	
 	val->value = NULL;
 	val->args = NULL;
 	val->path = NULL;
-	val->env = NULL;
+	//val->env = NULL;
 }
 
 
@@ -101,7 +101,7 @@ void free_common(t_cmd*cmd)
 	if (!cmd)
 		return;
 	// //dprintf(1, "\n\n\n\n\n\n\n\n\after if \n\n\n\n\n\n\n\n");
-	free_pwd(cmd->env); 
+	free_pwd(cmd->env);
 	ht_del_hash_table(cmd->env);
 	ft_lstfree(&(cmd->export_history), free);
 }

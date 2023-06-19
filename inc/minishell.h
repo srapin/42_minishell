@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rapi <rapi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 19:27:43 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/19 18:08:16 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/20 01:33:55 brapi agiguair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void link_cmds_with_redirections(t_cmd *cmd, t_cmd *next);
 void link_cmds_with_ctrls_op(t_cmd *cmd, t_cmd *next, ctrl_op c);
 
 
-int count_cmds(t_cmd *first_cmd);
+int count_cmds_linked_by_pipe(t_cmd *first_cmd);
 void	safe_pipe(int pipe_tab[2]);
 void	fail_process(void);
 void	safe_close(int *fd);
@@ -100,8 +100,9 @@ void dup_cmd_file(t_cmd *cmd);
 void            read_lines(t_data *data);
 
 t_token         *assign_type(char *input, size_t stream_len);
+// t_token_list    *tokenise(t_ht_hash_table *ht, t_token *token_stream, size_t stream_len, char *input);
 // t_token_list    *tokenise(t_data *data, t_token *token_stream, size_t stream_len, char *input);
-t_token_list    *tokenise(t_token *token_stream, size_t stream_len, char *input);
+t_token_list    **tokenise(t_token *token_stream, size_t stream_len, char *input);
 
 t_cmd *         parse(t_data *data);
 int             ft_syntax(t_data *data);

@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 19:32:17 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/19 17:54:19 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/20 00:40:03 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ void    exec_script(t_data *data, char *path)
     }
     line = get_next_line(fd);
     ////dprintf(1, "in exec_script(), line = %s\n", line);
-    tk_list = tokenise(data, assign_type(line, ft_strlen(line)), ft_strlen(line), line);
+    data->first = tokenise(assign_type(line, ft_strlen(line)), ft_strlen(line), line);
     parse(data);
     
     // normalement, n'a qu'une seule ligne !! car ne doit pas gerer les ';' dans minishell    
@@ -160,6 +160,11 @@ int main (int argc, char **argv, char **envp)
     char            *pwd;
     t_data          data;
     t_ht_hash_table *hash_map;
+
+    // initialise t_data
+    data.env = NULL;
+    data.env = NULL;
+    data.first = NULL;
 
     // rajouter une condition avec isatty pour gerer le cas ./minishell | ./minishell
     

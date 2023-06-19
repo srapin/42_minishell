@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 23:24:33 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/19 18:18:34 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/20 01:44:44 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ void	hd_perform_expand(t_ht_hash_table *ht, char **str) // char* ou char ** ?
 	// str existe forcément (sinon serait sorti du while (readline()))
 		return ;
 	len = ft_strlen(*str);
-	t_list = tokenise(ht, assign_type(*str, len), len, *str);
+	t_list = *tokenise(assign_type(*str, len), len, *str);
 
 	hd_expand(ht, &t_list);
 
@@ -285,7 +285,7 @@ bool	set_here_docs(t_data *data)
         fail_process();
     else if (pid == 0)
     {
-		//dprintf(1, "hd child proc \n");
+		dprintf(1, "hd child proc \n");
 		// hd_child_process(ht, first, exp_hist);
         hd_child_process(data);
     }

@@ -584,7 +584,7 @@ t_cmd   *get_ast(t_data *data)
             pipeline_start_tk = NULL;
         }
     }
-    free_tokens(data->first);
+    /* free_tokens(data->first); */
     t_cmd * test = *ast;
     free(ast);
     return (test);

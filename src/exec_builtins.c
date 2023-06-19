@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_builtins.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 20:57:20 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/19 04:10:57 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/19 19:24:33 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,37 +36,6 @@ int ft_echo(t_cmd *cmd)
     return (EXIT_OK); // à modifier, rajouté pour plus avoir de warning a la compilation
 }
 
-// void ft_cd(t_cmd *cmd)
-// {
-    
-// }
-
-// void ft_pwd(t_cmd *cmd)
-// {
-    
-// }
-
-
-
-// void ft_unset(t_cmd *cmd)
-// {
-    
-// }
-
-// // void ft_env(t_cmd *cmd)
-// // {
-    
-// // }
-
-// void ft_exit(t_cmd *cmd)
-// {
-    
-// }
-
-
-/* 
-!! Tout ce qui modifie l'environnement doit etre fait dans le processus parent !!!
-*/
 int (*get_builtins_foo(char *str))(t_cmd *)
 {
   

@@ -6,7 +6,7 @@ CC = cc
 CFLAGS = -g3 -g
 
 FILES = cmd_private\
-		cmd_pub\
+		cmd\
 		common_process\
 		exec_cmds \
 		exec_builtins \

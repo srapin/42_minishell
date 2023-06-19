@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 00:57:49 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/19 17:28:59 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/20 01:49:07 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,14 +53,14 @@ int ft_exit(t_cmd *cmd)
     {
        // free all
        free_pwd(cmd->env);
-       ft_putstr_fd("exit\n", 1);
+       write(STDERR_FILENO, "exit\n", 5);
        exit(0); // a modifier !! returns the exit status of the last command
     }
     while (arg[i])
     {
         if (!ft_isdigit(arg[i]))
         {
-            printf("exit\n");
+            write(STDERR_FILENO, "exit\n", 5);
             printf("minishell : exit : %s : numeric argument required\n", arg);
             // free all
             free_pwd(cmd->env);
@@ -71,6 +71,7 @@ int ft_exit(t_cmd *cmd)
     initial_nb = is_numeric(arg);
     if (initial_nb == -1)
     {
+        write(STDERR_FILENO, "exit\n", 5);
         printf("minishell : exit : %s : numeric argument required\n", arg);
         // free all
         free_pwd(cmd->env);
@@ -78,7 +79,7 @@ int ft_exit(t_cmd *cmd)
     }
     if (cmd->val.args[2]) // ie a au moins deux arguments
     {
-        printf("exit\n");
+        write(STDERR_FILENO, "exit\n", 5);
         printf("minishell : exit : too many arguments\n");
         return (1); 
     }

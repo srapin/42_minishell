@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 23:01:51 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/19 17:40:43 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/20 01:51:05 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,23 +67,24 @@ char	**get_path(t_cmd *cmd)
 {
 	int		i;
 	char	**paths;
+	char **env;
 	// ////dprintf(1, "if get peth");
-	cmd->val.env = hash_map_to_tab(cmd->env);
+	env = hash_map_to_tab(cmd->env);
 
 	i = 0;
 	paths = NULL;
-	if (!(cmd->val.env))
+	if (!env)
 		perror("envp recuparation prob");
-	while ((cmd->val.env)[i])
+	while (env[i])
 	{
-		if (!ft_strncmp((cmd->val.env)[i], "PATH=", 5))
+		if (!ft_strncmp(env[i], "PATH=", 5))
 		{
-			paths = ft_split((cmd->val.env)[i] + 5 * sizeof(char), ':');
+			paths = ft_split(env[i] + 5 * sizeof(char), ':');
 			break ;
 		}
 		i++;
 	}
 	add_slash(paths);
-	// free_tab(cmd->val.env);
+	free_tab(env);
 	return (paths);
 }

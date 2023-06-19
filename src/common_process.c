@@ -3,27 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   common_process.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: agiguair <agiguair@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:44:39 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/19 17:43:53 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/20 01:34:59 b agiguair         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "minishell.h"
 
 
 void	parent_process(t_cmd **cmd, int pipe_tab[2])
 {
-	
 	safe_close(&(pipe_tab[1]));
 	if (!cmd || !(*cmd))
 		return;
 	safe_close_cmd_fd(*cmd);
-	//if ((*cmd)->red.in_type == fd && ((t_file *) ((*cmd)->red.in_content))->sep)
-		//close
-	// t_cmd ** tmp;
-	// tmp = cmd;
 	*cmd = (*cmd)->red.next_cmd;
 	if (!cmd || !(*cmd))
 		return;
@@ -73,23 +68,22 @@ void	child_process(t_cmd *cmd, t_cmd *first,  int pipe_tab[2])
 	if (check_acces(paths, cmd))
 	{
 		path = cmd->val.path;
-		env = cmd->val.env;
+		env = hash_map_to_tab(cmd->env);
 		args = cmd->val.args;
 		cmd->val.args = NULL;
 		cmd->val.path = NULL;
-		cmd->val.env = NULL;
+		// cmd->val.env = NULL;
 		free_tab(paths);
 		free_cmds(&first, true);
 	 	execve(path, args, env);
 	}
-	cmd->val.args = args;
-	cmd->val.path = path;
-	cmd->val.env = env;
 	print_err(errno, cmd);
 	free_tab(paths);
 	free_cmds(&first, true);
 	exit(CMD_NOT_FOUND);
 }
+
+
 
 void	fail_process(void)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pub.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:15:39 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/16 11:49:38 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/20 01:44:44 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,12 @@ void init_redirections(t_redirect *red);
 t_redirect *create_redir();
 
 //cmd
-char *get_cmd_value(t_cmd *cmd);
 void dup_cmd_file(t_cmd *cmd);
-void init_cmd_and_add_val(t_cmd *cmd, char **envp, char *args);
 t_cmd *create_cmd_with_val(char **envp, char *args);
-int count_cmds(t_cmd *first_cmd);
+int count_cmds_linked_by_pipe(t_cmd *first_cmd);
 
 //to_del
-int count_cmds(t_cmd *first_cmd);
+int count_cmds_linked_by_pipe(t_cmd *first_cmd);
 
+void mask_and_free_for_exec(t_cmd *cmd, t_cmd *first);
 #endif

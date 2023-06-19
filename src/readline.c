@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 22:15:52 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/19 18:04:55 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/20 01:44:44 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void    read_lines(t_data *data)
         // int i = read(STDIN_FILENO, NULL, 1);
         // if (i==0)
         //     ft_exit(NULL);
-        
+        //dprintf(1, "pid main = %d\n", getpid());
         stream_len = ft_strlen(input);
         if (!stream_len) // ie si input_str = '\0'.
         {
@@ -126,4 +126,5 @@ void    read_lines(t_data *data)
     // free_tokens(&tk_list);
     free_cmds(&cmd, true);
     free(input);
+    printf("exit\n");
 }
