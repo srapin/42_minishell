@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:44:39 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/19 04:17:51 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/19 17:35:53 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	parent_process(t_cmd **cmd, int pipe_tab[2])
 		//close
 	// t_cmd ** tmp;
 	// tmp = cmd;
+	*cmd = (*cmd)->red.next_cmd;
 	if (!cmd || !(*cmd))
 		return;
 	(*cmd)->red.in_fd = pipe_tab[0];
