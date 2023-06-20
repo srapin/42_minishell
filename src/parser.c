@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 02:12:27 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/20 00:16:26 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/20 03:33:53 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,15 +120,7 @@ t_cmd  *parse(t_data *data)
     wstatus = ft_syntax(data);
     if (wstatus) // ie la syntaxe n'était pas bonne 
     {
-        // met à jour le dernier exit status
-        
-        //free_tokens(data->first);
-
-        //free_parsing_data(data);
-        /* free_tokens(&first);
-        ht_del_hash_table(ht);
-        ft_lstfree(&exp_hist, free); */
-        
+        g_exit_status = wstatus;
         return NULL;
     }
     

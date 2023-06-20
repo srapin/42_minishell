@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 23:24:33 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/20 01:53:40 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/20 03:11:33 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ char	*random_filename()
 	filename = ft_strjoin("/tmp/here_doc_tmp_", count);
 	while (access(filename, F_OK | R_OK | W_OK) == 0)
 	{
+		free(filename);
+		free(count);
 		files_count++;
 		count = ft_itoa(files_count);
 		filename = ft_strjoin("/tmp/here_doc_tmp_", count);
@@ -54,7 +56,43 @@ void	hd_expand(t_ht_hash_table *ht, t_token_list **t_list)
 	current = *t_list;
 	while (current)
 	{
-		dollar_start = ft_strchr(current->content, '$');
+		while (current && current->type == whitespace)
+            current = current->next;
+        if (!current)
+            break;
+        dollar_start = ft_strdup(ft_strchr(current->content, '$'));
+        while (dollar_start && *dollar_start)
+        {
+            dollar_index = current->length - ft_strlen(dollar_start);
+            next_dollar_start = ft_strdup(ft_strchr(dollar_start + 1, '$'));
+            next_dollar_index = current->length - ft_strlen(next_dollar_start);
+            if (next_dollar_start && *next_dollar_start)
+                expand(ht, &current, ft_substr(current->content, dollar_index + 1, next_dollar_index - dollar_index - 1), dollar_index);
+            else if (current->type == double_quote || current->type == simple_quote)
+            {
+                int k = 2;
+                char *var_name;
+                var_name = ft_substr(current->content, dollar_index + 1, current->length - dollar_index - k);
+                while (k + dollar_index <= current->length && !valid_name(var_name))
+                {
+                    free(var_name);
+                    k++;
+                    var_name = ft_substr(current->content, dollar_index + 1, current->length - dollar_index - k);
+                }
+                if (k + dollar_index <= current->length) // ie valid_name() == 1
+                    expand(ht, &current, var_name, dollar_index);    
+            }
+            else
+                expand(ht, &current, ft_strdup(dollar_start + 1), dollar_index);
+            ////dprintf(1, "fin de while, ok ici\n");
+            free(dollar_start);
+            dollar_start = NULL;
+            dollar_start = next_dollar_start;
+        }
+        free(dollar_start);
+        current = current->next;
+
+		/* dollar_start = ft_strchr(current->content, '$');
 		while (dollar_start)
 		{
 			dollar_index = current->length - ft_strlen(dollar_start);
@@ -73,9 +111,9 @@ void	hd_expand(t_ht_hash_table *ht, t_token_list **t_list)
 				expand(ht, &current, ft_strdup(dollar_start + 1), dollar_index);
 			dollar_start = next_dollar_start;
 		}
-		current = current->next;
+		current = current->next; */
 	}
-}
+} 
 
 /* variable expansions,
 	reusing functions used in the main parsing but without checking syntax 
@@ -86,13 +124,14 @@ void	hd_perform_expand(t_ht_hash_table *ht, char **str) // char* ou char ** ?
 	char *tmp;
 	char *tmp2;
 	t_token_list *t_list;
+	t_token_list **first;
 
 	if (!str || !(*str)[0])
 	// str existe forcément (sinon serait sorti du while (readline()))
 		return ;
 	len = ft_strlen(*str);
-	t_list = *tokenise(assign_type(*str, len), len, *str);
-
+	first = tokenise(assign_type(*str, len), len, *str);
+	t_list = *first;
 	hd_expand(ht, &t_list);
 
 	/* Join all the tokens' contents*/
@@ -108,7 +147,7 @@ void	hd_perform_expand(t_ht_hash_table *ht, char **str) // char* ou char ** ?
 
 	free(*str);
 	*str = tmp;
-	free_tokens(&t_list);
+	free_tokens(first);
 }
 
 void	get_here_doc_content(t_ht_hash_table *ht, int fd, char *limiter,
@@ -173,6 +212,7 @@ void	set_hd_filenames(t_token_list *current)
         	// current->length = 1;
         	// free(current->next->content);
 			tk_add_word_in_list(&current, file_name);
+			free(file_name);
 		}
 		// ie est un here doc
         // current->next->content = file_name;

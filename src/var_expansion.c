@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:12:06 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/20 01:58:25 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/20 03:34:33 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,6 @@ si b etait exporte avant a, alors on aurait a="coucou test"
 du fait du fonctionnement du builtin export
 */
 
-char    *get_last_exit_status(void)
-{
-    return (ft_itoa(55)); // juste pour que ca compile
-}
-
 void    expand(t_ht_hash_table *ht, t_token_list **current, char *var, size_t dollar_index) 
 {
     char *value; // ne pas le free ! car est malloc dans la hash_map, et peut en re avoir besoin dans une autre commande
@@ -70,7 +65,7 @@ void    expand(t_ht_hash_table *ht, t_token_list **current, char *var, size_t do
     before_key = ft_substr((*current)->content, 0, dollar_index);
     if (*var == '?') // expand_last_exit_status(current)
     {
-        value = get_last_exit_status(); // le mettre direct dans l'env ?
+        value = ft_itoa(g_exit_status);
         after_value = ft_substr((*current)->content, dollar_index + 2, (*current)->length);
     }
     else

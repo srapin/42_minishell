@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   next.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:50:05 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/18 23:46:23 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/20 03:45:03 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	wait_childs(t_cmd *origin)
 	// 	g_exit_status = WEXITSTATUS(status);
 
 	g_exit_status = status % 255;	
-	return (WIFEXITED(status) && WEXITSTATUS(status));
+	return (WIFEXITED(status) && WEXITSTATUS(status)); // WIFSTOPPED
 }
 
 bool check_ret(t_cmd *cmd, int ret)
