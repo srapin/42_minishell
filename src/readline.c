@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 22:15:52 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/20 09:31:02 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/20 09:36:35 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,6 @@ void    read_lines(t_data *data)
         input = readline("$ ");
     }
     if (!cmd) //todo c est moche 
-    {
         free_parsing_data(data);
     free_cmds(&cmd, true);
     free(input);

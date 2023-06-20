@@ -88,6 +88,42 @@ int     get_whtsp_pos(char *str, int whtsp_pos)
     return (-1);
 }
 
+void    split_not_merged_no_quotes(t_cmd **curr_cmd, t_token_list *curr_tk, int *i)
+{
+    int     whitespace_pos;
+    int     prev_whitespace_pos;
+    char    *tmp;
+    char    *substr;
+    char    *buffer;
+
+    prev_whitespace_pos = 0;
+    whitespace_pos = get_whtsp_pos(curr_tk->content, prev_whitespace_pos);
+    while (whitespace_pos != -1)
+    {
+        tmp = buffer;
+        substr = ft_substr(curr_tk->content, prev_whitespace_pos, whitespace_pos - prev_whitespace_pos);
+        buffer = ft_strjoin(tmp, substr);
+        if (*buffer)
+        {
+            (*curr_cmd)->val.args[*i] = ft_strdup(buffer);
+            (*i)++;
+            free(buffer);
+            buffer = NULL;
+        }
+        free(substr);
+        substr = NULL;
+        while (curr_tk->content[whitespace_pos] && (curr_tk->content[whitespace_pos] == ' ' || curr_tk->content[whitespace_pos] == '\t'))
+            whitespace_pos++;
+        prev_whitespace_pos = whitespace_pos;
+        whitespace_pos = get_whtsp_pos(curr_tk->content, prev_whitespace_pos);
+    }
+    if (prev_whitespace_pos < curr_tk->length)
+    {
+        (*curr_cmd)->val.args[*i] = ft_substr(curr_tk->content, prev_whitespace_pos, curr_tk->length);
+        (*i)++;
+    }
+}
+
 /*
 Dès que tombe sur une succession de whitespaces en parsant le token 
 -> tout ce qui venait avant devient un mot (ie token) individuel 
