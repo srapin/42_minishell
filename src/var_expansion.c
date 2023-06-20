@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:12:06 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/19 19:24:34 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/20 01:58:25 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ void    expand(t_ht_hash_table *ht, t_token_list **current, char *var, size_t do
     char *value; // ne pas le free ! car est malloc dans la hash_map, et peut en re avoir besoin dans une autre commande
     char *before_key;
     char *after_value;
+    char *tmp;
     
     if (!var) // le malloc de ft_substr() n'a pas fonctionné
         return ;
@@ -80,11 +81,13 @@ void    expand(t_ht_hash_table *ht, t_token_list **current, char *var, size_t do
     }
     
     free((*current)->content);
-    (*current)->content = ft_strjoin(ft_strjoin(before_key, value), after_value);
+    tmp = ft_strjoin(before_key, value);
+    (*current)->content = ft_strjoin(tmp, after_value);
     (*current)->length = ft_strlen((*current)->content);
     free(var);
     free(before_key);
     free(after_value);
+    free(tmp);
 }
 
 
