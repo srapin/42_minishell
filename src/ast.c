@@ -88,6 +88,92 @@ int     get_whtsp_pos(char *str, int whtsp_pos)
     return (-1);
 }
 
+void    split_not_merged_no_quotes(t_cmd **curr_cmd, t_token_list *curr_tk, int *i)
+{
+    char    *buffer;
+    char    *substr;
+    char    *tmp;
+    int     whitespace_pos;
+    int     prev_whitespace_pos;
+
+    ////dprintf(1, "in set_cmd_args(), current token = %s\n", curr_tk->content);
+    prev_whitespace_pos = 0;
+    whitespace_pos = get_whtsp_pos(curr_tk->content, prev_whitespace_pos);
+    buffer = NULL;
+    ////dprintf(1, "\twd = %s, whitespace_pos = %d\n", curr_tk->content, whitespace_pos);
+    while (whitespace_pos != -1)
+    {
+        tmp = buffer;
+        substr = ft_substr(curr_tk->content, prev_whitespace_pos, whitespace_pos - prev_whitespace_pos);
+        buffer = ft_strjoin(tmp, substr);
+        ////dprintf(1, "in set_cmd_args(), in while (whitespace_pos != -1)\n");
+        if (*buffer) // ie si il n'est pas vide
+        {
+            (*curr_cmd)->val.args[*i] = ft_strdup(buffer);
+            ////dprintf(1, "in set_cmd_args(), added new arg : %s\n", buffer);
+            (*i)++;
+            free(buffer);
+            buffer = NULL;
+        }
+        free(substr);
+        substr = NULL;
+        //j = whitespace_pos;
+        while (curr_tk->content[whitespace_pos] && (curr_tk->content[whitespace_pos] == ' ' || curr_tk->content[whitespace_pos] == '\t'))
+            whitespace_pos++;
+        prev_whitespace_pos = whitespace_pos;
+        whitespace_pos = get_whtsp_pos(curr_tk->content, prev_whitespace_pos);
+        ////dprintf(1, "\twd = %s, whitespace_pos = %d\n", curr_tk->content, whitespace_pos);
+    }
+    if (prev_whitespace_pos < curr_tk->length)
+    {
+        (*curr_cmd)->val.args[*i] = ft_substr(curr_tk->content, prev_whitespace_pos, curr_tk->length);
+        (*i)++;
+    }
+}
+
+void    split_merged_no_quotes(t_cmd **curr_cmd, t_word_data *wd, char *buffer, int *i)
+{
+    int     whitespace_pos;
+    int     prev_whitespace_pos;
+    char    *tmp;
+    char    *substr;
+
+    prev_whitespace_pos = 0;
+    whitespace_pos = get_whtsp_pos(wd->content, prev_whitespace_pos);
+    ////dprintf(1, "\twd = %s, whitespace_pos = %d\n", wd->content, whitespace_pos);
+    while (whitespace_pos != -1)
+    {
+        tmp = buffer;
+        substr = ft_substr(wd->content, prev_whitespace_pos, whitespace_pos - prev_whitespace_pos);
+        buffer = ft_strjoin(tmp, substr);
+        if (*buffer) // ou if (whitespace_pos - prev_whitespace_pos) // ie si il n'est pas vide
+        {
+            (*curr_cmd)->val.args[*i] = ft_strdup(buffer);
+            ////dprintf(1, "in set_cmd_args(), added new arg : %s\n", buffer);
+            (*i)++;
+            free(buffer);
+            buffer = NULL;
+        }
+        free(substr);
+        substr = NULL;
+        while (wd->content[whitespace_pos] && (wd->content[whitespace_pos] == ' ' || wd->content[whitespace_pos] == '\t'))
+            whitespace_pos++;
+        prev_whitespace_pos = whitespace_pos;
+        whitespace_pos = get_whtsp_pos(wd->content, prev_whitespace_pos);
+        ////dprintf(1, "\twd = %s, whitespace_pos = %d\n", wd->content, whitespace_pos);
+    }
+    if (whitespace_pos == -1) // pas opti
+    {
+        tmp = buffer;
+        substr = ft_substr(wd->content, prev_whitespace_pos, wd->length);
+        buffer = ft_strjoin(tmp, substr);
+        free(tmp);
+        free(substr);
+        tmp = NULL;
+        substr = NULL;
+    }
+}
+
 /*
 Dès que tombe sur une succession de whitespaces en parsant le token 
 -> tout ce qui venait avant devient un mot (ie token) individuel 
@@ -113,8 +199,6 @@ void    set_cmd_args(t_cmd **curr_cmd, t_token_list *curr_tk, int *i)
     char            *substr;
     t_word_data     *wd;
     
-    // removes the whitespaces that aren't in quotes in the current token 
-    //  (whitespaces that could for example be a result of a variable expansion)
     wd = curr_tk->merged_words;
     buffer = NULL;
     if (!curr_tk->content[0])
@@ -126,41 +210,7 @@ void    set_cmd_args(t_cmd **curr_cmd, t_token_list *curr_tk, int *i)
     if (!curr_tk->merged_words)
     {
         if (!curr_tk->quotes)
-        {
-            ////dprintf(1, "in set_cmd_args(), current token = %s\n", curr_tk->content);
-            prev_whitespace_pos = 0;
-            whitespace_pos = get_whtsp_pos(curr_tk->content, prev_whitespace_pos);
-            ////dprintf(1, "\twd = %s, whitespace_pos = %d\n", curr_tk->content, whitespace_pos);
-            while (whitespace_pos != -1)
-            {
-                tmp = buffer;
-                substr = ft_substr(curr_tk->content, prev_whitespace_pos, whitespace_pos - prev_whitespace_pos);
-                buffer = ft_strjoin(tmp, substr);
-                ////dprintf(1, "in set_cmd_args(), in while (whitespace_pos != -1)\n");
-                if (*buffer) // ie si il n'est pas vide
-                {
-                    (*curr_cmd)->val.args[*i] = ft_strdup(buffer);
-                    ////dprintf(1, "in set_cmd_args(), added new arg : %s\n", buffer);
-                    (*i)++;
-                    free(buffer);
-                    buffer = NULL;
-                }
-                free(substr);
-                substr = NULL;
-                //j = whitespace_pos;
-                while (curr_tk->content[whitespace_pos] && (curr_tk->content[whitespace_pos] == ' ' || curr_tk->content[whitespace_pos] == '\t'))
-                    whitespace_pos++;
-                prev_whitespace_pos = whitespace_pos;
-                whitespace_pos = get_whtsp_pos(curr_tk->content, prev_whitespace_pos);
-                ////dprintf(1, "\twd = %s, whitespace_pos = %d\n", curr_tk->content, whitespace_pos);
-            }
-            if (prev_whitespace_pos < curr_tk->length)
-            {
-                (*curr_cmd)->val.args[*i] = ft_substr(curr_tk->content, prev_whitespace_pos, curr_tk->length);
-                (*i)++;
-            }
-            
-        }
+            split_not_merged_no_quotes(curr_cmd, curr_tk, i);
         else
         {
             ////dprintf(1, "in set_cmd_args(), added new arg : %s\n", curr_tk->content);
@@ -169,9 +219,6 @@ void    set_cmd_args(t_cmd **curr_cmd, t_token_list *curr_tk, int *i)
         }
         return ;
     }
-    
-    ////dprintf(1, "in set_cmd_args()\n");
-    // 16/06, 20h : rentre pas dans la boucle ?
     while (wd)
     {
         ////dprintf(1, "\twd = %s, quotes = %d\n", wd->content, wd->quotes);
@@ -195,10 +242,9 @@ void    set_cmd_args(t_cmd **curr_cmd, t_token_list *curr_tk, int *i)
                 }
                 free(substr);
                 substr = NULL;
-                j = whitespace_pos;
-                while (wd->content[j] && (wd->content[j] == ' ' || wd->content[j] == '\t'))
-                    j++;
-                prev_whitespace_pos = j;
+                while (wd->content[whitespace_pos] && (wd->content[whitespace_pos] == ' ' || wd->content[whitespace_pos] == '\t'))
+                    whitespace_pos++;
+                prev_whitespace_pos = whitespace_pos;
                 whitespace_pos = get_whtsp_pos(wd->content, prev_whitespace_pos);
                 ////dprintf(1, "\twd = %s, whitespace_pos = %d\n", wd->content, whitespace_pos);
             }
@@ -207,7 +253,12 @@ void    set_cmd_args(t_cmd **curr_cmd, t_token_list *curr_tk, int *i)
                 tmp = buffer;
                 substr = ft_substr(wd->content, prev_whitespace_pos, wd->length);
                 buffer = ft_strjoin(tmp, substr);
+                free(tmp);
+                free(substr);
+                tmp = NULL;
+                substr = NULL;
             }
+            //split_merged_no_quotes(curr_cmd, wd, buffer, i); // est ce que va modifier buffer ou est-ce que doit donner son adresse ?
         }
         else
         {
@@ -234,101 +285,97 @@ void    set_command_attributs(t_cmd **current, t_token_list **first_tk, t_token_
     i = 0;
     if (!args_count)
         return ;
-    ////dprintf(1, "in set_command_attributs\n");
     (*current)->val.args = malloc(sizeof(char *) * (args_count + 1));
     if (!(*current)->val.args)
     {
         perror("malloc ");
         return ;
     }
-    while (current_tk && i < args_count) //while (current_tk && current_tk->type != and && current_tk->type != or)
+    while (current_tk && i < args_count)
     {
         if (current_tk->type == l_io_redirect || current_tk->type == r_io_redirect)
             current_tk = current_tk->next->next;
         else 
         {
-            ////dprintf(1, "before set_cmd_args()\n");
-            ////dprintf(1, "args_count = %d\n", args_count);
             set_cmd_args(current, current_tk, &i);
-            ////dprintf(1, "after set_cmd_args()\n");
-            //tk_del_one(first_tk, current_tk); // est-ce que current_tk pointe encore au bon endroit après ça ?
             current_tk = current_tk->next;
         }
     }
     (*current)->val.args[i] = NULL;
-    if (args_count) // le if est-il obligatoire ?
+    if (args_count)
         (*current)->val.value = ft_strdup((*current)->val.args[0]);
 }
 
-int get_words_count(t_token_list *current)
+int     no_merged_words_count(t_token_list *current)
 {
-    int             i;
+
+    int     count;
+    int     whitespace_pos;
+    int     prev_whitespace_pos;
+
+    count = 0;
+    if (!current->quotes)
+    {
+        prev_whitespace_pos = 0;
+        whitespace_pos = get_whtsp_pos(current->content, prev_whitespace_pos);
+        while (whitespace_pos != -1)
+        {
+            if (whitespace_pos - prev_whitespace_pos)
+                count++;
+            while (current->content[whitespace_pos] && (current->content[whitespace_pos] == ' ' || current->content[whitespace_pos] == '\t'))
+                whitespace_pos++;
+            prev_whitespace_pos = whitespace_pos;
+            whitespace_pos = get_whtsp_pos(current->content, prev_whitespace_pos);
+        }
+        if (prev_whitespace_pos < current->length)
+            count++;
+    }
+    else
+        count++;
+    return (count);
+}
+
+void    wd_no_quotes(char *content, int *buffer, int *count)
+{
+    int     whitespace_pos;
+    int     prev_whitespace_pos;
+
+    prev_whitespace_pos = 0;
+    whitespace_pos = get_whtsp_pos(content, prev_whitespace_pos);
+    while (whitespace_pos != -1)
+    {
+        if (whitespace_pos - prev_whitespace_pos)
+        {
+            (*count)++;
+            *buffer = 0;
+        }
+        while (content[whitespace_pos] && (content[whitespace_pos] == ' ' || content[whitespace_pos] == '\t'))
+            whitespace_pos++;
+        prev_whitespace_pos = whitespace_pos;
+        whitespace_pos = get_whtsp_pos(content, prev_whitespace_pos);
+    }
+    if (whitespace_pos == -1)
+        *buffer = 1;
+}
+
+int     get_words_count(t_token_list *current)
+{
     int             count;
-    int             buffer; // 0 when empty, 1 when not
-    int             whitespace_pos;
-    int             prev_whitespace_pos;
+    int             buffer;
     t_word_data     *wd;
 
-    i = 0;
     buffer = 0;
-    count = 0; // 0 ou 1 ?
+    count = 0;
     if (!current->content[0]) // si avait juste "" ou ''
         return (1);
     wd = current->merged_words;
     if (!wd)
-    {
-        if (!current->quotes)
-        {
-            ////dprintf(1, "in get_words_count(), current token = %s\n", current->content);
-            prev_whitespace_pos = 0;
-            whitespace_pos = get_whtsp_pos(current->content, prev_whitespace_pos);
-            ////dprintf(1, "\twd = %s, whitespace_pos = %d\n", current->content, whitespace_pos);
-            while (whitespace_pos != -1)
-            {
-                // tmp = buffer;
-                // substr = ft_substr(current->content, prev_whitespace_pos, whitespace_pos - prev_whitespace_pos);
-                // buffer = ft_strjoin(tmp, substr);
-                if (whitespace_pos - prev_whitespace_pos) // ie si il n'est pas vide
-                    count++;
-                while (current->content[whitespace_pos] && (current->content[whitespace_pos] == ' ' || current->content[whitespace_pos] == '\t'))
-                    whitespace_pos++;
-                prev_whitespace_pos = whitespace_pos;
-                whitespace_pos = get_whtsp_pos(current->content, prev_whitespace_pos);
-            }
-            if (prev_whitespace_pos < current->length)
-                count++;
-        }
-        else
-            count++;
-        ////dprintf(1, "in get_words_count(), count = %d\n", count);
-        return (count);
-    }
+        return (no_merged_words_count(current));
     while (wd)
     {
-        ////dprintf(1, "in get_words_count(), wd = %s\n", wd->content);
         if (!wd->quotes)
         {
-            prev_whitespace_pos = 0;
-            whitespace_pos = get_whtsp_pos(wd->content, prev_whitespace_pos);
-            while (whitespace_pos != -1)
-            {
-                ////dprintf(1, "in while (whitespace_pos != -1)\n");
-                if (whitespace_pos - prev_whitespace_pos) // ie si le buffer n'est pas vide
-                {
-                    count++;
-                    buffer = 0;
-                }
-                
-                while (wd->content[whitespace_pos] && (wd->content[whitespace_pos] == ' ' || wd->content[whitespace_pos] == '\t'))
-                    whitespace_pos++;
-                ////dprintf(1, "whitespace_pos = %d, prev_shitespace_pos = %d\n", whitespace_pos, prev_whitespace_pos);
-                prev_whitespace_pos = whitespace_pos;
-                ////dprintf(1, "\twd = %s, prev_whitespace_pos = %d\n", wd->content, prev_whitespace_pos);
-                whitespace_pos = get_whtsp_pos(wd->content, prev_whitespace_pos); // ou prev_whitespace_pos + 1 ?
-                ////dprintf(1, "\twd = %s, whitespace_pos = %d\n", wd->content, whitespace_pos);
-            }
-            if (whitespace_pos == -1) // pas opti
-                buffer = 1;
+            wd_no_quotes(wd->content, &buffer, &count);
         }
         else
             buffer = 1;
@@ -343,7 +390,7 @@ void    add_to_cmd_list(t_cmd **last, t_cmd *new)
 {
     if (!last)
         return ;
-    if (!(*last)) // si la liste est vide
+    if (!(*last))
         *last = new;
     else
     {
@@ -364,6 +411,8 @@ char    *random_subshell_fname(void)
     filename = ft_strjoin("/tmp/subshell_args_", count);
     while (access(filename, F_OK | R_OK | W_OK) == 0)
     {
+        free(filename);
+        free(count);
         files_count++;
         count = ft_itoa(files_count);
         filename = ft_strjoin("/tmp/subshell_args_", count);
@@ -384,7 +433,6 @@ t_cmd *init_new_cmd(t_data *data)
     cmd->env = data->env;
     cmd->export_history = data->exp_history;
     init_redirections(&(cmd->red));
-    //init_cmd(cmd, envp); envp est en fait ht
     return (cmd);
 }
 
@@ -410,12 +458,48 @@ Dès que tombe sur un opérateur de controle :
 (echo un | (echo deux && echo trois))
 */
 
-
-
-void    set_subshell_attributs(t_cmd *current_cmd, t_token_list **curr_tk)
+void    write_in_file(t_token_list **curr_tk, int fd_subshell)
 {
-    int             i;
     int             open_parentheses;
+    t_token_list    *current_tk;
+
+    open_parentheses = 1;
+    current_tk = (*curr_tk)->next;
+    while (current_tk)
+    {
+        if (current_tk->type == l_parenthesis)
+            open_parentheses++;
+        if (current_tk->type == r_parenthesis)
+            open_parentheses--;
+        if (!open_parentheses)
+            break;
+        if (write(fd_subshell, current_tk->content, current_tk->length) == -1)
+            perror ("write ");
+        current_tk = current_tk->next;
+    }
+    if (current_tk)
+        current_tk = current_tk->next;
+    *curr_tk = current_tk;   
+}
+
+void    set_subshell_attributs(t_cmd *current_cmd, char *subshell_filename)
+{
+    current_cmd->val.value = ft_strdup("minishell");
+    current_cmd->val.args = malloc(sizeof(char *) * 3);
+    if (!current_cmd->val.args)
+    {
+        perror("malloc ");
+        return ;
+    }
+    current_cmd->val.args[0] = ft_strdup("minishell");
+    current_cmd->val.args[1] = ft_strdup(subshell_filename);
+    current_cmd->val.args[2] = NULL;
+    free(subshell_filename);
+    subshell_filename = NULL;
+}
+
+void    set_subshell(t_cmd *current_cmd, t_token_list **curr_tk)
+{
     int             fd_subshell;
     char            *subshell_filename;
     t_token_list    *current_tk;
@@ -429,45 +513,32 @@ void    set_subshell_attributs(t_cmd *current_cmd, t_token_list **curr_tk)
         perror("open ");
         // free everything and return
     }
-    i = 0;
-    open_parentheses = 1;
-    current_tk = *curr_tk;
-    //cmd_start_tk = current_tk;
-    current_tk = current_tk->next;
-    while (current_tk) // && current_tk->type != r_parenthesis
-    {
-        if (current_tk->type == l_parenthesis)
-            open_parentheses++;
-        if (current_tk->type == r_parenthesis)
-            open_parentheses--;
-        ////dprintf(1, "in set_subshell(), current_tk = %s\n", current_tk->content);
-        if (!open_parentheses)
-            break;
-        if (write(fd_subshell, current_tk->content, current_tk->length) == -1) // vérifier si current_tk->length est bien à jour !
-            perror ("write ");
-        current_tk = current_tk->next;
-    }
-    if (current_tk)
-        current_tk = current_tk->next;
-    *curr_tk = current_tk;
-    //add_val_to_cmd(current_cmd, ft_strjoin("minishell ", subshell_filename));
-    
-    current_cmd->val.value = ft_strdup("minishell");
-    
-    current_cmd->val.args = malloc(sizeof(char *) * 3);
-    if (!current_cmd->val.args)
-    {
-        perror("malloc ");
-        // return ?
-    }
-    current_cmd->val.args[0] = ft_strdup("minishell");
-    current_cmd->val.args[1] = ft_strdup(subshell_filename);
-    current_cmd->val.args[2] = NULL;
-    
-    free(subshell_filename);
-    subshell_filename = NULL;
+    write_in_file(curr_tk, fd_subshell);
+    set_subshell_attributs(current_cmd, subshell_filename);
 }
 
+void    get_attribut(t_cmd *current_cmd, t_token_list **curr_tk, int *args_count, int *subshell)
+{
+    t_token_list    *current_tk;
+
+    current_tk = *curr_tk;
+    if (current_tk->type == l_io_redirect || current_tk->type == r_io_redirect)
+    {
+        update_redirect(current_cmd, current_tk);
+        current_tk = current_tk->next->next;
+    }
+    else if (current_tk->type == l_parenthesis)
+    {
+        *subshell = 1;
+        set_subshell(current_cmd, &current_tk);
+    }
+    else
+    {
+        args_count += get_words_count(current_tk);
+        current_tk = current_tk->next;
+    }
+    *curr_tk = current_tk;
+}
 
 void    set_simple_command(t_cmd *current_cmd, t_token_list **first_tk, t_token_list **cmd_start_tk, t_token_list **curr_tk)
 {
@@ -478,11 +549,8 @@ void    set_simple_command(t_cmd *current_cmd, t_token_list **first_tk, t_token_
     subshell = 0;
     args_count = 0;
     current_tk = *curr_tk;
-    
     while (current_tk && current_tk->type != and_tk && current_tk->type != or_tk)
     {
-        ////dprintf(1, "in set_simple_command(), current_tk = %s\n", current_tk->content);
-        
         if (current_tk->type == l_io_redirect || current_tk->type == r_io_redirect)
         {
             update_redirect(current_cmd, current_tk);
@@ -491,28 +559,25 @@ void    set_simple_command(t_cmd *current_cmd, t_token_list **first_tk, t_token_
         else if (current_tk->type == l_parenthesis)
         {
             subshell = 1;
-            set_subshell_attributs(current_cmd, &current_tk);
+            set_subshell(current_cmd, &current_tk);
         }
         else
         {
-            ////dprintf(1, "in set_simple_command(), before calling get_words_count()\n");
             args_count += get_words_count(current_tk);
-            ////dprintf(1, "in set_simple_command(), after calling get_words_count()\n");
             current_tk = current_tk->next;
         }
+        //get_attribut(current_cmd, &current_tk, &args_count, &subshell);
     }
     current_cmd->red.next_cmd = NULL;
-    ////dprintf(1, "in set_simple_command(), just before calling set_command_attributs()\n");
     if (!subshell)
         set_command_attributs(&current_cmd, first_tk, *cmd_start_tk, args_count);
     *curr_tk = current_tk;
 }
 
-void malloc_error()
+void    malloc_error()
 {
 
 }
-
 
 t_cmd   *get_ast(t_data *data)
 {

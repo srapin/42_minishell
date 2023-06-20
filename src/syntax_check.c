@@ -37,7 +37,7 @@ void    check_first(t_data *data, t_token_list **first)
         current = current->next;
     if (!current)
         return ;
-;   type = current->type;
+    type = current->type;
     if (type == and_tk)
     {
         if ((*first)->length >= 2)
@@ -71,43 +71,52 @@ void    check_io_redirect(t_data *data, t_token_list **op)
         display_se(data, ft_substr(current->content, 0, 2));
 }
 
-void    check_simple_command(t_data *data, t_token_list **current, int *parentheses_count, int *s_quotes, int *d_quotes)
+void     sc_check_quotes(t_data *data, t_token_list **current)
+{
+    if ((*current)->type == simple_quote 
+        && ((*current)->content[(*current)->length - 1] != '\''
+        || (*current)->length == 1))
+        {
+            printf("Syntax error : Missing closing quote\n");
+            free_parsing_data(data);
+            exit(SYNTAX_ERROR);
+        }
+    else if ((*current)->type == double_quote
+        && ((*current)->content[(*current)->length - 1] != '\"'
+        || (*current)->length == 1))
+        {
+            printf("Syntax error : Missing closing quote\n");
+            free_parsing_data(data);
+            exit(SYNTAX_ERROR);
+        }
+}
+
+void     sc_check_parentheses(t_data *data, t_token_list **current, int *parentheses_count)
+{
+    if ((*current)->type == l_parenthesis)
+    {
+        (*parentheses_count)++; // c'est tout ?
+        if ((*current)->next && (*current)->next->type == r_parenthesis)
+            display_se(data, ")");
+    }
+    else if ((*current)->type == r_parenthesis)
+    {
+        if (!(*parentheses_count))
+            display_se(data, ")");
+        (*parentheses_count)--;
+    }
+}
+
+void    check_simple_command(t_data *data, t_token_list **current, int *parentheses_count)
 {
     while ((*current) && (*current)->type != and_tk && (*current)->type != or_tk)
     {
         if ((*current)->type == l_io_redirect || (*current)->type == r_io_redirect)
             check_io_redirect(data, current);
-        else if ((*current)->type == l_parenthesis)
-        {
-            (*parentheses_count)++; // c'est tout ?
-            if ((*current)->next && (*current)->next->type == r_parenthesis)
-                display_se(data, ")");
-        }
-        else if ((*current)->type == r_parenthesis)
-        {
-            if (!(*parentheses_count))
-                display_se(data, ")");
-            (*parentheses_count)--;
-        }
-        else if ((*current)->type == simple_quote 
-            && ((*current)->content[(*current)->length - 1] != '\''
-            || (*current)->length == 1))
-            {
-                printf("Syntax error : Missing closing quote\n");
-                free_parsing_data(data);
-                //free_tokens(data->first);
-                //free_tokens(first);
-                exit(SYNTAX_ERROR);
-            }
-        else if ((*current)->type == double_quote
-            && ((*current)->content[(*current)->length - 1] != '\"'
-            || (*current)->length == 1))
-            {
-                printf("Syntax error : Missing closing quote\n");
-                free_parsing_data(data);
-                //free_tokens(first);
-                exit(SYNTAX_ERROR);
-            }
+        else if ((*current)->type == l_parenthesis || (*current)->type == r_parenthesis)
+            sc_check_parentheses(data, current, parentheses_count);
+        else if ((*current)->type == simple_quote || (*current)->type == double_quote)
+            sc_check_quotes(data, current);
         *current = (*current)->next;
     }
 }
@@ -146,19 +155,11 @@ void    check_pipe(t_data *data, t_token_list **current)
     (*current) = (*current)->next;
 }
 
-void    check_syntax(t_data *data)
+void    check_pipelines(t_data *data, int *parentheses_count)
 {
-    dprintf(1, "syntax, child process \n");
-    int parentheses_count = 0;
-    int s_quotes_count = 0; // si non utilisée plus haut, à delete
-    int d_quotes_count = 0; // si non utilisée plus haut, à delete
     t_token_list    *current;
-    
-    current = *(data->first); // part du principe qu'à au moins un élément ; sinon aurait déjà exit
-    
-    check_first(data, data->first); // utile ? en a deja un dans le while 
-    
-    /* check pipelines one by one */
+
+    current = *(data->first);
     while (current)
     {
         if (current->type == and_tk || (current->type) == or_tk && current->type > 1)
@@ -173,22 +174,32 @@ void    check_syntax(t_data *data)
                 if (current->type == or_tk && current->length == 1) // ie si est un pipe
                     check_pipe(data, &current);
                 else
-                    check_simple_command(data, &current, &parentheses_count, &s_quotes_count, &d_quotes_count);
+                    check_simple_command(data, &current, parentheses_count);
             }
         }
     }
-    if (parentheses_count) // ie toutes les parentheses ne sont pas fermees
+}
+
+void    check_syntax(t_data *data)
+{
+    dprintf(1, "syntax, child process\n");
+    int parentheses_count = 0;
+    
+    if (!data || !(data->first) || !(*(data->first)))
+        return ;
+    
+    check_first(data, data->first);
+    
+    /* check pipelines one by one */
+    check_pipelines(data, &parentheses_count);
+
+    if (parentheses_count)
     {
         printf("Syntax error : Missing closing parenthesis\n");
         free_parsing_data(data);
-        //free_tokens(data->first);
-        //free_tokens(first);
         exit(SYNTAX_ERROR);
     }
-    //dprintf(1, "syntax \n");
-    //free_tokens(data->first);
     free_parsing_data(data);
-    //free_tokens(first);
     exit(EXIT_SUCCESS);
 }
 

@@ -6,13 +6,12 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 23:24:33 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/20 03:11:33 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/20 06:10:18 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-// tf do i do that in a simple way ?
 char	*random_filename()
 {
 	static size_t	files_count;
@@ -91,27 +90,6 @@ void	hd_expand(t_ht_hash_table *ht, t_token_list **t_list)
         }
         free(dollar_start);
         current = current->next;
-
-		/* dollar_start = ft_strchr(current->content, '$');
-		while (dollar_start)
-		{
-			dollar_index = current->length - ft_strlen(dollar_start);
-			next_dollar_start = ft_strchr(dollar_start + 1, '$');
-			next_dollar_index = current->length - ft_strlen(next_dollar_start);
-			if (next_dollar_start)
-				expand(ht, &current, ft_substr(current->content, dollar_index
-							+ 1, next_dollar_index - dollar_index - 1),
-						dollar_index);
-			else if (current->type == double_quote
-					|| current->type == simple_quote)
-				expand(ht, &current, ft_substr(current->content, dollar_index
-							+ 1, current->length - dollar_index - 2),
-						dollar_index);
-			else
-				expand(ht, &current, ft_strdup(dollar_start + 1), dollar_index);
-			dollar_start = next_dollar_start;
-		}
-		current = current->next; */
 	}
 } 
 

@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 20:57:20 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/20 03:58:31 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/20 04:00:08 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ int try_to_exec_builtins(t_cmd *cmd, t_cmd *first, bool is_child)
         free_cmds(&first, true);
         exit(ret);
     }
-    dprintf(1, "at exit in child, last exit status = %d\n", ret);
+    //dprintf(1, "at exit in child, last exit status = %d\n", ret);
     g_exit_status = ret;
     dup2(old_in, STDIN_FILENO);
     dup2(old_out, STDOUT_FILENO);

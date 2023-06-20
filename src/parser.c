@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 02:12:27 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/20 03:58:54 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/20 04:52:48 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,47 +115,26 @@ void    print_ast(t_cmd *ast)
 
 t_cmd  *parse(t_data *data)
 {    
-    int wstatus;
+    int     wstatus;
+    t_cmd   *ast;
     
+    ast = NULL;
     wstatus = ft_syntax(data);
-    if (wstatus) // ie la syntaxe n'était pas bonne 
+    if (wstatus)
     {
         g_exit_status = wstatus;
         return NULL;
     }
-    
     perform_variable_exp(data);
-    
-    // tej les quotes en regroupant les <word> qui se suivent et ne sont pas 
-    // séparés par des whitespaces ou des operateurs de controle autres que des quotes.
-    // Cela ne veut pas dire que cela enleve les possibles nouveaux whitespaces 
-    // dans un <word>, apparus suite à l'expansion de variables.
-    // On ne fait cela (traites les chaines de caractères  qu'après avoir géré les wildcards et avoir
-    // séparé les tokens entre redirections et commandes
     delete_quotes(data);
     group_words(data);
-
-    ////dprintf(1, "in parse(), after delete_quotes() and group_words()\n");
-
     perform_wildcard_exp(data);
-
-    //print_tokens(first);
-    
-    ////dprintf(1, "in parse(), after perform_wildcard_exp()\n");
-
-    t_cmd *ast = NULL;
-    ////dprintf(1, "in parse(), after set_here_docs()\n");
-
-
     if (set_here_docs(data))
         ast = get_ast(data);
     // else 
     //     free_tokens()
-    //print_ast(ast);
     free_tokens(data->first);
     data->first = NULL;
-    
-
     exec_cmds(ast);
     return ast;
 }

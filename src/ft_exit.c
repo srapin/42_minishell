@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 00:57:49 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/20 01:53:40 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/20 04:05:23 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,8 @@ int ft_exit(t_cmd *cmd)
     exit_status = (unsigned char)initial_nb;
     // free all
     free_pwd(cmd->env);
+    ht_del_hash_table(cmd->env);
+    ft_lstfree(&cmd->export_history, free);
     printf("exit\n");
     exit(exit_status);
 }

@@ -40,7 +40,8 @@ FILES = cmd_private\
 		signal \
 		ast_heredocs \
 		ast\
-		free_cmds
+		free_cmds \
+		get_env 
 
 #PARSING_FILES = 	ast \
 					ast_heredocs

@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 00:40:45 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/19 23:22:49 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/20 04:53:49 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ t_token_list    **tokenise(t_token *token_stream, size_t stream_len, char *input
     t_token_list    **first;
     
     if (!token_stream)
-        return (NULL); // gerer autrement ?
+        return (NULL);
     i = 0;
     tk_list = NULL;
     first = malloc(sizeof(t_token_list *));
@@ -88,11 +88,11 @@ t_token_list    **tokenise(t_token *token_stream, size_t stream_len, char *input
         return (NULL);
     while (i < stream_len)
     {
-        current = token_stream[i].type; // inutile un peu
+        current = token_stream[i].type;
         
         if (i < stream_len && (current == r_parenthesis || current == l_parenthesis))
         {
-            tk_add(&tk_list, tk_new_elem(&input[i], 1, current, 0)); // stocke les parentheses token par token, et non en regroupant les memes types en un seul token (pourra donc avoir par ex 5 tokens de contenu "(", au lieu d'un unique token de contenu "(((((")
+            tk_add(&tk_list, tk_new_elem(&input[i], 1, current, 0));
             i++;
         }
         else if (i < stream_len && (current == simple_quote || current == double_quote))
@@ -101,7 +101,7 @@ t_token_list    **tokenise(t_token *token_stream, size_t stream_len, char *input
             i++;
             while (i < stream_len && token_stream[i].type != current)
                 i++;
-            if (i < stream_len) // ie si n'est pas arrivé en fin de commande sans trouver de closing quote (peut arriver dans le cas d'une quote non fermée )
+            if (i < stream_len)
                 i++;
             tk_add(&tk_list, tk_new_elem(&input[j], i - j, current, 
                 (current == simple_quote) + (current == double_quote) * 2));
@@ -152,10 +152,10 @@ t_token    *assign_type(char *input, size_t stream_len)
     i = 0;
     token_stream = ft_calloc(sizeof(t_token), stream_len + 1);
     if (!token_stream)
-        return (NULL); // return ou exit ?
+        return (NULL);
     while (i < stream_len)
     {
-        if (ft_strchr(WHITESPACES, input[i])) // else { set_operator_token();}, fonction dans laquelle fait le reste des else if
+        if (ft_strchr(WHITESPACES, input[i]))
             token_stream[i].type = whitespace;
         else if (set_token_operator(&token_stream[i], input[i]))
             ;

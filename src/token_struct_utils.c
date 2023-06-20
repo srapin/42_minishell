@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_struct_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:14:54 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/19 04:03:10 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/20 05:43:37 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,24 +23,12 @@ t_token_list    *tk_new_elem(char *t_stream, size_t t_len, int t_type, int is_qu
     new->length = t_len;
     new->type = t_type;
     new->quotes = is_quote;
-    // if (t_type == simple_quote || t_type == double_quote)
-    // {
-    //     new->quote_start = t_stream + 1;
-    //     new->quote_end = t_stream + (t_len - 2);
-    // }
-    // else
-    // {
-    //     new->quote_start = NULL;
-    //     new->quote_end = NULL;
-    // }
     new->merged_words = NULL;
     new->prev = NULL;
     new->next = NULL;
     return (new);
 }
 
-// Liste simplement ou doublement chainee ?
-// *first ou **first ? les modifs sont-elles faites si a uniquement *first ?
 void    tk_add(t_token_list **first, t_token_list *new)
 {
     t_token_list *current;
@@ -71,9 +59,8 @@ void    tk_del_one(t_token_list **first, t_token_list *to_del)
 
     while (current && current != to_del)
         current = current->next;
-    if (!current) // to_del ne se trouve pas dans la liste
+    if (!current)
         return ;
-    
     if (current->prev)
         current->prev->next = current->next;
     if (current->next)
@@ -85,7 +72,8 @@ void    tk_del_one(t_token_list **first, t_token_list *to_del)
     current = NULL;
 }
 
-void    tk_add_word_in_list(t_token_list **current, char *content) // adds a token <word> of content char *content after the *current
+ // adds a token <word> of content char *content after the *current
+void    tk_add_word_in_list(t_token_list **current, char *content)
 {
     t_token_list    *initial_current_next;
     t_token_list    *new;

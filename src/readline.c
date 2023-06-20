@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   readline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 22:15:52 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/20 02:23:26 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/20 04:38:55 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,18 +78,15 @@ void    read_lines(t_data *data)
     tk_list = NULL;
     while (input) // readline ne renvoie NULL que dans le cas d'un Ctrl-D
     {
-        // int i = read(STDIN_FILENO, NULL, 1);
-        // if (i==0)
-        //     ft_exit(NULL);
-        //dprintf(1, "pid main = %d\n", getpid());
+        
         stream_len = ft_strlen(input);
-        if (!stream_len) // ie si input_str = '\0'.
+        if (!stream_len)
         {
             input = readline("$ ");
             continue;
         }
         if (input && input[1] == 4)
-            ft_exit(NULL);
+            ft_exit(NULL); // ca leak non ???
         
         add_history(input);
         if (only_whitespaces(input))
@@ -106,18 +103,11 @@ void    read_lines(t_data *data)
             free(input);
             input = NULL;
         }
-        
         free_cmds(&cmd, false);
         input = readline("$ ");
     }
     if (!cmd)
-    {
         free_parsing_data(data);
-        /* free_pwd(ht); 
-        ht_del_hash_table(ht);
-        ft_lstfree(&exp_hist, free); */
-    }
-    // free_tokens(&tk_list);
     free_cmds(&cmd, true);
     free(input);
     printf("exit\n");

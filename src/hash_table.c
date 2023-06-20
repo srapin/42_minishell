@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hash_table.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 16:09:20 by hlesny            #+#    #+#             */
-/*   Updated: 2023/06/20 02:12:39 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/20 06:07:52 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,8 +120,8 @@ t_ht_hash_table    *ht_new(size_t size)
 
     ht_new = ft_calloc(sizeof(t_ht_hash_table), 1);
     if (!ht_new)
-        return (NULL); // idk
-    ht_new->count = 0; // utile sachant qu'on utilise calloc ?
+        return (NULL);
+    ht_new->count = 0;
     ht_new->base_size = size;
     ht_new->size = next_prime(size);
     ht_new->items = ft_calloc(sizeof(t_ht_item), ht_new->size);
@@ -141,22 +141,14 @@ t_ht_item   *ht_new_item(char *key, char *value)
     new = ft_calloc(sizeof(t_ht_item), 1);
     if (!new)
         return (NULL);
-    new->key = key; // ft_strdup(key); (les arguments de la fonction sont deja malloc)
-    new->value = value; // ft_strdup(value); (les arguments de la fonction sont deja malloc)
+    new->key = key;
+    new->value = value;
     return (new);
 }
 
 int    set_env_var(t_ht_item *item, char **env, int i)
 {
     char *tmp;
-    
-    // env[i] = ft_calloc(sizeof(char), (ft_strlen(item->key) + ft_strlen(item->value) + 2)); // +2 ou +5 ?
-    // if (!env[i])
-    // {
-    //     perror("malloc ");
-    //     free_tab(env);
-    //     return (0);
-    // }
     tmp = ft_strjoin(item->key, "=");
     env[i] = ft_strjoin(tmp, item->value);
     if (!env[i])
@@ -184,24 +176,12 @@ char    **hash_map_to_tab(t_ht_hash_table *ht)
     }
     i = 0;
     j = 0;
-    
     while (i < ht->count && j < ht->size)
     {
         while (j < ht->size && (!ht->items[j] || ht->items[j] == &HT_DELETED_ITEM))
             j++;
-        
         if (!set_env_var(ht->items[j], env, i))
             return (NULL);
-        /* env[i] = ft_calloc(sizeof(char), (ft_strlen(ht->items[j]->key) + ft_strlen(ht->items[j]->value) + 5)); // +2 : pour '=' et pour null-terminate
-        if (!env[i])
-        {
-            perror("malloc ");
-            free_tab(env);
-            return (NULL);
-        }
-        tmp = ft_strjoin(ht->items[j]->key, "=");
-        env[i] = ft_strjoin(tmp, ht->items[j]->value);
-        free(tmp); */
         i++;
         j++;
     }

@@ -77,7 +77,7 @@ void	child_process(t_cmd *cmd, t_cmd *first,  int pipe_tab[2])
 		free_cmds(&first, true);
 	 	execve(path, args, env);
 	}
-	print_err(errno, cmd);
+	print_err(errno, cmd); // renvoie pas le bon message d'erreur ! (no such file or directory au lieu de command not found)
 	free_tab(paths);
 	free_cmds(&first, true);
 	exit(CMD_NOT_FOUND);

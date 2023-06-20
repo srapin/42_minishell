@@ -6,11 +6,24 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:13:44 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/19 18:10:33 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/20 05:42:17 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+void rm_quotes_token(t_token_list *current)
+{
+    char *content_tmp;
+    
+    content_tmp = ft_substr(current->content, 1, current->length - 2);
+    if (!content_tmp)
+        return ;
+    free(current->content);
+    current->content = content_tmp;
+    current->type = word;
+    current->length -= 2;
+}
 
 /*
 Après l'expansion de variables. 
@@ -20,22 +33,10 @@ void    delete_quotes(t_data *data)
 {
     char *content_tmp;
     t_token_list *current;
-    t_token_list *current_prev;
 
     if (!data->first || !(*(data->first)))
         return ;
     current = *(data->first);
-    if (current->type == simple_quote || current->type == double_quote)
-    {
-        content_tmp = ft_substr(current->content, 1, current->length - 2);
-        if (!content_tmp) // && current->length - 2 > 0 // si le malloc ne fonctionne pas
-            return ; // que faire ?
-        free(current->content);
-        current->content = content_tmp;
-        current->type = word;
-    }
-    current_prev = current;
-    current = current->next;
     while (current)
     {
         if (current->type == l_parenthesis)
@@ -48,16 +49,7 @@ void    delete_quotes(t_data *data)
         else 
         {
             if (current->type == simple_quote || current->type == double_quote)
-            {
-                //if (current_prev->type != l_io_redirect || current_prev->length == 1) // si le token n'est pas le delimiteur d'un here_doc
-                    content_tmp = ft_substr(current->content, 1, current->length - 2);
-                    if (!content_tmp) // si le malloc ne fonctionne pas
-                        return ; // que faire ?
-                    free(current->content);
-                    current->content = content_tmp;
-                    current->type = word;
-                    current->length -= 2;
-            }
+                rm_quotes_token(current);
             current = current->next;
         }
     }
@@ -74,7 +66,6 @@ t_word_data     *new_word_data(t_token_list *token)
     wd->quotes = token->quotes;
     wd->length = token->length;
     wd->next = NULL;
-    ////dprintf(1, "in new_word_data(), wd = %s, quotes = %d, wd->quotes = %d, length = %zu, wd->length = %zu\n", wd->content, token->quotes, wd->quotes, token->length, wd->length);
     return (wd);
 }
 
@@ -85,7 +76,6 @@ void    add_word_data(t_word_data **first, t_word_data *to_add)
 
     if (!first)
         return ;
-    ////dprintf(1, "in add_wd(), quotes = %d\n", to_add->quotes);
     word_end_index = 0;
     if (!(*first))
         *first = to_add;
@@ -110,24 +100,37 @@ void    set_merged_words(t_token_list **curr)
     t_token_list    *tmp;
 
     current = *curr;
-    if (!current->merged_words) // ie le <word> n'a pas encore été merged avec un autre <word>
+    if (!current->merged_words)
         add_word_data(&current->merged_words, new_word_data(current));
     add_word_data(&current->merged_words, new_word_data(current->next));
-    
     content_tmp = ft_strjoin(current->content, current->next->content);
     free(current->content);
     current->content = content_tmp;
     current->length = ft_strlen(content_tmp);
-    
-    tmp = current->next; // the one to delete
-    tmp->prev->next = tmp->next; // fait pointer le précédent sur l'élément suivant celui qui va etre supprimé
+    tmp = current->next;
+    tmp->prev->next = tmp->next;
     if (tmp->next)
-        tmp->next->prev = tmp->prev; // idem mais dans l'autre sens
+        tmp->next->prev = tmp->prev;
     free(tmp->content);
     free(tmp);
     tmp = NULL;
-
     *curr = current;
+}
+
+void    del_whitespace(t_data *data, t_token_list *current)
+{
+    t_token_list    *current2;
+    
+    if (current == *(data->first))
+        *(data->first) = current->next;
+    current2 = current; 
+    current = current->next;
+    if (current2->prev)
+        current2->prev->next = current2->next;
+    if (current2->next)
+        current2->next->prev = current2->prev;
+    free(current2->content);
+    free(current2);
 }
 
 /*
@@ -138,11 +141,11 @@ Apres avoir enlevé les quotes, groupe deux <word> qui se suivent
 void    group_words(t_data *data)
 {
     t_token_list    *current;
-    t_token_list    *current2;
+    //t_token_list    *current2;
     char *content_tmp;
 
     if (!data->first)
-        return ; // ?
+        return ;
     current = *(data->first);
     while (current)
     {
@@ -155,23 +158,8 @@ void    group_words(t_data *data)
         }
         else if (current->type == word && current->next && current->next->type == word)
             set_merged_words(&current);
-        else if (current->type == whitespace) // deletes the token
-        {
-            if (current == *(data->first))
-                *(data->first) = current->next;
-            current2 = current; 
-            current = current->next;
-            if (current2->prev) // vérifie qu'il ne s'agit pas du premier élément
-                current2->prev->next = current2->next; // fait pointer le précédent sur l'élément suivant celui qui va etre supprimé
-            if (current2->next) // vérifie qu'il ne s'agit pas du dernier élément
-                current2->next->prev = current2->prev; // idem mais dans l'autre sens
-            
-            free(current2->content);
-            free(current2);
-
-            //current = current->next;
-            //tk_del_one(&current);
-        }
+        else if (current->type == whitespace)
+            del_whitespace(data, current);
         else
             current = current->next;
     }

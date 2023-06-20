@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:13:13 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/19 18:11:13 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/20 04:19:30 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,6 @@ char    *search_from_end(char *d_name, char *suffix)
 Renvoie NULL si le nom du directory stream donne en argument ne commence pas par prefix,
 et pointe vers le charactere suivant la fin du prefix dans la string dans le cas contraire
 */
-/*
-Renvoie le dir_content->name si ca match avec le prefix, et null le cas echeant
-*/
 char    *search_from_start(char *d_name, char *prefix)
 {
     int i;
@@ -49,12 +46,12 @@ char    *search_from_start(char *d_name, char *prefix)
             return (NULL);
         i++;
     }
-    if (prefix[i]) // ie n'a pas parcouru tout le prefix
+    if (prefix[i])
         return (NULL);
     return (d_name);
 }
 
-void    add_filename(t_filename **filenames, char *new) // new a deja ete malloc. PAS SUR (s'agit de l'attribut d_name de la struct dirent ; et s'agit d'un char[256])
+void    add_filename(t_filename **filenames, char *new)
 {
     t_filename  *current;
     t_filename  *new_path;
@@ -64,7 +61,7 @@ void    add_filename(t_filename **filenames, char *new) // new a deja ete malloc
     if (!new_path)
         return ;
     new_path->filename = ft_strdup(new);
-    if (!(*filenames)->filename) // ie la liste est pour l'instant vide
+    if (!(*filenames)->filename)
     {
         free(*filenames);
         (*filenames) = new_path;
@@ -78,27 +75,25 @@ void    add_filename(t_filename **filenames, char *new) // new a deja ete malloc
     }
 }
 
-/*
-!!!!!! si est entre quotes, il faut quand meme regarder si un autre wildcard est present apres celui ci, et ce avant de re parser quoi que ce soit dans la struct dirent
-*/
-int     is_in_quotes(t_token_list *current, size_t index) // determines if the index is in between quotes. index = index of the wildcard in the whole (final) word
+
+int     is_in_quotes(t_token_list *current, size_t index)
 {
     t_word_data *current_w;
     
-    if (!(current->merged_words)) // ie le token final n'est constitué que d'un seul token, le token initial (et donc pas d'un merge d'une succession de tokens séparés par rien ou des quotes)
+    if (!(current->merged_words))
         return (current->quotes);
     current_w = current->merged_words;
     while (current_w)
     {
         if (index >= current_w->word_start_index)
         {
-            if ((!current_w->next && current_w->length > index) // rien ne suit et index est bien contenu dans le dernier mot
-                || current_w->next->word_start_index > index) // index est dans la range d'indexes du current_w word
+            if ((!current_w->next && current_w->length > index)
+                || current_w->next->word_start_index > index)
                 return (current_w->quotes);
         }
         current_w = current_w->next;
     }
-    return (-1); // cas d'erreur, ie cas où l'index donné n'est pas dans l'intervalle d'indexes du mot (ie [0, ft_strlen(mot) - 1])
+    return (-1);
 }
 
 int     is_a_hidden_dir(struct dirent *dir_content)
@@ -114,6 +109,8 @@ int     is_a_hidden_dir(struct dirent *dir_content)
 /*
 Retourne les filenames associes au wildcard, ou NULL lorsqu'aucun filename ne correspond 
 IL S'AGIT DU PREMIER TRI
+
+ Note : readdir() renvoie NULL si il n'y a plus d'entité de directory à lire
 */
 t_filename  *first_sort(DIR *dir, char *prefix, char *suffix) // prefix and suffix indexes in the big (aka merged, final) word
 {
@@ -123,7 +120,7 @@ t_filename  *first_sort(DIR *dir, char *prefix, char *suffix) // prefix and suff
     t_filename      *filenames;            
     struct dirent   *dir_content;
     
-    if (!prefix || !suffix) // le malloc n'a pas fonctionné
+    if (!prefix || !suffix)
         return (NULL);
     filenames = ft_calloc(sizeof(t_filename), 1);
     if (!filenames)
@@ -131,46 +128,45 @@ t_filename  *first_sort(DIR *dir, char *prefix, char *suffix) // prefix and suff
     prefix_len = ft_strlen(prefix);
     suffix_len = ft_strlen(suffix);
     dir_content = readdir(dir);
-    if (!prefix_len && !suffix_len) // retourne l'entierete du contenu du repo courant
+    if (!prefix_len && !suffix_len)
     {
         while (dir_content)
         {
-            if (!is_a_hidden_dir(dir_content)) // skip . et ..
+            if (!is_a_hidden_dir(dir_content))
                 add_filename(&filenames, dir_content->d_name);
             dir_content = readdir(dir);
         }
         return (filenames);
     }
-    if (prefix_len == 2 && prefix[0] == '.' && prefix[1] == '.') // si ..* alors ne doit rien modifier
+    if (prefix_len == 2 && prefix[0] == '.' && prefix[1] == '.')
         return (NULL);
     while (dir_content)
     {
-        //printf("d_name = %s\n", dir_content->d_name);
-        if (prefix && *prefix != '.' && is_a_hidden_dir(dir_content)) // skip . et ..
+        if (prefix && *prefix != '.' && is_a_hidden_dir(dir_content))
             ;
-        else if (prefix_len && suffix_len) // est de la forme prefix*suffix
+        else if (prefix_len && suffix_len)
         {
-            curr_filename = search_from_start(dir_content->d_name, prefix); // ca marche ou est-ce que doit malloc ?
-            if (curr_filename)// si le prefix est present dans le d_name
+            curr_filename = search_from_start(dir_content->d_name, prefix);
+            if (curr_filename)
             {
                 curr_filename = search_from_end(dir_content->d_name, suffix);
-                if (curr_filename) // si le suffix est aussi present dans le d_name
+                if (curr_filename)
                     add_filename(&filenames, dir_content->d_name); 
             } 
         }
-        else if (prefix_len) // est de la forme prefix*
+        else if (prefix_len)
         {
-            curr_filename = search_from_start(dir_content->d_name, prefix); // ca marche ou est-ce que doit malloc ?
-            if (curr_filename) // si le prefix est present dans le d_name
+            curr_filename = search_from_start(dir_content->d_name, prefix);
+            if (curr_filename)
                 add_filename(&filenames, dir_content->d_name); 
         }
-        else if (suffix_len) // est de la forme *suffix
+        else if (suffix_len)
         {
-            curr_filename = search_from_end(dir_content->d_name, suffix); // ca marche ou est-ce que doit malloc ?
-            if (curr_filename) // si le suffix est present dans le d_name
+            curr_filename = search_from_end(dir_content->d_name, suffix);
+            if (curr_filename)
                 add_filename(&filenames, dir_content->d_name); 
         }
-        dir_content = readdir(dir); // readdir() renvoie NULL si il n'y a plus d'entité de directory à lire
+        dir_content = readdir(dir);
     }
     return (filenames);
 }
@@ -186,10 +182,10 @@ char *get_suffix(t_token_list *current)
     while (i >= 0)
     {
         if (current->content[i] == '*' && !is_in_quotes(current, i))
-            return (ft_substr(current->content, i + 1, current->length)); // ou return (current->content + i + 1) ?
+            return (ft_substr(current->content, i + 1, current->length));
         i--;
     }
-    return (NULL); // cas ou ne trouve pas ne serait-ce qu'un '*' (impossible sinon n'aurait jamais appelé cette fonction)
+    return (NULL);
 }
 
 char    *ft_search_str_in_str(char *s, char *to_find)
@@ -199,8 +195,8 @@ char    *ft_search_str_in_str(char *s, char *to_find)
 
     if (!s || ft_strlen(to_find) > ft_strlen(s))
         return (NULL);
-    if (!ft_strlen(to_find)) // to_find n'est jamais NULL : il a été malloc avec substr et est au moins la chaine vide (ie "\0")
-        return (s); // retourne s ou NULL ?
+    if (!ft_strlen(to_find))
+        return (s);
     i = 0;
     j = 0;
     while (s[i])
@@ -212,7 +208,7 @@ char    *ft_search_str_in_str(char *s, char *to_find)
                 i++;
                 j++;
             }
-            if (s[i] || (!s[i] && !to_find[j])) // ie est sorti soit car a parcouru l'entièreté de to_find
+            if (s[i] || (!s[i] && !to_find[j]))
                 return (&s[i - j + 1]);
             i -= j;
             j = 0;
@@ -239,18 +235,16 @@ int  get_next_wcard_index(t_token_list *current, size_t index)
 void    del_filename(t_filename **first, t_filename *to_del)
 {
     t_filename  *current;
-    //t_filename  *tmp;
-
+    
     current = (*first);
     while (current->next && current->next != to_del)
         current = current->next;
     if (!current->next)
-        return ; // a parcouru toute la liste sans trouver to_del
-    //tmp = to_del->next;
+        return ;
     current->next = to_del->next;
     free(to_del->filename);
-    free(to_del); // ?
-    to_del = NULL; // ?
+    free(to_del);
+    to_del = NULL;
 }
 
 /*
@@ -263,6 +257,10 @@ Sinon : en continuant dans le mot originel, si tombe sur un autre '*' : si ce qu
     Sinon, itère à nouveau sur le d_name jusqu'a trouver la première apparition de la string recherchée,
     ou jusqu'à ce que la fin du d_name soit reached.
 Etc...
+
+Sous chaine entre deux '*' : 
+    taille de la sous chaine : next_wcard_index - (curr_wcard_index + 1)
+    index du debut de la sous chaine : curr_wcard_index + 1
 */
 void    second_sort(t_filename **filenames, t_token_list *current, char *prefix)
 {
@@ -274,21 +272,19 @@ void    second_sort(t_filename **filenames, t_token_list *current, char *prefix)
 
     if (!filenames)
         return ;
-    if (!(*filenames)) // ie si n'a trouvé aucun match dans le repo courant pour ce prefixe et suffixe 
+    if (!(*filenames))
         return ;
     prefix_len = ft_strlen(prefix);
     current_f = (*filenames);
-    while (current_f) // regarde chaque filename un par un
+    while (current_f)
     {
-        i = prefix_len + 1; // si prefix non vide, i est initialisé à l'index suivant la fin du prefixe, + 1 pour "sauter" le '*'. Sinon, i est initialisé à 1
-        filename_pos = current_f->filename + prefix_len; // les filenames commencent tous par le prefixe
-        while (i < current->length) // ok ou c'est mieux de mettre i < ft_strlen(word) (ie i < current->length). Au cas ou i dépasse la taille de word avant de revenir dans la condition du while (aurait alors un segfault)
+        i = prefix_len + 1;
+        filename_pos = current_f->filename + prefix_len;
+        while (i < current->length)
         {
-            // sous chaine entre deux '*' : 
-            // taille de la sous chaine : next_wcard_index - (curr_wcard_index + 1)
-            // index du debut de la sous chaine : curr_wcard_index + 1
+            
             next_wcadr_index = get_next_wcard_index(current, i);
-            if (next_wcadr_index >= 0) // get_next_wcard() renvoie -1 en cas d'échec
+            if (next_wcadr_index >= 0)
             {
                 // printf("filename_pos : %s\n", filename_pos);
                 // printf("current->content : %s\n", current->content);
@@ -297,7 +293,6 @@ void    second_sort(t_filename **filenames, t_token_list *current, char *prefix)
                 filename_pos = ft_search_str_in_str(filename_pos, ft_substr(current->content, i, next_wcadr_index - i));
                 if (!filename_pos) // ft_search_str_in_str() renvoie NULL en cas d'échec
                 {
-                    // remove current_f from the *filenames list
                     del_filename(filenames, current_f);
                     break;
                 }
@@ -306,7 +301,7 @@ void    second_sort(t_filename **filenames, t_token_list *current, char *prefix)
                     i++;
             }
             else
-                break ; //avec ça, sort du while (word[i]) et reste dans while (current_f), ouais ?
+                break ;
         }
         current_f = current_f->next;
     }
@@ -351,20 +346,6 @@ void    insert_filenames(t_token_list **first, t_token_list **current, t_filenam
     }
     tk_del_one(first, tmp);
 
-    // new_content = ft_strdup((*filenames)->filename);
-    // while (current_f->next)
-    // {
-    //     tmp = new_content;
-    //     tmp2 = ft_strjoin(tmp, " ");
-    //     new_content = ft_strjoin(tmp2, current_f->next->filename);
-    //     free(tmp);
-    //     free(tmp2);
-    //     current_f = current_f->next;
-    // }
-    // free((*current)->content);
-    // (*current)->content = new_content;
-    // (*current)->length = ft_strlen(new_content);
-    
     //free_filenames(filenames); // POURQUOI CA MARCHE PAS 
 }
 

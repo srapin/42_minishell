@@ -98,10 +98,9 @@ void dup_cmd_file(t_cmd *cmd);
 // ------------ Parsing ------------------
 
 void            read_lines(t_data *data);
-
+t_ht_hash_table *ht_get_env(char **envp);
+t_ht_hash_table *get_minimal_env(void);
 t_token         *assign_type(char *input, size_t stream_len);
-// t_token_list    *tokenise(t_ht_hash_table *ht, t_token *token_stream, size_t stream_len, char *input);
-// t_token_list    *tokenise(t_data *data, t_token *token_stream, size_t stream_len, char *input);
 t_token_list    **tokenise(t_token *token_stream, size_t stream_len, char *input);
 
 t_cmd *         parse(t_data *data);
