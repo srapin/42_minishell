@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 16:39:50 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/20 01:54:50 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/20 03:41:20 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void free_cmd_value(t_cmd_value *val)
 	free(val->value);
 	free_tab(val->args);
 	// free(val->args);
-	dprintf(1,"freecmdvalue\n");
+	//dprintf(1,"freecmdvalue\n");
 	if (val->path)
 	{
 		val->path =NULL;	
