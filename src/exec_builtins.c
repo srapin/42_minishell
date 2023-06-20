@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_builtins.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 20:57:20 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/19 19:24:33 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/20 02:19:06 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ int try_to_exec_builtins(t_cmd *cmd, t_cmd *first, bool is_child)
     ret = foo(cmd);
     if (is_child)
     {
+        // dprintf(1, "get_builtins() return value : %p\n", foo);
         free_cmds(&first, true);
         exit(ret); // n'exit pas forcément avec 0 !! dépend de la valeur de retour du builtin
     }

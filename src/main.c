@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 19:32:17 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/20 00:40:03 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/20 02:23:32 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,7 +169,6 @@ int main (int argc, char **argv, char **envp)
     // rajouter une condition avec isatty pour gerer le cas ./minishell | ./minishell
     
     signal(SIGINT, sigint_next_prompt);
-    // signal(SIGQUIT, handle_sigquit);
     
     if (argc > 2)
     {
