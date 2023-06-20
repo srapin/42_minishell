@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 20:57:20 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/20 03:38:37 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/20 03:58:31 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ int try_to_exec_builtins(t_cmd *cmd, t_cmd *first, bool is_child)
     ret = foo(cmd);
     if (is_child)
     {
+        // dprintf(1, "get_builtins() return value : %p\n", foo);
         free_cmds(&first, true);
         exit(ret);
     }

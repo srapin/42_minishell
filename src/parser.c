@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 02:12:27 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/20 03:33:53 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/20 03:58:54 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,8 @@ t_cmd  *parse(t_data *data)
     //     free_tokens()
     //print_ast(ast);
     free_tokens(data->first);
+    data->first = NULL;
+    
 
     exec_cmds(ast);
     return ast;

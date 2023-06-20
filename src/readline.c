@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   readline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 22:15:52 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/20 01:53:40 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/20 02:23:26 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,13 +98,9 @@ void    read_lines(t_data *data)
             continue;
         }
         data->first = tokenise(assign_type(input, stream_len), stream_len, input);
-       	// signal(SIGINT, sigint_next_prompt);
-       	// signal(SIGQUIT, handle_sigquit2);
-       	// signal(SIGQUIT, handle_sigquit2);
         signal(SIGINT, sigint_during_cmd_exec);
         cmd = parse(data);
        	signal(SIGINT, sigint_next_prompt);
-       	// signal(SIGQUIT, handle_sigquit);
         if (input)
         {
             free(input);
@@ -113,8 +109,6 @@ void    read_lines(t_data *data)
         
         free_cmds(&cmd, false);
         input = readline("$ ");
-       	// signal(SIGINT, sigint_next_prompt);
-       	// signal(SIGQUIT, handle_sigquit2);
     }
     if (!cmd)
     {
