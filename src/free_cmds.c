@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 16:39:50 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/20 02:20:35 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/20 03:53:26 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void free_file_struct(t_file * file_struct)
 	// if (!p || !*p)
 	// 	return;
 	// file_struct = *p;
-	// //dprintf(1, "%s",file_struct->name);
+	// ////dprintf(1, "%s",file_struct->name);
 	if (file_struct->name)
 		free(file_struct->name);
 	// if(file_struct->sep)
@@ -55,7 +55,7 @@ void free_cmd_value(t_cmd_value *val)
 	free(val->value);
 	free_tab(val->args);
 	// free(val->args);
-	// dprintf(1,"freecmdvalue\n");
+	// //dprintf(1,"freecmdvalue\n");
 	if (val->path)
 	{
 		val->path =NULL;	
@@ -97,10 +97,10 @@ void free_cmd(t_cmd **p)
 
 void free_common(t_cmd*cmd)
 {
-	dprintf(1, "\n\n\n\n\n\n\nin common \n\n\n\n\n\n\n\n\n");
+	//dprintf(1, "\n\n\n\n\n\n\nin common \n\n\n\n\n\n\n\n\n");
 	if (!cmd)
 		return;
-	dprintf(1, "\n\n\n\n\n\n\n\n\after if \n\n\n\n\n\n\n\n");
+	//dprintf(1, "\n\n\n\n\n\n\n\n\after if \n\n\n\n\n\n\n\n");
 	free_pwd(cmd->env);
 	ht_del_hash_table(cmd->env);
 	ft_lstfree(&(cmd->export_history), free);

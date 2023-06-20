@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 19:32:17 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/20 02:23:32 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/20 04:03:24 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ void    exec_script(t_data *data, char *path)
         // return ; ?
     }
     line = get_next_line(fd);
-    ////dprintf(1, "in exec_script(), line = %s\n", line);
+    //////dprintf(1, "in exec_script(), line = %s\n", line);
     data->first = tokenise(assign_type(line, ft_strlen(line)), ft_strlen(line), line);
     parse(data);
     
@@ -168,8 +168,9 @@ int main (int argc, char **argv, char **envp)
 
     // rajouter une condition avec isatty pour gerer le cas ./minishell | ./minishell
     
+    printf("%d\n", getpid());
     signal(SIGINT, sigint_next_prompt);
-    
+    signal(SIGQUIT, SIG_IGN); 
     if (argc > 2)
     {
         printf("error : too many arguments\n"); //idk

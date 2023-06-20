@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 23:01:51 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/20 01:51:05 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/20 03:53:26 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ char	**get_path(t_cmd *cmd)
 	int		i;
 	char	**paths;
 	char **env;
-	// ////dprintf(1, "if get peth");
+	// //////dprintf(1, "if get peth");
 	env = hash_map_to_tab(cmd->env);
 
 	i = 0;

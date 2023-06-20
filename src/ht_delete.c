@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ht_delete.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 17:29:43 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/20 00:10:39 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/20 04:22:36 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,15 @@ void    ht_del_item(t_ht_item *item)
 {
     if (item != &HT_DELETED_ITEM) // item->key && item->value
     {
-        //dprintf(1, "in ht_delete : freeing %s\n", item->key);
-        //if (item->key)
+        ////dprintf(1, "in ht_delete : freeing %s\n", item->key);
+        if (item->key)
             free(item->key);
-        //if (item->value)
+        if (item->value)
             free(item->value);
-        //if (item)
+        if (item)
             free(item);
         item = NULL;
-        //dprintf(1, "freeing ok\n");
+        ////dprintf(1, "freeing ok\n");
     }
 }
 

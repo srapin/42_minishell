@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 22:15:52 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/20 02:23:26 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/20 05:06:54 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,15 +73,14 @@ void    read_lines(t_data *data)
     t_token_list  *tk_list;
     t_cmd *cmd;
 
+    struct termios termios_p;
+    tcgetattr(STDIN_FILENO, &termios_p);
     input = readline("$ "); 
     cmd = NULL;
     tk_list = NULL;
     while (input) // readline ne renvoie NULL que dans le cas d'un Ctrl-D
     {
-        // int i = read(STDIN_FILENO, NULL, 1);
-        // if (i==0)
-        //     ft_exit(NULL);
-        //dprintf(1, "pid main = %d\n", getpid());
+        printf("ret %d\n", tcsetattr(STDIN_FILENO, TCSAFLUSH,&termios_p));
         stream_len = ft_strlen(input);
         if (!stream_len) // ie si input_str = '\0'.
         {
@@ -110,7 +109,7 @@ void    read_lines(t_data *data)
         free_cmds(&cmd, false);
         input = readline("$ ");
     }
-    if (!cmd)
+    if (!cmd) //todo c est moche 
     {
         free_parsing_data(data);
         /* free_pwd(ht); 

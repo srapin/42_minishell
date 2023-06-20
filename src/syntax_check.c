@@ -148,7 +148,7 @@ void    check_pipe(t_data *data, t_token_list **current)
 
 void    check_syntax(t_data *data)
 {
-    dprintf(1, "syntax, child process \n");
+    //dprintf(1, "syntax, child process \n");
     int parentheses_count = 0;
     int s_quotes_count = 0; // si non utilisée plus haut, à delete
     int d_quotes_count = 0; // si non utilisée plus haut, à delete
@@ -185,7 +185,7 @@ void    check_syntax(t_data *data)
         //free_tokens(first);
         exit(SYNTAX_ERROR);
     }
-    //dprintf(1, "syntax \n");
+    ////dprintf(1, "syntax \n");
     //free_tokens(data->first);
     free_parsing_data(data);
     //free_tokens(first);

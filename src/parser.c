@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 02:12:27 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/20 02:38:00 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/20 03:53:26 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,16 +143,16 @@ t_cmd  *parse(t_data *data)
     delete_quotes(data);
     group_words(data);
 
-    ////dprintf(1, "in parse(), after delete_quotes() and group_words()\n");
+    //////dprintf(1, "in parse(), after delete_quotes() and group_words()\n");
 
     perform_wildcard_exp(data);
 
     //print_tokens(first);
     
-    ////dprintf(1, "in parse(), after perform_wildcard_exp()\n");
+    //////dprintf(1, "in parse(), after perform_wildcard_exp()\n");
 
     t_cmd *ast = NULL;
-    ////dprintf(1, "in parse(), after set_here_docs()\n");
+    //////dprintf(1, "in parse(), after set_here_docs()\n");
 
 
     if (set_here_docs(data))

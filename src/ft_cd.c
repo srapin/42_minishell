@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 01:12:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/19 04:05:37 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/20 03:53:26 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ int     ft_cd(t_cmd *cmd)
     char    *after_rel;
     char    *new_pwd;
 
-    ////dprintf(1, "coucou depuis ft_cd()\n");
+    //////dprintf(1, "coucou depuis ft_cd()\n");
     
     
     pwd = NULL;

@@ -1,5 +1,0 @@
-char **env (cree a partir de la hash map) n'est pas free 
-
-
-hash map doit etre free
-

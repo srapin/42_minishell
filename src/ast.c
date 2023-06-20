@@ -127,20 +127,20 @@ void    set_cmd_args(t_cmd **curr_cmd, t_token_list *curr_tk, int *i)
     {
         if (!curr_tk->quotes)
         {
-            ////dprintf(1, "in set_cmd_args(), current token = %s\n", curr_tk->content);
+            //////dprintf(1, "in set_cmd_args(), current token = %s\n", curr_tk->content);
             prev_whitespace_pos = 0;
             whitespace_pos = get_whtsp_pos(curr_tk->content, prev_whitespace_pos);
-            ////dprintf(1, "\twd = %s, whitespace_pos = %d\n", curr_tk->content, whitespace_pos);
+            //////dprintf(1, "\twd = %s, whitespace_pos = %d\n", curr_tk->content, whitespace_pos);
             while (whitespace_pos != -1)
             {
                 tmp = buffer;
                 substr = ft_substr(curr_tk->content, prev_whitespace_pos, whitespace_pos - prev_whitespace_pos);
                 buffer = ft_strjoin(tmp, substr);
-                ////dprintf(1, "in set_cmd_args(), in while (whitespace_pos != -1)\n");
+                //////dprintf(1, "in set_cmd_args(), in while (whitespace_pos != -1)\n");
                 if (*buffer) // ie si il n'est pas vide
                 {
                     (*curr_cmd)->val.args[*i] = ft_strdup(buffer);
-                    ////dprintf(1, "in set_cmd_args(), added new arg : %s\n", buffer);
+                    //////dprintf(1, "in set_cmd_args(), added new arg : %s\n", buffer);
                     (*i)++;
                     free(buffer);
                     buffer = NULL;
@@ -152,7 +152,7 @@ void    set_cmd_args(t_cmd **curr_cmd, t_token_list *curr_tk, int *i)
                     whitespace_pos++;
                 prev_whitespace_pos = whitespace_pos;
                 whitespace_pos = get_whtsp_pos(curr_tk->content, prev_whitespace_pos);
-                ////dprintf(1, "\twd = %s, whitespace_pos = %d\n", curr_tk->content, whitespace_pos);
+                //////dprintf(1, "\twd = %s, whitespace_pos = %d\n", curr_tk->content, whitespace_pos);
             }
             if (prev_whitespace_pos < curr_tk->length)
             {
@@ -163,23 +163,23 @@ void    set_cmd_args(t_cmd **curr_cmd, t_token_list *curr_tk, int *i)
         }
         else
         {
-            ////dprintf(1, "in set_cmd_args(), added new arg : %s\n", curr_tk->content);
+            //////dprintf(1, "in set_cmd_args(), added new arg : %s\n", curr_tk->content);
             (*curr_cmd)->val.args[*i] = ft_strdup(curr_tk->content);
             (*i)++;
         }
         return ;
     }
     
-    ////dprintf(1, "in set_cmd_args()\n");
+    //////dprintf(1, "in set_cmd_args()\n");
     // 16/06, 20h : rentre pas dans la boucle ?
     while (wd)
     {
-        ////dprintf(1, "\twd = %s, quotes = %d\n", wd->content, wd->quotes);
+        //////dprintf(1, "\twd = %s, quotes = %d\n", wd->content, wd->quotes);
         if (!wd->quotes)
         {
             prev_whitespace_pos = 0;
             whitespace_pos = get_whtsp_pos(wd->content, prev_whitespace_pos);
-            ////dprintf(1, "\twd = %s, whitespace_pos = %d\n", wd->content, whitespace_pos);
+            //////dprintf(1, "\twd = %s, whitespace_pos = %d\n", wd->content, whitespace_pos);
             while (whitespace_pos != -1)
             {
                 tmp = buffer;
@@ -188,7 +188,7 @@ void    set_cmd_args(t_cmd **curr_cmd, t_token_list *curr_tk, int *i)
                 if (*buffer) // ou if (whitespace_pos - prev_whitespace_pos) // ie si il n'est pas vide
                 {
                     (*curr_cmd)->val.args[*i] = ft_strdup(buffer);
-                    ////dprintf(1, "in set_cmd_args(), added new arg : %s\n", buffer);
+                    //////dprintf(1, "in set_cmd_args(), added new arg : %s\n", buffer);
                     (*i)++;
                     free(buffer);
                     buffer = NULL;
@@ -200,7 +200,7 @@ void    set_cmd_args(t_cmd **curr_cmd, t_token_list *curr_tk, int *i)
                     j++;
                 prev_whitespace_pos = j;
                 whitespace_pos = get_whtsp_pos(wd->content, prev_whitespace_pos);
-                ////dprintf(1, "\twd = %s, whitespace_pos = %d\n", wd->content, whitespace_pos);
+                //////dprintf(1, "\twd = %s, whitespace_pos = %d\n", wd->content, whitespace_pos);
             }
             if (whitespace_pos == -1) // pas opti
             {
@@ -219,7 +219,7 @@ void    set_cmd_args(t_cmd **curr_cmd, t_token_list *curr_tk, int *i)
     }
     if (buffer && *buffer)
     {
-        ////dprintf(1, "in set_cmd_args(), added new arg : %s\n", buffer);
+        //////dprintf(1, "in set_cmd_args(), added new arg : %s\n", buffer);
         (*curr_cmd)->val.args[*i] = ft_strdup(buffer);
         (*i)++;
         free(buffer);
@@ -234,7 +234,7 @@ void    set_command_attributs(t_cmd **current, t_token_list **first_tk, t_token_
     i = 0;
     if (!args_count)
         return ;
-    ////dprintf(1, "in set_command_attributs\n");
+    //////dprintf(1, "in set_command_attributs\n");
     (*current)->val.args = malloc(sizeof(char *) * (args_count + 1));
     if (!(*current)->val.args)
     {
@@ -247,10 +247,10 @@ void    set_command_attributs(t_cmd **current, t_token_list **first_tk, t_token_
             current_tk = current_tk->next->next;
         else 
         {
-            ////dprintf(1, "before set_cmd_args()\n");
-            ////dprintf(1, "args_count = %d\n", args_count);
+            //////dprintf(1, "before set_cmd_args()\n");
+            //////dprintf(1, "args_count = %d\n", args_count);
             set_cmd_args(current, current_tk, &i);
-            ////dprintf(1, "after set_cmd_args()\n");
+            //////dprintf(1, "after set_cmd_args()\n");
             //tk_del_one(first_tk, current_tk); // est-ce que current_tk pointe encore au bon endroit après ça ?
             current_tk = current_tk->next;
         }
@@ -279,10 +279,10 @@ int get_words_count(t_token_list *current)
     {
         if (!current->quotes)
         {
-            ////dprintf(1, "in get_words_count(), current token = %s\n", current->content);
+            //////dprintf(1, "in get_words_count(), current token = %s\n", current->content);
             prev_whitespace_pos = 0;
             whitespace_pos = get_whtsp_pos(current->content, prev_whitespace_pos);
-            ////dprintf(1, "\twd = %s, whitespace_pos = %d\n", current->content, whitespace_pos);
+            //////dprintf(1, "\twd = %s, whitespace_pos = %d\n", current->content, whitespace_pos);
             while (whitespace_pos != -1)
             {
                 // tmp = buffer;
@@ -300,19 +300,19 @@ int get_words_count(t_token_list *current)
         }
         else
             count++;
-        ////dprintf(1, "in get_words_count(), count = %d\n", count);
+        //////dprintf(1, "in get_words_count(), count = %d\n", count);
         return (count);
     }
     while (wd)
     {
-        ////dprintf(1, "in get_words_count(), wd = %s\n", wd->content);
+        //////dprintf(1, "in get_words_count(), wd = %s\n", wd->content);
         if (!wd->quotes)
         {
             prev_whitespace_pos = 0;
             whitespace_pos = get_whtsp_pos(wd->content, prev_whitespace_pos);
             while (whitespace_pos != -1)
             {
-                ////dprintf(1, "in while (whitespace_pos != -1)\n");
+                //////dprintf(1, "in while (whitespace_pos != -1)\n");
                 if (whitespace_pos - prev_whitespace_pos) // ie si le buffer n'est pas vide
                 {
                     count++;
@@ -321,11 +321,11 @@ int get_words_count(t_token_list *current)
                 
                 while (wd->content[whitespace_pos] && (wd->content[whitespace_pos] == ' ' || wd->content[whitespace_pos] == '\t'))
                     whitespace_pos++;
-                ////dprintf(1, "whitespace_pos = %d, prev_shitespace_pos = %d\n", whitespace_pos, prev_whitespace_pos);
+                //////dprintf(1, "whitespace_pos = %d, prev_shitespace_pos = %d\n", whitespace_pos, prev_whitespace_pos);
                 prev_whitespace_pos = whitespace_pos;
-                ////dprintf(1, "\twd = %s, prev_whitespace_pos = %d\n", wd->content, prev_whitespace_pos);
+                //////dprintf(1, "\twd = %s, prev_whitespace_pos = %d\n", wd->content, prev_whitespace_pos);
                 whitespace_pos = get_whtsp_pos(wd->content, prev_whitespace_pos); // ou prev_whitespace_pos + 1 ?
-                ////dprintf(1, "\twd = %s, whitespace_pos = %d\n", wd->content, whitespace_pos);
+                //////dprintf(1, "\twd = %s, whitespace_pos = %d\n", wd->content, whitespace_pos);
             }
             if (whitespace_pos == -1) // pas opti
                 buffer = 1;
@@ -440,7 +440,7 @@ void    set_subshell_attributs(t_cmd *current_cmd, t_token_list **curr_tk)
             open_parentheses++;
         if (current_tk->type == r_parenthesis)
             open_parentheses--;
-        ////dprintf(1, "in set_subshell(), current_tk = %s\n", current_tk->content);
+        //////dprintf(1, "in set_subshell(), current_tk = %s\n", current_tk->content);
         if (!open_parentheses)
             break;
         if (write(fd_subshell, current_tk->content, current_tk->length) == -1) // vérifier si current_tk->length est bien à jour !
@@ -481,7 +481,7 @@ void    set_simple_command(t_cmd *current_cmd, t_token_list **first_tk, t_token_
     
     while (current_tk && current_tk->type != and_tk && current_tk->type != or_tk)
     {
-        ////dprintf(1, "in set_simple_command(), current_tk = %s\n", current_tk->content);
+        //////dprintf(1, "in set_simple_command(), current_tk = %s\n", current_tk->content);
         
         if (current_tk->type == l_io_redirect || current_tk->type == r_io_redirect)
         {
@@ -495,14 +495,14 @@ void    set_simple_command(t_cmd *current_cmd, t_token_list **first_tk, t_token_
         }
         else
         {
-            ////dprintf(1, "in set_simple_command(), before calling get_words_count()\n");
+            //////dprintf(1, "in set_simple_command(), before calling get_words_count()\n");
             args_count += get_words_count(current_tk);
-            ////dprintf(1, "in set_simple_command(), after calling get_words_count()\n");
+            //////dprintf(1, "in set_simple_command(), after calling get_words_count()\n");
             current_tk = current_tk->next;
         }
     }
     current_cmd->red.next_cmd = NULL;
-    ////dprintf(1, "in set_simple_command(), just before calling set_command_attributs()\n");
+    //////dprintf(1, "in set_simple_command(), just before calling set_command_attributs()\n");
     if (!subshell)
         set_command_attributs(&current_cmd, first_tk, *cmd_start_tk, args_count);
     *curr_tk = current_tk;
@@ -538,11 +538,11 @@ t_cmd   *get_ast(t_data *data)
     pipeline_start_tk = *(data->first); 
     pipeline_start_cmd = *ast;
 
-    ////dprintf(1, "in get_ast(), before the while(pipeline_start_tk)\n");
+    //////dprintf(1, "in get_ast(), before the while(pipeline_start_tk)\n");
     
     while (pipeline_start_tk)
     {
-        ////dprintf(1, "in get_ast(), in the while(pipeline_start_tk)\n");
+        //////dprintf(1, "in get_ast(), in the while(pipeline_start_tk)\n");
         current_tk = pipeline_start_tk;
         current_cmd = pipeline_start_cmd;
         
@@ -550,7 +550,7 @@ t_cmd   *get_ast(t_data *data)
         // ie peut avoir des pipes, mais ne touche ici pas à la variable next de t_cmd
         while (current_tk && current_tk->type != and_tk && (current_tk->type != or_tk || current_tk->length == 1))
         {
-            ////dprintf(1, "in get_ast(), in the  while(not && and not ||), before calling set_simple_command()\n");
+            //////dprintf(1, "in get_ast(), in the  while(not && and not ||), before calling set_simple_command()\n");
             cmd_start_tk = current_tk;
             set_simple_command(current_cmd, data->first, &cmd_start_tk, &current_tk);
             

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_heredocs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 23:24:33 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/20 01:53:40 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/20 03:53:26 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,7 +192,7 @@ void set_here_doc(t_ht_hash_table *ht, t_token_list *current)
 	limiter = current->next->content;
 	file_name = current->content;
 	fd = open(file_name, O_WRONLY | O_TRUNC | O_CREAT, 0600); //  | O_EXCL
-	// //dprintf(1, "in set hd, %s, %s %i\n", limiter, file_name, fd);
+	// ////dprintf(1, "in set hd, %s, %s %i\n", limiter, file_name, fd);
 	if (fd == -1)
 	{
 		perror("open ");
@@ -203,16 +203,16 @@ void set_here_doc(t_ht_hash_table *ht, t_token_list *current)
 	quotes = set_quotes(current);
 	get_here_doc_content(ht, fd, limiter, quotes);
 	/* Give prompt back to user and write the heredoc content to the file*/
-	// //dprintf(1, "after del, %s, %s %i\n", current->content, current->next->content, fd);
+	// ////dprintf(1, "after del, %s, %s %i\n", current->content, current->next->content, fd);
 	close(fd);
-	// //dprintf(1, "after del, %s, %s %i\n", current->content, current->next->content, fd);
-	// //dprintf(1, "after del, %s, %s %i\n", current->content, current->next->content, fd);
+	// ////dprintf(1, "after del, %s, %s %i\n", current->content, current->next->content, fd);
+	// ////dprintf(1, "after del, %s, %s %i\n", current->content, current->next->content, fd);
 	
 }
 
 void hd_sigint(int i)
 {
-	// //dprintf(1, "sig press \n");
+	// ////dprintf(1, "sig press \n");
     g_exit_status = 130;
     close(0);
     close(1);
@@ -261,7 +261,7 @@ bool hd_parent_process(int pid, t_token_list *current)
 		}
 		current = current->next;
 	}
-	//dprintf(1, "%i\n", status);
+	////dprintf(1, "%i\n", status);
 	return (!(WIFEXITED(status) && WEXITSTATUS(status)));
 	// return true;
 }
@@ -279,13 +279,13 @@ bool	set_here_docs(t_data *data)
 	first = *(data->first);
 	// set_hd_filenames(ht, current);
     set_hd_filenames(first);
-    // //dprintf(1, "heyyyy\n");
+    // ////dprintf(1, "heyyyy\n");
     pid = fork();
     if (pid < 0)
         fail_process();
     else if (pid == 0)
     {
-		dprintf(1, "hd child proc \n");
+		//dprintf(1, "hd child proc \n");
 		// hd_child_process(ht, first, exp_hist);
         hd_child_process(data);
     }

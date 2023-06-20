@@ -61,7 +61,7 @@ int try_to_exec_builtins(t_cmd *cmd, t_cmd *first, bool is_child);
 
 //heredoc
 // void heredoc(t_cmd *cmd);
-
+#include <termios.h>
 //next
 bool check_ret(t_cmd *cmd, int ret);
 int	wait_childs(t_cmd *cmd);

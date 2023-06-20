@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 23:25:02 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/19 04:05:37 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/20 03:53:26 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,9 +138,9 @@ t_list *get_sorted_hist(t_ht_hash_table *ht)
     t_list *current;
     int i = 0;
     
-    // //dprintf(1, "hello\n");
+    // ////dprintf(1, "hello\n");
     lst = NULL;
-    // //dprintf(1, "hey\n");
+    // ////dprintf(1, "hey\n");
     while (i < ht->size)
     {
         // ln : a rajouté une condition pour si la variable a été delete de la hash_map (ie on a item->key = NULL et item->value = NULL)
@@ -150,13 +150,13 @@ t_list *get_sorted_hist(t_ht_hash_table *ht)
             break;
         to_insert = ht->items[i]->key;
         current = ft_lstnew(to_insert);
-        // //dprintf(1, "hello 2, %s\n", (char *) to_insert);
+        // ////dprintf(1, "hello 2, %s\n", (char *) to_insert);
         insert_in_sorted_lst(&lst, current);
         i++;
     }
     // while (lst)
     // {
-    //     //dprintf(1, "end of sort hist, %s\n", (char * )lst->content);
+    //     ////dprintf(1, "end of sort hist, %s\n", (char * )lst->content);
     //     lst = lst->next;
     //     /* code */
     // }
@@ -211,7 +211,7 @@ void    print_export_history(t_ht_hash_table *ht, t_list *export_hist)
     }
     ft_lstclear(&lst);
 
-    // //dprintf(1, "in print_export_history()\n");
+    // ////dprintf(1, "in print_export_history()\n");
     // j = 0;
     // i = 0;
     // sorted_history = ft_calloc(sizeof(char *), ht->count + ft_lstsize(export_hist));
@@ -330,7 +330,7 @@ int    ft_export(t_cmd *cmd)
     //printf("lol %s\n", cmd->val.args[i]);
     if (!cmd->val.args[i])
     {
-        // //dprintf(1, "pas d'arg\n");
+        // ////dprintf(1, "pas d'arg\n");
         print_export_history(cmd->env, cmd->export_history);
         return (exit_status);
     }
