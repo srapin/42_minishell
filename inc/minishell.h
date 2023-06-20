@@ -44,7 +44,7 @@ extern int g_exit_status;
 
 void exec_cmds(t_cmd *cmd);
 void malloc_error();
-int (*get_builtins_foo(char *str))(t_cmd *);
+int (*get_builtins_foo(char *str))(t_cmd *, t_cmd *);
 //common_process
 void	parent_process(t_cmd **cmd, int pipe_tab[2]);
 void	child_process(t_cmd *cmd, t_cmd *first, int pipe_tab[2]);
@@ -133,19 +133,19 @@ void            print_ast(t_cmd *ast);
 
 
 // builtins
-int             ft_env(t_cmd *cmd);
-int             ft_export(t_cmd *cmd);
-int             ft_unset(t_cmd *cmd);
+int             ft_env(t_cmd *cmd, t_cmd *first);
+int             ft_export(t_cmd *cmd, t_cmd *first);
+int             ft_unset(t_cmd *cmd, t_cmd *first);
 int             is_in_export_history(t_list *export_hist, char *var_name);
 void            del_from_export_history(t_list **export_hist, char *var_name);
 
 typedef char *path;
-int             ft_cd(t_cmd *cmd);
-int             ft_pwd(t_cmd *cmd);
+int             ft_cd(t_cmd *cmd, t_cmd *first);
+int             ft_pwd(t_cmd *cmd, t_cmd *first);
 path            *get_pwd(t_ht_hash_table *env);
 void            update_pwd(t_ht_hash_table *env, char *new_pwd);
 void            free_pwd(t_ht_hash_table *env);
-int             ft_exit(t_cmd *cmd);
+int             ft_exit(t_cmd *cmd, t_cmd *first);
 
 
 void            free_parsing_data(t_data *data);

@@ -6,13 +6,13 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 20:57:20 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/20 03:53:47 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/20 06:59:15 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-int ft_echo(t_cmd *cmd)
+int ft_echo(t_cmd *cmd, t_cmd *first)
 {
     char end[2];
     int i;
@@ -36,7 +36,7 @@ int ft_echo(t_cmd *cmd)
     return (EXIT_OK); // à modifier, rajouté pour plus avoir de warning a la compilation
 }
 
-int (*get_builtins_foo(char *str))(t_cmd *)
+int (*get_builtins_foo(char *str))(t_cmd *, t_cmd *)
 {
   
     if (ft_strisequal(str, "echo"))
@@ -80,7 +80,7 @@ int is_builtins(char * str)
 
 int try_to_exec_builtins(t_cmd *cmd, t_cmd *first, bool is_child)
 {
-    int (*foo)(t_cmd *);
+    int (*foo)(t_cmd *, t_cmd *);
     int ret;
     int old_in;
     int old_out;
@@ -89,17 +89,23 @@ int try_to_exec_builtins(t_cmd *cmd, t_cmd *first, bool is_child)
     //num = is_builtins(cmd->val.value);
     // signal(SIGINT, );
     ret = -1;
+    old_in = -1;
+    old_out = -1;
     foo = get_builtins_foo(cmd->val.value); 
     // ////dprintf(1, "get_builtins() return value : %p\n", foo);
     if (!foo)
         return ret;
+    
     if (!is_child)
     {
-        old_in = dup(STDIN_FILENO); 
-        old_out = dup(STDOUT_FILENO); 
+        if (foo != &ft_exit)
+        {
+            old_in = dup(STDIN_FILENO); 
+            old_out = dup(STDOUT_FILENO); 
+        }
         dup_cmd_file(cmd);
     }
-    ret = foo(cmd);
+    ret = foo(cmd, first);
     if (is_child)
     {
         // //dprintf(1, "get_builtins() return value : %p\n", foo);

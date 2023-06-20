@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 20:39:18 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/20 03:53:26 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/20 06:27:48 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void    print_env(t_ht_hash_table *ht)
 }
 
 /* A gerer sans options et sans arguments */
-int    ft_env(t_cmd *cmd)
+int    ft_env(t_cmd *cmd, t_cmd *first)
 {
     //////dprintf(1, "coucou depuis ft_env()\n");
     if (cmd->val.args[1])

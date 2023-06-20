@@ -6,14 +6,14 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 21:52:36 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/18 23:29:50 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/20 06:29:02 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
 // si la variable que veut unset n'a pas été export, ne fait rien et retourne 0
-int ft_unset(t_cmd *cmd)
+int ft_unset(t_cmd *cmd, t_cmd *first)
 {
     int i;
 

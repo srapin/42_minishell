@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 01:12:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/20 03:53:26 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/20 06:27:41 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ Implements the cd builtin with only a relative or absolute path.
 Returns 0 IF directory is successfully changed
 
 */
-int     ft_cd(t_cmd *cmd)
+int     ft_cd(t_cmd *cmd, t_cmd *first)
 {
     char    *full_path;
     char    *tmp;
