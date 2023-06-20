@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 01:12:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/20 06:27:41 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/20 08:26:18 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,45 +222,3 @@ int     ft_cd(t_cmd *cmd, t_cmd *first)
     
     return (EXIT_OK);
 }
-
-/*
-getcwd() returns a null-terminated string containing an
-absolute pathname that is the current working directory of the
-calling process.
-*/
-// char *getpwd()
-// {
-//     size_t  size;
-//     char    *path;
-
-//     size = GETCWD_INITIAL_BUF_SIZE;
-//     getcwd(path, size);
-//     while (!path && errno == ERANGE)
-//     {
-//         size *= 2;
-//         getcwd(path, size);
-//     }
-//     return (path);
-// }
-
-// int     ft_cd(t_cmd *cmd)
-// {
-//     char    *path;
-//     char    *new_pwd;
-
-//     if (!cmd->val.args[1]) // si n'a aucun argument
-//         return (EXIT_OK);
-//     if (cmd->val.args[2]) // si il y a plus d'un argument. val.args est null-terminated
-//         return (CD_TOO_MANY_ARGS);
-//     path = cmd->val.args[1];
-//     printf("path = %s\n", path);
-//     if (chdir(path) == -1)
-//     {
-//         perror("chdir ");
-//         return(errno); // Quel code erreur ?
-//     }
-//     new_pwd = getpwd();
-//     printf("new pwd = %s\n", new_pwd);
-//     ht_modify_value(cmd->env, "PWD", new_pwd);
-//     return (EXIT_OK);
-// }

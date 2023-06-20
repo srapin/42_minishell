@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 20:57:20 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/20 06:59:15 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/20 08:24:43 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,8 +110,9 @@ int try_to_exec_builtins(t_cmd *cmd, t_cmd *first, bool is_child)
     {
         // //dprintf(1, "get_builtins() return value : %p\n", foo);
         free_cmds(&first, true);
-        exit(ret); // n'exit pas forcément avec 0 !! dépend de la valeur de retour du builtin
+        exit(ret);
     }
+    dprintf(1, "at exit in child, last exit status = %d\n", ret);
     g_exit_status = ret;
     dup2(old_in, STDIN_FILENO);
     dup2(old_out, STDOUT_FILENO);
