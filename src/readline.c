@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   readline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 22:15:52 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/20 09:36:35 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/20 18:10:10 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,8 @@ void    read_lines(t_data *data)
     input = readline("$ "); 
     cmd = NULL;
     tk_list = NULL;
-    while (input) // readline ne renvoie NULL que dans le cas d'un Ctrl-D
+    while (input)
     {
-        
         // printf("ret %d\n", tcsetattr(STDIN_FILENO, TCSAFLUSH,&termios_p));
         stream_len = ft_strlen(input);
         if (!stream_len)
@@ -106,7 +105,7 @@ void    read_lines(t_data *data)
             free(input);
             input = NULL;
         }
-        free_cmds(&cmd, false);
+        free_cmds(&cmd, false); // vérifier que ca couille pas si cmd est NULL (quand a une erreur de syntaxe, parse retourne NULL)
         input = readline("$ ");
     }
     if (!cmd) //todo c est moche 
