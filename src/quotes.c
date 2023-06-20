@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:13:44 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/20 09:30:22 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/20 10:55:21 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,14 +117,14 @@ void    set_merged_words(t_token_list **curr)
     *curr = current;
 }
 
-void    del_whitespace(t_data *data, t_token_list *current)
+void    del_whitespace(t_data *data, t_token_list **current)
 {
     t_token_list    *current2;
     
-    if (current == *(data->first))
-        *(data->first) = current->next;
-    current2 = current; 
-    current = current->next;
+    if (*current == *(data->first))
+        *(data->first) = (*current)->next;
+    current2 = *current; 
+    *current = (*current)->next;
     if (current2->prev)
         current2->prev->next = current2->next;
     if (current2->next)
@@ -159,7 +159,7 @@ void    group_words(t_data *data)
         else if (current->type == word && current->next && current->next->type == word)
             set_merged_words(&current);
         else if (current->type == whitespace)
-            del_whitespace(data, current);
+            del_whitespace(data, &current);
         else
             current = current->next;
     }

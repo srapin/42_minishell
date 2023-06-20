@@ -99,8 +99,8 @@ ${OBJS_DIR_BONUS}/%.o: ${SRCS_DIR_BONUS}/%.c $(INCLUDES)
 
 leaks :
 	valgrind --suppressions=ignore_readline_aurele.txt --leak-check=full --show-leak-kinds=all \
-	--track-origins=yes --track-fds=yes ./$(NAME) 
-# --trace-children=yes
+	--track-origins=yes --track-fds=yes --trace-children=yes ./$(NAME) 
+
 
 clean: cleanlibs
 	rm -rf $(OBJS_DIR)

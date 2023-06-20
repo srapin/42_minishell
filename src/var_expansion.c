@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   var_expansion.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:12:06 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/20 08:24:09 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/20 11:52:33 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ void    expand(t_ht_hash_table *ht, t_token_list **current, char *var, size_t do
         if ((*current)->next && ((*current)->next->type == simple_quote 
             || (*current)->next->type == double_quote))
             remove_char(*current, dollar_index);
+        else
+            free(var);
         return ;
     }
     

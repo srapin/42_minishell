@@ -182,7 +182,7 @@ void    check_pipelines(t_data *data, int *parentheses_count)
 
 void    check_syntax(t_data *data)
 {
-    dprintf(1, "syntax, child process\n");
+    dprintf(1, "syntax\n");
     int parentheses_count = 0;
     
     if (!data || !(data->first) || !(*(data->first)))

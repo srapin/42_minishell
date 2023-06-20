@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 23:25:02 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/20 09:29:21 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/20 12:03:28 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,9 @@ t_list *get_sorted_hist(t_ht_hash_table *ht)
     lst = NULL;
     while (i < ht->size)
     {
-        while(i < ht->size && (!ht->items[i] || (!ht->items[i]->key && !ht->items[i]->value))) // (i < ht->size && !ht->items[i])
+        /* while(i < ht->size && (!ht->items[i] || (!ht->items[i]->key && !ht->items[i]->value))) // (i < ht->size && !ht->items[i])
+            i++; */
+        while(i < ht->size && (!ht->items[i] || (!ht->items[i]->key || !ht->items[i]->value))) // (i < ht->size && !ht->items[i])
             i++;
         if (!(i< ht->size) || (!ft_strcmp("_", ht->items[i]->key))) // fait le choix de ne pas print la var d'env "_" (undef behaviour, et posix ne le fait pas non plus)
             break;
@@ -165,7 +167,10 @@ void    del_from_export_history(t_list **export_hist, char *var_name)
     if (!ft_strcmp(current->content, var_name))
     {
         *export_hist = (*export_hist)->next;
+        free(current->content);
+        current->content = NULL;
         free(current);
+        current = NULL;
         return ;
     }
     while (current->next)
@@ -174,7 +179,10 @@ void    del_from_export_history(t_list **export_hist, char *var_name)
         {
             tmp = current->next;
             current->next = tmp->next;
+            free(tmp->content);
+            tmp->content = NULL;
             free(tmp);
+            tmp = NULL;
             return ;
         }
         current = current->next;
@@ -197,6 +205,7 @@ int    export_with_value(t_cmd *cmd, char *var_name, int i, int j)
     else
     {
         printf("export : `%s' : not a valid identifier\n", cmd->val.args[i]);
+        free(var_name); // rajoute
         return (INVALID_VAR_ID);
     }
     return (0);
@@ -207,7 +216,7 @@ int    export_without_value(t_cmd *cmd, char *var_name, int i)
     if (valid_name(var_name))
     {
         if (!is_in_export_history(cmd->export_history, var_name))
-            ft_lstadd_back(&(cmd->export_history), ft_lstnew(var_name));
+            ft_lstadd_back(&(cmd->export_history), ft_lstnew(ft_strdup(var_name)));
     }
     else
     {

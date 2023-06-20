@@ -124,24 +124,8 @@ void    split_not_merged_no_quotes(t_cmd **curr_cmd, t_token_list *curr_tk, int 
     }
 }
 
-/*
-Dès que tombe sur une succession de whitespaces en parsant le token 
--> tout ce qui venait avant devient un mot (ie token) individuel 
-
-1) des que tombe sur un mot n'étant pas entre quotes :
-    s'il n'y a pas de whitespaces, le garde dans un buffer et passe au mot suivant
-    sinon, cherche la position du premier whitespace, garde le sous-mot jusqu'a l'index dans un buffer,
-    join ce buffer avec le buffer du/des mots précédents si ce dernier buffer est non nul,
-    puis ajoute à la liste d'arguments de la commande.
-    ensuite, recherche s'il y a un autre whitespace qui suit :
-        si non, garde la fin du mot dans un buffer et passe au mot suivant
-        si oui, répète l'opération jusqu'à arriver a la fin du mot ou jusqu'à 
-        ne plus avoir de whitespaces dans le mot
-
-*/
-void    set_cmd_args(t_cmd **curr_cmd, t_token_list *curr_tk, int *i)
+void    get_args_from_merged_words(t_cmd **curr_cmd, t_token_list *curr_tk, int *i)
 {
-    int             j;
     int             whitespace_pos;
     int             prev_whitespace_pos;
     char            *buffer;
@@ -151,41 +135,21 @@ void    set_cmd_args(t_cmd **curr_cmd, t_token_list *curr_tk, int *i)
     
     wd = curr_tk->merged_words;
     buffer = NULL;
-    if (!curr_tk->content[0])
-    {
-        (*curr_cmd)->val.args[*i] = ft_strdup("\0");
-        (*i)++;
-        return ;
-    }
-    if (!curr_tk->merged_words)
-    {
-        if (!curr_tk->quotes)
-            split_not_merged_no_quotes(curr_cmd, curr_tk, i);
-        else
-        {
-            //////dprintf(1, "in set_cmd_args(), added new arg : %s\n", curr_tk->content);
-            (*curr_cmd)->val.args[*i] = ft_strdup(curr_tk->content);
-            (*i)++;
-        }
-        return ;
-    }
+
     while (wd)
     {
-        //////dprintf(1, "\twd = %s, quotes = %d\n", wd->content, wd->quotes);
         if (!wd->quotes)
         {
             prev_whitespace_pos = 0;
             whitespace_pos = get_whtsp_pos(wd->content, prev_whitespace_pos);
-            //////dprintf(1, "\twd = %s, whitespace_pos = %d\n", wd->content, whitespace_pos);
             while (whitespace_pos != -1)
             {
                 tmp = buffer;
                 substr = ft_substr(wd->content, prev_whitespace_pos, whitespace_pos - prev_whitespace_pos);
                 buffer = ft_strjoin(tmp, substr);
-                if (*buffer) // ou if (whitespace_pos - prev_whitespace_pos) // ie si il n'est pas vide
+                if (*buffer)
                 {
                     (*curr_cmd)->val.args[*i] = ft_strdup(buffer);
-                    //////dprintf(1, "in set_cmd_args(), added new arg : %s\n", buffer);
                     (*i)++;
                     free(buffer);
                     buffer = NULL;
@@ -196,9 +160,8 @@ void    set_cmd_args(t_cmd **curr_cmd, t_token_list *curr_tk, int *i)
                     whitespace_pos++;
                 prev_whitespace_pos = whitespace_pos;
                 whitespace_pos = get_whtsp_pos(wd->content, prev_whitespace_pos);
-                //////dprintf(1, "\twd = %s, whitespace_pos = %d\n", wd->content, whitespace_pos);
             }
-            if (whitespace_pos == -1) // pas opti
+            if (whitespace_pos == -1)
             {
                 tmp = buffer;
                 substr = ft_substr(wd->content, prev_whitespace_pos, wd->length);
@@ -220,12 +183,49 @@ void    set_cmd_args(t_cmd **curr_cmd, t_token_list *curr_tk, int *i)
     }
     if (buffer && *buffer)
     {
-        //////dprintf(1, "in set_cmd_args(), added new arg : %s\n", buffer);
         (*curr_cmd)->val.args[*i] = ft_strdup(buffer);
         (*i)++;
         free(buffer);
         buffer = NULL;
     }
+}
+
+/*
+Dès que tombe sur une succession de whitespaces en parsant le token 
+-> tout ce qui venait avant devient un mot (ie token) individuel 
+
+1) des que tombe sur un mot n'étant pas entre quotes :
+    s'il n'y a pas de whitespaces, le garde dans un buffer et passe au mot suivant
+    sinon, cherche la position du premier whitespace, garde le sous-mot jusqu'a l'index dans un buffer,
+    join ce buffer avec le buffer du/des mots précédents si ce dernier buffer est non nul,
+    puis ajoute à la liste d'arguments de la commande.
+    ensuite, recherche s'il y a un autre whitespace qui suit :
+        si non, garde la fin du mot dans un buffer et passe au mot suivant
+        si oui, répète l'opération jusqu'à arriver a la fin du mot ou jusqu'à 
+        ne plus avoir de whitespaces dans le mot
+
+*/
+void    set_cmd_args(t_cmd **curr_cmd, t_token_list *curr_tk, int *i)
+{
+    if (!curr_tk->content[0])
+    {
+        (*curr_cmd)->val.args[*i] = ft_strdup("\0");
+        (*i)++;
+        return ;
+    }
+    if (!curr_tk->merged_words)
+    {
+        if (!curr_tk->quotes)
+            split_not_merged_no_quotes(curr_cmd, curr_tk, i);
+        else
+        {
+            (*curr_cmd)->val.args[*i] = ft_strdup(curr_tk->content);
+            (*i)++;
+        }
+        return ;
+    }
+    get_args_from_merged_words(curr_cmd, curr_tk, i);
+    // get_args_from_merged_words()
 }
 
 void    set_command_attributs(t_cmd **current, t_token_list **first_tk, t_token_list *current_tk, int args_count)
