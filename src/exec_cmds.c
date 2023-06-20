@@ -47,8 +47,8 @@ void exec_cmds(t_cmd *first_cmd)
 	int foo(t_cmd *);
 
 	cmd = first_cmd;
-	//////dprintf(1, "coucou test\n");
-	////dprintf(1, "in exec, first command name = %s\n", cmd->val.value);
+	////////dprintf(1, "coucou test\n");
+	//////dprintf(1, "in exec, first command name = %s\n", cmd->val.value);
 	
 	while(cmd)
 	{
@@ -63,6 +63,7 @@ void exec_cmds(t_cmd *first_cmd)
 			i++;
 		}
 		wait_childs(ret_cmd);
+		signal(SIGINT, sigint_during_cmd_exec);
 		while (!check_ret(ret_cmd, g_exit_status))
 		{
 			cmd = next;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 01:12:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/20 03:41:56 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/20 08:26:18 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ Implements the cd builtin with only a relative or absolute path.
 Returns 0 IF directory is successfully changed
 
 */
-int     ft_cd(t_cmd *cmd)
+int     ft_cd(t_cmd *cmd, t_cmd *first)
 {
     char    *full_path;
     char    *tmp;
@@ -137,7 +137,7 @@ int     ft_cd(t_cmd *cmd)
     char    *after_rel;
     char    *new_pwd;
 
-    ////dprintf(1, "coucou depuis ft_cd()\n");
+    //////dprintf(1, "coucou depuis ft_cd()\n");
     
     
     pwd = NULL;
@@ -190,8 +190,7 @@ int     ft_cd(t_cmd *cmd)
         
     if (chdir(full_path) == -1)
     {
-        perror("chdir3");
-        // TODO free  ?
+        perror("chdir ");
         return (CANNOT_ACCESS_DIR); // Quel code erreur ?
     }
     

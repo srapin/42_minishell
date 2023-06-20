@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 23:25:02 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/20 05:23:27 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/20 09:29:21 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,7 +244,7 @@ int     export_variable(t_cmd *cmd, int i)
 // var en plus dans export quand arrive dans un nouveau shell : OLDPWD 
 
 // modif : mettre la t_list **export_history dans la structure de t_cmd 
-int    ft_export(t_cmd *cmd)
+int    ft_export(t_cmd *cmd, t_cmd *first)
 {
     int     i;
     char    *var_name;

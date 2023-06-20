@@ -15,6 +15,8 @@
 
 void	parent_process(t_cmd **cmd, int pipe_tab[2])
 {
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, SIG_IGN);
 	safe_close(&(pipe_tab[1]));
 	if (!cmd || !(*cmd))
 		return;
@@ -53,13 +55,14 @@ void	child_process(t_cmd *cmd, t_cmd *first,  int pipe_tab[2])
 	char **env;
 	char **tmp;
 
-	//dprintf(1, "exec child proc \n");
+	////dprintf(1, "exec child proc \n");
 	if (pipe_tab[0] > -1)
 	{
 		safe_close(&(pipe_tab[0]));
 		cmd->red.out_fd = pipe_tab[1];
 	}
 	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	dup_cmd_file(cmd);
 	
 	try_to_exec_builtins(cmd, first, true);

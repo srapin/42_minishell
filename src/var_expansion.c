@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   var_expansion.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:12:06 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/20 03:34:33 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/20 08:24:09 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ void    perform_variable_exp(t_data *data)
             || current->prev->type != l_io_redirect || current->prev->length == 1)) // ie n'est pas dans le limiteur d'un here_doc
         {
             dollar_start = ft_strdup(ft_strchr(current->content, '$'));
-            ////dprintf(1, "before while, dollar_start = %s\n", dollar_start);
+            //////dprintf(1, "before while, dollar_start = %s\n", dollar_start);
             while (dollar_start && *dollar_start)
             {
                 dollar_index = current->length - ft_strlen(dollar_start);
@@ -125,7 +125,7 @@ void    perform_variable_exp(t_data *data)
                 //printf("dollar index = %zu\n", dollar_index);
                 // ne delete les quotes et merge les mots qu'apres l'expansion de variables
                 next_dollar_start = ft_strdup(ft_strchr(dollar_start + 1, '$'));
-                ////dprintf(1, "ok ici, next_dollar_start = %s\n", next_dollar_start);
+                //////dprintf(1, "ok ici, next_dollar_start = %s\n", next_dollar_start);
                 next_dollar_index = current->length - ft_strlen(next_dollar_start);
                 //printf("next dollar index = %zu\n", next_dollar_index);
                 if (next_dollar_start && *next_dollar_start)
@@ -146,13 +146,13 @@ void    perform_variable_exp(t_data *data)
                 }
                 else
                     expand(data->env, &current, ft_strdup(dollar_start + 1), dollar_index);
-                ////dprintf(1, "fin de while, ok ici\n");
+                //////dprintf(1, "fin de while, ok ici\n");
                 free(dollar_start);
                 dollar_start = NULL;
                 dollar_start = next_dollar_start;
             }
             free(dollar_start);
-            ////dprintf(1, "current = %s\n", current->content);
+            //////dprintf(1, "current = %s\n", current->content);
         }
         current = current->next;
     }

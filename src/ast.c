@@ -88,92 +88,6 @@ int     get_whtsp_pos(char *str, int whtsp_pos)
     return (-1);
 }
 
-void    split_not_merged_no_quotes(t_cmd **curr_cmd, t_token_list *curr_tk, int *i)
-{
-    char    *buffer;
-    char    *substr;
-    char    *tmp;
-    int     whitespace_pos;
-    int     prev_whitespace_pos;
-
-    ////dprintf(1, "in set_cmd_args(), current token = %s\n", curr_tk->content);
-    prev_whitespace_pos = 0;
-    whitespace_pos = get_whtsp_pos(curr_tk->content, prev_whitespace_pos);
-    buffer = NULL;
-    ////dprintf(1, "\twd = %s, whitespace_pos = %d\n", curr_tk->content, whitespace_pos);
-    while (whitespace_pos != -1)
-    {
-        tmp = buffer;
-        substr = ft_substr(curr_tk->content, prev_whitespace_pos, whitespace_pos - prev_whitespace_pos);
-        buffer = ft_strjoin(tmp, substr);
-        ////dprintf(1, "in set_cmd_args(), in while (whitespace_pos != -1)\n");
-        if (*buffer) // ie si il n'est pas vide
-        {
-            (*curr_cmd)->val.args[*i] = ft_strdup(buffer);
-            ////dprintf(1, "in set_cmd_args(), added new arg : %s\n", buffer);
-            (*i)++;
-            free(buffer);
-            buffer = NULL;
-        }
-        free(substr);
-        substr = NULL;
-        //j = whitespace_pos;
-        while (curr_tk->content[whitespace_pos] && (curr_tk->content[whitespace_pos] == ' ' || curr_tk->content[whitespace_pos] == '\t'))
-            whitespace_pos++;
-        prev_whitespace_pos = whitespace_pos;
-        whitespace_pos = get_whtsp_pos(curr_tk->content, prev_whitespace_pos);
-        ////dprintf(1, "\twd = %s, whitespace_pos = %d\n", curr_tk->content, whitespace_pos);
-    }
-    if (prev_whitespace_pos < curr_tk->length)
-    {
-        (*curr_cmd)->val.args[*i] = ft_substr(curr_tk->content, prev_whitespace_pos, curr_tk->length);
-        (*i)++;
-    }
-}
-
-void    split_merged_no_quotes(t_cmd **curr_cmd, t_word_data *wd, char *buffer, int *i)
-{
-    int     whitespace_pos;
-    int     prev_whitespace_pos;
-    char    *tmp;
-    char    *substr;
-
-    prev_whitespace_pos = 0;
-    whitespace_pos = get_whtsp_pos(wd->content, prev_whitespace_pos);
-    ////dprintf(1, "\twd = %s, whitespace_pos = %d\n", wd->content, whitespace_pos);
-    while (whitespace_pos != -1)
-    {
-        tmp = buffer;
-        substr = ft_substr(wd->content, prev_whitespace_pos, whitespace_pos - prev_whitespace_pos);
-        buffer = ft_strjoin(tmp, substr);
-        if (*buffer) // ou if (whitespace_pos - prev_whitespace_pos) // ie si il n'est pas vide
-        {
-            (*curr_cmd)->val.args[*i] = ft_strdup(buffer);
-            ////dprintf(1, "in set_cmd_args(), added new arg : %s\n", buffer);
-            (*i)++;
-            free(buffer);
-            buffer = NULL;
-        }
-        free(substr);
-        substr = NULL;
-        while (wd->content[whitespace_pos] && (wd->content[whitespace_pos] == ' ' || wd->content[whitespace_pos] == '\t'))
-            whitespace_pos++;
-        prev_whitespace_pos = whitespace_pos;
-        whitespace_pos = get_whtsp_pos(wd->content, prev_whitespace_pos);
-        ////dprintf(1, "\twd = %s, whitespace_pos = %d\n", wd->content, whitespace_pos);
-    }
-    if (whitespace_pos == -1) // pas opti
-    {
-        tmp = buffer;
-        substr = ft_substr(wd->content, prev_whitespace_pos, wd->length);
-        buffer = ft_strjoin(tmp, substr);
-        free(tmp);
-        free(substr);
-        tmp = NULL;
-        substr = NULL;
-    }
-}
-
 /*
 Dès que tombe sur une succession de whitespaces en parsant le token 
 -> tout ce qui venait avant devient un mot (ie token) individuel 
@@ -213,7 +127,7 @@ void    set_cmd_args(t_cmd **curr_cmd, t_token_list *curr_tk, int *i)
             split_not_merged_no_quotes(curr_cmd, curr_tk, i);
         else
         {
-            ////dprintf(1, "in set_cmd_args(), added new arg : %s\n", curr_tk->content);
+            //////dprintf(1, "in set_cmd_args(), added new arg : %s\n", curr_tk->content);
             (*curr_cmd)->val.args[*i] = ft_strdup(curr_tk->content);
             (*i)++;
         }
@@ -221,12 +135,12 @@ void    set_cmd_args(t_cmd **curr_cmd, t_token_list *curr_tk, int *i)
     }
     while (wd)
     {
-        ////dprintf(1, "\twd = %s, quotes = %d\n", wd->content, wd->quotes);
+        //////dprintf(1, "\twd = %s, quotes = %d\n", wd->content, wd->quotes);
         if (!wd->quotes)
         {
             prev_whitespace_pos = 0;
             whitespace_pos = get_whtsp_pos(wd->content, prev_whitespace_pos);
-            ////dprintf(1, "\twd = %s, whitespace_pos = %d\n", wd->content, whitespace_pos);
+            //////dprintf(1, "\twd = %s, whitespace_pos = %d\n", wd->content, whitespace_pos);
             while (whitespace_pos != -1)
             {
                 tmp = buffer;
@@ -235,7 +149,7 @@ void    set_cmd_args(t_cmd **curr_cmd, t_token_list *curr_tk, int *i)
                 if (*buffer) // ou if (whitespace_pos - prev_whitespace_pos) // ie si il n'est pas vide
                 {
                     (*curr_cmd)->val.args[*i] = ft_strdup(buffer);
-                    ////dprintf(1, "in set_cmd_args(), added new arg : %s\n", buffer);
+                    //////dprintf(1, "in set_cmd_args(), added new arg : %s\n", buffer);
                     (*i)++;
                     free(buffer);
                     buffer = NULL;
@@ -246,7 +160,7 @@ void    set_cmd_args(t_cmd **curr_cmd, t_token_list *curr_tk, int *i)
                     whitespace_pos++;
                 prev_whitespace_pos = whitespace_pos;
                 whitespace_pos = get_whtsp_pos(wd->content, prev_whitespace_pos);
-                ////dprintf(1, "\twd = %s, whitespace_pos = %d\n", wd->content, whitespace_pos);
+                //////dprintf(1, "\twd = %s, whitespace_pos = %d\n", wd->content, whitespace_pos);
             }
             if (whitespace_pos == -1) // pas opti
             {
@@ -270,7 +184,7 @@ void    set_cmd_args(t_cmd **curr_cmd, t_token_list *curr_tk, int *i)
     }
     if (buffer && *buffer)
     {
-        ////dprintf(1, "in set_cmd_args(), added new arg : %s\n", buffer);
+        //////dprintf(1, "in set_cmd_args(), added new arg : %s\n", buffer);
         (*curr_cmd)->val.args[*i] = ft_strdup(buffer);
         (*i)++;
         free(buffer);
@@ -603,11 +517,11 @@ t_cmd   *get_ast(t_data *data)
     pipeline_start_tk = *(data->first); 
     pipeline_start_cmd = *ast;
 
-    ////dprintf(1, "in get_ast(), before the while(pipeline_start_tk)\n");
+    //////dprintf(1, "in get_ast(), before the while(pipeline_start_tk)\n");
     
     while (pipeline_start_tk)
     {
-        ////dprintf(1, "in get_ast(), in the while(pipeline_start_tk)\n");
+        //////dprintf(1, "in get_ast(), in the while(pipeline_start_tk)\n");
         current_tk = pipeline_start_tk;
         current_cmd = pipeline_start_cmd;
         
@@ -615,7 +529,7 @@ t_cmd   *get_ast(t_data *data)
         // ie peut avoir des pipes, mais ne touche ici pas à la variable next de t_cmd
         while (current_tk && current_tk->type != and_tk && (current_tk->type != or_tk || current_tk->length == 1))
         {
-            ////dprintf(1, "in get_ast(), in the  while(not && and not ||), before calling set_simple_command()\n");
+            //////dprintf(1, "in get_ast(), in the  while(not && and not ||), before calling set_simple_command()\n");
             cmd_start_tk = current_tk;
             set_simple_command(current_cmd, data->first, &cmd_start_tk, &current_tk);
             

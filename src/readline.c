@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 22:15:52 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/20 04:38:55 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/20 09:31:02 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,12 +73,15 @@ void    read_lines(t_data *data)
     t_token_list  *tk_list;
     t_cmd *cmd;
 
+    struct termios termios_p;
+    tcgetattr(STDIN_FILENO, &termios_p);
     input = readline("$ "); 
     cmd = NULL;
     tk_list = NULL;
     while (input) // readline ne renvoie NULL que dans le cas d'un Ctrl-D
     {
         
+        // printf("ret %d\n", tcsetattr(STDIN_FILENO, TCSAFLUSH,&termios_p));
         stream_len = ft_strlen(input);
         if (!stream_len)
         {
@@ -86,7 +89,7 @@ void    read_lines(t_data *data)
             continue;
         }
         if (input && input[1] == 4)
-            ft_exit(NULL); // ca leak non ???
+            ft_exit(NULL, NULL);
         
         add_history(input);
         if (only_whitespaces(input))
@@ -106,7 +109,8 @@ void    read_lines(t_data *data)
         free_cmds(&cmd, false);
         input = readline("$ ");
     }
-    if (!cmd)
+    if (!cmd) //todo c est moche 
+    {
         free_parsing_data(data);
     free_cmds(&cmd, true);
     free(input);

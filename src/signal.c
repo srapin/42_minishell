@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/11 22:38:56 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/19 04:05:37 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/20 04:05:33 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int		g_exit_status;
 
 void sigint_next_prompt(int sig)
 {
-	// //dprintf(1, "sigint");
+	// ////dprintf(1, "sigint");
 	g_exit_status = 130;
 	ft_putstr_fd("\n", 1);
 
@@ -28,7 +28,8 @@ void sigint_next_prompt(int sig)
 
 void	sigint_during_cmd_exec(int sig)
 {
-	// //dprintf(1, "sigint2");
+	// dprintf(1, "sigint2");
+	// dprintf(1, "sdfyhjikl;'p'hgbf\n%d\n",getpid());
 	g_exit_status = 130;
 	ft_putstr_fd("\n", 1);
 	// rl_replace_line("", 1);
