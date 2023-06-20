@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 23:25:02 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/20 12:03:28 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/20 18:55:31 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,24 +37,15 @@ t_list  *init_export_history(t_ht_hash_table *ht)
     return (first);
 }
 
-void insert_in_sorted_lst(t_list **head, t_list *elem)
+void    search_and_insert(t_list **head, t_list *elem)
 {
     t_list *lst;
     t_list *prev;
     t_list *tmp;
-    char *new_key;
+    char    *new_key;
 
-    if (!head || !elem)
-        return;
     lst = *head;
-    if (!lst)
-    {
-        *head = elem;
-        return; 
-    }
     new_key = (char *)elem->content;
-    if (ft_strcmp((char*)lst->content, new_key) >= 0)
-        return ft_lstadd_front(head, elem);
     while (lst && ft_strcmp((char*)lst->content, new_key) < 0)
     {
         prev = lst;
@@ -68,6 +59,41 @@ void insert_in_sorted_lst(t_list **head, t_list *elem)
     tmp = prev->next;
     prev->next = elem;
     elem->next = tmp;
+}
+
+void insert_in_sorted_lst(t_list **head, t_list *elem)
+{
+    // t_list *prev;
+    // t_list *tmp;
+    // char    *new_key;
+    t_list *lst;
+
+    if (!head || !elem)
+        return;
+    lst = *head;
+    if (!lst)
+    {
+        *head = elem;
+        return; 
+    }
+    //new_key = (char *)elem->content;
+    if (ft_strcmp((char*)lst->content, (char *)elem->content) >= 0)
+        return ft_lstadd_front(head, elem);
+    search_and_insert(head, elem);
+    
+    // while (lst && ft_strcmp((char*)lst->content, new_key) < 0)
+    // {
+    //     prev = lst;
+    //     lst = lst->next;
+    // }
+    // if (!lst)
+    // {
+    //     prev->next = elem;
+    //     return;
+    // }
+    // tmp = prev->next;
+    // prev->next = elem;
+    // elem->next = tmp;
 }
 
 t_list *get_sorted_hist(t_ht_hash_table *ht)
@@ -108,16 +134,11 @@ bool ft_lst_in(t_list *lst, char *str)
 // print toutes les variables ayant été exportées, triées par ordre alphabétique
 void    print_export_history(t_ht_hash_table *ht, t_list *export_hist)
 {
-    int     i;
-    int     j;
-    char    **sorted_history;
     t_list  *current_var;
     t_list *lst;
     t_list *exp;
     t_list *exp_next;
-    char    *to_insert;
     
-
     lst = get_sorted_hist(ht);
     exp = export_hist;
     while(exp)
@@ -134,9 +155,7 @@ void    print_export_history(t_ht_hash_table *ht, t_list *export_hist)
         if (!str && is_in_export_history(export_hist,(char *) current_var->content))
             printf("%s\n", (char *) current_var->content);
         else if (str)
-        {
             printf("%s=\"%s\"\n", (char *) current_var->content, str);
-        }
        current_var = current_var->next; 
     }
     ft_lstclear(&lst);
@@ -156,33 +175,35 @@ int     is_in_export_history(t_list *export_hist, char *var_name)
     return (0);
 }
 
+void    lst_del_first(t_list **export_hist, t_list *current)
+{
+    *export_hist = (*export_hist)->next;
+    free(current->content);
+    current->content = NULL;
+    free(current);
+    current = NULL;
+}
+
 /* Deletes var_name from export history. 
 Does nothing if the export_history does not contain var_name*/
 void    del_from_export_history(t_list **export_hist, char *var_name)
 {
     t_list  *current;
-    t_list  *tmp;
+    t_list  *current_next;
 
     current = *export_hist;
     if (!ft_strcmp(current->content, var_name))
-    {
-        *export_hist = (*export_hist)->next;
-        free(current->content);
-        current->content = NULL;
-        free(current);
-        current = NULL;
-        return ;
-    }
+        lst_del_first(export_hist, current);
     while (current->next)
     {
         if (!ft_strcmp(current->next->content, var_name))
         {
-            tmp = current->next;
-            current->next = tmp->next;
-            free(tmp->content);
-            tmp->content = NULL;
-            free(tmp);
-            tmp = NULL;
+            current_next = current->next;
+            current->next = current_next->next;
+            free(current_next->content);
+            current_next->content = NULL;
+            free(current_next);
+            current_next = NULL;
             return ;
         }
         current = current->next;

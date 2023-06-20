@@ -2,6 +2,14 @@ bash-5.1$ echo coucou > /dev/full
 bash: echo: write error: No space left on device
 
 
+$ coucou"lalalalalala je suis $USER dans $HOME"
+syntax
+minishell : coucoulalalalalala je suis /Users/Helene: No such file or directory
+-> DEVRAIT AVOIR : bash-5.1$ coucou"lalalalalala je suis $USER dans $HOME" 
+bash: coucoulalalalalala je suis ln dans /home/ln: No such file or directory
+-> n'expand pas $HOME, pourquoi ? a voir avec gdb 
+
+
 $ minishell
 minishell : webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*
 .wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*
@@ -13,6 +21,9 @@ export l="ls -la"
 $ cat $l$l
 cat: ls: No such file or directory
 -> ca boucle, pourquoi ? ca marche avec juste cat $l
+
+
+------------------------ EN DESSOUS : DEJA GERE --------------------------------
 
 
 $ cd
@@ -42,9 +53,6 @@ $ echo $HOME
 cd ../../
 $ exit
 exit
-
-
------------------------- EN DESSOUS : DEJA GERE --------------------------------
 
 
 $ unset PWD
