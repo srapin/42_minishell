@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 00:40:45 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/21 03:15:34 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/21 04:26:39 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,14 @@ parts of the command.
 
 /*
 The parser scans input and breaks it down to tokens. 
-A token consists of one or more characters (letters, digits, symbols), and represents a single unit of input. 
-For example, a token can be a variable name, a keyword, a number, or an arithmetic operator.
-The parser then takes these tokens, groups them together, and creates an Abstract Syntax Tree, or AST.
-The parser takes the AST and passes it to the executor, which reads the AST and executes the parsed command.
+A token consists of one or more characters (letters, digits, symbols),
+	and represents a single unit of input. 
+For example, a token can be a variable name, a keyword, a number,
+	or an arithmetic operator.
+The parser then takes these tokens, groups them together,
+	and creates an Abstract Syntax Tree, or AST.
+The parser takes the AST and passes it to the executor,
+	which reads the AST and executes the parsed command.
 */
 
 /*
@@ -41,7 +45,8 @@ de considérer tout ce qui est dans les quotes comme un unique mot.
 Deux mots entre quotes NON séparés par un/des whitespaces ne sont en réalité qu'un seul
 mot, les whitespaces étant nécessaires pour distinguer deux mots.
 Et les espaces sont ce qui permet de distinguer deux mots.
-Pour ce qui est de distinguer deux opérateurs ou un mot et un opérateur, aucun espace 
+Pour ce qui est de distinguer deux opérateurs ou un mot et un opérateur,
+	aucun espace 
 n'est nécessaire (leurs différents types d'opérateur/mot suffisent à faire la distinction)
 
 -----------------------------------
@@ -65,83 +70,92 @@ not allowed : single quotes inside single quotes
 */
 
 /*
-Si deux mots (ou deux tokens quote) ne sont séparés par rien, deviennent un seul mot. 
-! here_doc : le limiteur peut etre entouré de quotes, et il faut garder en mémoire si c'est le cas ou non
-Meme si le limiteur du here_doc est entre quotes, ne doit PAS expandre de variables (ie le(s) $ reste(nt) tel(s) quel(s))
+Si deux mots (ou deux tokens quote) ne sont séparés par rien,
+	deviennent un seul mot. 
+! here_doc : le limiteur peut etre entouré de quotes,
+	et il faut garder en mémoire si c'est le cas ou non
+Meme si le limiteur du here_doc est entre quotes,
+	ne doit PAS expandre de variables (ie le(s) $ reste(nt) tel(s) quel(s))
 
 */
 
-void    merge_token_quotes(t_token_list **tk_list, char *input, t_token *token_stream, int *i)
+void	merge_token_quotes(t_token_list **tk_list, char *input,
+		t_token *token_stream, int *i)
 {
-    int     j;
-    int     current;
-    size_t  stream_len;
+	int		j;
+	int		current;
+	size_t	stream_len;
 
-    stream_len = ft_strlen(input);
-    current = token_stream[*i].type;
-    j = *i;
-    (*i)++;
-    while ((*i) < stream_len && token_stream[*i].type != current)
-        (*i)++;
-    if ((*i) < stream_len)
-        (*i)++;
-    tk_add(tk_list, tk_new_elem(&input[j], (*i) - j, current, 
-        (current == simple_quote) + (current == double_quote) * 2));
+	stream_len = ft_strlen(input);
+	current = token_stream[*i].type;
+	j = *i;
+	(*i)++;
+	while ((*i) < stream_len && token_stream[*i].type != current)
+		(*i)++;
+	if ((*i) < stream_len)
+		(*i)++;
+	tk_add(tk_list, tk_new_elem(&input[j], (*i) - j, current,
+				(current == simple_quote) + (current == double_quote) * 2));
 }
 
-void    merge_single_tokens(t_token_list **tk_list, char *input, t_token *token_stream, size_t stream_len)
+void	merge_single_tokens(t_token_list **tk_list, char *input,
+		t_token *token_stream, size_t stream_len)
 {
-    int     i;
-    int     j;
-    int     current;
+	int	i;
+	int	j;
+	int	current;
 
-    i = 0;
-    j = 0;
-    while (i < stream_len)
-    {
-        current = token_stream[i].type;
-        if (i < stream_len && (current == r_parenthesis || current == l_parenthesis))
-        {
-            tk_add(tk_list, tk_new_elem(&input[i], 1, current, 0));
-            i++;
-        }
-        else if (i < stream_len && (current == simple_quote || current == double_quote))
-            merge_token_quotes(tk_list, input, token_stream, &i);
-        else if (i < stream_len)
-        {
-            j = i;
-            while (i < stream_len && token_stream[i].type == current)
-                i++;
-            tk_add(tk_list, tk_new_elem(&input[j], i - j, current, 0));
-        }
-    }
+	i = 0;
+	j = 0;
+	while (i < stream_len)
+	{
+		current = token_stream[i].type;
+		if (i < stream_len && (current == r_parenthesis
+				|| current == l_parenthesis))
+		{
+			tk_add(tk_list, tk_new_elem(&input[i], 1, current, 0));
+			i++;
+		}
+		else if (i < stream_len && (current == simple_quote
+					|| current == double_quote))
+			merge_token_quotes(tk_list, input, token_stream, &i);
+		else if (i < stream_len)
+		{
+			j = i;
+			while (i < stream_len && token_stream[i].type == current)
+				i++;
+			tk_add(tk_list, tk_new_elem(&input[j], i - j, current, 0));
+		}
+	}
 }
 
-t_token_list    **tokenise(t_token *token_stream, size_t stream_len, char *input)
+t_token_list	**tokenise(t_token *token_stream, size_t stream_len,
+		char *input)
 {
-    int             current;
-    t_token_list    *tk_list;
-    t_token_list    **first;
-    
-    if (!token_stream)
-        return (NULL);
-    tk_list = NULL;
-    first = malloc(sizeof(t_token_list *));
-    if (!first)
-        return (NULL);
-    
-    merge_single_tokens(&tk_list, input, token_stream, stream_len); // ajouté chez oim le mardi 20 en fin d'aprem et ca leak
-    
-    /* while (i < stream_len)
+	int				current;
+	t_token_list	*tk_list;
+	t_token_list	**first;
+
+	if (!token_stream)
+		return (NULL);
+	tk_list = NULL;
+	first = malloc(sizeof(t_token_list *));
+	if (!first)
+		return (NULL);
+	merge_single_tokens(&tk_list, input, token_stream, stream_len);
+		// ajouté chez oim le mardi 20 en fin d'aprem et ca leak
+	/* while (i < stream_len)
     {
         
         current = token_stream[i].type;
-         if (i < stream_len && (current == r_parenthesis || current == l_parenthesis))
+         if (i < stream_len && (current == r_parenthesis
+			|| current == l_parenthesis))
          {
              tk_add(&tk_list, tk_new_elem(&input[i], 1, current, 0));
              i++;
          }
-         else if (i < stream_len && (current == simple_quote || current == double_quote))
+         else if (i < stream_len && (current == simple_quote
+			|| current == double_quote))
          {
              j = i;
              i++;
@@ -160,55 +174,54 @@ t_token_list    **tokenise(t_token *token_stream, size_t stream_len, char *input
              tk_add(&tk_list, tk_new_elem(&input[j], i - j, current, 0));
          }
     } */
-    free(token_stream);
-    token_stream = NULL;
-    
-    *first = tk_list;
-    return (first);
+	free(token_stream);
+	token_stream = NULL;
+	*first = tk_list;
+	return (first);
 }
 
-int    set_token_operator(t_token *token, char input)
+int	set_token_operator(t_token *token, char input)
 {
-    if (input == '<')
-        token->type = l_io_redirect;
-    else if (input == '>')
-        token->type = r_io_redirect;
-    else if (input == '(')
-        token->type = l_parenthesis;
-    else if (input == ')')
-        token->type = r_parenthesis;
-    else if (input == '&')
-        token->type = and_tk;
-    else if (input == '|')
-        token->type = or_tk;
-    else if (input == '\'')
-        token->type = simple_quote;
-    else if (input == '\"')
-        token->type = double_quote;
-    else 
-        return (0);
-    return (1);
+	if (input == '<')
+		token->type = l_io_redirect;
+	else if (input == '>')
+		token->type = r_io_redirect;
+	else if (input == '(')
+		token->type = l_parenthesis;
+	else if (input == ')')
+		token->type = r_parenthesis;
+	else if (input == '&')
+		token->type = and_tk;
+	else if (input == '|')
+		token->type = or_tk;
+	else if (input == '\'')
+		token->type = simple_quote;
+	else if (input == '\"')
+		token->type = double_quote;
+	else
+		return (0);
+	return (1);
 }
 
-t_token    *assign_type(char *input, size_t stream_len)
+t_token	*assign_type(char *input, size_t stream_len)
 {
-    int i;
-    t_token *token_stream;
+	int		i;
+	t_token	*token_stream;
 
-    i = 0;
-    token_stream = ft_calloc(sizeof(t_token), stream_len + 1);
-    if (!token_stream)
-        return (NULL);
-    while (i < stream_len)
-    {
-        if (ft_strchr(WHITESPACES, input[i]))
-            token_stream[i].type = whitespace;
-        else if (set_token_operator(&token_stream[i], input[i]))
-            ;
-        else 
-            token_stream[i].type = word;
-        token_stream[i].content = input[i];
-        i++;
-    }
-    return (token_stream);
+	i = 0;
+	token_stream = ft_calloc(sizeof(t_token), stream_len + 1);
+	if (!token_stream)
+		return (NULL);
+	while (i < stream_len)
+	{
+		if (ft_strchr(WHITESPACES, input[i]))
+			token_stream[i].type = whitespace;
+		else if (set_token_operator(&token_stream[i], input[i]))
+			;
+		else
+			token_stream[i].type = word;
+		token_stream[i].content = input[i];
+		i++;
+	}
+	return (token_stream);
 }

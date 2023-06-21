@@ -12,7 +12,6 @@ FILES = cmd_private\
 		exec_builtins \
 		file_struct_priv\
 		file_struct_pub\
-		here_doc\
 		main \
 		next\
 		redir_pub\

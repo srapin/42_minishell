@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 23:24:33 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/20 09:22:11 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/21 04:30:40 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,47 +51,54 @@ void	hd_expand(t_ht_hash_table *ht, t_token_list **t_list)
 	size_t			next_dollar_index;
 	size_t			dollar_index;
 	t_token_list	*current;
+	int				k;
+				char *var_name;
 
 	current = *t_list;
 	while (current)
 	{
 		while (current && current->type == whitespace)
-            current = current->next;
-        if (!current)
-            break;
-        dollar_start = ft_strdup(ft_strchr(current->content, '$'));
-        while (dollar_start && *dollar_start)
-        {
-            dollar_index = current->length - ft_strlen(dollar_start);
-            next_dollar_start = ft_strdup(ft_strchr(dollar_start + 1, '$'));
-            next_dollar_index = current->length - ft_strlen(next_dollar_start);
-            if (next_dollar_start && *next_dollar_start)
-                expand(ht, &current, ft_substr(current->content, dollar_index + 1, next_dollar_index - dollar_index - 1), dollar_index);
-            else if (current->type == double_quote || current->type == simple_quote)
-            {
-                int k = 2;
-                char *var_name;
-                var_name = ft_substr(current->content, dollar_index + 1, current->length - dollar_index - k);
-                while (k + dollar_index <= current->length && !valid_name(var_name))
-                {
-                    free(var_name);
-                    k++;
-                    var_name = ft_substr(current->content, dollar_index + 1, current->length - dollar_index - k);
-                }
-                if (k + dollar_index <= current->length) // ie valid_name() == 1
-                    expand(ht, &current, var_name, dollar_index);    
-            }
-            else
-                expand(ht, &current, ft_strdup(dollar_start + 1), dollar_index);
-            ////dprintf(1, "fin de while, ok ici\n");
-            free(dollar_start);
-            dollar_start = NULL;
-            dollar_start = next_dollar_start;
-        }
-        free(dollar_start);
-        current = current->next;
+			current = current->next;
+		if (!current)
+			break ;
+		dollar_start = ft_strdup(ft_strchr(current->content, '$'));
+		while (dollar_start && *dollar_start)
+		{
+			dollar_index = current->length - ft_strlen(dollar_start);
+			next_dollar_start = ft_strdup(ft_strchr(dollar_start + 1, '$'));
+			next_dollar_index = current->length - ft_strlen(next_dollar_start);
+			if (next_dollar_start && *next_dollar_start)
+				expand(ht, &current, ft_substr(current->content, dollar_index
+							+ 1, next_dollar_index - dollar_index - 1),
+						dollar_index);
+			else if (current->type == double_quote
+					|| current->type == simple_quote)
+			{
+				k = 2;
+				var_name = ft_substr(current->content, dollar_index + 1,
+						current->length - dollar_index - k);
+				while (k + dollar_index <= current->length
+					&& !valid_name(var_name))
+				{
+					free(var_name);
+					k++;
+					var_name = ft_substr(current->content, dollar_index + 1,
+							current->length - dollar_index - k);
+				}
+				if (k + dollar_index <= current->length) // ie valid_name() == 1
+					expand(ht, &current, var_name, dollar_index);
+			}
+			else
+				expand(ht, &current, ft_strdup(dollar_start + 1), dollar_index);
+			////dprintf(1, "fin de while, ok ici\n");
+			free(dollar_start);
+			dollar_start = NULL;
+			dollar_start = next_dollar_start;
+		}
+		free(dollar_start);
+		current = current->next;
 	}
-} 
+}
 
 /* variable expansions,
 	reusing functions used in the main parsing but without checking syntax 
@@ -105,7 +112,7 @@ void	hd_perform_expand(t_ht_hash_table *ht, char **str) // char* ou char ** ?
 	t_token_list **first;
 
 	if (!str || !(*str)[0])
-	// str existe forcément (sinon serait sorti du while (readline()))
+		// str existe forcément (sinon serait sorti du while (readline()))
 		return ;
 	len = ft_strlen(*str);
 	first = tokenise(assign_type(*str, len), len, *str);
@@ -136,13 +143,13 @@ void	get_here_doc_content(t_ht_hash_table *ht, int fd, char *limiter,
 	hd_content = readline("> ");
 	while (hd_content && !is_limiter(hd_content, limiter))
 	{
-		if (!quotes)                            // if quotes in limiter,don't expand user's input
+		if (!quotes) // if quotes in limiter,don't expand user's input
 			hd_perform_expand(ht, &hd_content);
-				// vérifier que hd_content est bien modifié après l'appel !
+		// vérifier que hd_content est bien modifié après l'appel !
 		if (write(fd, hd_content, ft_strlen(hd_content)) == -1)
-			perror("write ");         // return ? jpense pas
+			perror("write "); // return ? jpense pas
 		if (write(fd, "\n", 1) == -1)
-		// non ? car readline() retire le \n de fin
+			// non ? car readline() retire le \n de fin
 			perror("write ");
 		free(hd_content);
 		hd_content = readline("> ");
@@ -181,26 +188,26 @@ int	set_quotes(t_token_list *current)
 // void	set_hd_filenames(t_ht_hash_table *ht, t_token_list *current)
 void	set_hd_filenames(t_token_list *current)
 {
-    char	*file_name;
-    while (current)
+	char	*file_name;
+
+	while (current)
 	{
 		if (current->type == l_io_redirect && current->length == 2)
 		{
-        	file_name = random_filename();
-        	// current->length = 1;
-        	// free(current->next->content);
+			file_name = random_filename();
+			// current->length = 1;
+			// free(current->next->content);
 			tk_add_word_in_list(&current, file_name);
 			free(file_name);
 		}
 		// ie est un here doc
-        // current->next->content = file_name;
-        // current->next->length = ft_strlen(file_name);
+		// current->next->content = file_name;
+		// current->next->length = ft_strlen(file_name);
 		current = current->next;
 	}
-	
 }
 
-void set_here_doc(t_ht_hash_table *ht, t_token_list *current)
+void	set_here_doc(t_ht_hash_table *ht, t_token_list *current)
 {
 	char	*limiter;
 	char	*file_name;
@@ -221,38 +228,34 @@ void set_here_doc(t_ht_hash_table *ht, t_token_list *current)
 	quotes = set_quotes(current);
 	get_here_doc_content(ht, fd, limiter, quotes);
 	/* Give prompt back to user and write the heredoc content to the file*/
-	// ////dprintf(1, "after del, %s, %s %i\n", current->content, current->next->content, fd);
 	close(fd);
-	// ////dprintf(1, "after del, %s, %s %i\n", current->content, current->next->content, fd);
-	// ////dprintf(1, "after del, %s, %s %i\n", current->content, current->next->content, fd);
-	
 }
 
-void hd_sigint(int i)
+void	hd_sigint(int i)
 {
 	// ////dprintf(1, "sig press \n");
-    g_exit_status = 130;
-    close(0);
-    close(1);
-    close(2);
+	g_exit_status = 130;
+	close(0);
+	close(1);
+	close(2);
 }
 
-void hd_child_process(t_data *data)
+void	hd_child_process(t_data *data)
 {
-	//t_token_list *first;
-	t_token_list 	*current;
+	t_token_list	*current;
 
+	//t_token_list *first;
 	//first = current;
 	current = *(data->first);
 	g_exit_status = 0;
-    signal(SIGINT, hd_sigint);
-    while (current && g_exit_status != 130)
+	signal(SIGINT, hd_sigint);
+	while (current && g_exit_status != 130)
 	{
-		if(current->type == l_io_redirect && current->length == 2 )
+		if (current->type == l_io_redirect && current->length == 2)
 		{
-			current = current->next;	
+			current = current->next;
 			set_here_doc(data->env, current);
-		}	
+		}
 		current = current->next;
 	}
 	// ft_lstfree(&first, free);
@@ -261,17 +264,17 @@ void hd_child_process(t_data *data)
 	ht_del_hash_table(ht);
 	free_tokens(&first);
 	ft_lstfree(&exp_hist, free); */
-    exit(g_exit_status);
+	exit(g_exit_status);
 }
 
-bool hd_parent_process(int pid, t_token_list *current)
+bool	hd_parent_process(int pid, t_token_list *current)
 {
-	int status;
-	
-    waitpid(pid, &status, 0);
+	int	status;
+
+	waitpid(pid, &status, 0);
 	while (current)
 	{
-		if(current->type == l_io_redirect && current->length == 2)
+		if (current->type == l_io_redirect && current->length == 2)
 		{
 			current->length = 1;
 			current = current->next;
@@ -281,36 +284,36 @@ bool hd_parent_process(int pid, t_token_list *current)
 	}
 	////dprintf(1, "%i\n", status);
 	return (!(WIFEXITED(status) && WEXITSTATUS(status)));
-	// return true;
+	// return (true);
 }
 
 /* Gives the prompt back to the user for here_doc contents, 
 deleting the later from the tokens' list while doing so */
 bool	set_here_docs(t_data *data)
 {
-	//t_token_list	*current;
-	t_token_list 	*first;
-    int pid;
-    int status;
+	t_token_list	*first;
+	int				pid;
+	int				status;
 
+	//t_token_list	*current;
 	//current = *first;
 	first = *(data->first);
 	// set_hd_filenames(ht, current);
-    set_hd_filenames(first);
-    // ////dprintf(1, "heyyyy\n");
-    pid = fork();
-    if (pid < 0)
-        fail_process();
-    else if (pid == 0)
-    {
+	set_hd_filenames(first);
+	// ////dprintf(1, "heyyyy\n");
+	pid = fork();
+	if (pid < 0)
+		fail_process();
+	else if (pid == 0)
+	{
 		//dprintf(1, "hd child proc \n");
 		// hd_child_process(ht, first, exp_hist);
-        hd_child_process(data);
-    }
-    else
-    {
-		return hd_parent_process(pid, first);
+		hd_child_process(data);
+	}
+	else
+	{
+		return (hd_parent_process(pid, first));
 		// wait(&status);
 	}
-	return true;
+	return (true);
 }
