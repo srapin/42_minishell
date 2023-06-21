@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 23:01:51 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/20 03:53:26 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/21 02:48:57 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	free_tab(char **tab)
 {
 	int	i;
 
-	if (!tab) // rajouté par ln. utils ?
+	if (!tab)
 		return ;
 	i = 0;
 	while (tab[i])
@@ -61,16 +61,13 @@ void	add_slash(char **paths)
 	}
 }
 
-
-
 char	**get_path(t_cmd *cmd)
 {
 	int		i;
 	char	**paths;
-	char **env;
-	// //////dprintf(1, "if get peth");
-	env = hash_map_to_tab(cmd->env);
+	char	**env;
 
+	env = hash_map_to_tab(cmd->env);
 	i = 0;
 	paths = NULL;
 	if (!env)

@@ -36,24 +36,28 @@ void safe_close_cmd_fd(t_cmd *cmd)
 	safe_close(&(cmd->red.out_fd));
 }
 
-bool	check_acces(char **paths, t_cmd *cmd)
+bool	check_acces(t_cmd *cmd)
 {
 	int		i;
 	char	*path;
+	char	**paths;
 
 	i = 0;
+	paths = get_path(cmd);
 	while (paths && paths[i])
 	{
 		path = ft_strjoin(paths[i], cmd->val.value);
 		if (path && access(path, X_OK) == 0)
 		{
 			cmd->val.path = path;
+			free_tab(paths);
 			return (true);
 		}
 		free(path);
 		i++;
 	}
-	if (access(cmd->val.value, X_OK) != 0)
+	free_tab(paths);
+	if (access(cmd->val.value, X_OK) != 0 || !(ft_strnstr(cmd->val.value, "./", 2)))
 		return (false);
 	cmd->val.path = ft_strdup(cmd->val.value);
 	return (true);

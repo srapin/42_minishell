@@ -122,3 +122,9 @@ bash-5.1$ pwd
 
 
 Quand affiche l'env entier, SHLVL = n. Si fait env | grep SHLVL dans le meme shell sans modifier la variable entre temps, SHLVL = n - 1. d'ou ???
+
+
+
+check er_message (common_process)
+check lancr un executable genre push_swap prob perror?
+ctrl d ->seg fault

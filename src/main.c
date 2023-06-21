@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 19:32:17 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/21 01:32:11 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/21 02:55:34 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ void    exec_script(t_data *data, char *path)
 
 void    initialise_data(t_data *data)
 {
+    data->first = NULL;
     data->first = NULL;
     data->exp_history = NULL;
     data->env = NULL;

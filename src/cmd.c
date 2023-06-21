@@ -10,33 +10,32 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/priv.h"
 #include "../inc/minishell.h"
+#include "../inc/priv.h"
 
-void mask_and_free_for_exec(t_cmd *cmd, t_cmd *first)
+void	mask_and_free_for_exec(t_cmd *cmd, t_cmd *first)
 {
 	cmd->val.args = NULL;
 	cmd->val.path = NULL;
-	// cmd->val.env = NULL;
 	free_cmds(&first, true);
 }
 
-int count_cmds_linked_by_pipe(t_cmd *first_cmd)
+int	count_cmds_linked_by_pipe(t_cmd *first_cmd)
 {
-	int nb;
-	t_cmd *cmd;
+	int		nb;
+	t_cmd	*cmd;
 
 	cmd = first_cmd;
 	nb = 1;
-	while(cmd && cmd->red.next_cmd)
+	while (cmd && cmd->red.next_cmd)
 	{
 		nb++;
 		cmd = cmd->red.next_cmd;
 	}
-	return nb;
+	return (nb);
 }
 
-void dup_cmd_file(t_cmd *cmd)
+void	dup_cmd_file(t_cmd *cmd)
 {
 	open_cmd_files(cmd);
 	if (cmd->red.in_fd > -1)

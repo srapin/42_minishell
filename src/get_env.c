@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   get_env.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/20 04:16:54 by hlesny            #+#    #+#             */
-/*   Updated: 2023/06/20 04:17:56 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/21 01:11:23 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
-#include "minishell.h"
+#include "../inc/minishell.h"
 
 // peut avoir un shell level maximal de 999 (ie export SHLVL=1000)
 // si excede : bash: warning: shell level (1099) too high, resetting to 1 (avec export SHLVL=1100 ici)

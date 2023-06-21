@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   common_process.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agiguair <agiguair@student.42.fr>          +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/23 00:44:39 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/20 01:34:59 b agiguair         ###   ########.fr       */
+/*   Created: 2023/06/21 01:02:42 by srapin            #+#    #+#             */
+/*   Updated: 2023/06/21 02:04:19 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
+#include "../inc/minishell.h"
 
 void	parent_process(t_cmd **cmd, int pipe_tab[2])
 {
@@ -19,20 +18,18 @@ void	parent_process(t_cmd **cmd, int pipe_tab[2])
 	signal(SIGINT, SIG_IGN);
 	safe_close(&(pipe_tab[1]));
 	if (!cmd || !(*cmd))
-		return;
+		return ;
 	safe_close_cmd_fd(*cmd);
 	*cmd = (*cmd)->red.next_cmd;
 	if (!cmd || !(*cmd))
-		return;
+		return ;
 	(*cmd)->red.in_fd = pipe_tab[0];
 }
 
-void print_err(int e, t_cmd *cmd)
+void	print_err(int e, t_cmd *cmd)
 {
-	
-	// 2 : cmd not found. 13 : permission denied
-	char *mess;
-	char *tmp;
+	char	*mess;
+	char	*tmp;
 
 	mess = NULL;
 	tmp = ft_strjoin(mess, "minishell : ");
@@ -41,52 +38,51 @@ void print_err(int e, t_cmd *cmd)
 	free(tmp);
 	perror(mess);
 	free(mess);
-	// if (e == 2)
-	// 	printf("minishell : %s : command not found\n", cmd->val.value);
-	// else if (e == 13)
-	// 	printf("minishell : %s : permission denied\n", cmd->val.value);
 }
 
-void	child_process(t_cmd *cmd, t_cmd *first,  int pipe_tab[2])
+void	reset_defaults_signals(void)
 {
-	char	**paths;
-	char	*path;
-	char ** args;
-	char **env;
-	char **tmp;
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+}
 
-	////dprintf(1, "exec child proc \n");
+void	cmd_not_found(t_cmd *cmd, t_cmd *first)
+{
+	int	e;
+
+	e = errno;
+	print_err(e, cmd);
+	free_cmds(&first, true);
+	exit(CMD_NOT_FOUND);
+}
+
+void	child_process(t_cmd *cmd, t_cmd *first, int pipe_tab[2])
+{
+	char	*path;
+	char	**args;
+	char	**env;
+	char	**tmp;
+
 	if (pipe_tab[0] > -1)
 	{
 		safe_close(&(pipe_tab[0]));
 		cmd->red.out_fd = pipe_tab[1];
 	}
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
+	reset_defaults_signals();
 	dup_cmd_file(cmd);
-	
 	try_to_exec_builtins(cmd, first, true);
-	
-	paths = get_path(cmd);
-	if (check_acces(paths, cmd))
+	if (check_acces(cmd))
 	{
 		path = cmd->val.path;
 		env = hash_map_to_tab(cmd->env);
 		args = cmd->val.args;
 		cmd->val.args = NULL;
 		cmd->val.path = NULL;
-		// cmd->val.env = NULL;
-		free_tab(paths);
 		free_cmds(&first, true);
-	 	execve(path, args, env);
+		execve(path, args, env);
 	}
-	print_err(errno, cmd); // renvoie pas le bon message d'erreur ! (no such file or directory au lieu de command not found)
-	free_tab(paths);
-	free_cmds(&first, true);
-	exit(CMD_NOT_FOUND);
+	cmd_not_found(cmd, first);
 }
-
-
 
 void	fail_process(void)
 {
