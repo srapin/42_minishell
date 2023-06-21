@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 01:02:42 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/21 01:17:38 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/21 02:04:19 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,9 @@ void	reset_defaults_signals(void)
 
 void	cmd_not_found(t_cmd *cmd, t_cmd *first)
 {
-	int e = errno;
-	
+	int	e;
+
+	e = errno;
 	print_err(e, cmd);
 	free_cmds(&first, true);
 	exit(CMD_NOT_FOUND);

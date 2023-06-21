@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 02:12:27 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/21 01:21:55 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/21 02:08:48 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,8 +134,7 @@ t_cmd  *parse(t_data *data)
         ast = get_ast(data);
     // else 
     //     free_tokens()
-    if (data);
-        free_tokens(data->first);
+    free_tokens(data->first);
     data->first = NULL;
     exec_cmds(ast);
     return ast;

@@ -3,120 +3,116 @@
 /*                                                        :::      ::::::::   */
 /*   exec_builtins.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 20:57:20 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/20 09:26:24 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/21 02:04:58 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-int ft_echo(t_cmd *cmd, t_cmd *first)
+int	ft_echo(t_cmd *cmd, t_cmd *first)
 {
-    char end[2];
-    int i;
+	char	end[2];
+	int		i;
 
-    end[0] = '\n';
-    end[1] = '\0';
-    i = 1;
-    if (ft_strisequal(cmd->val.args[i], "-n"))
-    {
-        i++; 
-        end[0] = '\0';
-    }
-    while(cmd->val.args[i])
-    {
-        printf("%s", cmd->val.args[i]);
-        i++;
-        if (cmd->val.args[i])
-            printf(" ");
-    }
-    printf("%s", end);
-    return (EXIT_OK); // à modifier, rajouté pour plus avoir de warning a la compilation
+	end[0] = '\n';
+	end[1] = '\0';
+	i = 1;
+	if (ft_strisequal(cmd->val.args[i], "-n"))
+	{
+		i++;
+		end[0] = '\0';
+	}
+	while (cmd->val.args[i])
+	{
+		printf("%s", cmd->val.args[i]);
+		i++;
+		if (cmd->val.args[i])
+			printf(" ");
+	}
+	printf("%s", end);
+	return (EXIT_OK); // à modifier, rajouté pour plus avoir de warning a la compilation
 }
 
 int (*get_builtins_foo(char *str))(t_cmd *, t_cmd *)
 {
-  
-    if (ft_strisequal(str, "echo"))
-        return &ft_echo;
-    if (ft_strisequal(str, "cd"))
-        return &ft_cd;
-    if (ft_strisequal(str, "pwd"))
-        return &ft_pwd;
-    if (ft_strisequal(str, "export"))
-        return &ft_export;
-    if (ft_strisequal(str, "unset"))
-        return &ft_unset;
-    if (ft_strisequal(str, "env"))
-        return &ft_env;
-    if (ft_strisequal(str, "exit"))
-        return &ft_exit;
-    return NULL; // return -1 plutot ? si les builtins retournent un int >= 0 
+	if (ft_strisequal(str, "echo"))
+		return (&ft_echo);
+	if (ft_strisequal(str, "cd"))
+		return (&ft_cd);
+	if (ft_strisequal(str, "pwd"))
+		return (&ft_pwd);
+	if (ft_strisequal(str, "export"))
+		return (&ft_export);
+	if (ft_strisequal(str, "unset"))
+		return (&ft_unset);
+	if (ft_strisequal(str, "env"))
+		return (&ft_env);
+	if (ft_strisequal(str, "exit"))
+		return (&ft_exit);
+	return (NULL); // return -1 plutot ? si les builtins retournent un int >= 0
 }
 
-
-int is_builtins(char * str)
+int	is_builtins(char *str)
 {
-    if (ft_strisequal(str, "echo"))
-        return 1;
-    if (ft_strisequal(str, "cd"))
-        return 1;
-    if (ft_strisequal(str, "pwd"))
-        return 1;
-    if (ft_strisequal(str, "export"))
-        return 3;
-    if (ft_strisequal(str, "unset"))
-        return 4;
-    if (ft_strisequal(str, "env"))
-        return 5;
-    if (ft_strisequal(str, "exit"))
-        return 6;
-    return -1;
+	if (ft_strisequal(str, "echo"))
+		return (1);
+	if (ft_strisequal(str, "cd"))
+		return (1);
+	if (ft_strisequal(str, "pwd"))
+		return (1);
+	if (ft_strisequal(str, "export"))
+		return (3);
+	if (ft_strisequal(str, "unset"))
+		return (4);
+	if (ft_strisequal(str, "env"))
+		return (5);
+	if (ft_strisequal(str, "exit"))
+		return (6);
+	return (-1);
 }
 
-
-
-int try_to_exec_builtins(t_cmd *cmd, t_cmd *first, bool is_child)
+int	try_to_exec_builtins(t_cmd *cmd, t_cmd *first, bool is_child)
 {
-    int (*foo)(t_cmd *, t_cmd *);
-    int ret;
-    int old_in;
-    int old_out;
+	int (*foo)(t_cmd *, t_cmd *);
+	int ret;
+	int old_in;
+	int old_out;
 
-    // ////dprintf(1, "in try_to_exec_builtins()\n");
-    //num = is_builtins(cmd->val.value);
-    // signal(SIGINT, );
-    ret = -1;
-    old_in = -1;
-    old_out = -1;
-    foo = get_builtins_foo(cmd->val.value); 
-    // ////dprintf(1, "get_builtins() return value : %p\n", foo);
-    if (!foo)
-        return ret;
-    
-    if (!is_child)
-    {
-        if (foo != &ft_exit)
-        {
-            old_in = dup(STDIN_FILENO); 
-            old_out = dup(STDOUT_FILENO); 
-        }
-        dup_cmd_file(cmd);
-    }
-    ret = foo(cmd, first);
-    if (is_child)
-    {
-        // //dprintf(1, "get_builtins() return value : %p\n", foo);
-        free_cmds(&first, true);
-        exit(ret);
-    }
-    //dprintf(1, "at exit in child, last exit status = %d\n", ret);
-    g_exit_status = ret;
-    dup2(old_in, STDIN_FILENO);
-    dup2(old_out, STDOUT_FILENO);
-    close(old_in);
-    close(old_out);
-    return ret;
+	// ////dprintf(1, "in try_to_exec_builtins()\n");
+	//num = is_builtins(cmd->val.value);
+	// signal(SIGINT, );
+	ret = -1;
+	old_in = -1;
+	old_out = -1;
+	foo = get_builtins_foo(cmd->val.value);
+	// ////dprintf(1, "get_builtins() return value : %p\n", foo);
+	if (!foo)
+		return ret;
+
+	if (!is_child)
+	{
+		if (foo != &ft_exit)
+		{
+			old_in = dup(STDIN_FILENO);
+			old_out = dup(STDOUT_FILENO);
+		}
+		dup_cmd_file(cmd);
+	}
+	ret = foo(cmd, first);
+	if (is_child)
+	{
+		// //dprintf(1, "get_builtins() return value : %p\n", foo);
+		free_cmds(&first, true);
+		exit(ret);
+	}
+	//dprintf(1, "at exit in child, last exit status = %d\n", ret);
+	g_exit_status = ret;
+	dup2(old_in, STDIN_FILENO);
+	dup2(old_out, STDOUT_FILENO);
+	close(old_in);
+	close(old_out);
+	return ret;
 }
