@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:12:06 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/21 06:07:52 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/21 18:42:35 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,14 +140,14 @@ char	*get_valid_id(t_token_list *current, size_t dollar_index,
 	return (NULL);
 }
 
-int		is_exit_status(t_ht_hash_table *ht, t_token_list *current, 
+int	is_exit_status(t_ht_hash_table *ht, t_token_list *current,
 		char *dollar_start)
 {
-	char 	*value;
-	char 	*after_value;
-	char 	*before_key;
-	size_t 	dollar_index;
-	
+	char	*value;
+	char	*after_value;
+	char	*before_key;
+	size_t	dollar_index;
+
 	if (*dollar_start && dollar_start[1] && dollar_start[1] == '?')
 	{
 		dollar_index = current->length - ft_strlen(dollar_start);
@@ -161,38 +161,44 @@ int		is_exit_status(t_ht_hash_table *ht, t_token_list *current,
 	return (0);
 }
 
+void	check_next_token(t_token_list **current, size_t dollar_index)
+{
+	if ((*current)->next && ((*current)->next->type == simple_quote
+			|| (*current)->next->type == double_quote))
+		remove_char(*current, dollar_index);
+}
+
 void	parse_current_tk(t_ht_hash_table *ht, t_token_list *current)
 {
-	char	*next_dollar_start;
-	char	*dollar_start;
+	char	*next_d_start;
+	char	*d_start;
 	char	*var_name;
-	size_t	next_dollar_index;
-	size_t	dollar_index;
+	size_t	next_d_index;
+	size_t	d_index;
 
-	dollar_start = ft_strdup(ft_strchr(current->content, '$'));
-	if (is_exit_status(ht, current, dollar_start))
+	d_start = ft_strdup(ft_strchr(current->content, '$'));
+	if (is_exit_status(ht, current, d_start))
 		return ;
-	while (dollar_start && *dollar_start)
+	while (d_start && *d_start)
 	{
-		dollar_index = current->length - ft_strlen(dollar_start);
-		next_dollar_start = ft_strdup(ft_strchr(dollar_start + 1, '$'));
-		next_dollar_index = current->length - ft_strlen(next_dollar_start);
-		if (next_dollar_start && *next_dollar_start)
-			var_name = get_valid_id(current, dollar_index, next_dollar_index,
-					0);
+		d_index = current->length - ft_strlen(d_start);
+		next_d_start = ft_strdup(ft_strchr(d_start + 1, '$'));
+		next_d_index = current->length - ft_strlen(next_d_start);
+		if (next_d_start && *next_d_start)
+			var_name = get_valid_id(current, d_index, next_d_index, 0);
 		else if (current->type == double_quote)
-			var_name = get_valid_id(current, dollar_index, next_dollar_index,
-					1);
+			var_name = get_valid_id(current, d_index, next_d_index, 1);
 		else
-			var_name = get_valid_id(current, dollar_index, next_dollar_index,
-					2);
+			var_name = get_valid_id(current, d_index, next_d_index, 2);
 		if (var_name)
-			expand(ht, &current, var_name, dollar_index);
-		free(dollar_start);
-		dollar_start = next_dollar_start;
+			search_and_expand(ht, &current, var_name, d_index);
+		else
+			check_next_token(&current, d_index);
+		free(d_start);
+		d_start = next_d_start;
 	}
-	free(dollar_start);
-	dollar_start = NULL;
+	free(d_start);
+	d_start = NULL;
 }
 
 void	perform_variable_exp(t_data *data)

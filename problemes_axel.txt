@@ -22,21 +22,17 @@ unlink heredocs
 
 leaks wildcards (t_filename * non free)
 
-wildcards : gerer **** (ie succession d'asterisks sans prefixe ni suffixe) : doit faire pareil que juste * 
-
 dans reassess_buffer (ast.c), verifier si doit etre if (*buffer) ou (if *buffer && **buffer)
 
-bash-5.1$ export "a b"="c d"
-bash: export: `a b=c d': not a valid identifier
 
-bash-5.1$ echo coucou > /dev/full
-bash: echo: write error: No space left on device
-
-
-// ------------------------ ln ---------------------------------
-
-y'a des leaks chelous quand export (below main) (ls leak, normal)
-
+$ exit 23163 jsahglag
+syntax
+heyyexit
+minishell : exit : too many arguments
+$ $?
+syntax
+minishell: 0: No such file or directory
+-> devrait avoir 1 comme dernier exit status et non 0
 
 
 $ exit 245 lsaglhlkf
@@ -46,3 +42,17 @@ exit
 minishell : exit : too many arguments
 ==391345== Warning: invalid file descriptor -1 in syscall close()
 ==391345== Warning: invalid file descriptor -1 in syscall close()
+
+
+// ------------------------ en dessous : plus un probleme ---------------------------------
+
+bash-5.1$ export "a b"="c d"
+bash: export: `a b=c d': not a valid identifier
+
+wildcards : gerer **** (ie succession d'asterisks sans prefixe ni suffixe) : doit faire pareil que juste * 
+
+bash-5.1$ echo coucou > /dev/full
+bash: echo: write error: No space left on device
+
+y'a des leaks chelous quand export (below main) (ls leak, normal)
+

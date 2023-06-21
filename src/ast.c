@@ -489,14 +489,14 @@ void	write_in_file(t_token_list **curr_tk, int fd_subshell)
 
 void	set_subshell_attributs(t_cmd *current_cmd, char *subshell_filename)
 {
-	current_cmd->val.value = ft_strdup("minishell");
+	current_cmd->val.value = ft_strdup("./minishell");
 	current_cmd->val.args = malloc(sizeof(char *) * 3);
 	if (!current_cmd->val.args)
 	{
 		perror("malloc ");
 		return ;
 	}
-	current_cmd->val.args[0] = ft_strdup("minishell");
+	current_cmd->val.args[0] = ft_strdup("./minishell");
 	current_cmd->val.args[1] = ft_strdup(subshell_filename);
 	current_cmd->val.args[2] = NULL;
 	free(subshell_filename);

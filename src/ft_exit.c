@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 00:57:49 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/21 06:41:49 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/21 18:33:02 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ int	ft_exit(t_cmd *cmd, t_cmd *first)
 	{
 		free_cmds(&first, true);
 		printf("exit\n");
-		exit(0); // a modifier !! returns the exit status of the last command
+		exit(g_exit_status);
 	}
 	check_if_numeric(cmd, first);
 	exit_status = check_long_overflow(cmd, first);
