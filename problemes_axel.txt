@@ -5,7 +5,7 @@ export non valide // leak , des choses pas free cela ce voit cmd next
 // quand export une commande sans value associee, a des leaks a la commande suivante 
 // ( des invalid read of size 1 quand tape export juste apres)
 
-cd // same shit leak , des choses pas free cela ce voit cmd next;
+cd // same shit leak , des choses pas free cela ce voit cmd next;   -------------------->ok
 exit | exit // exit alors que non sur bash --posix
 
 builtins | builtins // deux builtins communique avec pipe leak

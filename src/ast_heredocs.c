@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_heredocs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 23:24:33 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/20 09:22:11 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/21 05:51:42 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,12 +255,7 @@ void hd_child_process(t_data *data)
 		}	
 		current = current->next;
 	}
-	// ft_lstfree(&first, free);
 	free_parsing_data(data);
-	/* free_pwd(ht);
-	ht_del_hash_table(ht);
-	free_tokens(&first);
-	ft_lstfree(&exp_hist, free); */
     exit(g_exit_status);
 }
 

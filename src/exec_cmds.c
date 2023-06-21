@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 02:05:40 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/21 02:14:27 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/21 06:06:43 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,12 @@ void	launch_process(t_cmd **cmd, t_cmd *first, int *pip_tab, bool need_pip)
 {
 	if (need_pip)
 		safe_pipe(pip_tab);
-	else
+	else 
+		reset_pip_tab(pip_tab);
+	if (first && !first->red.next_cmd)
 	{
 		if (try_to_exec_builtins(*cmd, first, false) >= 0)
 			return ;
-		reset_pip_tab(pip_tab);
 	}
 	(*cmd)->pid = fork();
 	if ((*cmd)->pid < 0)

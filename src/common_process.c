@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 01:02:42 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/21 03:55:37 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/21 05:36:21 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,8 @@ void	parent_process(t_cmd **cmd, int pipe_tab[2])
 void	print_err(int e, t_cmd *cmd)
 {
 	char	*mess;
-	char	*tmp;
 
-	mess = NULL;
-	tmp = ft_strjoin(mess, "minishell : ");
-	free(mess);
-	mess = ft_strjoin(tmp, cmd->val.value);
-	free(tmp);
+	mess = ft_strjoin("minishell: ", cmd->val.value);
 	perror(mess);
 	free(mess);
 }
