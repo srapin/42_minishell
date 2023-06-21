@@ -84,47 +84,6 @@ int	get_whtsp_pos(char *str, int whtsp_pos)
 	return (-1);
 }
 
-void	split_not_merged_no_quotes(t_cmd **curr_cmd, t_token_list *curr_tk,
-		int *i)
-{
-	int		whitespace_pos;
-	int		prev_whitespace_pos;
-	char	*tmp;
-	char	*substr;
-	char	*buffer;
-
-	prev_whitespace_pos = 0;
-	whitespace_pos = get_whtsp_pos(curr_tk->content, prev_whitespace_pos);
-	while (whitespace_pos != -1)
-	{
-		tmp = buffer;
-		substr = ft_substr(curr_tk->content, prev_whitespace_pos, whitespace_pos
-				- prev_whitespace_pos);
-		buffer = ft_strjoin(tmp, substr);
-		if (*buffer)
-		{
-			(*curr_cmd)->val.args[*i] = ft_strdup(buffer);
-			(*i)++;
-			free(buffer);
-			buffer = NULL;
-		}
-		free(substr);
-		substr = NULL;
-		while (curr_tk->content[whitespace_pos]
-			&& (curr_tk->content[whitespace_pos] == ' '
-				|| curr_tk->content[whitespace_pos] == '\t'))
-			whitespace_pos++;
-		prev_whitespace_pos = whitespace_pos;
-		whitespace_pos = get_whtsp_pos(curr_tk->content, prev_whitespace_pos);
-	}
-	if (prev_whitespace_pos < curr_tk->length)
-	{
-		(*curr_cmd)->val.args[*i] = ft_substr(curr_tk->content,
-				prev_whitespace_pos, curr_tk->length);
-		(*i)++;
-	}
-}
-
 void 	set_buffer(char **buffer, char *substr)
 {
 	char 	*tmp;
@@ -139,44 +98,110 @@ void 	set_buffer(char **buffer, char *substr)
 	tmp = NULL;
 }
 
-void 	whitespaces_skip_assess(t_word_data *wd, int *whitespace_pos, 
-		int *prev_whitespace_pos)
+void 	reassess_buffer(t_cmd **curr_cmd, char **buffer, int *i)
 {
-	while (wd->content[*whitespace_pos]
-		&& (wd->content[*whitespace_pos] == ' '
-			|| wd->content[*whitespace_pos] == '\t'))
-		(*whitespace_pos)++;
-	*prev_whitespace_pos = *whitespace_pos;
-	*whitespace_pos = get_whtsp_pos(wd->content,
-			*prev_whitespace_pos);
+	if (!buffer)
+		return ;
+	if (*buffer)
+	{
+		(*curr_cmd)->val.args[*i] = ft_strdup(*buffer);
+		(*i)++;
+		free(*buffer);
+		*buffer = NULL;
+	}
+}
+
+void	skip_whitespaces_reassess_indexes(char *curr_content, int *wht_pos, 
+		int *p_wht_pos)
+{
+	while (curr_content[*wht_pos]
+			&& (curr_content[*wht_pos] == ' '
+				|| curr_content[*wht_pos] == '\t'))
+			(*wht_pos)++;
+	*p_wht_pos = *wht_pos;
+	*wht_pos = get_whtsp_pos(curr_content, *p_wht_pos);
+}
+
+void	split_not_merged_no_quotes(t_cmd **curr_cmd, t_token_list *curr_tk,
+		int *i)
+{
+	int		wht_pos;
+	int		p_wht_pos;
+	char	*tmp;
+	char	*substr;
+	char	*buffer;
+
+	p_wht_pos = 0;
+	wht_pos = get_whtsp_pos(curr_tk->content, p_wht_pos);
+	while (wht_pos != -1)
+	{
+		//tmp = buffer;
+		substr = ft_substr(curr_tk->content, p_wht_pos, wht_pos
+				- p_wht_pos);
+		set_buffer(&buffer, substr);
+		//buffer = ft_strjoin(tmp, substr);
+		// free(substr);
+		// substr = NULL;
+		reassess_buffer(curr_cmd, &buffer, i);
+		// if (*buffer)
+		// {
+		// 	(*curr_cmd)->val.args[*i] = ft_strdup(buffer);
+		// 	(*i)++;
+		// 	free(buffer);
+		// 	buffer = NULL;
+		// }
+		skip_whitespaces_reassess_indexes(curr_tk->content, 
+			&wht_pos, &p_wht_pos);
+	}
+	if (p_wht_pos < curr_tk->length)
+	{
+		(*curr_cmd)->val.args[*i] = ft_substr(curr_tk->content,
+				p_wht_pos, curr_tk->length);
+		(*i)++;
+	}
+}
+
+void 	whitespaces_skip_assess(t_word_data *wd, int *wht_pos, 
+		int *p_wht_pos)
+{
+	while (wd->content[*wht_pos]
+		&& (wd->content[*wht_pos] == ' '
+			|| wd->content[*wht_pos] == '\t'))
+		(*wht_pos)++;
+	*p_wht_pos = *wht_pos;
+	*wht_pos = get_whtsp_pos(wd->content,
+			*p_wht_pos);
 }
 
 void 	split_merged_no_quotes(t_cmd **curr_cmd, t_word_data *wd,
 		char **buffer, int *i)
 {
-	int			whitespace_pos;
-	int			prev_whitespace_pos;
+	int			wht_pos;
+	int			p_wht_pos;
 	char 		*substr;
 
-	prev_whitespace_pos = 0;
-	whitespace_pos = get_whtsp_pos(wd->content, prev_whitespace_pos);
-	while (whitespace_pos != -1)
+	p_wht_pos = 0;
+	wht_pos = get_whtsp_pos(wd->content, p_wht_pos);
+	while (wht_pos != -1)
 	{
-		substr = ft_substr(wd->content, prev_whitespace_pos,
-				whitespace_pos - prev_whitespace_pos);
+		substr = ft_substr(wd->content, p_wht_pos,
+				wht_pos - p_wht_pos);
 		set_buffer(buffer, substr);
-		if (*buffer)
-		{
-			(*curr_cmd)->val.args[*i] = ft_strdup(*buffer);
-			(*i)++;
-			free(*buffer);
-			*buffer = NULL;
-		}
-		whitespaces_skip_assess(wd, &whitespace_pos, &prev_whitespace_pos);
+		reassess_buffer(curr_cmd, buffer, i);
+		// if (*buffer)
+		// {
+		// 	(*curr_cmd)->val.args[*i] = ft_strdup(*buffer);
+		// 	(*i)++;
+		// 	free(*buffer);
+		// 	*buffer = NULL;
+		// }
+		//whitespaces_skip_assess(wd, &wht_pos, &p_wht_pos);
+		skip_whitespaces_reassess_indexes(wd->content, 
+			&wht_pos, &p_wht_pos);
 	}
-	if (whitespace_pos == -1)
+	if (wht_pos == -1)
 	{
-		substr = ft_substr(wd->content, prev_whitespace_pos,
+		substr = ft_substr(wd->content, p_wht_pos,
 				wd->length);
 		set_buffer(buffer, substr);
 	}
@@ -185,11 +210,8 @@ void 	split_merged_no_quotes(t_cmd **curr_cmd, t_word_data *wd,
 void	get_args_from_merged_words(t_cmd **curr_cmd, t_token_list *curr_tk,
 		int *i)
 {
-	/* int			whitespace_pos;
-	int			prev_whitespace_pos; */
 	char		*buffer;
 	char		*tmp;
-	char		*substr;
 	t_word_data	*wd;
 
 	wd = curr_tk->merged_words;
@@ -197,47 +219,7 @@ void	get_args_from_merged_words(t_cmd **curr_cmd, t_token_list *curr_tk,
 	while (wd)
 	{
 		if (!wd->quotes)
-		{
 			split_merged_no_quotes(curr_cmd, wd, &buffer, i);
-			/* prev_whitespace_pos = 0;
-			whitespace_pos = get_whtsp_pos(wd->content, prev_whitespace_pos);
-			while (whitespace_pos != -1)
-			{
-				tmp = buffer;
-				substr = ft_substr(wd->content, prev_whitespace_pos,
-						whitespace_pos - prev_whitespace_pos);
-				buffer = ft_strjoin(tmp, substr);
-				if (*buffer)
-				{
-					(*curr_cmd)->val.args[*i] = ft_strdup(buffer);
-					(*i)++;
-					free(buffer);
-					buffer = NULL;
-				}
-				free(substr);
-				substr = NULL;
-				while (wd->content[whitespace_pos]
-					&& (wd->content[whitespace_pos] == ' '
-						|| wd->content[whitespace_pos] == '\t'))
-					whitespace_pos++;
-				prev_whitespace_pos = whitespace_pos;
-				whitespace_pos = get_whtsp_pos(wd->content,
-						prev_whitespace_pos);
-			}
-			if (whitespace_pos == -1)
-			{
-				tmp = buffer;
-				substr = ft_substr(wd->content, prev_whitespace_pos,
-						wd->length);
-				buffer = ft_strjoin(tmp, substr);
-				free(tmp);
-				free(substr);
-				tmp = NULL;
-				substr = NULL;
-			} */
-			//split_merged_no_quotes(curr_cmd, wd, buffer, i);
-				// est ce que va modifier buffer ou est-ce que doit donner son adresse ?
-		}
 		else
 		{
 			tmp = buffer;
@@ -327,27 +309,28 @@ void	set_command_attributs(t_cmd **current, t_token_list **first_tk,
 int	no_merged_words_count(t_token_list *current)
 {
 	int	count;
-	int	whitespace_pos;
-	int	prev_whitespace_pos;
+	int	wht_pos;
+	int	p_wht_pos;
 
 	count = 0;
 	if (!current->quotes)
 	{
-		prev_whitespace_pos = 0;
-		whitespace_pos = get_whtsp_pos(current->content, prev_whitespace_pos);
-		while (whitespace_pos != -1)
+		p_wht_pos = 0;
+		wht_pos = get_whtsp_pos(current->content, p_wht_pos);
+		while (wht_pos != -1)
 		{
-			if (whitespace_pos - prev_whitespace_pos)
+			if (wht_pos - p_wht_pos)
 				count++;
-			while (current->content[whitespace_pos]
-				&& (current->content[whitespace_pos] == ' '
-					|| current->content[whitespace_pos] == '\t'))
-				whitespace_pos++;
-			prev_whitespace_pos = whitespace_pos;
-			whitespace_pos = get_whtsp_pos(current->content,
-					prev_whitespace_pos);
+			skip_whitespaces_reassess_indexes(current->content, 
+				&wht_pos, &p_wht_pos);
+			// while (current->content[wht_pos]
+			// 	&& (current->content[wht_pos] == ' '
+			// 		|| current->content[wht_pos] == '\t'))
+			// 	wht_pos++;
+			// p_wht_pos = wht_pos;
+			// wht_pos = get_whtsp_pos(current->content, p_wht_pos);
 		}
-		if (prev_whitespace_pos < current->length)
+		if (p_wht_pos < current->length)
 			count++;
 	}
 	else
@@ -357,25 +340,25 @@ int	no_merged_words_count(t_token_list *current)
 
 void	wd_no_quotes(char *content, int *buffer, int *count)
 {
-	int	whitespace_pos;
-	int	prev_whitespace_pos;
+	int	wht_pos;
+	int	p_wht_pos;
 
-	prev_whitespace_pos = 0;
-	whitespace_pos = get_whtsp_pos(content, prev_whitespace_pos);
-	while (whitespace_pos != -1)
+	p_wht_pos = 0;
+	wht_pos = get_whtsp_pos(content, p_wht_pos);
+	while (wht_pos != -1)
 	{
-		if (whitespace_pos - prev_whitespace_pos)
+		if (wht_pos - p_wht_pos)
 		{
 			(*count)++;
 			*buffer = 0;
 		}
-		while (content[whitespace_pos] && (content[whitespace_pos] == ' '
-				|| content[whitespace_pos] == '\t'))
-			whitespace_pos++;
-		prev_whitespace_pos = whitespace_pos;
-		whitespace_pos = get_whtsp_pos(content, prev_whitespace_pos);
+		while (content[wht_pos] && (content[wht_pos] == ' '
+				|| content[wht_pos] == '\t'))
+			wht_pos++;
+		p_wht_pos = wht_pos;
+		wht_pos = get_whtsp_pos(content, p_wht_pos);
 	}
-	if (whitespace_pos == -1)
+	if (wht_pos == -1)
 		*buffer = 1;
 }
 
@@ -395,9 +378,7 @@ int	get_words_count(t_token_list *current)
 	while (wd)
 	{
 		if (!wd->quotes)
-		{
 			wd_no_quotes(wd->content, &buffer, &count);
-		}
 		else
 			buffer = 1;
 		wd = wd->next;

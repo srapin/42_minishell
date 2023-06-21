@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 01:12:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/21 04:24:03 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/21 17:21:33 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,7 @@ void	prev_dir(char **path, int *i)
 			*i = j + 1;
 		else
 			*i = 0;
-		//("before set_path, path = %s\n", *path);
 		set_path(path, before, after);
-		//printf("after set_path, path = %s\n", *path);
 	}
 }
 

@@ -24,6 +24,8 @@ leaks wildcards (t_filename * non free)
 
 wildcards : gerer **** (ie succession d'asterisks sans prefixe ni suffixe) : doit faire pareil que juste * 
 
+dans reassess_buffer (ast.c), verifier si doit etre if (*buffer) ou (if *buffer && **buffer)
+
 bash-5.1$ export "a b"="c d"
 bash: export: `a b=c d': not a valid identifier
 
