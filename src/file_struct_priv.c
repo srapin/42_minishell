@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:08:04 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/21 02:53:51 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/21 02:54:41 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,7 @@ void init_file_struct(t_file *file_struct)
 {
 	file_struct->name = NULL;
 	file_struct->fd = -1;
-	// file_struct->sep = NULL;
 	file_struct->flag = -1;
-	//file_struct->quotes = false;
 }
 
 // void set_fd(t_file * f_struct, int *fd, int flag)

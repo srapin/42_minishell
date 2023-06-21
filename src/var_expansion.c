@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:12:06 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/21 02:51:44 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/21 03:30:11 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,18 @@ If a parameter expansion occurs inside double-quotes:
     Field splitting shall not be performed on the results of the expansion.
 */
 
+void    update_tk_content()
+{
+    
+}
+
+void    search_and_expand()
+{
+    
+    
+    update_tk_content();
+}
+
 /*
 Dans le cas export a="coucou $b", export b=test, echo "$a", ne doit expand que a lors du parsing
 -> en effet, lors d'un appel a export, l'expansion de variables est egalement faite 
@@ -51,7 +63,6 @@ void    expand(t_ht_hash_table *ht, t_token_list **current, char *var, size_t do
     
     if (!var) // le malloc de ft_substr() n'a pas fonctionné
         return ;
-    
     if (!(*var)) // ie rien ne suit le '$', et le prochain token n'est pas des quotes
     {
         if ((*current)->next && ((*current)->next->type == simple_quote 
@@ -61,9 +72,9 @@ void    expand(t_ht_hash_table *ht, t_token_list **current, char *var, size_t do
             free(var);
         return ;
     }
-    
-    //printf("var = %s\ndollar index = %zu\n", var, dollar_index);
 
+    //search_and_expand(current, var, dollar_index);
+    
     before_key = ft_substr((*current)->content, 0, dollar_index);
     if (*var == '?') // expand_last_exit_status(current)
     {
@@ -76,6 +87,7 @@ void    expand(t_ht_hash_table *ht, t_token_list **current, char *var, size_t do
         after_value = ft_substr((*current)->content, dollar_index + ft_strlen(var) + 1, 
             (*current)->length);
     }
+    
     
     free((*current)->content);
     tmp = ft_strjoin(before_key, value);
@@ -104,17 +116,15 @@ void    perform_variable_exp(t_data *data)
     current = *(data->first);
     while (current)
     {
-        //printf("current->content = %s\n", current->content);
-        //printf("current->length = %zu\n", current->length);
         while (current && current->type == whitespace)
             current = current->next;
         if (!current)
             break;
-        if (current->type == l_parenthesis) // n'expand pas ce qui est entre parenthèses, le fera dans le subshell
+        if (current->type == l_parenthesis)
         {
             while (current && current->type != r_parenthesis)
                 current = current->next;
-            if (current) // ie current = ')'
+            if (current)
                 current = current->next;
             continue ;
         }
@@ -122,30 +132,25 @@ void    perform_variable_exp(t_data *data)
             || current->prev->type != l_io_redirect || current->prev->length == 1)) // ie n'est pas dans le limiteur d'un here_doc
         {
             dollar_start = ft_strdup(ft_strchr(current->content, '$'));
-            //////dprintf(1, "before while, dollar_start = %s\n", dollar_start);
             while (dollar_start && *dollar_start)
             {
                 dollar_index = current->length - ft_strlen(dollar_start);
-                //printf("dollar start = %s\n", dollar_start);
-                //printf("dollar index = %zu\n", dollar_index);
-                // ne delete les quotes et merge les mots qu'apres l'expansion de variables
                 next_dollar_start = ft_strdup(ft_strchr(dollar_start + 1, '$'));
-                //////dprintf(1, "ok ici, next_dollar_start = %s\n", next_dollar_start);
                 next_dollar_index = current->length - ft_strlen(next_dollar_start);
-                //printf("next dollar index = %zu\n", next_dollar_index);
                 if (next_dollar_start && *next_dollar_start)
                 {
-                    /* int k = 1;
+                    int k = 1;
                     char *var_name;
-                    var_name = ft_substr(current->content, dollar_index + 1, current->length - dollar_index - k);
+                    var_name = ft_substr(current->content, dollar_index + 1, next_dollar_index + 1);
                     while (k + dollar_index <= current->length && !valid_name(var_name))
                     {
                         free(var_name);
                         k++;
                         var_name = ft_substr(current->content, dollar_index + 1, current->length - dollar_index - k);
                     }
-                    if (k + dollar_index <= current->length) // ie valid_name() == 1 */
-                    expand(data->env, &current, ft_substr(current->content, dollar_index + 1, next_dollar_index - dollar_index - 1), dollar_index);
+                    if (k + dollar_index <= current->length) // ie valid_name() == 1
+                        expand(data->env, &current, var_name, dollar_index);  
+                        /* expand(data->env, &current, ft_substr(current->content, dollar_index + 1, next_dollar_index - dollar_index - 1), dollar_index); */
                 }
                 else if (current->type == double_quote)
                 {
@@ -163,7 +168,7 @@ void    perform_variable_exp(t_data *data)
                 }
                 else
                 {
-                   /*  int k = 1;
+                    int k = 1;
                     char *var_name;
                     var_name = ft_substr(current->content, dollar_index + 1, current->length - dollar_index - k);
                     while (k + dollar_index <= current->length && !valid_name(var_name))
@@ -172,16 +177,16 @@ void    perform_variable_exp(t_data *data)
                         k++;
                         var_name = ft_substr(current->content, dollar_index + 1, current->length - dollar_index - k);
                     }
-                    if (k + dollar_index <= current->length) // ie valid_name() == 1 */
-                    expand(data->env, &current, ft_strdup(dollar_start + 1), dollar_index);
+                    if (k + dollar_index <= current->length) // ie valid_name() == 1
+                        expand(data->env, &current, var_name, dollar_index);  
+                        //expand(data->env, &current, ft_strdup(dollar_start + 1), dollar_index);
                 }
-                //////dprintf(1, "fin de while, ok ici\n");
                 free(dollar_start);
                 dollar_start = NULL;
                 dollar_start = next_dollar_start;
             }
             free(dollar_start);
-            //////dprintf(1, "current = %s\n", current->content);
+            dollar_start = NULL;
         }
         current = current->next;
     }
