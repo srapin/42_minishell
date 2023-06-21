@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/11 22:38:56 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/20 21:01:44 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/21 05:49:46 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void sigint_next_prompt(int sig)
 	g_exit_status = 130;
 	ft_putstr_fd("\n", 1);
 
-	//ln : a décommenter !!! (juste compilait pas bien avec sous mac os)
+	
 	rl_replace_line("", 1);
 	rl_on_new_line();
 	rl_redisplay();
@@ -28,11 +28,8 @@ void sigint_next_prompt(int sig)
 
 void	sigint_during_cmd_exec(int sig)
 {
-	// dprintf(1, "sigint2");
-	// dprintf(1, "sdfyhjikl;'p'hgbf\n%d\n",getpid());
 	g_exit_status = 130;
 	ft_putstr_fd("\n", 1);
-	// rl_replace_line("", 1);
 }
 
 void	handle_sigquit2(int sig)

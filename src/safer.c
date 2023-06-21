@@ -57,7 +57,7 @@ bool	check_acces(t_cmd *cmd)
 		i++;
 	}
 	free_tab(paths);
-	if (access(cmd->val.value, X_OK) != 0 || !(ft_strnstr(cmd->val.value, "./", 2)))
+	if (access(cmd->val.value, X_OK) != 0 || (!(ft_strnstr(cmd->val.value, "./", 2)) && !ft_strnstr(cmd->val.value, "/", 1)))
 		return (false);
 	cmd->val.path = ft_strdup(cmd->val.value);
 	return (true);

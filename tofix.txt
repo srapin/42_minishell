@@ -125,6 +125,4 @@ Quand affiche l'env entier, SHLVL = n. Si fait env | grep SHLVL dans le meme she
 
 
 
-check er_message (common_process)
-check lancr un executable genre push_swap prob perror?
-ctrl d ->seg fault
+check er_message (common_process) ->>>>>>>>>>>> cmd not found

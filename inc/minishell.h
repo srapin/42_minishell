@@ -88,10 +88,10 @@ void	safe_pipe(int pipe_tab[2]);
 void	fail_process(void);
 void	safe_close(int *fd);
 //to test
-void open_cmd_files(t_cmd * cmd);
+bool open_cmd_files(t_cmd * cmd);
 void	parent_process(t_cmd **cmd, int pipe_tab[2]);
 void safe_close_cmd_fd(t_cmd *cmd);
-void dup_cmd_file(t_cmd *cmd);
+bool dup_cmd_file(t_cmd *cmd);
 
 
 // ------------ Parsing ------------------

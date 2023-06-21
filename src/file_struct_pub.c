@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:08:11 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/21 02:40:38 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/21 03:42: by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,10 @@ t_file	*create_file_struct_with_filename(char *filename)
 	return (file_struct);
 }
 
-void	replace_fd(t_file *f_s, int *to_rep, bool out)
+bool	replace_fd(t_file *f_s, int *to_rep, bool out)
 {
-	int	new_fd;
+	int		new_fd;
+	char	*err_mess;
 
 	new_fd = *to_rep;
 	if (f_s->fd > -1)
@@ -52,34 +53,40 @@ void	replace_fd(t_file *f_s, int *to_rep, bool out)
 			new_fd = open(f_s->name, f_s->flag);
 		else
 		{
-			perror("cannot open file");
-			exit(EXIT_FAILURE);
+			err_mess = ft_strjoin("minishell: ", f_s->name);
+			perror(err_mess);
+			free(err_mess);
+			return (false);
 		}
 	}
 	if (new_fd > -1 && *to_rep > -1 && *to_rep != new_fd)
 		safe_close(to_rep);
 	*to_rep = new_fd;
+	return (true);
 }
 
-void	open_cmd_files(t_cmd *cmd)
+bool	open_cmd_files(t_cmd *cmd)
 {
 	t_list	*tmp_lst;
 	t_file	*tmp_file;
+	bool	flag;
 
+	flag = true;
 	tmp_lst = cmd->red.in_list;
-	while (tmp_lst)
+	while (tmp_lst && flag)
 	{
 		tmp_file = tmp_lst->content;
 		if (tmp_file)
-			replace_fd(tmp_file, &(cmd->red.in_fd), false);
+			flag = replace_fd(tmp_file, &(cmd->red.in_fd), false);
 		tmp_lst = tmp_lst->next;
 	}
 	tmp_lst = cmd->red.out_list;
-	while (tmp_lst)
+	while (tmp_lst && flag)
 	{
 		tmp_file = tmp_lst->content;
 		if (tmp_file)
-			replace_fd(tmp_file, &(cmd->red.out_fd), true);
+			flag = replace_fd(tmp_file, &(cmd->red.out_fd), true);
 		tmp_lst = tmp_lst->next;
 	}
+	return (flag);
 }
