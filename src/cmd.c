@@ -35,17 +35,20 @@ int	count_cmds_linked_by_pipe(t_cmd *first_cmd)
 	return (nb);
 }
 
-void	dup_cmd_file(t_cmd *cmd)
+bool	dup_cmd_file(t_cmd *cmd)
 {
-	open_cmd_files(cmd);
-	if (cmd->red.in_fd > -1)
+	bool flag;
+
+	flag = open_cmd_files(cmd);
+	if (flag && cmd->red.in_fd > -1)
 	{
 		dup2(cmd->red.in_fd, STDIN_FILENO);
 		safe_close(&(cmd->red.in_fd));
 	}
-	if (cmd->red.out_fd > -1)
+	if (flag && cmd->red.out_fd > -1)
 	{
 		dup2(cmd->red.out_fd, STDOUT_FILENO);
 		safe_close(&(cmd->red.out_fd));
 	}
+	return (flag);
 }

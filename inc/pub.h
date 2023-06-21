@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:15:39 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/21 02:19:18 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/21 03:53:26 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ void init_redirections(t_redirect *red);
 t_redirect *create_redir();
 
 //cmd
-void dup_cmd_file(t_cmd *cmd);
 t_cmd *create_cmd_with_val(char **envp, char *args);
 int count_cmds_linked_by_pipe(t_cmd *first_cmd);
 

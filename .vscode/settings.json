@@ -1,5 +1,6 @@
 {
 	"files.associations": {
-		"../inc/minishell.h": "c"
+		"../inc/minishell.h": "c",
+		"type_traits": "c"
 	}
 }

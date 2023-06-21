@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 01:02:42 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/21 02:04:19 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/21 03:55:37 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,15 @@ void	cmd_not_found(t_cmd *cmd, t_cmd *first)
 	exit(CMD_NOT_FOUND);
 }
 
+void	failed_to_open_files(t_cmd *first)
+{
+	int	e;
+
+	e = errno;
+	free_cmds(&first, true);
+	exit(CMD_NOT_FOUND);
+}
+
 void	child_process(t_cmd *cmd, t_cmd *first, int pipe_tab[2])
 {
 	char	*path;
@@ -69,7 +78,8 @@ void	child_process(t_cmd *cmd, t_cmd *first, int pipe_tab[2])
 		cmd->red.out_fd = pipe_tab[1];
 	}
 	reset_defaults_signals();
-	dup_cmd_file(cmd);
+	if (!dup_cmd_file(cmd))
+		failed_to_open_files(first);
 	try_to_exec_builtins(cmd, first, true);
 	if (check_acces(cmd))
 	{

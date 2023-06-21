@@ -6,20 +6,32 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 20:57:20 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/21 02:04:58 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/21 04:28:32 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
+int	write_error(t_cmd *cmd)
+{
+	char	*err_mess;
+
+	err_mess = ft_strjoin("minishell: ", cmd->val.value);
+	perror(err_mess);
+	free(err_mess);
+	return (EXIT_FAILURE);
+}
+
 int	ft_echo(t_cmd *cmd, t_cmd *first)
 {
 	char	end[2];
 	int		i;
+	int		ret;
 
 	end[0] = '\n';
 	end[1] = '\0';
 	i = 1;
+	ret = 0;
 	if (ft_strisequal(cmd->val.args[i], "-n"))
 	{
 		i++;
@@ -27,16 +39,19 @@ int	ft_echo(t_cmd *cmd, t_cmd *first)
 	}
 	while (cmd->val.args[i])
 	{
-		printf("%s", cmd->val.args[i]);
+		ret = printf("%s", cmd->val.args[i]);
 		i++;
-		if (cmd->val.args[i])
-			printf(" ");
+		if (ret >= 0 && cmd->val.args[i])
+			ret = printf(" ");
 	}
-	printf("%s", end);
-	return (EXIT_OK); // à modifier, rajouté pour plus avoir de warning a la compilation
+	if (ret >= 0)
+		ret = printf("%s", end);
+	if (ret < 0)
+		return (write_error(cmd));
+	return (EXIT_OK);
 }
 
-int (*get_builtins_foo(char *str))(t_cmd *, t_cmd *)
+int	(*get_builtins_foo(char *str))(t_cmd *cmd, t_cmd *first)
 {
 	if (ft_strisequal(str, "echo"))
 		return (&ft_echo);
@@ -52,67 +67,52 @@ int (*get_builtins_foo(char *str))(t_cmd *, t_cmd *)
 		return (&ft_env);
 	if (ft_strisequal(str, "exit"))
 		return (&ft_exit);
-	return (NULL); // return -1 plutot ? si les builtins retournent un int >= 0
+	return (NULL);
 }
 
-int	is_builtins(char *str)
+void	reset_files(int old_in, int old_out)
 {
-	if (ft_strisequal(str, "echo"))
-		return (1);
-	if (ft_strisequal(str, "cd"))
-		return (1);
-	if (ft_strisequal(str, "pwd"))
-		return (1);
-	if (ft_strisequal(str, "export"))
-		return (3);
-	if (ft_strisequal(str, "unset"))
-		return (4);
-	if (ft_strisequal(str, "env"))
-		return (5);
-	if (ft_strisequal(str, "exit"))
-		return (6);
-	return (-1);
-}
-
-int	try_to_exec_builtins(t_cmd *cmd, t_cmd *first, bool is_child)
-{
-	int (*foo)(t_cmd *, t_cmd *);
-	int ret;
-	int old_in;
-	int old_out;
-
-	// ////dprintf(1, "in try_to_exec_builtins()\n");
-	//num = is_builtins(cmd->val.value);
-	// signal(SIGINT, );
-	ret = -1;
-	old_in = -1;
-	old_out = -1;
-	foo = get_builtins_foo(cmd->val.value);
-	// ////dprintf(1, "get_builtins() return value : %p\n", foo);
-	if (!foo)
-		return ret;
-
-	if (!is_child)
-	{
-		if (foo != &ft_exit)
-		{
-			old_in = dup(STDIN_FILENO);
-			old_out = dup(STDOUT_FILENO);
-		}
-		dup_cmd_file(cmd);
-	}
-	ret = foo(cmd, first);
-	if (is_child)
-	{
-		// //dprintf(1, "get_builtins() return value : %p\n", foo);
-		free_cmds(&first, true);
-		exit(ret);
-	}
-	//dprintf(1, "at exit in child, last exit status = %d\n", ret);
-	g_exit_status = ret;
 	dup2(old_in, STDIN_FILENO);
 	dup2(old_out, STDOUT_FILENO);
 	close(old_in);
 	close(old_out);
-	return ret;
+}
+
+void	quit_builtins_child(t_cmd *first, int ret)
+{
+	free_cmds(&first, true);
+	exit(ret);
+}
+
+void	save_in_out(int *in, int *out)
+{
+	*in = dup(STDIN_FILENO);
+	*out = dup(STDOUT_FILENO);
+}
+
+int	try_to_exec_builtins(t_cmd *cmd, t_cmd *first, bool is_child)
+{
+	int	(*foo)(t_cmd *, t_cmd *);
+	int	ret;
+	int	old_in;
+	int	old_out;
+
+	ret = -1;
+	old_in = -1;
+	old_out = -1;
+	foo = get_builtins_foo(cmd->val.value);
+	if (!foo)
+		return (ret);
+	if (!is_child)
+	{
+		if (foo != &ft_exit)
+			save_in_out(&old_in, &old_out);
+		dup_cmd_file(cmd);
+	}
+	ret = foo(cmd, first);
+	if (is_child)
+		quit_builtins_child(first, ret);
+	g_exit_status = ret;
+	reset_files(old_in, old_out);
+	return (ret);
 }
