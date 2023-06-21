@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 16:39:50 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/20 09:27:04 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/21 00:34:26 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ void free_file_struct(t_file * file_struct)
 	// ////dprintf(1, "%s",file_struct->name);
 	if (file_struct->name)
 		free(file_struct->name);
-	// if(file_struct->sep)
-	// 	free(file_struct->sep);
+	/* if(file_struct->sep)
+	 	free(file_struct->sep); */
 	free(file_struct);
 }
 

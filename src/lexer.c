@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 00:40:45 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/20 18:05:03 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/20 21:34:30 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,85 +89,90 @@ void    merge_token_quotes(t_token_list **tk_list, char *input, t_token *token_s
         (current == simple_quote) + (current == double_quote) * 2));
 }
 
-void    merge_single_tokens(t_token_list **tk_list, char *input, t_token *token_stream, int *i)
+void    merge_single_tokens(t_token_list **tk_list, char *input, t_token *token_stream)
 {
-    int j;
-    int current;
+    int     i;
+    int     j;
+    int     current;
     size_t  stream_len;
 
+    i = 0;
     j = 0;
     stream_len = ft_strlen(input);
-    current = token_stream[*i].type;
-    if ((*i) < stream_len && (current == r_parenthesis || current == l_parenthesis))
+    while (i < stream_len)
     {
-        tk_add(tk_list, tk_new_elem(&input[*i], 1, current, 0));
-        (*i)++;
+        current = token_stream[i].type;
+        if (i < stream_len && (current == r_parenthesis || current == l_parenthesis))
+        {
+            tk_add(tk_list, tk_new_elem(&input[i], 1, current, 0));
+            i++;
+        }
+        else if (i < stream_len && (current == simple_quote || current == double_quote))
+        {
+            merge_token_quotes(tk_list, input, token_stream, &i);
+            /* j = i;
+            i++;
+            while (i < stream_len && token_stream[i].type != current)
+                i++;
+            if (i < stream_len)
+                i++;
+            tk_add(tk_list, tk_new_elem(&input[j], i - j, current, 
+                (current == simple_quote) + (current == double_quote) * 2)); */
+        }
+        else if (i < stream_len)
+        {
+            j = i;
+            while (i < stream_len && token_stream[i].type == current)
+                i++;
+            tk_add(tk_list, tk_new_elem(&input[j], i - j, current, 0));
+        }
     }
-    else if ((*i) < stream_len && (current == simple_quote || current == double_quote))
-    {
-        merge_token_quotes(tk_list, input, token_stream, i);
-        // j = *i;
-        // (*i)++;
-        // while ((*i) < stream_len && token_stream[*i].type != current)
-        //     (*i)++;
-        // if ((*i) < stream_len)
-        //     (*i)++;
-        // tk_add(tk_list, tk_new_elem(&input[j], (*i) - j, current, 
-        //     (current == simple_quote) + (current == double_quote) * 2));
-    }
-    else if ((*i) < stream_len)
-    {
-        j = *i;
-        while ((*i) < stream_len && token_stream[*i].type == current)
-            (*i)++;
-        tk_add(tk_list, tk_new_elem(&input[j], (*i) - j, current, 0));
-    }
+    
 }
 
 t_token_list    **tokenise(t_token *token_stream, size_t stream_len, char *input)
 {
-    int             i;
-    int             j;
     int             current;
     t_token_list    *tk_list;
     t_token_list    **first;
     
     if (!token_stream)
         return (NULL);
-    i = 0;
     tk_list = NULL;
     first = malloc(sizeof(t_token_list *));
     if (!first)
         return (NULL);
-    while (i < stream_len)
+    
+    merge_single_tokens(&tk_list, input, token_stream); // ajouté chez oim le mardi 20 en fin d'aprem et ca leak
+    
+    /* while (i < stream_len)
     {
-        // ajouté chez oim le mardi 20 en fin d'aprem
-        merge_single_tokens(&tk_list, input, token_stream, &i);
-        //current = token_stream[i].type;
-        // if (i < stream_len && (current == r_parenthesis || current == l_parenthesis))
-        // {
-        //     tk_add(&tk_list, tk_new_elem(&input[i], 1, current, 0));
-        //     i++;
-        // }
-        // else if (i < stream_len && (current == simple_quote || current == double_quote))
-        // {
-        //     j = i;
-        //     i++;
-        //     while (i < stream_len && token_stream[i].type != current)
-        //         i++;
-        //     if (i < stream_len)
-        //         i++;
-        //     tk_add(&tk_list, tk_new_elem(&input[j], i - j, current, 
-        //         (current == simple_quote) + (current == double_quote) * 2));
-        // }
-        // else if (i < stream_len)
-        // {
-        //     j = i;
-        //     while (i < stream_len && token_stream[i].type == current)
-        //         i++;
-        //     tk_add(&tk_list, tk_new_elem(&input[j], i - j, current, 0));
-        // }
-    }
+        
+        current = token_stream[i].type;
+         if (i < stream_len && (current == r_parenthesis || current == l_parenthesis))
+         {
+             tk_add(&tk_list, tk_new_elem(&input[i], 1, current, 0));
+             i++;
+         }
+         else if (i < stream_len && (current == simple_quote || current == double_quote))
+         {
+             j = i;
+             i++;
+             while (i < stream_len && token_stream[i].type != current)
+                 i++;
+             if (i < stream_len)
+                 i++;
+             tk_add(&tk_list, tk_new_elem(&input[j], i - j, current, 
+                 (current == simple_quote) + (current == double_quote) * 2));
+         }
+         else if (i < stream_len)
+         {
+             j = i;
+             while (i < stream_len && token_stream[i].type == current)
+                 i++;
+             tk_add(&tk_list, tk_new_elem(&input[j], i - j, current, 0));
+         }
+    } */
     free(token_stream);
     token_stream = NULL;
     

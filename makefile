@@ -30,6 +30,8 @@ FILES = cmd_private\
 		quotes \
 		var_expansion \
 		wildcards \
+		wildcards_first_sort \
+		wildcards_second_sort \
 		free_tokens \
 		ft_env \
 		ft_export \

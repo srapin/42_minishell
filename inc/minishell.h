@@ -113,6 +113,8 @@ void            expand(t_ht_hash_table *ht, t_token_list **current, char *var, s
 void            delete_quotes(t_data *data);
 void            group_words(t_data *data);
 void            perform_wildcard_exp(t_data *data);
+t_filename      *first_sort(DIR *dir, char *prefix, char *suffix);
+void            second_sort(t_filename **filenames, t_token_list *current, char *prefix);
 
 int             is_in_quotes(t_token_list *current, size_t index);
 

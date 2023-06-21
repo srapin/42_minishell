@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:03:15 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/20 01:53:33 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/21 00:34:18 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ typedef struct file
 {
 	char *name; //dans parsing
 	int fd;     //si deja ouvert. dans parsing -> mettre a -1
-	// char *sep;  //mettre a null si pas heredoc
+	//char *sep;  //mettre a null si pas heredoc. si heredoc, est le limiteur
 	int				flag;
 	/* data */
 }					t_file;
@@ -88,14 +88,11 @@ typedef struct redirect
 
 typedef struct cmd
 {
-	//type_parse type;
 	t_cmd_value		val; // nom de la commande
 	t_redirect 		red; 
 	t_ht_hash_table *env;
 	t_list 			*export_history;
 	int				pid;
-	//int 			is_minimal_env;
-	// to move into node
 	ctrl_op			ctrl;
 	struct cmd		*next;
 

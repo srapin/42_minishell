@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:12:06 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/20 11:52:33 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/21 02:51:44 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,13 @@ void    expand(t_ht_hash_table *ht, t_token_list **current, char *var, size_t do
     tmp = ft_strjoin(before_key, value);
     (*current)->content = ft_strjoin(tmp, after_value);
     (*current)->length = ft_strlen((*current)->content);
+    if (*var == '?')
+        free(value);
     free(var);
     free(before_key);
     free(after_value);
     free(tmp);
+    // tout mettre a NULL apres aussi 
 }
 
 
@@ -131,10 +134,22 @@ void    perform_variable_exp(t_data *data)
                 next_dollar_index = current->length - ft_strlen(next_dollar_start);
                 //printf("next dollar index = %zu\n", next_dollar_index);
                 if (next_dollar_start && *next_dollar_start)
+                {
+                    /* int k = 1;
+                    char *var_name;
+                    var_name = ft_substr(current->content, dollar_index + 1, current->length - dollar_index - k);
+                    while (k + dollar_index <= current->length && !valid_name(var_name))
+                    {
+                        free(var_name);
+                        k++;
+                        var_name = ft_substr(current->content, dollar_index + 1, current->length - dollar_index - k);
+                    }
+                    if (k + dollar_index <= current->length) // ie valid_name() == 1 */
                     expand(data->env, &current, ft_substr(current->content, dollar_index + 1, next_dollar_index - dollar_index - 1), dollar_index);
+                }
                 else if (current->type == double_quote)
                 {
-                    int k = 2;
+                    int k = 1;
                     char *var_name;
                     var_name = ft_substr(current->content, dollar_index + 1, current->length - dollar_index - k);
                     while (k + dollar_index <= current->length && !valid_name(var_name))
@@ -147,7 +162,19 @@ void    perform_variable_exp(t_data *data)
                         expand(data->env, &current, var_name, dollar_index);    
                 }
                 else
+                {
+                   /*  int k = 1;
+                    char *var_name;
+                    var_name = ft_substr(current->content, dollar_index + 1, current->length - dollar_index - k);
+                    while (k + dollar_index <= current->length && !valid_name(var_name))
+                    {
+                        free(var_name);
+                        k++;
+                        var_name = ft_substr(current->content, dollar_index + 1, current->length - dollar_index - k);
+                    }
+                    if (k + dollar_index <= current->length) // ie valid_name() == 1 */
                     expand(data->env, &current, ft_strdup(dollar_start + 1), dollar_index);
+                }
                 //////dprintf(1, "fin de while, ok ici\n");
                 free(dollar_start);
                 dollar_start = NULL;
