@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/10 17:29:36 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/20 02:28:50 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/21 01:26:56 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,13 @@ void    free_tokens(t_token_list **first)
     t_token_list    *current;
     t_token_list    *tmp;
 
-    if (!first || !(*first))
+    if (!first) 
         return ;
+    if (!(*first))
+    {
+        free(first);
+        return ;
+    }
     current = *first;
     while (current)
     {

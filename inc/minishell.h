@@ -68,7 +68,7 @@ int	wait_childs(t_cmd *cmd);
 
 //safer
 void reset_pip_tab(int pip_tab[2]);
-bool	check_acces(char **paths, t_cmd *cmd);
+bool	check_acces(t_cmd *cmd);
 void safe_close_cmd_fd(t_cmd *cmd);
 void	safe_pipe(int pipe_tab[2]);
 void	safe_close(int *fd);
