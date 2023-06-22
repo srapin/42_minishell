@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:13:13 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/21 04:31:18 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/22 23:19:14 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,17 +54,17 @@ char	*get_suffix(t_token_list *current)
 
 void	free_filenames(t_filename **filenames)
 {
-	t_filename	*current;
-
-	current = (*filenames);
-	while (current)
+	t_filename *curr;
+	curr = *filenames;
+	while (*filenames)
 	{
-		current = (*filenames)->next;
-		if ((*filenames)->filename)
-			free((*filenames)->filename);
-		free((*filenames));
+		curr = *filenames;
+		*filenames = (*filenames)->next;
+		if (*filenames)
+			curr->next = (*filenames)->next;
+		free(curr->filename);
+		free(curr);
 	}
-	//free(filenames); // POURQUOI ÇA MARCHE PAS ??
 }
 
 /*
@@ -91,6 +91,19 @@ void	insert_filenames(t_token_list **first, t_token_list **current,
 		current_f = current_f->next;
 	}
 	tk_del_one(first, tmp);
+
+	free_filenames(filenames);
+	/* t_filename *curr;
+	curr = *filenames;
+	while (*filenames)
+	{
+		curr = *filenames;
+		*filenames = (*filenames)->next;
+		if (*filenames)
+			curr->next = (*filenames)->next;
+		free(curr->filename);
+		free(curr);
+	} */
 	//free_filenames(filenames); // POURQUOI CA MARCHE PAS
 }
 

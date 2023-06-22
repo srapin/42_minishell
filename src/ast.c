@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 21:44:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/19 03:53:221 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/22 23:53:56 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,8 @@ void	update_redirect(t_cmd *cmd, t_token_list *current)
 	}
 }
 
-/* Returns the substring starting at the first encountered whitespace in the initial string.
+/* Returns the substring starting at the first encountered 
+whitespace in the initial string.
 When no whitespace is encountered, NULL is returned.
 If the string is either empty or null, NULL is returned. */
 int	get_whtsp_pos(char *str, int whtsp_pos)
@@ -149,14 +150,12 @@ void	split_not_merged_no_quotes(t_cmd **curr_cmd, t_token_list *curr_tk,
 		// 	buffer = NULL;
 		// }
 		skip_whitespaces_reassess_indexes(curr_tk->content,
-											&wht_pos,
-											&p_wht_pos);
+		&wht_pos, &p_wht_pos);
 	}
 	if (p_wht_pos < curr_tk->length)
 	{
 		(*curr_cmd)->val.args[*i] = ft_substr(curr_tk->content,
-												p_wht_pos,
-												curr_tk->length);
+		p_wht_pos, curr_tk->length);
 		(*i)++;
 	}
 }
@@ -434,6 +433,12 @@ t_cmd	*init_new_cmd(t_data *data)
 	cmd->env = data->env;
 	cmd->export_history = data->exp_history;
 	init_redirections(&(cmd->red));
+	cmd->val.value = NULL;
+ 	cmd->val.args = NULL;
+ 	cmd->val.path = NULL;
+	cmd->ctrl = pointvirgule;	
+ 	cmd->next = NULL;
+ 	cmd->pid = -1;
 	return (cmd);
 }
 
@@ -609,7 +614,7 @@ int	set_ctrl_op(t_data *data, t_token_list **current_tk,
 	if (*current_tk && is_a_ctrl_op(*current_tk))
 	{
 		(*pipeline_start_cmd)->ctrl = ((*current_tk)->type == and_tk)
-			* and+((*current_tk)->type == or_tk) * or ;
+			* and+((*current_tk)->type == or_tk) * or;
 		(*pipeline_start_cmd)->next = init_new_cmd(data);
 		*pipeline_start_cmd = (*pipeline_start_cmd)->next;
 		if (!(*pipeline_start_cmd))

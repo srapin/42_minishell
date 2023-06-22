@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:12:06 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/22 22:51:19 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/23 00:24:49 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,18 +59,18 @@ void	search_and_expand(t_ht_hash_table *ht, t_token_list **current,
 	char *value; /* ne pas le free ! car est malloc dans la hash_map,
 		et peut en re avoir besoin dans une autre commande*/
 	before_key = ft_substr((*current)->content, 0, dollar_index);
-	if (*var == '?') // expand_last_exit_status(current)
+	/* if (*var == '?') // expand_last_exit_status(current)
 	{
 		value = ft_itoa(g_exit_status);
 		after_value = ft_substr((*current)->content, dollar_index + 2,
 				(*current)->length);
-	}
-	else
-	{
+	} */
+	//else
+	//{
 		value = ht_search(ht, var);
 		after_value = ft_substr((*current)->content, dollar_index
 				+ ft_strlen(var) + 1, (*current)->length);
-	}
+	//}
 	update_tk_content(current, before_key, value, after_value);
 	if (*var == '?')
 		free(value);
@@ -218,7 +218,10 @@ int	is_exit_status(t_ht_hash_table *ht, t_token_list *current,
 
 	i = 0;
 	if (!(*dollar_start))
+	{
+		free(dollar_start);
 		return (1); // ou 0, change r car va rien expand dans tous les cas
+	}
 	while (dollar_start[i] && dollar_start[i] == '$')
 		i++;
 	if (dollar_start[i] && dollar_start[i] == '?')
@@ -231,6 +234,7 @@ int	is_exit_status(t_ht_hash_table *ht, t_token_list *current,
 		update_tk_content(&current, before_key, value, after_value);
 		check_next_token(&current, current->length - ft_strlen(dollar_start)
 				- 1);
+		free(dollar_start);
 		return (1);
 	}
 	return (0);
