@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 23:24:33 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/21 18:20:01 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/22 22:25:07 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	hd_expand(t_ht_hash_table *ht, t_token_list **t_list)
 	size_t			dollar_index;
 	t_token_list	*current;
 	int				k;
-				char *var_name;
+	char			*var_name;
 
 	current = *t_list;
 	while (current)

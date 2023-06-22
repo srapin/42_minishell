@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:12:06 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/22 21:40:20 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/22 22:51:19 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,26 @@ void	expand(t_ht_hash_table *ht, t_token_list **current, char *var,
 	search_and_expand(ht, current, var, dollar_index);
 }
 
+char	*set_var_name(t_token_list *current, size_t dollar_index,
+		size_t next_dollar_index, int exp_case)
+{
+	int		k;
+	char	*var_name;
+
+	k = 1;
+	if (exp_case == 1)
+		k = 2;
+	/* var_name = set_var_name(current, dollar_index,
+			next_dollar_index,exp_case); */
+	if (exp_case == 0)
+		var_name = ft_substr(current->content, dollar_index + 1,
+				next_dollar_index - dollar_index - 1);
+	else
+		var_name = ft_substr(current->content, dollar_index + 1, current->length
+				- dollar_index - k);
+	return (var_name);
+}
+
 /* Returns NULL in case no valid identifier follows the '$' at the given <dollar_index> index
 Case 0 : is followed by another dollar sign (ie next_dollar_index != -1)
 Case 1 : is inside double quotes
@@ -121,12 +141,13 @@ char	*get_valid_id(t_token_list *current, size_t dollar_index,
 	k = 1;
 	if (exp_case == 1)
 		k = 2;
-	if (exp_case == 0)
+	var_name = set_var_name(current, dollar_index, next_dollar_index, exp_case);
+	/* if (exp_case == 0)
 		var_name = ft_substr(current->content, dollar_index + 1,
 				next_dollar_index + 1);
 	else
 		var_name = ft_substr(current->content, dollar_index + 1, current->length
-				- dollar_index - k);
+				- dollar_index - k); */
 	while (k + dollar_index <= current->length && !valid_name(var_name))
 	{
 		free(var_name);
@@ -143,9 +164,9 @@ char	*get_valid_id(t_token_list *current, size_t dollar_index,
 	return (NULL);
 }
 
-int 	is_only_dollars(char *str)
+int	is_only_dollars(char *str)
 {
-	int 	i;
+	int	i;
 
 	i = 0;
 	while (str[i])
@@ -159,23 +180,21 @@ int 	is_only_dollars(char *str)
 
 void	check_next_token(t_token_list **curr, size_t dollar_index)
 {
-	int 			dollars_count;
-	t_token_list 	*current;
+	int				dollars_count;
+	t_token_list	*current;
 
 	current = *curr;
 	dollars_count = 0;
-	while (current && (current->type == word 
-		|| current->type == simple_quote || current->type == double_quote)
+	while (current && (current->type == word || current->type == simple_quote
+			|| current->type == double_quote)
 		&& is_only_dollars(current->content))
-		{
-			dollars_count = ft_strlen(current->content);
-			if (dollars_count && dollars_count % 2)
-				remove_char(current, 0);
-			current = current->next;
-		}
-		*curr = current;
-		
-	
+	{
+		dollars_count = ft_strlen(current->content);
+		if (dollars_count && dollars_count % 2)
+			remove_char(current, 0);
+		current = current->next;
+	}
+	*curr = current;
 	// if ((*current)->next && ((*current)->next->type == simple_quote
 	// 		|| (*current)->next->type == double_quote))
 	// 	remove_char(*current, dollar_index);
@@ -191,18 +210,17 @@ dollar_index = 5 -
 int	is_exit_status(t_ht_hash_table *ht, t_token_list *current,
 		char *dollar_start)
 {
-	int 	i;
+	int		i;
 	char	*value;
 	char	*after_value;
 	char	*before_key;
 	size_t	dollar_index;
-	
+
 	i = 0;
 	if (!(*dollar_start))
-		return (1);  // ou 0, change r car va rien expand dans tous les cas
+		return (1); // ou 0, change r car va rien expand dans tous les cas
 	while (dollar_start[i] && dollar_start[i] == '$')
 		i++;
-	
 	if (dollar_start[i] && dollar_start[i] == '?')
 	{
 		dollar_index = current->length - ft_strlen(dollar_start + i) - 1;
@@ -211,7 +229,8 @@ int	is_exit_status(t_ht_hash_table *ht, t_token_list *current,
 		after_value = ft_substr(current->content, dollar_index + 2,
 				current->length);
 		update_tk_content(&current, before_key, value, after_value);
-		check_next_token(&current, current->length - ft_strlen(dollar_start) - 1);
+		check_next_token(&current, current->length - ft_strlen(dollar_start)
+				- 1);
 		return (1);
 	}
 	return (0);
@@ -219,7 +238,7 @@ int	is_exit_status(t_ht_hash_table *ht, t_token_list *current,
 
 char	*get_next_d_start(char *d_start)
 {
-	int 	i;	
+	int		i;
 	char	*next_d_start;
 
 	i = 0;
@@ -227,6 +246,20 @@ char	*get_next_d_start(char *d_start)
 		i++;
 	next_d_start = ft_strdup(ft_strchr(d_start + i, '$')); // malloc a proteger
 	return (next_d_start);
+}
+
+char	*get_var_name(t_token_list *current, char *next_d_start, size_t d_index,
+		size_t next_d_index)
+{
+	char	*var_name;
+
+	if (next_d_start && *next_d_start)
+		var_name = get_valid_id(current, d_index, next_d_index, 0);
+	else if (current->type == double_quote)
+		var_name = get_valid_id(current, d_index, next_d_index, 1);
+	else
+		var_name = get_valid_id(current, d_index, next_d_index, 2);
+	return (var_name);
 }
 
 void	parse_current_tk(t_ht_hash_table *ht, t_token_list *current)
@@ -243,20 +276,15 @@ void	parse_current_tk(t_ht_hash_table *ht, t_token_list *current)
 	while (d_start && *d_start)
 	{
 		d_index = current->length - ft_strlen(d_start);
-		
-		//next_d_start = get_next_d_start(d_start);
-		/* int i = 0;
-		while (d_start[i] && d_start[i] == '$')
-			i++;
-		next_d_start = ft_strdup(ft_strchr(d_start + i, '$')); */
 		next_d_start = ft_strdup(ft_strchr(d_start + 1, '$'));
 		next_d_index = current->length - ft_strlen(next_d_start);
-		if (next_d_start && *next_d_start)
+		var_name = get_var_name(current, next_d_start, d_index, next_d_index);
+		/* if (next_d_start && *next_d_start)
 			var_name = get_valid_id(current, d_index, next_d_index, 0);
 		else if (current->type == double_quote)
 			var_name = get_valid_id(current, d_index, next_d_index, 1);
 		else
-			var_name = get_valid_id(current, d_index, next_d_index, 2);
+			var_name = get_valid_id(current, d_index, next_d_index, 2); */
 		if (var_name)
 			search_and_expand(ht, &current, var_name, d_index);
 		else

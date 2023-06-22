@@ -84,9 +84,9 @@ int	get_whtsp_pos(char *str, int whtsp_pos)
 	return (-1);
 }
 
-void 	set_buffer(char **buffer, char *substr)
+void	set_buffer(char **buffer, char *substr)
 {
-	char 	*tmp;
+	char	*tmp;
 
 	if (!buffer)
 		return ;
@@ -98,7 +98,7 @@ void 	set_buffer(char **buffer, char *substr)
 	tmp = NULL;
 }
 
-void 	reassess_buffer(t_cmd **curr_cmd, char **buffer, int *i)
+void	reassess_buffer(t_cmd **curr_cmd, char **buffer, int *i)
 {
 	if (!buffer)
 		return ;
@@ -111,13 +111,12 @@ void 	reassess_buffer(t_cmd **curr_cmd, char **buffer, int *i)
 	}
 }
 
-void	skip_whitespaces_reassess_indexes(char *curr_content, int *wht_pos, 
+void	skip_whitespaces_reassess_indexes(char *curr_content, int *wht_pos,
 		int *p_wht_pos)
 {
-	while (curr_content[*wht_pos]
-			&& (curr_content[*wht_pos] == ' '
-				|| curr_content[*wht_pos] == '\t'))
-			(*wht_pos)++;
+	while (curr_content[*wht_pos] && (curr_content[*wht_pos] == ' '
+			|| curr_content[*wht_pos] == '\t'))
+		(*wht_pos)++;
 	*p_wht_pos = *wht_pos;
 	*wht_pos = get_whtsp_pos(curr_content, *p_wht_pos);
 }
@@ -136,8 +135,7 @@ void	split_not_merged_no_quotes(t_cmd **curr_cmd, t_token_list *curr_tk,
 	while (wht_pos != -1)
 	{
 		//tmp = buffer;
-		substr = ft_substr(curr_tk->content, p_wht_pos, wht_pos
-				- p_wht_pos);
+		substr = ft_substr(curr_tk->content, p_wht_pos, wht_pos - p_wht_pos);
 		set_buffer(&buffer, substr);
 		//buffer = ft_strjoin(tmp, substr);
 		// free(substr);
@@ -150,42 +148,41 @@ void	split_not_merged_no_quotes(t_cmd **curr_cmd, t_token_list *curr_tk,
 		// 	free(buffer);
 		// 	buffer = NULL;
 		// }
-		skip_whitespaces_reassess_indexes(curr_tk->content, 
-			&wht_pos, &p_wht_pos);
+		skip_whitespaces_reassess_indexes(curr_tk->content,
+											&wht_pos,
+											&p_wht_pos);
 	}
 	if (p_wht_pos < curr_tk->length)
 	{
 		(*curr_cmd)->val.args[*i] = ft_substr(curr_tk->content,
-				p_wht_pos, curr_tk->length);
+												p_wht_pos,
+												curr_tk->length);
 		(*i)++;
 	}
 }
 
-void 	whitespaces_skip_assess(t_word_data *wd, int *wht_pos, 
-		int *p_wht_pos)
+void	whitespaces_skip_assess(t_word_data *wd, int *wht_pos, int *p_wht_pos)
 {
-	while (wd->content[*wht_pos]
-		&& (wd->content[*wht_pos] == ' '
+	while (wd->content[*wht_pos] && (wd->content[*wht_pos] == ' '
 			|| wd->content[*wht_pos] == '\t'))
 		(*wht_pos)++;
 	*p_wht_pos = *wht_pos;
 	*wht_pos = get_whtsp_pos(wd->content,
-			*p_wht_pos);
+								*p_wht_pos);
 }
 
-void 	split_merged_no_quotes(t_cmd **curr_cmd, t_word_data *wd,
-		char **buffer, int *i)
+void	split_merged_no_quotes(t_cmd **curr_cmd, t_word_data *wd, char **buffer,
+		int *i)
 {
-	int			wht_pos;
-	int			p_wht_pos;
-	char 		*substr;
+	int		wht_pos;
+	int		p_wht_pos;
+	char	*substr;
 
 	p_wht_pos = 0;
 	wht_pos = get_whtsp_pos(wd->content, p_wht_pos);
 	while (wht_pos != -1)
 	{
-		substr = ft_substr(wd->content, p_wht_pos,
-				wht_pos - p_wht_pos);
+		substr = ft_substr(wd->content, p_wht_pos, wht_pos - p_wht_pos);
 		set_buffer(buffer, substr);
 		reassess_buffer(curr_cmd, buffer, i);
 		// if (*buffer)
@@ -196,13 +193,13 @@ void 	split_merged_no_quotes(t_cmd **curr_cmd, t_word_data *wd,
 		// 	*buffer = NULL;
 		// }
 		//whitespaces_skip_assess(wd, &wht_pos, &p_wht_pos);
-		skip_whitespaces_reassess_indexes(wd->content, 
-			&wht_pos, &p_wht_pos);
+		skip_whitespaces_reassess_indexes(wd->content,
+											&wht_pos,
+											&p_wht_pos);
 	}
 	if (wht_pos == -1)
 	{
-		substr = ft_substr(wd->content, p_wht_pos,
-				wd->length);
+		substr = ft_substr(wd->content, p_wht_pos, wd->length);
 		set_buffer(buffer, substr);
 	}
 }
@@ -321,8 +318,9 @@ int	no_merged_words_count(t_token_list *current)
 		{
 			if (wht_pos - p_wht_pos)
 				count++;
-			skip_whitespaces_reassess_indexes(current->content, 
-				&wht_pos, &p_wht_pos);
+			skip_whitespaces_reassess_indexes(current->content,
+												&wht_pos,
+												&p_wht_pos);
 			// while (current->content[wht_pos]
 			// 	&& (current->content[wht_pos] == ' '
 			// 		|| current->content[wht_pos] == '\t'))
@@ -552,7 +550,7 @@ void	set_simple_command(t_cmd *current_cmd, t_token_list **first_tk,
 	int				subshell;
 	int				args_count;
 	t_token_list	*current_tk;
-	t_token_list 	*cmd_start_tk;
+	t_token_list	*cmd_start_tk;
 
 	subshell = 0;
 	args_count = 0;
@@ -581,8 +579,7 @@ void	set_simple_command(t_cmd *current_cmd, t_token_list **first_tk,
 	}
 	current_cmd->red.next_cmd = NULL;
 	if (!subshell)
-		set_command_attributs(&current_cmd, first_tk, cmd_start_tk,
-				args_count);
+		set_command_attributs(&current_cmd, first_tk, cmd_start_tk, args_count);
 	*curr_tk = current_tk;
 }
 
@@ -590,29 +587,29 @@ void	malloc_error(void)
 {
 }
 
-void 	set_pipe(t_data *data, t_token_list **current_tk, t_cmd **current_cmd)
+void	set_pipe(t_data *data, t_token_list **current_tk, t_cmd **current_cmd)
 {
 	if (*current_tk && (*current_tk)->type == or_tk
 		&& (*current_tk)->length == 1)
+	{
+		(*current_cmd)->red.next_cmd = init_new_cmd(data);
+		if (!(*current_cmd)->red.next_cmd)
 		{
-			(*current_cmd)->red.next_cmd = init_new_cmd(data);
-			if (!(*current_cmd)->red.next_cmd)
-			{
-				perror("malloc ");
-				// free and return. Quel exit status ?
-			}
-			*current_cmd = (*current_cmd)->red.next_cmd;
-			*current_tk = (*current_tk)->next;
+			perror("malloc ");
+			// free and return. Quel exit status ?
 		}
+		*current_cmd = (*current_cmd)->red.next_cmd;
+		*current_tk = (*current_tk)->next;
+	}
 }
 
-int 	set_ctrl_op(t_data *data, t_token_list **current_tk, 
+int	set_ctrl_op(t_data *data, t_token_list **current_tk,
 		t_token_list **pipeline_start_tk, t_cmd **pipeline_start_cmd)
 {
 	if (*current_tk && is_a_ctrl_op(*current_tk))
 	{
 		(*pipeline_start_cmd)->ctrl = ((*current_tk)->type == and_tk)
-			* and + ((*current_tk)->type == or_tk) * or ;
+			* and+((*current_tk)->type == or_tk) * or ;
 		(*pipeline_start_cmd)->next = init_new_cmd(data);
 		*pipeline_start_cmd = (*pipeline_start_cmd)->next;
 		if (!(*pipeline_start_cmd))
@@ -633,12 +630,13 @@ t_cmd	*get_ast(t_data *data)
 	t_cmd			**ast;
 	t_cmd			*pipeline_start_cmd;
 	t_cmd			*current_cmd;
-	t_cmd			*test; // est-ce que cette variable est utile ? 
 
+	t_cmd *test; // est-ce que cette variable est utile ?
 	ast = malloc(sizeof(t_cmd *));
-	/* if (!ast && malloc_error(data, ...)) (avec malloc_error qui retourne tjr 1, 
+	/* if (!ast && malloc_error(data,
+				...)) (avec malloc_error qui retourne tjr 1, 
 	comme ca economise 3 lignes ici)*/
-	if (!ast) 
+	if (!ast)
 	{
 		malloc_error();
 		return (NULL);
@@ -646,29 +644,27 @@ t_cmd	*get_ast(t_data *data)
 	*ast = init_new_cmd(data);
 	if (!*ast)
 		return (NULL);
-
-
 	pipeline_start_tk = *(data->first);
 	pipeline_start_cmd = *ast;
 	while (pipeline_start_tk)
 	{
 		current_tk = pipeline_start_tk;
 		current_cmd = pipeline_start_cmd;
-		/* tant que n'est ni un '&&' ni un '||', ie peut avoir des pipes, mais ne touche ici pas à la variable next de t_cmd */
+		/* tant que n'est ni un '&&' ni un '||', ie peut avoir des pipes,
+			mais ne touche ici pas à la variable next de t_cmd */
 		while (current_tk && current_tk->type != and_tk
 			&& (current_tk->type != or_tk || current_tk->length == 1))
 		{
 			set_simple_command(current_cmd, data->first, &current_tk);
 			set_pipe(data, &current_tk, &current_cmd);
 		}
-		if (!set_ctrl_op(data, &current_tk, &pipeline_start_tk, &pipeline_start_cmd))
+		if (!set_ctrl_op(data, &current_tk, &pipeline_start_tk,
+				&pipeline_start_cmd))
 		{
 			current_cmd->ctrl = pointvirgule;
 			pipeline_start_tk = NULL;
 		}
 	}
-
-	
 	/* free_tokens(data->first); */
 	test = *ast;
 	free(ast);

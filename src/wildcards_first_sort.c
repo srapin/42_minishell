@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/20 22:50:42 by hlesny            #+#    #+#             */
-/*   Updated: 2023/06/21 04:29:03 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/22 22:21:29 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,7 +197,7 @@ DIR *dir, char *
 Note : readdir() renvoie NULL si il n'y a plus d'entité de directory à lire.
 */
 t_filename	*first_sort(DIR *dir, char *prefix, char *suffix)
-	// prefix and suffix indexes in the big (aka merged, final) word
+// prefix and suffix indexes in the big (aka merged, final) word
 {
 	size_t prefix_len;
 	size_t suffix_len;

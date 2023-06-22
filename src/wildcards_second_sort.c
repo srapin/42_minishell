@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcards_second_sort.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 01:36:57 by hlesny            #+#    #+#             */
-/*   Updated: 2023/06/22 16:47:30 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/22 22:21:33 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,8 @@ void	parse_current_filename(t_filename **filenames, t_filename *current_f,
 		if (next_wcard_index >= 0)
 		{
 			filename_pos = ft_search_str_in_str(filename_pos,
-					ft_substr(current->content, i, next_wcard_index - i));
+												ft_substr(current->content, i,
+														next_wcard_index - i));
 			if (!filename_pos)
 			{
 				del_filename(filenames, current_f);
