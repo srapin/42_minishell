@@ -547,15 +547,17 @@ void	get_attribut(t_cmd *current_cmd, t_token_list **curr_tk,
 }
 
 void	set_simple_command(t_cmd *current_cmd, t_token_list **first_tk,
-		t_token_list **cmd_start_tk, t_token_list **curr_tk)
+		t_token_list **curr_tk)
 {
 	int				subshell;
 	int				args_count;
 	t_token_list	*current_tk;
+	t_token_list 	*cmd_start_tk;
 
 	subshell = 0;
 	args_count = 0;
 	current_tk = *curr_tk;
+	cmd_start_tk = *curr_tk;
 	while (current_tk && current_tk->type != and_tk
 		&& current_tk->type != or_tk)
 	{
@@ -579,7 +581,7 @@ void	set_simple_command(t_cmd *current_cmd, t_token_list **first_tk,
 	}
 	current_cmd->red.next_cmd = NULL;
 	if (!subshell)
-		set_command_attributs(&current_cmd, first_tk, *cmd_start_tk,
+		set_command_attributs(&current_cmd, first_tk, cmd_start_tk,
 				args_count);
 	*curr_tk = current_tk;
 }
@@ -588,20 +590,58 @@ void	malloc_error(void)
 {
 }
 
+void 	set_pipe(t_data *data, t_token_list **current_tk, t_cmd **current_cmd)
+{
+	if (*current_tk && (*current_tk)->type == or_tk
+		&& (*current_tk)->length == 1)
+		{
+			(*current_cmd)->red.next_cmd = init_new_cmd(data);
+			if (!(*current_cmd)->red.next_cmd)
+			{
+				perror("malloc ");
+				// free and return. Quel exit status ?
+			}
+			*current_cmd = (*current_cmd)->red.next_cmd;
+			*current_tk = (*current_tk)->next;
+		}
+}
+
+int 	set_ctrl_op(t_data *data, t_token_list **current_tk, 
+		t_token_list **pipeline_start_tk, t_cmd **pipeline_start_cmd)
+{
+	if (*current_tk && is_a_ctrl_op(*current_tk))
+	{
+		(*pipeline_start_cmd)->ctrl = ((*current_tk)->type == and_tk)
+			* and + ((*current_tk)->type == or_tk) * or ;
+		(*pipeline_start_cmd)->next = init_new_cmd(data);
+		*pipeline_start_cmd = (*pipeline_start_cmd)->next;
+		if (!(*pipeline_start_cmd))
+		{
+			perror("malloc ");
+			// free en cascade. Quel exit status ?
+		}
+		*pipeline_start_tk = (*current_tk)->next;
+		return (1);
+	}
+	return (0);
+}
+
 t_cmd	*get_ast(t_data *data)
 {
-	int				subshell;
-	int				args_count;
+	//int				subshell;
+	//int				args_count;
 	t_token_list	*pipeline_start_tk;
-	t_token_list	*cmd_start_tk;
+	//t_token_list	*cmd_start_tk;
 	t_token_list	*current_tk;
 	t_cmd			**ast;
 	t_cmd			*pipeline_start_cmd;
 	t_cmd			*current_cmd;
-	t_cmd			*test;
+	t_cmd			*test; // est-ce que cette variable est utile ? 
 
 	ast = malloc(sizeof(t_cmd *));
-	if (!ast)
+	/* if (!ast && malloc_error(data, ...)) (avec malloc_error qui retourne tjr 1, 
+	comme ca economise 3 lignes ici)*/
+	if (!ast) 
 	{
 		malloc_error();
 		return (NULL);
@@ -609,24 +649,21 @@ t_cmd	*get_ast(t_data *data)
 	*ast = init_new_cmd(data);
 	if (!*ast)
 		return (NULL);
-	subshell = 0;
+	//subshell = 0;
 	pipeline_start_tk = *(data->first);
 	pipeline_start_cmd = *ast;
-	//////dprintf(1, "in get_ast(), before the while(pipeline_start_tk)\n");
 	while (pipeline_start_tk)
 	{
 		current_tk = pipeline_start_tk;
 		current_cmd = pipeline_start_cmd;
-		// tant que n'est ni un '&&' ni un '||'
-		// ie peut avoir des pipes, 
-        // mais ne touche ici pas à la variable next de t_cmd
+		/* tant que n'est ni un '&&' ni un '||', ie peut avoir des pipes, mais ne touche ici pas à la variable next de t_cmd */
 		while (current_tk && current_tk->type != and_tk
 			&& (current_tk->type != or_tk || current_tk->length == 1))
 		{
-			cmd_start_tk = current_tk;
-			set_simple_command(current_cmd, data->first, &cmd_start_tk,
-					&current_tk);
-			if (current_tk && current_tk->type == or_tk
+			//cmd_start_tk = current_tk;
+			set_simple_command(current_cmd, data->first, &current_tk);
+			set_pipe(data, &current_tk, &current_cmd);
+			/*if (current_tk && current_tk->type == or_tk
 				&& current_tk->length == 1)
 			{
 				current_cmd->red.next_cmd = init_new_cmd(data);
@@ -637,12 +674,17 @@ t_cmd	*get_ast(t_data *data)
 				}
 				current_cmd = current_cmd->red.next_cmd;
 				current_tk = current_tk->next;
-			}
+			} */
 		}
-		if (current_tk && is_a_ctrl_op(current_tk))
+		if (!set_ctrl_op(data, &current_tk, &pipeline_start_tk, &pipeline_start_cmd))
+		{
+			current_cmd->ctrl = pointvirgule;
+			pipeline_start_tk = NULL;
+		}
+		/*if (current_tk && is_a_ctrl_op(current_tk))
 		{
 			pipeline_start_cmd->ctrl = (current_tk->type == and_tk)
-				* and+(current_tk->type == or_tk) * or ;
+				* and + (current_tk->type == or_tk) * or ;
 			pipeline_start_cmd->next = init_new_cmd(data);
 			pipeline_start_cmd = pipeline_start_cmd->next;
 			if (!pipeline_start_cmd)
@@ -656,7 +698,7 @@ t_cmd	*get_ast(t_data *data)
 		{
 			current_cmd->ctrl = pointvirgule;
 			pipeline_start_tk = NULL;
-		}
+		}*/
 	}
 	/* free_tokens(data->first); */
 	test = *ast;
