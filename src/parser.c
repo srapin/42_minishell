@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 02:12:27 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/22 19:49:28 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/22 21:16:52 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,9 +127,7 @@ t_cmd	*parse(t_data *data)
 		g_exit_status = wstatus % 255; // ou juste g_exit_status = SYNTAX_ERROR
 		return (NULL);
 	}
-	print_tokens(*data->first);
 	perform_variable_exp(data);
-	print_tokens(*data->first);
 	delete_quotes(data);
 	group_words(data);
 	perform_wildcard_exp(data);

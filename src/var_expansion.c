@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   var_expansion.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:12:06 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/22 19:48:20 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/22 21:40:20 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,9 @@ void	update_tk_content(t_token_list **current, char *before_key, char *value,
 	free(before_key);
 	free(after_value);
 	free(tmp);
+	before_key = NULL;
+	after_value = NULL;
+	tmp = NULL;
 }
 
 void	search_and_expand(t_ht_hash_table *ht, t_token_list **current,
@@ -140,27 +143,6 @@ char	*get_valid_id(t_token_list *current, size_t dollar_index,
 	return (NULL);
 }
 
-int	is_exit_status(t_ht_hash_table *ht, t_token_list *current,
-		char *dollar_start)
-{
-	char	*value;
-	char	*after_value;
-	char	*before_key;
-	size_t	dollar_index;
-
-	if (*dollar_start && dollar_start[1] && dollar_start[1] == '?')
-	{
-		dollar_index = current->length - ft_strlen(dollar_start);
-		before_key = ft_substr(current->content, 0, dollar_index);
-		value = ft_itoa(g_exit_status);
-		after_value = ft_substr(current->content, dollar_index + 2,
-				current->length);
-		update_tk_content(&current, before_key, value, after_value);
-		return (1);
-	}
-	return (0);
-}
-
 int 	is_only_dollars(char *str)
 {
 	int 	i;
@@ -192,10 +174,59 @@ void	check_next_token(t_token_list **curr, size_t dollar_index)
 			current = current->next;
 		}
 		*curr = current;
+		
 	
 	// if ((*current)->next && ((*current)->next->type == simple_quote
 	// 		|| (*current)->next->type == double_quote))
 	// 	remove_char(*current, dollar_index);
+}
+
+/* 
+$$$$?
+dollar_start = $$$$?
+i = 4
+dollar_start[i] = '?'
+dollar_index = 5 - 
+*/
+int	is_exit_status(t_ht_hash_table *ht, t_token_list *current,
+		char *dollar_start)
+{
+	int 	i;
+	char	*value;
+	char	*after_value;
+	char	*before_key;
+	size_t	dollar_index;
+	
+	i = 0;
+	if (!(*dollar_start))
+		return (1);  // ou 0, change r car va rien expand dans tous les cas
+	while (dollar_start[i] && dollar_start[i] == '$')
+		i++;
+	
+	if (dollar_start[i] && dollar_start[i] == '?')
+	{
+		dollar_index = current->length - ft_strlen(dollar_start + i) - 1;
+		before_key = ft_substr(current->content, 0, dollar_index);
+		value = ft_itoa(g_exit_status);
+		after_value = ft_substr(current->content, dollar_index + 2,
+				current->length);
+		update_tk_content(&current, before_key, value, after_value);
+		check_next_token(&current, current->length - ft_strlen(dollar_start) - 1);
+		return (1);
+	}
+	return (0);
+}
+
+char	*get_next_d_start(char *d_start)
+{
+	int 	i;	
+	char	*next_d_start;
+
+	i = 0;
+	while (d_start[i] && d_start[i] == '$')
+		i++;
+	next_d_start = ft_strdup(ft_strchr(d_start + i, '$')); // malloc a proteger
+	return (next_d_start);
 }
 
 void	parse_current_tk(t_ht_hash_table *ht, t_token_list *current)
@@ -212,6 +243,12 @@ void	parse_current_tk(t_ht_hash_table *ht, t_token_list *current)
 	while (d_start && *d_start)
 	{
 		d_index = current->length - ft_strlen(d_start);
+		
+		//next_d_start = get_next_d_start(d_start);
+		/* int i = 0;
+		while (d_start[i] && d_start[i] == '$')
+			i++;
+		next_d_start = ft_strdup(ft_strchr(d_start + i, '$')); */
 		next_d_start = ft_strdup(ft_strchr(d_start + 1, '$'));
 		next_d_index = current->length - ft_strlen(next_d_start);
 		if (next_d_start && *next_d_start)

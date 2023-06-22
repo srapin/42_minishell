@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_builtins.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 20:57:20 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/21 06:20:21 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/22 21:05:17 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ int	try_to_exec_builtins(t_cmd *cmd, t_cmd *first, bool is_child)
 		return (ret);
 	if (!is_child)
 	{
-		dprintf(1, "heyy");
+		//dprintf(1, "heyy");
 		if (foo != &ft_exit)
 			save_in_out(&old_in, &old_out);
 		if (!dup_cmd_file(cmd))
