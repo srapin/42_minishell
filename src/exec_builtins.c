@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_builtins.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 20:57:20 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/22 21:05:17 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/22 23:49:57 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,7 @@ int	try_to_exec_builtins(t_cmd *cmd, t_cmd *first, bool is_child)
 	if (is_child)
 		quit_builtins_child(first, ret);
 	g_exit_status = ret;
+	// dprintf(1, "g_exit_status = %d\n",  g_exit_status);
 	reset_files(old_in, old_out);
 	return (ret);
 }

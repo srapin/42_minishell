@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_check.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 04:36:57 by hlesny            #+#    #+#             */
-/*   Updated: 2023/06/21 06:43:06 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/22 23:50:16 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,7 +198,7 @@ void	check_syntax(t_data *data)
 {
 	int	parentheses_count;
 
-	dprintf(1, "syntax\n");
+	// dprintf(1, "syntax\n");
 	parentheses_count = 0;
 	if (!data || !(data->first) || !(*(data->first)))
 		return ;
