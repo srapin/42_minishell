@@ -24,6 +24,48 @@ leaks wildcards (t_filename * non free)
 
 dans reassess_buffer (ast.c), verifier si doit etre if (*buffer) ou (if *buffer && **buffer)
 
+---------------------------------------------------------------------
+var expansion : fonctionne par parité pour les $$ se succedant 
+
+bash-5.1$ cat << $"end"
+> end
+bash-5.1$ cat << $$"end"
+> end
+> $end
+> $$end
+end
+$end
+bash-5.1$ cat << $$$"end"
+> end
+> $end
+> $$end
+end
+$end
+bash-5.1$ cat << $$$$"end"
+> end
+> $end
+> $$end
+> $$$end
+> $$$$end
+end
+$end
+$$end
+$$$end
+bash-5.1$ 
+
+bash-5.1$ $"end"
+bash: end: command not found
+bash-5.1$ $$"end"
+bash: 14110end: command not found
+bash-5.1$ $$$"end"
+bash: 14110end: command not found
+bash-5.1$ $$$$"end"
+bash: 1411014110end: command not found
+-------------------------------------------------------------------
+
+
+print_export_hist ne fonctionne pas bien (quand export abc=coucou, ca ne print pas abc)
+
 
 $ exit 23163 jsahglag
 syntax

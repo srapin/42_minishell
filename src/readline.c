@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   readline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 22:15:52 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/21 06:41:26 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/22 18:36:50 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,30 +59,40 @@ int	only_whitespaces(char *str)
 	return (1);
 }
 
-/*
-readline returns the text of the line read. 
-A blank line returns the empty string. 
-If EOF is encountered while reading a line, and the line is empty, 
-NULL is returned. 
-If an EOF is read with a non-empty line, it is treated as a newline.
-*/
+void 	lexe_parse_execute(t_data *data, char *input)
+{
+	size_t stream_len;
+	t_cmd 	*cmd;
+
+	stream_len = ft_strlen(input);
+	data->first = tokenise(assign_type(input, stream_len), stream_len,
+			input);
+	signal(SIGINT, sigint_during_cmd_exec);
+	cmd = parse(data);
+	signal(SIGINT, sigint_next_prompt);
+	if (input)
+	{
+		free(input);
+		input = NULL;
+	}
+	free_cmds(&cmd, false);
+}
+
 void	read_lines(t_data *data)
 {
 	char			*input;
-	size_t			stream_len;
-	t_token_list	*tk_list;
+	//size_t			stream_len;
 	t_cmd			*cmd;
 	struct termios	termios_p;
 
 	tcgetattr(STDIN_FILENO, &termios_p);
 	input = readline("$ ");
 	cmd = NULL;
-	tk_list = NULL;
 	while (input)
 	{
 		// printf("ret %d\n", tcsetattr(STDIN_FILENO, TCSAFLUSH,&termios_p));
-		stream_len = ft_strlen(input);
-		if (!stream_len)
+		//stream_len = ft_strlen(input);
+		if (!ft_strlen(input))
 		{
 			input = readline("$ ");
 			continue ;
@@ -95,7 +105,10 @@ void	read_lines(t_data *data)
 			input = readline("$ ");
 			continue ;
 		}
-		data->first = tokenise(assign_type(input, stream_len), stream_len,
+		
+		lexe_parse_execute(data, input);
+		
+		/*data->first = tokenise(assign_type(input, stream_len), stream_len,
 				input);
 		signal(SIGINT, sigint_during_cmd_exec);
 		cmd = parse(data);
@@ -105,9 +118,7 @@ void	read_lines(t_data *data)
 			free(input);
 			input = NULL;
 		}
-		free_cmds(&cmd, false);
-			// vérifier que ca couille pas si cmd est NULL 
-            // (quand a une erreur de syntaxe, parse retourne NULL)
+		free_cmds(&cmd, false);*/
 		input = readline("$ ");
 	}
 	if (!cmd) //todo c est moche

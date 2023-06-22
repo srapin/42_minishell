@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   var_expansion.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:12:06 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/21 18:42:35 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/22 19:48:20 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,11 +161,41 @@ int	is_exit_status(t_ht_hash_table *ht, t_token_list *current,
 	return (0);
 }
 
-void	check_next_token(t_token_list **current, size_t dollar_index)
+int 	is_only_dollars(char *str)
 {
-	if ((*current)->next && ((*current)->next->type == simple_quote
-			|| (*current)->next->type == double_quote))
-		remove_char(*current, dollar_index);
+	int 	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] != '$')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+void	check_next_token(t_token_list **curr, size_t dollar_index)
+{
+	int 			dollars_count;
+	t_token_list 	*current;
+
+	current = *curr;
+	dollars_count = 0;
+	while (current && (current->type == word 
+		|| current->type == simple_quote || current->type == double_quote)
+		&& is_only_dollars(current->content))
+		{
+			dollars_count = ft_strlen(current->content);
+			if (dollars_count && dollars_count % 2)
+				remove_char(current, 0);
+			current = current->next;
+		}
+		*curr = current;
+	
+	// if ((*current)->next && ((*current)->next->type == simple_quote
+	// 		|| (*current)->next->type == double_quote))
+	// 	remove_char(*current, dollar_index);
 }
 
 void	parse_current_tk(t_ht_hash_table *ht, t_token_list *current)

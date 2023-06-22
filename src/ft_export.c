@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 23:25:02 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/21 17:22:50 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/22 17:42:20 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,23 +135,11 @@ bool	ft_lst_in(t_list *lst, char *str)
 	return (false);
 }
 
-// print toutes les variables ayant été exportées, triées par ordre alphabétique
-void	print_export_history(t_ht_hash_table *ht, t_list *export_hist)
+void 	print_sorted_hist(t_ht_hash_table *ht, t_list *export_hist, t_list *lst)
 {
 	t_list	*current_var;
-	t_list	*lst;
-	t_list	*exp;
-	t_list	*exp_next;
 	char	*str;
-
-	lst = get_sorted_hist(ht);
-	exp = export_hist;
-	while (exp)
-	{
-		exp_next = exp->next;
-		insert_in_sorted_lst(&lst, ft_lstnew(exp->content));
-		exp = exp_next;
-	}
+	
 	current_var = lst;
 	while (current_var)
 	{
@@ -163,6 +151,37 @@ void	print_export_history(t_ht_hash_table *ht, t_list *export_hist)
 			printf("%s=\"%s\"\n", (char *)current_var->content, str);
 		current_var = current_var->next;
 	}
+}
+
+// print toutes les variables ayant été exportées, triées par ordre alphabétique
+void	print_export_history(t_ht_hash_table *ht, t_list *export_hist)
+{
+	t_list	*lst;
+	t_list	*exp;
+	t_list	*exp_next;
+	//t_list	*current_var;
+	//char	*str;
+
+	lst = get_sorted_hist(ht);
+	exp = export_hist;
+	while (exp)
+	{
+		exp_next = exp->next;
+		insert_in_sorted_lst(&lst, ft_lstnew(exp->content));
+		exp = exp_next;
+	}
+	print_sorted_hist(ht, export_hist, lst);
+	/*current_var = lst;
+	while (current_var)
+	{
+		str = ht_search(ht, current_var->content);
+		if (!str && is_in_export_history(export_hist,
+				(char *)current_var->content))
+			printf("%s\n", (char *)current_var->content);
+		else if (str)
+			printf("%s=\"%s\"\n", (char *)current_var->content, str);
+		current_var = current_var->next;
+	}*/
 	ft_lstclear(&lst);
 }
 
