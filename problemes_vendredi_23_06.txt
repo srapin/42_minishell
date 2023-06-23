@@ -1,0 +1,35 @@
+$ pwd
+/Users/Helene/Desktop/42/42-projets/42_minimichel
+$ cd
+$ pwd
+/Users/Helene
+$ echo un && (echo deux || echo trois)
+un
+minishell: ./minishell: No such file or directory
+$ cd Desktop/42/42-projets/42_minimichel
+$ echo un && (echo deux || echo trois)
+un
+deux
+
+
+
+$ export l="ls -la"
+$ cat $l
+minishell(7840,0x10b31e600) malloc: *** error for object 0x7ff80784f7d2: pointer being freed was not allocated
+minishell(7840,0x10b31e600) malloc: *** set a breakpoint in malloc_error_break to debug
+[1]    7840 abort      ./minishell
+
+
+
+
+$ $""
+minishell: ring: Permission denied
+$ $""
+minishell: d38f974550dd506b4f: Permission denied
+$ $""
+minishell: : Permission denied
+-> lit trop loin dans la memoire
+PAR CONTRE quand a echo $"", ecrira tjr la chaine vide (ie rien)
+
+
+

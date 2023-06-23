@@ -5,7 +5,7 @@ CC = cc
 #CFLAGS = -Wall -Wextra -Werror -g3 -g
 CFLAGS = -g3 -g
 
-FILES = ast.c \
+FILES = ast \
 		ast_simple_command \
 		ast_set_cmd_args \
 		ast_set_cmd_args_count \
@@ -14,7 +14,7 @@ FILES = ast.c \
 		ast_subshell \
 		ast_heredocs \
 		cmd_private\
-		cmd\
+		cmd \
 		common_process\
 		del_quotes_group_words \
 		del_quotes_group_words_utils \
@@ -49,7 +49,7 @@ FILES = ast.c \
 		tools\
 		token_struct_utils \
 		var_expansion \
-		var_expansion_var_names \
+		var_expansion_var_name \
 		var_expansion_utils \
 		wildcards \
 		wildcards_utils \

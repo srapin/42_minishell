@@ -16,6 +16,9 @@ $$ && $ // leak car tu essaye de les expand
 -> SHLVL // leak
 
 
+
+
+
 signaux builtins retour (variable globale)
 
 unlink heredocs 
