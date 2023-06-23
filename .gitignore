@@ -7,3 +7,4 @@ todo_builtins.txt
 todo_exec.txt
 
 obj/*.o
+minishell

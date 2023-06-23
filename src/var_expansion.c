@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:12:06 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/23 00:24:49 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/23 01:24:54 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,8 @@ void	search_and_expand(t_ht_hash_table *ht, t_token_list **current,
 				+ ft_strlen(var) + 1, (*current)->length);
 	//}
 	update_tk_content(current, before_key, value, after_value);
-	if (*var == '?')
-		free(value);
-	free(var);
+	/* if (*var == '?')
+		free(value); */
 }
 
 /*
@@ -154,13 +153,14 @@ char	*get_valid_id(t_token_list *current, size_t dollar_index,
 		k++;
 		if (exp_case == 0)
 			var_name = ft_substr(current->content, dollar_index + 1,
-					next_dollar_index + 1 - k);
+					next_dollar_index - dollar_index - k);
 		else
 			var_name = ft_substr(current->content, dollar_index + 1,
 					current->length - dollar_index - k);
 	}
 	if (k + dollar_index <= current->length)
 		return (var_name);
+	free(var_name);
 	return (NULL);
 }
 
@@ -189,12 +189,17 @@ void	check_next_token(t_token_list **curr, size_t dollar_index)
 			|| current->type == double_quote)
 		&& is_only_dollars(current->content))
 	{
-		dollars_count = ft_strlen(current->content);
-		if (dollars_count && dollars_count % 2)
-			remove_char(current, 0);
+		if (current->next && (current->next->type == simple_quote
+			|| current->next->type == double_quote))
+			{
+				dollars_count = ft_strlen(current->content);
+				if (dollars_count && dollars_count % 2)
+					remove_char(current, 0);
+			}
 		current = current->next;
 	}
-	*curr = current;
+	//*curr = current;
+	
 	// if ((*current)->next && ((*current)->next->type == simple_quote
 	// 		|| (*current)->next->type == double_quote))
 	// 	remove_char(*current, dollar_index);
@@ -295,6 +300,7 @@ void	parse_current_tk(t_ht_hash_table *ht, t_token_list *current)
 			check_next_token(&current, d_index);
 		free(d_start);
 		d_start = next_d_start;
+		free(var_name);
 	}
 	free(d_start);
 	d_start = NULL;

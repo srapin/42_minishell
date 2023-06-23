@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 21:44:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/22 23:53:56 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/23 02:30:13 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ void	reassess_buffer(t_cmd **curr_cmd, char **buffer, int *i)
 {
 	if (!buffer)
 		return ;
-	if (*buffer)
+	if (*buffer && **buffer)
 	{
 		(*curr_cmd)->val.args[*i] = ft_strdup(*buffer);
 		(*i)++;

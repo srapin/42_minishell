@@ -20,7 +20,14 @@ signaux builtins retour (variable globale)
 
 unlink heredocs 
 
-leaks wildcards (t_filename * non free)
+$ $""
+minishell: ring: Permission denied
+$ $""
+minishell: d38f974550dd506b4f: Permission denied
+$ $""
+minishell: : Permission denied
+-> lit trop loin dans la memoire
+PAR CONTRE quand a echo $"", ecrira tjr la chaine vide (ie rien)
 
 dans reassess_buffer (ast.c), verifier si doit etre if (*buffer) ou (if *buffer && **buffer)
 
@@ -63,6 +70,8 @@ bash-5.1$ $$$$"end"
 bash: 1411014110end: command not found
 -------------------------------------------------------------------
 
+
+leaks wildcards (t_filename * non free)
 
 print_export_hist ne fonctionne pas bien (quand export abc=coucou, ca ne print pas abc)
 
