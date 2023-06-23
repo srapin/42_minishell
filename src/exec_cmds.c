@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmds.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 02:05:40 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/22 23:46:22 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/23 22:38:33 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,11 @@ void	launch_process(t_cmd **cmd, t_cmd *first, int *pip_tab, bool need_pip)
 	if ((*cmd)->pid < 0)
 		fail_process();
 	if ((*cmd)->pid == 0)
+	{
+		//dprintf(2, "MYPID %d\n", getpid());
+		//sleep(10000);
 		child_process(*cmd, first, pip_tab);
+	}
 	if ((*cmd)->pid > 0)
 		parent_process(cmd, pip_tab);
 }

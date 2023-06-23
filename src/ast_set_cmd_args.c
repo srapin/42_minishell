@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_set_cmd_args.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:03:43 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/23 15:06:50 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/23 17:42:56 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void	split_not_merged_no_quotes(t_cmd **curr_cmd, t_token_list *curr_tk,
 
 	p_wht_pos = 0;
 	wht_pos = get_whtsp_pos(curr_tk->content, p_wht_pos);
+	buffer = NULL;
 	while (wht_pos != -1)
 	{
 		//tmp = buffer;

@@ -135,7 +135,6 @@ void link_cmds_with_ctrls_op(t_cmd *cmd, t_cmd *next, ctrl_op c);
 int count_cmds_linked_by_pipe(t_cmd *first_cmd);
 void	safe_pipe(int pipe_tab[2]);
 void	fail_process(void);
-void	safe_close(int *fd);
 //to test
 bool open_cmd_files(t_cmd * cmd);
 void	parent_process(t_cmd **cmd, int pipe_tab[2]);

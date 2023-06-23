@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_subshell.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:09:03 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/23 15:09:35 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/23 22:36:47 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,43 @@ void	write_in_file(t_token_list **curr_tk, int fd_subshell)
 	*curr_tk = current_tk;
 }
 
-void	set_subshell_attributs(t_cmd *current_cmd, char *subshell_filename)
+char	*get_subshell_command(t_token_list **curr_tk)
 {
+	int				open_parentheses;
+	char 			*subshell_cmd;
+	char 			*tmp;
+	t_token_list	*current_tk;
+
+	open_parentheses = 1;
+	current_tk = (*curr_tk)->next;
+	tmp = NULL;
+	subshell_cmd = NULL;
+	while (current_tk)
+	{
+		if (current_tk->type == l_parenthesis)
+			open_parentheses++;
+		if (current_tk->type == r_parenthesis)
+			open_parentheses--;
+		if (!open_parentheses)
+			break ;
+		tmp = subshell_cmd;
+		subshell_cmd = ft_strjoin(tmp, current_tk->content);
+		free(tmp);
+		/* if (write(fd_subshell, current_tk->content, current_tk->length) == -1)
+			perror("write "); */
+		current_tk = current_tk->next;
+	}
+	if (current_tk)
+		current_tk = current_tk->next;
+	*curr_tk = current_tk;
+	return (subshell_cmd);
+}
+
+void	set_subshell_attributs(t_cmd *current_cmd, t_token_list **curr_tk)
+{
+	char 	*subshell_cmd;
+
+	subshell_cmd = get_subshell_command(curr_tk);
 	current_cmd->val.value = ft_strdup("./minishell");
 	current_cmd->val.args = malloc(sizeof(char *) * 3);
 	if (!current_cmd->val.args)
@@ -94,28 +129,30 @@ void	set_subshell_attributs(t_cmd *current_cmd, char *subshell_filename)
 		return ;
 	}
 	current_cmd->val.args[0] = ft_strdup("./minishell");
-	current_cmd->val.args[1] = ft_strdup(subshell_filename);
+	current_cmd->val.args[1] = ft_strdup(subshell_cmd);
 	current_cmd->val.args[2] = NULL;
-	free(subshell_filename);
-	subshell_filename = NULL;
+	free(subshell_cmd);
+	subshell_cmd = NULL;
 }
 
 void	set_subshell(t_cmd *current_cmd, t_token_list **curr_tk)
 {
-	int				fd_subshell;
-	char			*subshell_filename;
-	t_token_list	*current_tk;
-
-	if (!current_cmd || !curr_tk)
+	char 	*subshell_cmd;
+	
+	if (!current_cmd)
 		return ;
-	subshell_filename = random_subshell_fname();
-	ft_lstadd_back(&(current_cmd->filenames), ft_lstnew(subshell_filename));	
-	fd_subshell = open(subshell_filename, O_CREAT | O_WRONLY, 00700);
-	if (fd_subshell == -1)
+	subshell_cmd = get_subshell_command(curr_tk);
+	current_cmd->val.value = ft_strdup("./minishell");
+	current_cmd->val.args = malloc(sizeof(char *) * 3);
+	if (!current_cmd->val.args)
 	{
-		perror("open ");
-		// free everything and return
+		perror("malloc ");
+		return ;
 	}
-	write_in_file(curr_tk, fd_subshell);
-	set_subshell_attributs(current_cmd, subshell_filename);
+	current_cmd->val.args[0] = ft_strdup("./minishell");
+	current_cmd->val.args[1] = ft_strdup(subshell_cmd);
+	current_cmd->val.args[2] = NULL;
+	free(subshell_cmd);
+	subshell_cmd = NULL;
+	//set_subshell_attributs(current_cmd, curr_tk);
 }

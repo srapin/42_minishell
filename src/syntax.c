@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   syntax_check.c                                     :+:      :+:    :+:   */
+/*   syntax.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 04:36:57 by hlesny            #+#    #+#             */
-/*   Updated: 2023/06/23 15:23:06 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/23 20:15:59 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	check_syntax(t_data *data)
 {
 	int	parentheses_count;
 
-	// dprintf(1, "syntax\n");
+	/* dprintf(1, "syntax\n"); */
 	parentheses_count = 0;
 	if (!data || !(data->first) || !(*(data->first)))
 		return ;
@@ -73,6 +73,7 @@ void	check_syntax(t_data *data)
 		exit(SYNTAX_ERROR);
 	}
 	free_parsing_data(data);
+	//dprintf(1, "syntax\n pid = %d\n", getpid());
 	exit(EXIT_SUCCESS);
 }
 

@@ -20,6 +20,8 @@ minishell(7840,0x10b31e600) malloc: *** set a breakpoint in malloc_error_break t
 [1]    7840 abort      ./minishell
 
 
+compiler avec flagd 
+utiliser scan-build-12 
 
 
 $ $""

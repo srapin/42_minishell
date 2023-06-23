@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 19:32:17 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/23 15:00:14 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/23 21:47:57 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,16 @@ void	print_ht(t_ht_hash_table *ht)
 					ht->items[i]->value);
 		}
 	}
+}
+
+void 	exec_command(t_data *data, char *command)
+{
+	t_token_list 	*tk_list;
+	
+	// checker s'il y a un \n. si c'est le cas, ne fait rien (pour eviter qu on nous pqsse des commqndes cheums en arg)
+	data->first = tokenise(assign_type(command, ft_strlen(command)), ft_strlen(command), 
+		command);	
+	parse_and_execute(data);
 }
 
 void	exec_script(t_data *data, char *path)
@@ -49,6 +59,7 @@ void	exec_script(t_data *data, char *path)
 		free(line);
 		line = get_next_line(fd);
 	}
+	dprintf(2, "about to unlink %s\n", path);
 	unlink(path);
 	safe_close(&fd);
 }
@@ -60,13 +71,30 @@ void	initialise_data(t_data *data)
 	data->exp_history = NULL;
 	data->env = NULL;
 }
+void write_to_file(const char *name, const char *text)
+{
+	int num;
+	FILE *fptr;
 
+	// use appropriate location if you are using MacOS or Linux
+	fptr = fopen("name","w");
+
+	if(fptr == NULL)
+	{
+    	printf("Error!");   
+    	exit(1);             
+	}
+
+	fprintf(fptr,"%s",text);
+	fclose(fptr);
+}
 int	main(int argc, char **argv, char **envp)
 {
 	char *pwd;
 	t_data data;
 	t_ht_hash_table *hash_map;
 
+	//write_to_file("/mnt/nfs/homes/hlesny/42/42cursus/42_minimicheln/lalaal", "TUTUTU");
 	initialise_data(&data);
 	signal(SIGINT, sigint_next_prompt);
 	if (argc > 2)
@@ -86,5 +114,5 @@ int	main(int argc, char **argv, char **envp)
 	if (argc == 1)
 		read_lines(&data);
 	else
-		exec_script(&data, argv[1]);
+		exec_command(&data, argv[1]);
 }
