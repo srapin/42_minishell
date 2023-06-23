@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 19:32:17 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/23 03:17:25 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/23 15:00:14 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	exec_script(t_data *data, char *path)
 	line = get_next_line(fd);
 	data->first = tokenise(assign_type(line, ft_strlen(line)), ft_strlen(line),
 			line);
-	parse(data);
+	parse_and_execute(data);
 	while (line)
 	{
 		free(line);

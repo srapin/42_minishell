@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 02:12:27 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/23 03:17:01 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/23 14:45:08 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ void unlink_files(t_data *data)
 }
 
 // peut le mettre dans le meme fichier que readline en vrai
-t_cmd	*parse(t_data *data)
+t_cmd	*parse_and_execute(t_data *data)
 {
 	int wstatus;
 	t_cmd *ast;

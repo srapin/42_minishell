@@ -3,73 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   wildcards_second_sort.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 01:36:57 by hlesny            #+#    #+#             */
-/*   Updated: 2023/06/22 22:21:33 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/23 15:34:06 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// ft_search_str_in_str() renvoie NULL en cas d'échec
-char	*ft_search_str_in_str(char *s, char *to_find)
-{
-	int	i;
-	int	j;
-
-	if (!s || ft_strlen(to_find) > ft_strlen(s))
-		return (NULL);
-	if (!ft_strlen(to_find))
-		return (s);
-	i = -1;
-	j = 0;
-	while (s[++i])
-	{
-		if (s[i] == to_find[j])
-		{
-			while (s[i] == to_find[j])
-			{
-				i++;
-				j++;
-			}
-			if (s[i] || (!s[i] && !to_find[j]))
-				return (&s[i - j + 1]);
-			i -= j;
-			j = 0;
-		}
-	}
-	return (NULL);
-}
-
-int	get_next_wcard_index(t_token_list *current, size_t index)
-{
-	int	i;
-
-	i = index;
-	while (current->content[i])
-	{
-		if (current->content[i] == '*' && !is_in_quotes(current, i))
-			return (i);
-		i++;
-	}
-	return (-1);
-}
-
-void	del_filename(t_filename **first, t_filename *to_del)
-{
-	t_filename	*current;
-
-	current = (*first);
-	while (current->next && current->next != to_del)
-		current = current->next;
-	if (!current->next)
-		return ;
-	current->next = to_del->next;
-	free(to_del->filename);
-	free(to_del);
-	to_del = NULL;
-}
 
 void	parse_current_filename(t_filename **filenames, t_filename *current_f,
 		t_token_list *current, size_t prefix_len)

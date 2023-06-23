@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 00:40:45 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/21 04:26:39 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/23 15:13:55 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,37 +143,6 @@ t_token_list	**tokenise(t_token *token_stream, size_t stream_len,
 	if (!first)
 		return (NULL);
 	merge_single_tokens(&tk_list, input, token_stream, stream_len);
-		// ajouté chez oim le mardi 20 en fin d'aprem et ca leak
-	/* while (i < stream_len)
-    {
-        
-        current = token_stream[i].type;
-         if (i < stream_len && (current == r_parenthesis
-			|| current == l_parenthesis))
-         {
-             tk_add(&tk_list, tk_new_elem(&input[i], 1, current, 0));
-             i++;
-         }
-         else if (i < stream_len && (current == simple_quote
-			|| current == double_quote))
-         {
-             j = i;
-             i++;
-             while (i < stream_len && token_stream[i].type != current)
-                 i++;
-             if (i < stream_len)
-                 i++;
-             tk_add(&tk_list, tk_new_elem(&input[j], i - j, current, 
-                 (current == simple_quote) + (current == double_quote) * 2));
-         }
-         else if (i < stream_len)
-         {
-             j = i;
-             while (i < stream_len && token_stream[i].type == current)
-                 i++;
-             tk_add(&tk_list, tk_new_elem(&input[j], i - j, current, 0));
-         }
-    } */
 	free(token_stream);
 	token_stream = NULL;
 	*first = tk_list;

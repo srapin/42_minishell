@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 00:59:44 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/22 23:31:41 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/23 14:46:54 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 /* Quel que soit le nombre d'arguments donnés, il printera dans
 tous les cas le chemin absolu vers le dossier courant */
 // quels cas d'erreur à gérer ?????
-path	*get_pwd(t_ht_hash_table *env)
+char	**get_pwd(t_ht_hash_table *env)
 {
-	static path	pwd; 
+	static char	*pwd; 
 
 	if (!pwd)
 		pwd = ft_strdup(ht_search(env, "PWD"));

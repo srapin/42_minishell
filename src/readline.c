@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   readline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 22:15:52 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/22 23:25:32 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/23 15:00:38 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void 	lexe_parse_execute(t_data *data, char *input)
 	data->first = tokenise(assign_type(input, stream_len), stream_len,
 			input);
 	signal(SIGINT, sigint_during_cmd_exec);
-	cmd = parse(data);
+	cmd = parse_and_execute(data);
 	signal(SIGINT, sigint_next_prompt);
 	if (input)
 	{

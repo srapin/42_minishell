@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   var_expansion.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:12:06 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/23 01:24:54 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/23 15:30:26 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,22 +32,7 @@ If a parameter expansion occurs inside double-quotes:
     Field splitting shall not be performed on the results of the expansion.
 */
 
-void	update_tk_content(t_token_list **current, char *before_key, char *value,
-		char *after_value)
-{
-	char	*tmp;
 
-	free((*current)->content);
-	tmp = ft_strjoin(before_key, value);
-	(*current)->content = ft_strjoin(tmp, after_value);
-	(*current)->length = ft_strlen((*current)->content);
-	free(before_key);
-	free(after_value);
-	free(tmp);
-	before_key = NULL;
-	after_value = NULL;
-	tmp = NULL;
-}
 
 void	search_and_expand(t_ht_hash_table *ht, t_token_list **current,
 		char *var, size_t dollar_index)
@@ -90,6 +75,8 @@ si b etait exporte avant a, alors on aurait a="coucou test"
 du fait du fonctionnement du builtin export
 */
 
+
+// cette fonction ne sert plus a rien : a tej !!!
 void	expand(t_ht_hash_table *ht, t_token_list **current, char *var,
 		size_t dollar_index)
 {
@@ -105,104 +92,6 @@ void	expand(t_ht_hash_table *ht, t_token_list **current, char *var,
 		return ;
 	}
 	search_and_expand(ht, current, var, dollar_index);
-}
-
-char	*set_var_name(t_token_list *current, size_t dollar_index,
-		size_t next_dollar_index, int exp_case)
-{
-	int		k;
-	char	*var_name;
-
-	k = 1;
-	if (exp_case == 1)
-		k = 2;
-	/* var_name = set_var_name(current, dollar_index,
-			next_dollar_index,exp_case); */
-	if (exp_case == 0)
-		var_name = ft_substr(current->content, dollar_index + 1,
-				next_dollar_index - dollar_index - 1);
-	else
-		var_name = ft_substr(current->content, dollar_index + 1, current->length
-				- dollar_index - k);
-	return (var_name);
-}
-
-/* Returns NULL in case no valid identifier follows the '$' at the given <dollar_index> index
-Case 0 : is followed by another dollar sign (ie next_dollar_index != -1)
-Case 1 : is inside double quotes
-Case 2 : not followed by another dollar sign, and not in quotes */
-char	*get_valid_id(t_token_list *current, size_t dollar_index,
-		size_t next_dollar_index, int exp_case)
-{
-	int		k;
-	char	*var_name;
-
-	k = 1;
-	if (exp_case == 1)
-		k = 2;
-	var_name = set_var_name(current, dollar_index, next_dollar_index, exp_case);
-	/* if (exp_case == 0)
-		var_name = ft_substr(current->content, dollar_index + 1,
-				next_dollar_index + 1);
-	else
-		var_name = ft_substr(current->content, dollar_index + 1, current->length
-				- dollar_index - k); */
-	while (k + dollar_index <= current->length && !valid_name(var_name))
-	{
-		free(var_name);
-		k++;
-		if (exp_case == 0)
-			var_name = ft_substr(current->content, dollar_index + 1,
-					next_dollar_index - dollar_index - k);
-		else
-			var_name = ft_substr(current->content, dollar_index + 1,
-					current->length - dollar_index - k);
-	}
-	if (k + dollar_index <= current->length)
-		return (var_name);
-	free(var_name);
-	return (NULL);
-}
-
-int	is_only_dollars(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] != '$')
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
-void	check_next_token(t_token_list **curr, size_t dollar_index)
-{
-	int				dollars_count;
-	t_token_list	*current;
-
-	current = *curr;
-	dollars_count = 0;
-	while (current && (current->type == word || current->type == simple_quote
-			|| current->type == double_quote)
-		&& is_only_dollars(current->content))
-	{
-		if (current->next && (current->next->type == simple_quote
-			|| current->next->type == double_quote))
-			{
-				dollars_count = ft_strlen(current->content);
-				if (dollars_count && dollars_count % 2)
-					remove_char(current, 0);
-			}
-		current = current->next;
-	}
-	//*curr = current;
-	
-	// if ((*current)->next && ((*current)->next->type == simple_quote
-	// 		|| (*current)->next->type == double_quote))
-	// 	remove_char(*current, dollar_index);
 }
 
 /* 
@@ -245,31 +134,6 @@ int	is_exit_status(t_ht_hash_table *ht, t_token_list *current,
 	return (0);
 }
 
-char	*get_next_d_start(char *d_start)
-{
-	int		i;
-	char	*next_d_start;
-
-	i = 0;
-	while (d_start[i] && d_start[i] == '$')
-		i++;
-	next_d_start = ft_strdup(ft_strchr(d_start + i, '$')); // malloc a proteger
-	return (next_d_start);
-}
-
-char	*get_var_name(t_token_list *current, char *next_d_start, size_t d_index,
-		size_t next_d_index)
-{
-	char	*var_name;
-
-	if (next_d_start && *next_d_start)
-		var_name = get_valid_id(current, d_index, next_d_index, 0);
-	else if (current->type == double_quote)
-		var_name = get_valid_id(current, d_index, next_d_index, 1);
-	else
-		var_name = get_valid_id(current, d_index, next_d_index, 2);
-	return (var_name);
-}
 
 void	parse_current_tk(t_ht_hash_table *ht, t_token_list *current)
 {

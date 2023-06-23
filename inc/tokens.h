@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokens.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 18:15:56 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/23 00:33:26 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/23 14:50:02 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,16 @@
 
 enum e_t_types
 {
-    word, // anything that isn't one of the above
+    word,
     simple_quote,
     double_quote,
     r_parenthesis,
     l_parenthesis,
-    l_io_redirect, // '<'
-    r_io_redirect, // '>' 
-    and_tk, // '&'
-    or_tk, // |
-    whitespace // ' ', '\t', or '\n'
+    l_io_redirect,
+    r_io_redirect,
+    and_tk,
+    or_tk,
+    whitespace
 };
 
 enum e_quotes
@@ -38,7 +38,7 @@ enum e_quotes
 
 typedef struct  s_token
 {
-    int     type; /* Token type. */
+    int     type;
     char    content;
 }               t_token;
 
@@ -60,13 +60,11 @@ typedef struct s_filename
 
 typedef struct  s_token_list
 {
-    int             type; /* Token type. */
-    char            *content; /* Zero terminated string. */
-    size_t          length; /* Content length. Useful ? */
-    int             quotes; // 0 : token does not contain quotes. 1 : token contains single quotes. 2 : contains double quotes
-    t_word_data     *merged_words; // lien vers les <word> suivants parmi ceux ayant été merged ; est à NULL s'il s'agit d'un token "individuel" (ie pas un <word> ayant été merged avec d'autres <word>)
-    //t_list          *before_exp;
-    
+    int                 type;
+    char                *content;
+    size_t              length;
+    int                 quotes;
+    t_word_data         *merged_words;
     struct s_token_list *prev;
     struct s_token_list *next;
 }               t_token_list;

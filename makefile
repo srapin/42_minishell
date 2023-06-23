@@ -5,44 +5,58 @@ CC = cc
 #CFLAGS = -Wall -Wextra -Werror -g3 -g
 CFLAGS = -g3 -g
 
-FILES = cmd_private\
+FILES = ast.c \
+		ast_simple_command \
+		ast_set_cmd_args \
+		ast_set_cmd_args_count \
+		ast_set_cmd_utils \
+		ast_utils \
+		ast_subshell \
+		ast_heredocs \
+		cmd_private\
 		cmd\
 		common_process\
+		del_quotes_group_words \
+		del_quotes_group_words_utils \
 		exec_cmds \
 		exec_builtins \
 		file_struct_priv\
 		file_struct_pub\
-		main \
-		next\
-		redir_pub\
-		safer\
-		tools\
-		hash_table \
-		ht_search_modify \
-		ht_insert \
-		ht_delete \
-		readline \
-		token_struct_utils \
-		lexer \
-		syntax_check \
-		parser \
-		quotes \
-		var_expansion \
-		wildcards \
-		wildcards_first_sort \
-		wildcards_second_sort \
 		free_tokens \
+		free_cmds \
 		ft_env \
 		ft_export \
 		ft_unset \
 		ft_cd \
 		ft_pwd \
 		ft_exit \
+		get_env \
+		hash_table \
+		ht_search_modify \
+		ht_insert \
+		ht_delete \
+		lexer \
+		main \
+		next\
+		parser \
+		redir_pub \
+		readline \
+		safer\
+		syntax \
+		syntax_simple_command \
+		syntax_pipeline \
 		signal \
-		ast_heredocs \
-		ast\
-		free_cmds \
-		get_env 
+		tools\
+		token_struct_utils \
+		var_expansion \
+		var_expansion_var_names \
+		var_expansion_utils \
+		wildcards \
+		wildcards_utils \
+		wildcards_first_sort \
+		wildcards_first_sort_utils \
+		wildcards_second_sort \
+		wildcards_second_sort_utils
 
 #PARSING_FILES = 	ast \
 					ast_heredocs
