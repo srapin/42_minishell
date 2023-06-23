@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/20 04:16:54 by hlesny            #+#    #+#             */
-/*   Updated: 2023/06/21 04:25:42 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/23 02:48:26 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,10 @@ t_ht_hash_table	*ht_get_env(char **envp)
 					ft_strlen(envp[i])));
 		i++;
 	}
-	set_shell_level(ht);
+	if (!ht_search(ht, "SHLVL"))
+		ht_insert_item(ht, ft_strdup("SHLVL"), ft_strdup("0"));
+	else
+		set_shell_level(ht);
 	return (ht);
 }
 

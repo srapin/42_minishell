@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 00:57:49 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/21 18:33:02 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/23 02:27:59 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int	check_long_overflow(t_cmd *cmd, t_cmd *first)
 	}
 	exit_status = (unsigned char)initial_nb;
 	free_cmds(&first, true);
-	printf("exit\n");
+	write(STDERR_FILENO, "exit\n", 5);
 	exit(exit_status);
 }
 
