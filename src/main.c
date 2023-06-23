@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 19:32:17 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/23 21:47:57 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/23 23:09:54 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,14 @@ void	print_ht(t_ht_hash_table *ht)
 void 	exec_command(t_data *data, char *command)
 {
 	t_token_list 	*tk_list;
+	t_cmd 			*cmd;
 	
 	// checker s'il y a un \n. si c'est le cas, ne fait rien (pour eviter qu on nous pqsse des commqndes cheums en arg)
 	data->first = tokenise(assign_type(command, ft_strlen(command)), ft_strlen(command), 
 		command);	
-	parse_and_execute(data);
+	cmd = parse_and_execute(data);
+	free_parsing_data(data);
+	free_cmds(&cmd, false);
 }
 
 void	exec_script(t_data *data, char *path)
