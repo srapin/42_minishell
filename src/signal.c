@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/11 22:38:56 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/23 14:59:14 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/23 22:38:10 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,14 @@ int		g_exit_status;
 
 void sigint_next_prompt(int sig)
 {
-	// ////dprintf(1, "sigint");
+	// //////dprintf(1, "sigint");
 	g_exit_status = 130;
 	ft_putstr_fd("\n", 1);
 
 	
-	// rl_replace_line("", 1);
-	// rl_on_new_line();
-	// rl_redisplay();
+	rl_replace_line("", 1);
+	rl_on_new_line();
+	rl_redisplay();
 }
 
 void	sigint_during_cmd_exec(int sig)

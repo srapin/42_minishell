@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 02:05:40 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/22 23:46:22 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/23 22:38:10 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	launch_process(t_cmd **cmd, t_cmd *first, int *pip_tab, bool need_pip)
 			return ;
 		}
 	}
+	//dprintf(1, "launch process =%s}\n", (*cmd)->val.value);
 	(*cmd)->pid = fork();
 	if ((*cmd)->pid < 0)
 		fail_process();

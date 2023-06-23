@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   var_expansion_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:26:43 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/23 15:30:00 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/23 22:38:10 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ void	remove_char(t_token_list *current, size_t index)
 	}
 	free(current->content);
 	current->content = ft_strjoin(before, after);
+	//dprintf(1, "content = %s\n", current->content);
 	current->length--;
 	free(before);
 	free(after);

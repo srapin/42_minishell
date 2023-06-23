@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   syntax_check.c                                     :+:      :+:    :+:   */
+/*   syntax.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 04:36:57 by hlesny            #+#    #+#             */
-/*   Updated: 2023/06/23 15:23:06 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/23 22:38:10 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	check_syntax(t_data *data)
 {
 	int	parentheses_count;
 
-	// dprintf(1, "syntax\n");
+	// //dprintf(1, "syntax\n");
 	parentheses_count = 0;
 	if (!data || !(data->first) || !(*(data->first)))
 		return ;

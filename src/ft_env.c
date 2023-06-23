@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 20:39:18 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/21 04:24:14 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/23 22:38:10 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	print_env(t_ht_hash_table *ht)
 /* A gerer sans options et sans arguments */
 int	ft_env(t_cmd *cmd, t_cmd *first)
 {
-	//////dprintf(1, "coucou depuis ft_env()\n");
+	////////dprintf(1, "coucou depuis ft_env()\n");
 	if (cmd->val.args[1])
 	{
 		printf("Error : env : too many arguments given. Zero needed\n");
