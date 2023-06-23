@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 19:32:17 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/22 23:22:10 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/23 02:10:50 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,13 @@ void	exec_script(t_data *data, char *path)
 		line = get_next_line(fd);
 	}
 	unlink(path);
-	close(fd);
+	safe_close(&fd);
 }
 
 void	initialise_data(t_data *data)
 {
 	data->first = NULL;
-	data->first = NULL;
+	data->files = NULL;
 	data->exp_history = NULL;
 	data->env = NULL;
 }
@@ -80,7 +80,6 @@ int	main(int argc, char **argv, char **envp)
 		hash_map = ht_get_env(envp);
 	if (!hash_map)
 		return (1); // do we return ? which exit status ?
-	pwd = *get_pwd(hash_map);
 	t_list *exp_hist = init_export_history(hash_map);
 	data.env = hash_map;
 	data.exp_history = exp_hist;

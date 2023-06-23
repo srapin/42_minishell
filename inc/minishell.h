@@ -60,7 +60,7 @@ void exec_cmds(t_cmd *first_cmd); //to div
 int try_to_exec_builtins(t_cmd *cmd, t_cmd *first, bool is_child);
 
 //heredoc
-// void heredoc(t_cmd *cmd);
+// void heredoc(t_cmd *cmd)t_token_list
 #include <termios.h>
 //next
 bool check_ret(t_cmd *cmd, int ret);

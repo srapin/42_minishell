@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:50:05 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/22 23:49:36 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/23 02:11:16 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ void	wait_childs(t_cmd *origin)
 	cmd = origin;
 	
 	ret = g_exit_status;
+	f_status = g_exit_status;
 	status = 0;
 	while (cmd)
 	{

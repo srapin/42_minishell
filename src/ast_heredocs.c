@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_heredocs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 23:24:33 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/22 22:25:07 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/23 01:54:14 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*random_filename()
 
 	count = ft_itoa(files_count);
 	filename = ft_strjoin("/tmp/here_doc_tmp_", count);
-	while (access(filename, F_OK | R_OK | W_OK) == 0)
+	while (access(filename, F_OK) == 0)
 	{
 		free(filename);
 		free(count);
@@ -186,7 +186,7 @@ int	set_quotes(t_token_list *current)
 */
 
 // void	set_hd_filenames(t_ht_hash_table *ht, t_token_list *current)
-void	set_hd_filenames(t_token_list *current)
+void	set_hd_filenames(t_token_list *current, t_data *data)
 {
 	char	*file_name;
 
@@ -195,10 +195,11 @@ void	set_hd_filenames(t_token_list *current)
 		if (current->type == l_io_redirect && current->length == 2)
 		{
 			file_name = random_filename();
+			ft_lstadd_back(&(data->files), ft_lstnew(file_name));
 			// current->length = 1;
 			// free(current->next->content);
 			tk_add_word_in_list(&current, file_name);
-			free(file_name);
+			// free(file_name);
 		}
 		// ie est un here doc
 		// current->next->content = file_name;
@@ -235,9 +236,9 @@ void	hd_sigint(int i)
 {
 	// ////dprintf(1, "sig press \n");
 	g_exit_status = 130;
-	close(0);
-	close(1);
-	close(2);
+	close(STDIN_FILENO);
+	close(STDOUT_FILENO);
+	close(STDERR_FILENO);
 }
 
 void	hd_child_process(t_data *data)
@@ -298,7 +299,7 @@ bool	set_here_docs(t_data *data)
 	//current = *first;
 	first = *(data->first);
 	// set_hd_filenames(ht, current);
-	set_hd_filenames(first);
+	set_hd_filenames(first, data);
 	// ////dprintf(1, "heyyyy\n");
 	pid = fork();
 	if (pid < 0)

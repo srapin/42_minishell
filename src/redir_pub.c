@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:11:02 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/21 02:47:54 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/23 02:12:06 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ t_redirect	*create_redir(void)
 {
 	t_redirect	*red;
 
-	red = malloc(sizeof(red));
+	red = malloc(sizeof(t_redirect));
 	init_redirections(red);
 	return (red);
 }

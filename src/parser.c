@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 02:12:27 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/22 21:16:52 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/23 01:17:52 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,19 @@ void	print_ast(t_cmd *ast)
 	}
 }
 
+void unlink_files(t_data *data)
+{
+	t_list *lst;
+
+	lst = data->files;
+	while(lst)
+	{
+		unlink(lst->content);
+		lst = lst->next;	
+	}
+	ft_lstfree(&(data->files), free);
+}
+
 // peut le mettre dans le meme fichier que readline en vrai
 t_cmd	*parse(t_data *data)
 {
@@ -138,5 +151,6 @@ t_cmd	*parse(t_data *data)
 	free_tokens(data->first);
 	data->first = NULL;
 	exec_cmds(ast);
+	unlink_files(data);	
 	return (ast);
 }

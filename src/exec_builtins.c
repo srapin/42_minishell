@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 20:57:20 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/22 23:49:57 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/23 02:04:02 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,10 +72,12 @@ int	(*get_builtins_foo(char *str))(t_cmd *cmd, t_cmd *first)
 
 int	reset_files(int old_in, int old_out)
 {
-	dup2(old_in, STDIN_FILENO);
-	dup2(old_out, STDOUT_FILENO);
-	close(old_in);
-	close(old_out);
+	if (old_in < 0)
+		dup2(old_in, STDIN_FILENO);
+	if (old_out < 0)
+		dup2(old_out, STDOUT_FILENO);
+	safe_close(&old_in);
+	safe_close(&old_out);
 	return (1);
 }
 
@@ -112,8 +114,8 @@ int	try_to_exec_builtins(t_cmd *cmd, t_cmd *first, bool is_child)
 		if (!dup_cmd_file(cmd))
 			return (reset_files(old_in, old_out));
 	}
-	else if (foo == &ft_exit)
-		close(STDOUT_FILENO);
+	// else if (foo == &ft_exit)
+	// 	close(STDOUT_FILENO);
 	ret = foo(cmd, first);
 	if (is_child)
 		quit_builtins_child(first, ret);

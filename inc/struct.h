@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:03:15 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/21 02:53:21 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/23 00:49:19 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,6 @@ typedef enum ctrl_op
 	and,
 	or
 }					ctrl_op;
-
-typedef enum type_redirect
-{
-	noneu,
-	fd,
-	cmds_cmd,
-	pipeu
-}					type_redirect;
 
 typedef struct s_cmd_value
 {
@@ -71,19 +63,6 @@ typedef struct redirect
 	t_cmd	*next_cmd;
 	int in_fd;
 	int out_fd;
-
-
-	/*
-	type_redirect	in_type;
-	int				in_fd;
-	void *in_content; // soit un t_node soit un file_struct
-	type_redirect	out_type;
-	int				out_fd;
-	void *out_content; // soit un t_node soit un file_struct
-	type_redirect	err_type;
-	int				err_fd;
-	void *err_content; // soit un t_node soit un file_struct
-	*/
 }					t_redirect;
 
 typedef struct cmd
@@ -92,6 +71,7 @@ typedef struct cmd
 	t_redirect 		red; 
 	t_ht_hash_table *env;
 	t_list 			*export_history;
+	t_list 			*filenames;
 	int				pid;
 	ctrl_op			ctrl;
 	struct cmd		*next;

@@ -14,7 +14,7 @@
 
 void	safe_close(int *fd)
 {
-	if (*fd > -1)
+	if (*fd > 2)
 	{
 		close(*fd);
 		*fd = -1;

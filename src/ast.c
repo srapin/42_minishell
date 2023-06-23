@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 21:44:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/22 23:53:56 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/23 00:54:11 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -408,7 +408,7 @@ char	*random_subshell_fname(void)
 
 	count = ft_itoa(files_count);
 	filename = ft_strjoin("/tmp/subshell_args_", count);
-	while (access(filename, F_OK | R_OK | W_OK) == 0)
+	while (access(filename, F_OK) == 0)
 	{
 		free(filename);
 		free(count);
@@ -432,6 +432,7 @@ t_cmd	*init_new_cmd(t_data *data)
 	}
 	cmd->env = data->env;
 	cmd->export_history = data->exp_history;
+	cmd->filenames = data->files;
 	init_redirections(&(cmd->red));
 	cmd->val.value = NULL;
  	cmd->val.args = NULL;
@@ -515,6 +516,7 @@ void	set_subshell(t_cmd *current_cmd, t_token_list **curr_tk)
 	if (!current_cmd || !curr_tk)
 		return ;
 	subshell_filename = random_subshell_fname();
+	ft_lstadd_back(&(current_cmd->filenames), ft_lstnew(subshell_filename));	
 	fd_subshell = open(subshell_filename, O_CREAT | O_WRONLY, 00700);
 	if (fd_subshell == -1)
 	{

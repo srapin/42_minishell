@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_cmds.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 16:39:50 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/21 02:55:01 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/23 00:50:45 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ void	free_common(t_cmd *cmd)
 	free_pwd(cmd->env);
 	ht_del_hash_table(cmd->env);
 	ft_lstfree(&(cmd->export_history), free);
+	ft_lstfree(&(cmd->filenames), free);
 }
 
 void	rec_free_commands(t_cmd *cmd)

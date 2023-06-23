@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 01:02:42 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/21 05:36:21 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/23 02:10:41 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ void	failed_to_open_files(t_cmd *first)
 {
 	int	e;
 
-	e = errno;
 	free_cmds(&first, true);
 	exit(CMD_NOT_FOUND);
 }
