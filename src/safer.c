@@ -43,8 +43,13 @@ bool	check_acces(t_cmd *cmd)
 	char	**paths;
 
 	i = 0;
+	if (!cmd->val.value || !cmd->val.value[0])
+	{
+		errno = ENOENT;
+		return false;
+	}
 	paths = get_path(cmd);
-	while (paths && paths[i])
+	while (paths && paths[i] && cmd->val.value)
 	{
 		path = ft_strjoin(paths[i], cmd->val.value);
 		if (path && access(path, X_OK) == 0)
@@ -57,6 +62,7 @@ bool	check_acces(t_cmd *cmd)
 		i++;
 	}
 	free_tab(paths);
+	//dprintf(1, "after while");
 	if (access(cmd->val.value, X_OK) != 0 || (!(ft_strnstr(cmd->val.value, "./", 2)) && !ft_strnstr(cmd->val.value, "/", 1)))
 		return (false);
 	cmd->val.path = ft_strdup(cmd->val.value);

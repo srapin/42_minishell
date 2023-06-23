@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 23:24:33 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/23 19:09:34 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/23 22:41:53 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void	hd_expand(t_ht_hash_table *ht, t_token_list **t_list)
 			}
 			else
 				expand(ht, &current, ft_strdup(dollar_start + 1), dollar_index);
-			////dprintf(1, "fin de while, ok ici\n");
+			//////dprintf(1, "fin de while, ok ici\n");
 			free(dollar_start);
 			dollar_start = NULL;
 			dollar_start = next_dollar_start;
@@ -218,7 +218,7 @@ void	set_here_doc(t_ht_hash_table *ht, t_token_list *current)
 	limiter = current->next->content;
 	file_name = current->content;
 	fd = open(file_name, O_WRONLY | O_TRUNC | O_CREAT, 0600); //  | O_EXCL
-	// ////dprintf(1, "in set hd, %s, %s %i\n", limiter, file_name, fd);
+	// //////dprintf(1, "in set hd, %s, %s %i\n", limiter, file_name, fd);
 	if (fd == -1)
 	{
 		perror("open ");
@@ -234,7 +234,7 @@ void	set_here_doc(t_ht_hash_table *ht, t_token_list *current)
 
 void	hd_sigint(int i)
 {
-	// ////dprintf(1, "sig press \n");
+	// //////dprintf(1, "sig press \n");
 	g_exit_status = 130;
 	// A VOIR PAS SUR
 		close(STDIN_FILENO);
@@ -283,7 +283,7 @@ bool	hd_parent_process(int pid, t_token_list *current)
 		}
 		current = current->next;
 	}
-	////dprintf(1, "%i\n", status);
+	//////dprintf(1, "%i\n", status);
 	return (!(WIFEXITED(status) && WEXITSTATUS(status)));
 	// return (true);
 }
@@ -301,13 +301,13 @@ bool	set_here_docs(t_data *data)
 	first = *(data->first);
 	// set_hd_filenames(ht, current);
 	set_hd_filenames(first, data);
-	// ////dprintf(1, "heyyyy\n");
+	// //////dprintf(1, "heyyyy\n");
 	pid = fork();
 	if (pid < 0)
 		fail_process();
 	else if (pid == 0)
 	{
-		//dprintf(1, "hd child proc \n");
+		////dprintf(1, "hd child proc \n");
 		// hd_child_process(ht, first, exp_hist);
 		hd_child_process(data);
 	}

@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/11 22:38:56 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/23 21:13:19 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/23 22:42:29 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int		g_exit_status;
 
 void sigint_next_prompt(int sig)
 {
-	// ////dprintf(1, "sigint");
+	// //////dprintf(1, "sigint");
 	g_exit_status = 130;
 	ft_putstr_fd("\n", 1);
 

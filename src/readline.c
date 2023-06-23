@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   readline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 22:15:52 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/23 15:00:38 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/23 21:25:12 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void	read_lines(t_data *data)
 	cmd = NULL;
 	while (input)
 	{
-		// printf("ret %d\n", tcsetattr(STDIN_FILENO, TCSAFLUSH,&termios_p));
+		tcsetattr(STDIN_FILENO, TCSAFLUSH,&termios_p);
 		//stream_len = ft_strlen(input);
 		if (!ft_strlen(input))
 		{
