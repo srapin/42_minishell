@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_simple_command.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:02:23 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/24 10:26:12 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/24 12:08:54 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	get_attribut(t_cmd *current_cmd, t_token_list **curr_tk,
 	}
 	else
 	{
-		args_count += get_words_count(current_tk);
+		*args_count += get_words_count(current_tk);
 		current_tk = current_tk->next;
 	}
 	*curr_tk = current_tk;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 00:57:49 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/23 02:27:59 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/24 12:44:28 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,26 @@ The number sent as argument has to be a positive integer*/
 long long	is_numeric(char *str_nb)
 {
 	int					i;
+	int 				sign;
 	unsigned long long	nb;
 
 	i = 0;
 	nb = 0;
+	sign = 1;
+	if (str_nb[i] && str_nb[i] == '-')
+	{
+		sign = -1;
+		i++;
+	}
 	while (str_nb[i] && nb <= LLONG_MAX)
 	{
 		nb = nb * 10 + (str_nb[i] - '0');
 		i++;
 	}
-	if (nb > LLONG_MAX)
+	if ((sign > 0 && nb > LLONG_MAX) 
+		|| (sign < 0 && nb > (unsigned long long)LLONG_MAX + 1))
 		return (-1);
-	return (nb);
+	return (sign * nb);
 }
 
 void	check_if_numeric(t_cmd *cmd, t_cmd *first)
@@ -40,6 +48,8 @@ void	check_if_numeric(t_cmd *cmd, t_cmd *first)
 
 	i = 0;
 	arg = cmd->val.args[1];
+	if (arg[i] && arg[i] == '-')
+		i++;
 	while (arg[i])
 	{
 		if (!ft_isdigit(arg[i]))
@@ -62,6 +72,7 @@ int	check_long_overflow(t_cmd *cmd, t_cmd *first)
 
 	arg = cmd->val.args[1];
 	initial_nb = is_numeric(arg);
+	printf("initial_nb = %lld\n", initial_nb);
 	if (initial_nb == -1)
 	{
 		write(STDERR_FILENO, "exit\n", 5);
