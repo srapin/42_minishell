@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 00:57:49 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/23 02:27:59 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/24 12:22:48 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,11 @@ void	check_if_numeric(t_cmd *cmd, t_cmd *first)
 		if (!ft_isdigit(arg[i]))
 		{
 			write(STDERR_FILENO, "exit\n", 5);
-			printf("minishell : exit : %s : numeric argument required\n", arg);
+			write(STDERR_FILENO, "minishell : exit : ", ft_strlen("minishell : exit : "));
+			write(STDERR_FILENO, arg, ft_strlen(arg));
+			write(STDERR_FILENO,  ": numeric argument required\n", ft_strlen(" : numeric argument required\n"));
+			
+			// printf("minishell : exit : %s : numeric argument required\n", arg);
 			// ecrire sur STDERR
 			free_cmds(&first, true);
 			exit(NOT_A_NUM);
@@ -65,7 +69,10 @@ int	check_long_overflow(t_cmd *cmd, t_cmd *first)
 	if (initial_nb == -1)
 	{
 		write(STDERR_FILENO, "exit\n", 5);
-		printf("minishell : exit : %s : numeric argument required\n", arg);
+		write(STDERR_FILENO, "minishell : exit : ", ft_strlen("minishell : exit : "));
+		write(STDERR_FILENO, arg, ft_strlen(arg));
+		write(STDERR_FILENO,  ": numeric argument required\n", ft_strlen(" : numeric argument required\n"));
+		// printf("minishell : exit : %s : numeric argument required\n", arg);
 		// ecrire sur STDERR
 		free_cmds(&first, true);
 		exit(NOT_A_NUM);
@@ -73,7 +80,10 @@ int	check_long_overflow(t_cmd *cmd, t_cmd *first)
 	if (cmd->val.args[2])
 	{
 		write(STDERR_FILENO, "exit\n", 5);
-		printf("minishell : exit : too many arguments\n"); // ecrire sur STDERR
+		write(STDERR_FILENO, "minishell : exit : too many arguments\n", ft_strlen("minishell : exit : too many arguments\n"));
+		
+		// write(STDERR_FILENO,  ": numeric argument required\n", ft_strlen(" : numeric argument required\n"));
+		// printf("minishell : exit : too many arguments\n"); // ecrire sur STDERR
 		return (1);
 	}
 	exit_status = (unsigned char)initial_nb;
@@ -101,7 +111,8 @@ int	ft_exit(t_cmd *cmd, t_cmd *first)
 	if (!arg)
 	{
 		free_cmds(&first, true);
-		printf("exit\n");
+		write(STDERR_FILENO, "exit\n", 5);
+		// printf("exit\n");
 		exit(g_exit_status);
 	}
 	check_if_numeric(cmd, first);
