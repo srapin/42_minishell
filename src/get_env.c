@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/20 04:16:54 by hlesny            #+#    #+#             */
-/*   Updated: 2023/06/24 10:43:47 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/24 11:52:07 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,16 @@ t_ht_hash_table	*ht_get_env(char **envp, char *exec_name)
 		ht_insert_item(ht, ft_strdup("SHLVL"), ft_strdup("0"));
 	else
 		set_shell_level(ht);
+	char *mini_path;
 	if (ft_strnstr(exec_name, ".", 1))
+	{
 		exec_name++;
-	char *mini_path = ft_strjoin(*get_pwd(ht), exec_name);
+		mini_path = ft_strjoin(*get_pwd(ht), exec_name);
+	}
+	else
+	{
+		mini_path = ft_strdup(exec_name);
+	}
 	// dprintf(1, "pminipath = %s\n", mini_path);
 	if (!ht_search(ht, "MINISHELL_PATH"))
 		ht_insert_item(ht, ft_strdup("MINISHELL_PATH"), mini_path);
@@ -97,8 +104,18 @@ t_ht_hash_table	*get_minimal_env(char *exec_name)
 	ht_insert_item(ht, ft_strdup("SHLVL"), ft_strdup("1"));
 	ht_insert_item(ht, ft_strdup("PWD"), pwd);
 	ht_insert_item(ht, ft_strdup("_"), ft_strdup("/usr/bin/env"));
-	
-	char *mini_path = ft_strjoin(*get_pwd(ht), exec_name);
+
+		
+	char *mini_path;
+	if (ft_strnstr(exec_name, ".", 1))
+	{
+		exec_name++;
+		mini_path = ft_strjoin(*get_pwd(ht), exec_name);
+	}
+	else
+	{
+		mini_path = ft_strdup(exec_name);
+	}
 	// dprintf(1, "pminipath = %s\n", mini_path);
 	if (!ht_search(ht, "MINISHELL_PATH"))
 		ht_insert_item(ht, ft_strdup("MINISHELL_PATH"), mini_path);
