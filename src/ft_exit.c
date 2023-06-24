@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 00:57:49 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/24 12:47:00 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/24 13:01:07 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,10 @@ long long	is_numeric(char *str_nb)
 	i = 0;
 	nb = 0;
 	sign = 1;
-	if (str_nb[i] && str_nb[i] == '-')
+	if (str_nb[i] && (str_nb[i] == '-' || str_nb[i] == '+'))
 	{
-		sign = -1;
+		if (str_nb[i] == '-')
+			sign = -1;
 		i++;
 	}
 	while (str_nb[i] && nb <= LLONG_MAX)
@@ -48,7 +49,7 @@ void	check_if_numeric(t_cmd *cmd, t_cmd *first)
 
 	i = 0;
 	arg = cmd->val.args[1];
-	if (arg[i] && arg[i] == '-')
+	if (arg[i] && (arg[i] == '-'  || arg[i] == '+'))
 		i++;
 	while (arg[i])
 	{
@@ -76,7 +77,6 @@ int	check_long_overflow(t_cmd *cmd, t_cmd *first)
 
 	arg = cmd->val.args[1];
 	initial_nb = is_numeric(arg);
-	printf("initial_nb = %lld\n", initial_nb);
 	if (initial_nb == -1)
 	{
 		write(STDERR_FILENO, "exit\n", 5);
