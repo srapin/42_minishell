@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 20:39:18 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/23 22:38:10 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/24 10:57:22 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 void	print_env(t_ht_hash_table *ht)
 {
-	int			i;
-	t_ht_item	*item;
+	size_t			i;
+	// t_ht_item	*item;
 
 	i = 0;
 	while (i < ht->size)
 	{
-		item = ht->items[i];
+		// item = ht->items[i];
 		if (ht->items[i] && ht->items[i]->key && ht->items[i]->value)
 		{
 			printf("%s=%s\n", ht->items[i]->key, ht->items[i]->value);
@@ -33,6 +33,7 @@ void	print_env(t_ht_hash_table *ht)
 int	ft_env(t_cmd *cmd, t_cmd *first)
 {
 	////////dprintf(1, "coucou depuis ft_env()\n");
+	(void) first;
 	if (cmd->val.args[1])
 	{
 		printf("Error : env : too many arguments given. Zero needed\n");

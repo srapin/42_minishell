@@ -1,9 +1,9 @@
 NAME = minishell
-NAME_BONUS = pipex_bonus # ???
+NAME_BONUS = minishell_bonus # ???
 
 CC = cc
 #CFLAGS = -Wall -Wextra -Werror -g3 -g
-CFLAGS = -g3 -g
+CFLAGS = -g3 -g -Wall -Wextra -Werror
 
 FILES = ast \
 		ast_simple_command \

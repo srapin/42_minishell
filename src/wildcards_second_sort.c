@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcards_second_sort.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 01:36:57 by hlesny            #+#    #+#             */
-/*   Updated: 2023/06/23 15:34:06 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/24 11:41:58 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	parse_current_filename(t_filename **filenames, t_filename *current_f,
 		t_token_list *current, size_t prefix_len)
 {
-	int		i;
+	size_t		i;
 	int		next_wcard_index;
 	char	*filename_pos;
 

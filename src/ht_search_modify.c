@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ht_search_modify.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 17:22:28 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/21 04:26:33 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/24 11:23:31 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-static t_ht_item	HT_DELETED_ITEM = {NULL, NULL};
+// static t_ht_item	HT_DELETED_ITEM = {NULL, NULL};
 
 int	ft_strcmp(const char *s1, const char *s2)
 {

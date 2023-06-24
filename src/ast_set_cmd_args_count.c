@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ast_set_cmd_words_count.c                          :+:      :+:    :+:   */
+/*   ast_set_cmd_args_count.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:05:06 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/23 15:05:43 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/24 10:51:54 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	no_merged_words_count(t_token_list *current)
 			// p_wht_pos = wht_pos;
 			// wht_pos = get_whtsp_pos(current->content, p_wht_pos);
 		}
-		if (p_wht_pos < current->length)
+		if ((size_t) p_wht_pos < current->length)
 			count++;
 	}
 	else

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcards_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:34:40 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/23 15:35:46 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/24 11:34:05 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	free_and_null(char *prefix, char *suffix)
 
 int	is_in_quotes(t_token_list *current, size_t index)
 {
-	int			length;
+	size_t			length;
 	t_word_data	*current_w;
 
 	if (!(current->merged_words))

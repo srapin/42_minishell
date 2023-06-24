@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:12:06 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/23 21:36:32 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/24 11:32:29 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	search_and_expand(t_ht_hash_table *ht, t_token_list **current,
 {
 	char	*before_key;
 	char	*after_value;
-	char	*tmp;
+	// char	*tmp;
 
 	char *value; /* ne pas le free ! car est malloc dans la hash_map,
 		et peut en re avoir besoin dans une autre commande*/
@@ -111,6 +111,7 @@ int	is_exit_status(t_ht_hash_table *ht, t_token_list *current,
 	size_t	dollar_index;
 
 	i = 0;
+	(void) ht;
 	if (!(*dollar_start))
 	{
 		free(dollar_start);

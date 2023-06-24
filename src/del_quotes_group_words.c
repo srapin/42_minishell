@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   quotes.c                                           :+:      :+:    :+:   */
+/*   del_quotes_group_words.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:13:44 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/23 15:15:39 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/24 10:56:18 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ Enleve les quotes de début et de fin, et remplace le token <quote> par <word>
 */
 void	delete_quotes(t_data *data)
 {
-	char			*content_tmp;
+	// char			*content_tmp;
 	t_token_list	*current;
 
 	if (!data->first || !(*(data->first)))
@@ -75,7 +75,7 @@ Apres avoir enlevé les quotes, groupe deux <word> qui se suivent
 void	group_words(t_data *data)
 {
 	t_token_list	*current;
-	char			*content_tmp;
+	// char			*content_tmp;
 
 	//t_token_list    *current2;
 	if (!data->first)

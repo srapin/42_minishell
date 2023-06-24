@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hash_table.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/10 16:09:20 by hlesny            #+#    #+#             */
-/*   Updated: 2023/06/21 04:25:48 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/24 11:21:21 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,9 +164,9 @@ int	set_env_var(t_ht_item *item, char **env, int i)
 
 char	**hash_map_to_tab(t_ht_hash_table *ht)
 {
-	int		i;
-	int		j;
-	char	*tmp;
+	size_t		i;
+	size_t		j;
+	// char	*tmp;
 	char	**env;
 
 	env = ft_calloc(sizeof(char *), (ht->count + 1));

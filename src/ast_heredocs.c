@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_heredocs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 23:24:33 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/23 22:41:53 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/24 10:52:51 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,6 +235,7 @@ void	set_here_doc(t_ht_hash_table *ht, t_token_list *current)
 void	hd_sigint(int i)
 {
 	// //////dprintf(1, "sig press \n");
+	(void) i;
 	g_exit_status = 130;
 	// A VOIR PAS SUR
 		close(STDIN_FILENO);
@@ -294,7 +295,7 @@ bool	set_here_docs(t_data *data)
 {
 	t_token_list	*first;
 	int				pid;
-	int				status;
+	// int				status;
 
 	//t_token_list	*current;
 	//current = *first;

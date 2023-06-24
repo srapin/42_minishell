@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 01:12:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/21 17:21:33 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/24 11:20:06 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	prev_dir(char **path, int *i)
 
 	if ((!(*path)[*i + 2] || (*path)[*i + 2] == '/')) // '..' ou '../'
 	{
-		if (i - 2 >= 0) // ie n'est pas à la racine
+		if (*i - 2 >= 0) // ie n'est pas à la racine
 		{
 			// détermine l'index du précédent '/' (par ex le premier '/' de "cd ./dir1/..")
 			j = *i - 2;
@@ -104,9 +104,9 @@ void	del_slashes(char **path)
 char	*replace_prev_or_actual_dir(char *path)
 {
 	int		i;
-	int		j;
-	char	*before;
-	char	*after;
+	// int		j;
+	// char	*before;
+	// char	*after;
 
 	i = 0;
 	if (path[0] && path[0] == '/' && path[1] && path[1] == '/' && !path[2])
@@ -183,7 +183,7 @@ char	*cd_move_to(t_cmd *cmd)
 void	set_pwd(t_cmd *cmd, char *full_path)
 {
 	char	*tmp;
-	char	*pwd;
+	// char	*pwd;
 
 	tmp = ft_strdup(full_path);
 	free(full_path);
@@ -208,9 +208,10 @@ Returns 0 IF directory is successfully changed
 int	ft_cd(t_cmd *cmd, t_cmd *first)
 {
 	char	*full_path;
-	char	*tmp;
+	// char	*tmp;
 
-	tmp = NULL;
+	(void) first;
+	// tmp = NULL;
 	full_path = NULL;
 	if (!cmd->val.args[1])
 		return (go_to_home(cmd));

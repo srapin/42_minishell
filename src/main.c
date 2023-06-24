@@ -6,31 +6,31 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 19:32:17 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/24 10:44:16 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/24 11:26:46 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
 /* Prints the hash map */
-void	print_ht(t_ht_hash_table *ht)
-{
-	printf("ht->count = %ld\n\n", ht->count);
-	for (int i = 0; i < ht->size; i++)
-	{
-		if (ht->items[i])
-		{
-			printf("hash->items[%d] :\nkey = %s \nvalue = %s\n\n",
-					i,
-					ht->items[i]->key,
-					ht->items[i]->value);
-		}
-	}
-}
+// void	print_ht(t_ht_hash_table *ht)
+// {
+// 	printf("ht->count = %ld\n\n", ht->count);
+// 	for (int i = 0; i < ht->size; i++)
+// 	{
+// 		if (ht->items[i])
+// 		{
+// 			printf("hash->items[%d] :\nkey = %s \nvalue = %s\n\n",
+// 					i,
+// 					ht->items[i]->key,
+// 					ht->items[i]->value);
+// 		}
+// 	}
+// }
 
 void 	exec_command(t_data *data, char *command)
 {
-	t_token_list 	*tk_list;
+	// t_token_list 	*tk_list;
 	t_cmd 			*cmd;
 	
 	// checker s'il y a un \n. si c'est le cas, ne fait rien (pour eviter qu on nous pqsse des commqndes cheums en arg)
@@ -45,7 +45,7 @@ void	exec_script(t_data *data, char *path)
 {
 	int				fd;
 	char			*line;
-	t_token_list	*tk_list;
+	// t_token_list	*tk_list;
 
 	fd = open(path, O_RDONLY);
 	if (!fd)
@@ -74,26 +74,26 @@ void	initialise_data(t_data *data)
 	data->exp_history = NULL;
 	data->env = NULL;
 }
-void write_to_file(const char *name, const char *text)
-{
-	int num;
-	FILE *fptr;
+// void write_to_file(const char *name, const char *text)
+// {
+// 	// int num;
+// 	FILE *fptr;
 
-	// use appropriate location if you are using MacOS or Linux
-	fptr = fopen("name","w");
+// 	// use appropriate location if you are using MacOS or Linux
+// 	fptr = fopen("name","w");
 
-	if(fptr == NULL)
-	{
-    	printf("Error!");   
-    	exit(1);             
-	}
+// 	if(fptr == NULL)
+// 	{
+//     	printf("Error!");   
+//     	exit(1);             
+// 	}
 
-	fprintf(fptr,"%s",text);
-	fclose(fptr);
-}
+// 	fprintf(fptr,"%s",text);
+// 	fclose(fptr);
+// }
 int	main(int argc, char **argv, char **envp)
 {
-	char *pwd;
+	// char *pwd;
 	t_data data;
 	t_ht_hash_table *hash_map;
 

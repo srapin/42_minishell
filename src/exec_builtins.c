@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 20:57:20 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/23 22:38:10 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/24 10:56:35 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ int	ft_echo(t_cmd *cmd, t_cmd *first)
 	int		i;
 	int		ret;
 
+	(void) first;
 	end[0] = '\n';
 	end[1] = '\0';
 	i = 1;

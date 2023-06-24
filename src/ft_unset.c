@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 21:52:36 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/21 04:25:12 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/24 11:14:51 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 int	ft_unset(t_cmd *cmd, t_cmd *first)
 {
 	int	i;
-
+	(void) first;
 	i = 1; // args[0] est le nom de la commande
 	if (!cmd->val.args[i])
 		return (EXIT_OK);

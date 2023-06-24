@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:50:05 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/23 02:11:16 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/24 11:28:34 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void	wait_childs(t_cmd *origin)
 
 bool check_ret(t_cmd *cmd, int ret)
 {
-	if (cmd->ctrl == none)
+	if (cmd->ctrl == pointvirgule)
 		return true;
 	else if (cmd->ctrl == and)
 	{

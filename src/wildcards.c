@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcards.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:13:13 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/23 15:35:21 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/24 11:33:50 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 // retourne la string suivant le dernier '*' non contenu dans des quotes
 char	*get_suffix(t_token_list *current)
 {
-	size_t		i;
-	t_word_data	*wd;
+	int		i;
+	// t_word_data	*wd;
 
-	wd = current->merged_words;
+	// wd = current->merged_words;
 	i = current->length - 1;
 	while (i >= 0)
 	{
@@ -62,7 +62,7 @@ void	expand_wildcards_in_current(t_data *data, DIR *dir,
 void	parse_and_expand_wildcards(t_data *data, DIR *dir)
 {
 	t_token_list	*current;
-	t_filename		*filenames;
+	// t_filename		*filenames;
 
 	current = *(data->first);
 	while (current)

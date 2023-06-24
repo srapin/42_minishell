@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ht_insert.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 17:25:42 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/21 04:26:23 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/24 11:23:45 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	intervert_hts(t_ht_hash_table *ht, t_ht_hash_table *new_ht,
 // leaks : ht_new n'est apparamment pas free()
 void	ht_resize(t_ht_hash_table *ht, size_t base_size)
 {
-	int				i;
+	size_t			i;
 	t_ht_item		*current;
 	t_ht_hash_table	*new_ht;
 

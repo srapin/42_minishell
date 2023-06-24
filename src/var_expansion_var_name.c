@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   var_expansion_var_name.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:27:44 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/23 15:29:31 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/24 11:32:53 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	check_next_token(t_token_list **curr, size_t dollar_index)
 	int				dollars_count;
 	t_token_list	*current;
 
+	(void) dollar_index;
 	current = *curr;
 	dollars_count = 0;
 	while (current && (current->type == word || current->type == simple_quote

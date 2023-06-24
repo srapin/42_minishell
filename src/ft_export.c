@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 23:25:02 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/22 17:42:20 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/24 11:14:37 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ t_list	*init_export_history(t_ht_hash_table *ht)
 {
 	t_list	*first;
 
+	(void) ht;
 	first = ft_lstnew(ft_strdup("OLDPWD"));
 	return (first);
 }
@@ -101,7 +102,7 @@ t_list	*get_sorted_hist(t_ht_hash_table *ht)
 	char	*to_insert;
 	t_list	*lst;
 	t_list	*current;
-	int		i;
+	size_t	i;
 
 	i = 0;
 	lst = NULL;
@@ -303,10 +304,12 @@ int	export_variable(t_cmd *cmd, int i)
 int	ft_export(t_cmd *cmd, t_cmd *first)
 {
 	int i;
-	char *var_name;
-	char *var_value;
+	// char *var_name;
+	// char *var_value;
 
+	(void) first;
 	i = 1;
+	
 	if (!cmd->val.args[i])
 	{
 		print_export_history(cmd->env, cmd->export_history);

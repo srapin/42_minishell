@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_pipeline.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:22:29 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/23 15:22:50 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/24 11:30:20 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,13 @@ void	check_pipe(t_data *data, t_token_list **current)
 
 void	check_pipelines(t_data *data, int *parentheses_count)
 {
+	//ligne 59 modifié attention checker paranthes!!!!!!!
 	t_token_list	*current;
 
 	current = *(data->first);
 	while (current)
 	{
-		if (current->type == and_tk || (current->type) == or_tk
+		if ((current->type == and_tk || (current->type) == or_tk)
 			&& current->type > 1)
 			check_control_op(data, &current);
 		else

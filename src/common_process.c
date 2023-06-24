@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   common_process.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 01:02:42 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/23 22:42:22 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/24 10:56:02 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	parent_process(t_cmd **cmd, int pipe_tab[2])
 	(*cmd)->red.in_fd = pipe_tab[0];
 }
 
-void	print_err(int e, t_cmd *cmd)
+void	print_err(t_cmd *cmd)
 {
 	char	*mess;
 
@@ -44,18 +44,13 @@ void	reset_defaults_signals(void)
 
 void	cmd_not_found(t_cmd *cmd, t_cmd *first)
 {
-	int	e;
-
-	e = errno;
-	//dprintf(1, "print_err=%s}\n", cmd->val.value);
-	print_err(e, cmd);
+	print_err(cmd);
+	free_cmds(&first, true);
 	exit(CMD_NOT_FOUND);
 }
 
 void	failed_to_open_files(t_cmd *first)
 {
-	int	e;
-
 	free_cmds(&first, true);
 	exit(CMD_NOT_FOUND);
 }
@@ -65,7 +60,6 @@ void	child_process(t_cmd *cmd, t_cmd *first, int pipe_tab[2])
 	char	*path;
 	char	**args;
 	char	**env;
-	char	**tmp;
 
 	//dprintf(1, "child proc, val =%s}\n", cmd->val.value);
 	if (pipe_tab[0] > -1)

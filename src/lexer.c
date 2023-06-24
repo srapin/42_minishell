@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 00:40:45 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/23 15:13:55 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/24 11:24:43 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ Meme si le limiteur du here_doc est entre quotes,
 */
 
 void	merge_token_quotes(t_token_list **tk_list, char *input,
-		t_token *token_stream, int *i)
+		t_token *token_stream, size_t *i)
 {
 	int		j;
 	int		current;
@@ -101,7 +101,7 @@ void	merge_token_quotes(t_token_list **tk_list, char *input,
 void	merge_single_tokens(t_token_list **tk_list, char *input,
 		t_token *token_stream, size_t stream_len)
 {
-	int	i;
+	size_t	i;
 	int	j;
 	int	current;
 
@@ -132,7 +132,7 @@ void	merge_single_tokens(t_token_list **tk_list, char *input,
 t_token_list	**tokenise(t_token *token_stream, size_t stream_len,
 		char *input)
 {
-	int				current;
+	// int				current;
 	t_token_list	*tk_list;
 	t_token_list	**first;
 
@@ -174,7 +174,7 @@ int	set_token_operator(t_token *token, char input)
 
 t_token	*assign_type(char *input, size_t stream_len)
 {
-	int		i;
+	size_t		i;
 	t_token	*token_stream;
 
 	i = 0;

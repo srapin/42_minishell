@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcards_first_sort.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/20 22:50:42 by hlesny            #+#    #+#             */
-/*   Updated: 2023/06/23 15:32:56 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/24 11:41:28 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ t_filename	*check_prefix_suffix(DIR *dir, char *prefix, char *suffix)
 	dir_content = readdir(dir);
 	while (dir_content)
 	{
-		if (prefix && *prefix != '.' && is_a_hidden_dir(dir_content))
-			;
+		// if (prefix && *prefix != '.' && is_a_hidden_dir(dir_content))
+		// 	;
 		curr_filename = search_from_start(dir_content->d_name, prefix);
 		if (curr_filename)
 		{
@@ -82,8 +82,8 @@ t_filename	*parse_current_dir(DIR *dir, char *prefix, char *suffix)
 {
 	size_t			prefix_len;
 	size_t			suffix_len;
-	char			*curr_filename;
-	struct dirent	*dir_content;
+	// char			*curr_filename;
+	// struct dirent	*dir_content;
 	t_filename		*filenames;
 
 	filenames = ft_calloc(sizeof(t_filename), 1);
@@ -91,7 +91,7 @@ t_filename	*parse_current_dir(DIR *dir, char *prefix, char *suffix)
 		return (NULL);
 	prefix_len = ft_strlen(prefix);
 	suffix_len = ft_strlen(suffix);
-	dir_content = readdir(dir);
+	// dir_content = readdir(dir);
 	if (prefix_len && suffix_len)
 		return (check_prefix_suffix(dir, prefix, suffix));
 	else if (prefix_len)
@@ -112,7 +112,7 @@ t_filename	*first_sort(DIR *dir, char *prefix, char *suffix)
 {
 	size_t prefix_len;
 	size_t suffix_len;
-	struct dirent *dir_content;
+	// struct dirent *dir_content;
 
 	if (!prefix || !suffix)
 		return (NULL);

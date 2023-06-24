@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_set_cmd_args.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:03:43 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/23 17:42:56 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/24 10:51:42 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	split_not_merged_no_quotes(t_cmd **curr_cmd, t_token_list *curr_tk,
 {
 	int		wht_pos;
 	int		p_wht_pos;
-	char	*tmp;
+	// char	*tmp;
 	char	*substr;
 	char	*buffer;
 
@@ -45,7 +45,7 @@ void	split_not_merged_no_quotes(t_cmd **curr_cmd, t_token_list *curr_tk,
 		skip_whitespaces_reassess_indexes(curr_tk->content,
 		&wht_pos, &p_wht_pos);
 	}
-	if (p_wht_pos < curr_tk->length)
+	if ((size_t) p_wht_pos < curr_tk->length)
 	{
 		(*curr_cmd)->val.args[*i] = ft_substr(curr_tk->content,
 		p_wht_pos, curr_tk->length);
@@ -160,6 +160,7 @@ void	set_command_attributs(t_cmd **current, t_token_list **first_tk,
 {
 	int	i;
 
+	(void) first_tk;
 	i = 0;
 	if (!args_count)
 		return ;

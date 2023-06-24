@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_struct_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:14:54 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/21 04:28:26 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/24 11:32:05 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ void	tk_add(t_token_list **first, t_token_list *new)
 
 void	tk_del_one(t_token_list **first, t_token_list *to_del)
 {
-	t_token_list	*prev;
-	t_token_list	*next;
+	// t_token_list	*prev;
+	// t_token_list	*next;
 	t_token_list	*current;
 
 	if (!to_del)
