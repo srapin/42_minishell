@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_subshell.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:09:03 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/23 22:36:47 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/24 10:32:36 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,18 +138,22 @@ void	set_subshell_attributs(t_cmd *current_cmd, t_token_list **curr_tk)
 void	set_subshell(t_cmd *current_cmd, t_token_list **curr_tk)
 {
 	char 	*subshell_cmd;
+	char *mini_path = ht_search(current_cmd->env, "MINISHELL_PATH");
 	
 	if (!current_cmd)
 		return ;
 	subshell_cmd = get_subshell_command(curr_tk);
-	current_cmd->val.value = ft_strdup("./minishell");
+	current_cmd->val.value = ft_strdup(mini_path);
+	// current_cmd->val.value = ft_strdup("./minishell");
 	current_cmd->val.args = malloc(sizeof(char *) * 3);
+	// dprintf(1, "set sub=%s\n", test);
 	if (!current_cmd->val.args)
 	{
 		perror("malloc ");
 		return ;
 	}
-	current_cmd->val.args[0] = ft_strdup("./minishell");
+	current_cmd->val.args[0] = ft_strdup(mini_path);
+	// current_cmd->val.args[0] = ft_strdup("./minishell");
 	current_cmd->val.args[1] = ft_strdup(subshell_cmd);
 	current_cmd->val.args[2] = NULL;
 	free(subshell_cmd);

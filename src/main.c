@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 19:32:17 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/23 23:09:54 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/24 10:44:16 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,15 +100,16 @@ int	main(int argc, char **argv, char **envp)
 	//write_to_file("/mnt/nfs/homes/hlesny/42/42cursus/42_minimicheln/lalaal", "TUTUTU");
 	initialise_data(&data);
 	signal(SIGINT, sigint_next_prompt);
+	// printf("av0=%s\n", argv[0]);
 	if (argc > 2)
 	{
 		printf("error : too many arguments\n");
 		return (0);
 	}
 	if (!envp || !envp[0])
-		hash_map = get_minimal_env();
+		hash_map = get_minimal_env(argv[0]);
 	else
-		hash_map = ht_get_env(envp);
+		hash_map = ht_get_env(envp, argv[0]);
 	if (!hash_map)
 		return (1); // do we return ? which exit status ?
 	t_list *exp_hist = init_export_history(hash_map);
