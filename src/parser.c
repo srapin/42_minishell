@@ -6,7 +6,7 @@
 /*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 02:12:27 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/23 14:45:08 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/24 13:04:46 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ t_cmd	*parse_and_execute(t_data *data)
 	wstatus = ft_syntax(data);
 	if (wstatus)
 	{
-		g_exit_status = wstatus % 255; // ou juste g_exit_status = SYNTAX_ERROR
+		g_exit_status = wstatus % 256; // ou juste g_exit_status = SYNTAX_ERROR
 		return (NULL);
 	}
 	perform_variable_exp(data);
