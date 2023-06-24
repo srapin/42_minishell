@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 19:32:17 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/24 11:26:46 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/24 12:23:18 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	exec_script(t_data *data, char *path)
 		free(line);
 		line = get_next_line(fd);
 	}
-	dprintf(2, "about to unlink %s\n", path);
+	// dprintf(2, "about to unlink %s\n", path);
 	unlink(path);
 	safe_close(&fd);
 }
@@ -97,15 +97,18 @@ int	main(int argc, char **argv, char **envp)
 	t_data data;
 	t_ht_hash_table *hash_map;
 
-	//write_to_file("/mnt/nfs/homes/hlesny/42/42cursus/42_minimicheln/lalaal", "TUTUTU");
+	rl_outstream = stderr;	//write_to_file("/mnt/nfs/homes/hlesny/42/42cursus/42_minimicheln/lalaal", "TUTUTU");
 	initialise_data(&data);
 	signal(SIGINT, sigint_next_prompt);
 	// printf("av0=%s\n", argv[0]);
-	if (argc > 2)
-	{
-		printf("error : too many arguments\n");
-		return (0);
-	}
+	
+	// si rop d arg bash regrade que premier
+	
+	// if (argc > 2)
+	// {
+	// 	printf("error : too many arguments\n");
+	// 	return (0);
+	// }
 	if (!envp || !envp[0])
 		hash_map = get_minimal_env(argv[0]);
 	else

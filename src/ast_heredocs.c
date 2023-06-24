@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 23:24:33 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/24 10:52:51 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/24 12:11:22 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,8 +149,8 @@ void	get_here_doc_content(t_ht_hash_table *ht, int fd, char *limiter,
 		if (write(fd, hd_content, ft_strlen(hd_content)) == -1)
 			perror("write "); // return ? jpense pas
 		if (write(fd, "\n", 1) == -1)
-			// non ? car readline() retire le \n de fin
 			perror("write ");
+			// non ? car readline() retire le \n de fin
 		free(hd_content);
 		hd_content = readline("> ");
 	}

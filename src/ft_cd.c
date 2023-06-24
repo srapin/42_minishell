@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 01:12:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/24 11:20:06 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/24 12:14:57 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,9 @@ void	curr_dir(char **path, int i)
 
 	before = ft_substr(*path, 0, i);
 	after = ft_substr(*path, i + 2, ft_strlen(*path));
-	printf("before set_path, path = %s\n", *path);
+	// printf("before set_path, path = %s\n", *path);
 	set_path(path, before, after);
-	printf("after set_path, path = %s\n", *path);
+	// printf("after set_path, path = %s\n", *path);
 }
 
 /* Deletes the '..' or '../', along with the <dir_name>/ that 
@@ -134,7 +134,7 @@ int	go_to_home(t_cmd *cmd)
 
 	if (!ht_search(cmd->env, "HOME"))
 	{
-		printf("minishell : cd : HOME not set\n");
+		write(STDERR_FILENO, "minishell : cd : HOME not set\n", ft_strlen("minishell : cd : HOME not set\n"));
 		return (HOME_NOT_SET);
 	}
 	full_path = ft_strdup(ht_search(cmd->env, "HOME"));
@@ -217,7 +217,7 @@ int	ft_cd(t_cmd *cmd, t_cmd *first)
 		return (go_to_home(cmd));
 	if (cmd->val.args[2])
 	{
-		printf("minishell : cd : too many arguments\n");
+		write(STDERR_FILENO, "minishell : cd : too many arguments\n", ft_strlen("minishell : cd : too many arguments\n"));
 		return (CD_TOO_MANY_ARGS);
 	}
 	full_path = cd_move_to(cmd);
