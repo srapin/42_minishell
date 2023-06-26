@@ -46,15 +46,17 @@ bool	replace_fd(t_file *f_s, int *to_rep, bool out)
 		new_fd = f_s->fd;
 	else if (f_s->name)
 	{
-		if (out && (access(f_s->name, W_OK) == 0 || access(f_s->name,
+		if (out && (access(f_s->name, f_s->flag) == 0 || access(f_s->name,
 					F_OK) != 0))
 			new_fd = open(f_s->name, f_s->flag, S_IRWXU);
-		else if (access(f_s->name, R_OK) == 0)
+		else if (access(f_s->name, f_s->flag) == 0)
 			new_fd = open(f_s->name, f_s->flag);
 		else
 		{
+			new_fd = open(f_s->name, f_s->flag, S_IRWXU);
 			err_mess = ft_strjoin("minishell: ", f_s->name);
 			perror(err_mess);
+			safe_close(to_rep);
 			free(err_mess);
 			return (false);
 		}
