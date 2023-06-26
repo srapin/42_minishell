@@ -46,14 +46,13 @@ bool	replace_fd(t_file *f_s, int *to_rep, bool out)
 		new_fd = f_s->fd;
 	else if (f_s->name)
 	{
-		if (out && (access(f_s->name, f_s->flag) == 0 || access(f_s->name,
-					F_OK) != 0))
+		if (out && access(f_s->name,F_OK) != 0)
 			new_fd = open(f_s->name, f_s->flag, S_IRWXU);
-		else if (access(f_s->name, f_s->flag) == 0)
-			new_fd = open(f_s->name, f_s->flag);
 		else
+			new_fd = open(f_s->name, f_s->flag);
+		if (new_fd < 0)
 		{
-			new_fd = open(f_s->name, f_s->flag, S_IRWXU);
+			// new_fd = open(f_s->name, f_s->flag, S_IRWXU);
 			err_mess = ft_strjoin("minishell: ", f_s->name);
 			perror(err_mess);
 			safe_close(to_rep);
@@ -74,14 +73,6 @@ bool	open_cmd_files(t_cmd *cmd)
 	bool	flag;
 
 	flag = true;
-	tmp_lst = cmd->red.in_list;
-	while (tmp_lst && flag)
-	{
-		tmp_file = tmp_lst->content;
-		if (tmp_file)
-			flag = replace_fd(tmp_file, &(cmd->red.in_fd), false);
-		tmp_lst = tmp_lst->next;
-	}
 	tmp_lst = cmd->red.out_list;
 	while (tmp_lst && flag)
 	{
@@ -90,5 +81,14 @@ bool	open_cmd_files(t_cmd *cmd)
 			flag = replace_fd(tmp_file, &(cmd->red.out_fd), true);
 		tmp_lst = tmp_lst->next;
 	}
+	tmp_lst = cmd->red.in_list;
+	while (tmp_lst && flag)
+	{
+		tmp_file = tmp_lst->content;
+		if (tmp_file)
+			flag = replace_fd(tmp_file, &(cmd->red.in_fd), false);
+		tmp_lst = tmp_lst->next;
+	}
+	
 	return (flag);
 }
