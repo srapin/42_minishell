@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 23:25:02 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/24 11:14:37 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/26 20:49:20 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,9 +147,9 @@ void 	print_sorted_hist(t_ht_hash_table *ht, t_list *export_hist, t_list *lst)
 		str = ht_search(ht, current_var->content);
 		if (!str && is_in_export_history(export_hist,
 				(char *)current_var->content))
-			printf("%s\n", (char *)current_var->content);
+			printf("export %s\n", (char *)current_var->content);
 		else if (str)
-			printf("%s=\"%s\"\n", (char *)current_var->content, str);
+			printf("export %s=\"%s\"\n", (char *)current_var->content, str);
 		current_var = current_var->next;
 	}
 }
@@ -303,13 +303,15 @@ int	export_variable(t_cmd *cmd, int i)
 // modif : mettre la t_list **export_history dans la structure de t_cmd
 int	ft_export(t_cmd *cmd, t_cmd *first)
 {
-	int i;
+	int 	i;
+	int 	exit_status;
 	// char *var_name;
 	// char *var_value;
 
 	(void) first;
 	i = 1;
-	
+	exit_status = EXIT_OK;
+		
 	if (!cmd->val.args[i])
 	{
 		print_export_history(cmd->env, cmd->export_history);
@@ -318,8 +320,8 @@ int	ft_export(t_cmd *cmd, t_cmd *first)
 	while (cmd->val.args[i])
 	{
 		if (export_variable(cmd, i))
-			return (INVALID_VAR_ID);
+			exit_status = INVALID_VAR_ID;
 		i++;
 	}
-	return (EXIT_OK);
+	return (exit_status);
 }

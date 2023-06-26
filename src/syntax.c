@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2023/06/26 17:17:13 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/26 18:50:04 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,14 @@ int	ft_syntax(t_data *data)
 		check_syntax(data);
 	if (waitpid(pid, &wstatus, 0) == -1)
 		perror("wait ");
-	return (WIFEXITED(wstatus) && WEXITSTATUS(wstatus)); // marche pas ienb a modifier
+	if (WIFEXITED(wstatus))
+		return (WEXITSTATUS(wstatus));
+	else if (WIFSIGNALED(wstatus))
+		return (WTERMSIG(wstatus) + 128);
+	else if (WIFSTOPPED(wstatus))
+		return (WSTOPSIG(wstatus) + 128);
+	else
+		return (0); // ? b
+//	return (WIFEXITED(wstatus) && WEXITSTATUS(wstatus)); // marche pas ienb a modifier
 //	return (wstatus);
 }

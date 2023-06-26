@@ -1,6 +1,6 @@
 
-
-commande avec erreur de syntaxe puis `echo $?` -> leaks 
+export : 3 arguments invalides puis un/des args valides : print un msg d'erreur par arg non valide, 
+puis exporte le reste. exit status = 1.
 
 
 
