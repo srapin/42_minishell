@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 01:02:42 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/24 10:56:02 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/27 01:40:07 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	print_err(t_cmd *cmd)
 	char	*mess;
 
 	//dprintf(1, "print_err=%s}\n", cmd->val.value);
+
 	mess = ft_strjoin("minishell: ", cmd->val.value);
 	perror(mess);
 	free(mess);
@@ -42,7 +43,7 @@ void	reset_defaults_signals(void)
 	signal(SIGQUIT, SIG_DFL);
 }
 
-void	cmd_not_found(t_cmd *cmd, t_cmd *first)
+void	not_found(t_cmd *cmd, t_cmd *first)
 {
 	print_err(cmd);
 	free_cmds(&first, true);
@@ -70,8 +71,13 @@ void	child_process(t_cmd *cmd, t_cmd *first, int pipe_tab[2])
 	reset_defaults_signals();
 	if (!dup_cmd_file(cmd))
 		failed_to_open_files(first);
+	if (!cmd->val.value)
+	{
+		free_cmds(&first, true);
+		exit(EXIT_SUCCESS);
+	}
 	try_to_exec_builtins(cmd, first, true);
-	if (check_acces(cmd))
+	if (check_acces(cmd, first))
 	{
 		//dprintf(1, "after check access\n");
 		path = cmd->val.path;
@@ -87,8 +93,8 @@ void	child_process(t_cmd *cmd, t_cmd *first, int pipe_tab[2])
 		perror("exceve failed : abort");
 		exit(CMD_NOT_FOUND);
 	}
-	//dprintf(1, "cmd not found\n");
-	cmd_not_found(cmd, first);
+	// dprintf(1, "cmd not found\n");
+	not_found(cmd, first);
 }
 
 void	fail_process(void)

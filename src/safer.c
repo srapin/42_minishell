@@ -36,18 +36,51 @@ void safe_close_cmd_fd(t_cmd *cmd)
 	safe_close(&(cmd->red.out_fd));
 }
 
-bool	check_acces(t_cmd *cmd)
+bool	basic_check_access(t_cmd *cmd)
+{
+	if (!cmd->val.value || !cmd->val.value[0])
+	{
+		errno = ENOENT;
+		return false;
+	}
+	if (ft_strisequal(cmd->val.value, "/") || ft_strisequal(cmd->val.value, "."))
+	{
+		errno = EISDIR;
+		return false;
+	}
+	return true;
+}
+
+bool look_like_a_cmd(t_cmd *cmd)
+{
+	return (!(ft_strnstr(cmd->val.value, "./", 2)) && !ft_strnstr(cmd->val.value, "/", 1));
+}
+
+void cmd_not_found(t_cmd *cmd, t_cmd*first)
+{
+	char	*mess;
+	char *tmp;
+	tmp = ft_strjoin("minishell: ", cmd->val.value);
+	mess = ft_strjoin(tmp, ": command not found\n");
+	write(STDERR_FILENO, mess, ft_strlen(mess));
+	free(tmp);
+	free(mess);
+	free_cmds(&first, true);
+	exit(CMD_NOT_FOUND);
+}
+
+bool	check_acces(t_cmd *cmd, t_cmd *first )
 {
 	int		i;
 	char	*path;
 	char	**paths;
 
 	i = 0;
-	if (!cmd->val.value || !cmd->val.value[0])
-	{
-		errno = ENOENT;
-		return false;
-	}
+	if (!basic_check_access(cmd))
+		return (false);
+	// if (ft_strisequal(cmd->val.value, "."))
+	
+	//  || (ft_strisequal(cmd->val.value, "/"))
 	paths = get_path(cmd);
 	while (paths && paths[i] && cmd->val.value)
 	{
@@ -62,9 +95,12 @@ bool	check_acces(t_cmd *cmd)
 		i++;
 	}
 	free_tab(paths);
-	//dprintf(1, "after while");
-	if (access(cmd->val.value, X_OK) != 0 || (!(ft_strnstr(cmd->val.value, "./", 2)) && !ft_strnstr(cmd->val.value, "/", 1)))
+	// //dprintf(1, "after while");
+	if (look_like_a_cmd(cmd))
+		cmd_not_found(cmd, first);
+	if (access(cmd->val.value, X_OK) != 0)
 		return (false);
+	
 	cmd->val.path = ft_strdup(cmd->val.value);
 	return (true);
 }
