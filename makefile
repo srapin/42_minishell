@@ -24,12 +24,13 @@ FILES = ast \
 		file_struct_pub\
 		free_tokens \
 		free_cmds \
+		ft_cd \
+		ft_echo \
 		ft_env \
+		ft_exit \
 		ft_export \
 		ft_unset \
-		ft_cd \
 		ft_pwd \
-		ft_exit \
 		get_env \
 		hash_table \
 		ht_search_modify \

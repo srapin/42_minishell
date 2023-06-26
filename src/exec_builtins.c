@@ -3,54 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   exec_builtins.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 20:57:20 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/24 10:56:35 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/26 17:30:10 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-
-int	write_error(t_cmd *cmd)
-{
-	char	*err_mess;
-
-	err_mess = ft_strjoin("minishell: ", cmd->val.value);
-	perror(err_mess);
-	free(err_mess);
-	return (EXIT_FAILURE);
-}
-
-int	ft_echo(t_cmd *cmd, t_cmd *first)
-{
-	char	end[2];
-	int		i;
-	int		ret;
-
-	(void) first;
-	end[0] = '\n';
-	end[1] = '\0';
-	i = 1;
-	ret = 0;
-	if (ft_strisequal(cmd->val.args[i], "-n"))
-	{
-		i++;
-		end[0] = '\0';
-	}
-	while (cmd->val.args[i])
-	{
-		ret = printf("%s", cmd->val.args[i]);
-		i++;
-		if (ret >= 0 && cmd->val.args[i])
-			ret = printf(" ");
-	}
-	if (ret >= 0)
-		ret = printf("%s", end);
-	if (ret < 0)
-		return (write_error(cmd));
-	return (EXIT_OK);
-}
 
 int	(*get_builtins_foo(char *str))(t_cmd *cmd, t_cmd *first)
 {

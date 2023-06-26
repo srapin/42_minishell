@@ -220,6 +220,7 @@ void            free_tokens(t_token_list **first);
 char            **hash_map_to_tab(t_ht_hash_table *ht);
 
 // builtins
+int				ft_echo(t_cmd *cmd, t_cmd *first);
 int             ft_env(t_cmd *cmd, t_cmd *first);
 int             ft_export(t_cmd *cmd, t_cmd *first);
 int             ft_unset(t_cmd *cmd, t_cmd *first);

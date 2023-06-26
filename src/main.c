@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 19:32:17 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/24 12:23:18 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/26 17:17:57 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ void	exec_script(t_data *data, char *path)
 		free(line);
 		line = get_next_line(fd);
 	}
-	// dprintf(2, "about to unlink %s\n", path);
 	unlink(path);
 	safe_close(&fd);
 }
@@ -74,30 +73,14 @@ void	initialise_data(t_data *data)
 	data->exp_history = NULL;
 	data->env = NULL;
 }
-// void write_to_file(const char *name, const char *text)
-// {
-// 	// int num;
-// 	FILE *fptr;
 
-// 	// use appropriate location if you are using MacOS or Linux
-// 	fptr = fopen("name","w");
-
-// 	if(fptr == NULL)
-// 	{
-//     	printf("Error!");   
-//     	exit(1);             
-// 	}
-
-// 	fprintf(fptr,"%s",text);
-// 	fclose(fptr);
-// }
 int	main(int argc, char **argv, char **envp)
 {
 	// char *pwd;
 	t_data data;
 	t_ht_hash_table *hash_map;
 
-	rl_outstream = stderr;	//write_to_file("/mnt/nfs/homes/hlesny/42/42cursus/42_minimicheln/lalaal", "TUTUTU");
+	rl_outstream = stderr;
 	initialise_data(&data);
 	signal(SIGINT, sigint_next_prompt);
 	// printf("av0=%s\n", argv[0]);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2023/06/24 13:01:26 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/26 17:17:13 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,13 @@
 
 /*
 Prints the syntax error while specifying the token
-Then,
-	frees all data structures and returns the corresponding exit status (ie 2 for syntax error)
+Then frees all data structures and returns the 
+corresponding exit status (ie 2 for syntax error)
 */
 void	display_se(t_data *data, char *token)
 {
 	printf("Syntax error near unexpected token `%s\'\n", token);
 	free_parsing_data(data);
-	/* free_tokens(first); */
 	free(token);
 	exit(SYNTAX_ERROR);
 }
@@ -33,7 +32,7 @@ void	check_first(t_data *data, t_token_list **first)
 	t_token_list	*current;
 
 	if (!first || !*first)
-		exit(EXIT_OK); // rien a free dans ce cas, si ?
+		exit(EXIT_OK);
 	current = (*first);
 	while (current && current->type == whitespace)
 		current = current->next;
@@ -65,7 +64,6 @@ void	check_syntax(t_data *data)
 	if (!data || !(data->first) || !(*(data->first)))
 		return ;
 	check_first(data, data->first);
-	/* check pipelines one by one */
 	check_pipelines(data, &parentheses_count);
 	if (parentheses_count)
 	{
@@ -86,9 +84,10 @@ int	ft_syntax(t_data *data)
 	pid = fork();
 	if (pid == -1)
 		perror("fork ");
-	if (pid == 0) // ie s'agit du process enfant
+	if (pid == 0)
 		check_syntax(data);
 	if (waitpid(pid, &wstatus, 0) == -1)
 		perror("wait ");
-	return (wstatus);
+	return (WIFEXITED(wstatus) && WEXITSTATUS(wstatus)); // marche pas ienb a modifier
+//	return (wstatus);
 }
