@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_simple_command.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:17:34 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/23 15:23:00 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/26 22:27:05 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,16 +56,20 @@ void	sc_check_quotes(t_data *data, t_token_list **current)
 void	sc_check_parentheses(t_data *data, t_token_list **current,
 		int *parentheses_count)
 {
+	
 	if ((*current)->type == l_parenthesis)
 	{
 		(*parentheses_count)++; // c'est tout ?
-		if ((*current)->next && (*current)->next->type == r_parenthesis)
-			display_se(data, ")");
+		*current = (*current)->next;
+		while (*current && (*current)->type == whitespace)
+			*current = (*current)->next;
+		if (*current && (*current)->type == r_parenthesis)
+			display_se(data, ft_strdup(")"));
 	}
 	else if ((*current)->type == r_parenthesis)
 	{
 		if (!(*parentheses_count))
-			display_se(data, ")");
+			display_se(data, ft_strdup(")"));
 		(*parentheses_count)--;
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   readline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 22:15:52 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/26 19:08:21 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/26 22:19:16 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,6 @@ void 	lexe_parse_execute(t_data *data, char *input)
 void	read_lines(t_data *data)
 {
 	char			*input;
-	//size_t			stream_len;
 	t_cmd			*cmd;
 	struct termios	termios_p;
 
@@ -91,7 +90,6 @@ void	read_lines(t_data *data)
 	while (input)
 	{
 		tcsetattr(STDIN_FILENO, TCSAFLUSH,&termios_p);
-		//stream_len = ft_strlen(input);
 		if (!ft_strlen(input))
 		{
 			input = readline("$ ");
@@ -105,20 +103,7 @@ void	read_lines(t_data *data)
 			input = readline("$ ");
 			continue ;
 		}
-		
 		lexe_parse_execute(data, input);
-		
-		/*data->first = tokenise(assign_type(input, stream_len), stream_len,
-				input);
-		signal(SIGINT, sigint_during_cmd_exec);
-		cmd = parse(data);
-		signal(SIGINT, sigint_next_prompt);
-		if (input)
-		{
-			free(input);
-			input = NULL;
-		}
-		free_cmds(&cmd, false);*/
 		input = readline("$ ");
 	}
 	if (!cmd) //todo c est moche
@@ -126,5 +111,4 @@ void	read_lines(t_data *data)
 	free_cmds(&cmd, true);
 	free(input);
 	write(STDERR_FILENO, "exit\n", ft_strlen("exit\n"));
-	// printf("exit\n");
 }

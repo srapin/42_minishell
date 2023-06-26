@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 01:12:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/24 12:14:57 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/26 21:18:23 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,6 +183,7 @@ char	*cd_move_to(t_cmd *cmd)
 void	set_pwd(t_cmd *cmd, char *full_path)
 {
 	char	*tmp;
+	char 	*oldpwd;
 	// char	*pwd;
 
 	tmp = ft_strdup(full_path);
@@ -196,6 +197,9 @@ void	set_pwd(t_cmd *cmd, char *full_path)
 		free(full_path);
 		full_path = tmp;
 	}
+	oldpwd = ft_strdup(*get_pwd(cmd->env));
+	if (!ht_modify_value(cmd->env, "OLDPWD", oldpwd))
+		ht_insert_item(cmd->env, ft_strdup("OLDPWD"), oldpwd);
 	if (!ht_modify_value(cmd->env, "PWD", full_path))
 		ht_insert_item(cmd->env, ft_strdup("PWD"), full_path);
 	update_pwd(cmd->env, full_path);
