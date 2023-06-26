@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 18:31:24 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/26 17:38:46 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/26 18:36:54 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	ft_echo(t_cmd *cmd, t_cmd *first)
 	/* if (ret >= 0)
 		ret = printf("%s", end); */
     if (ret >= 0)
-        ret = write(1, end, 2);
+        ret = write(1, end, 1);
 	else if (ret < 0)
 		return (write_error(cmd));
 	return (EXIT_OK);
