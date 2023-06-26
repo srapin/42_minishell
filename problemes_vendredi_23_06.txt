@@ -9,6 +9,18 @@ exceve failed : abort: Permission denied
 
 
 
+bash-5.1$ $""
+bash: : command not found
+bash-5.1$ $9
+bash-5.1$ $HOME
+bash: /mnt/nfs/homes/hlesny: Is a directory
+bash-5.1$ $HOM
+bash-5.1$ $HO
+bash-5.1$ $H
+bash-5.1$
+
+
+
 $ ahofae |
 Syntax error near unexpected token `|'
 $ 

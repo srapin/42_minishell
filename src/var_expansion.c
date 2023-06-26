@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:12:06 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/26 17:47:18 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/27 00:20:15 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,12 +154,6 @@ void	parse_current_tk(t_ht_hash_table *ht, t_token_list *current)
 		next_d_start = ft_strdup(ft_strchr(d_start + 1, '$'));
 		next_d_index = current->length - ft_strlen(next_d_start);
 		var_name = get_var_name(current, next_d_start, d_index, next_d_index);
-		/* if (next_d_start && *next_d_start)
-			var_name = get_valid_id(current, d_index, next_d_index, 0);
-		else if (current->type == double_quote)
-			var_name = get_valid_id(current, d_index, next_d_index, 1);
-		else
-			var_name = get_valid_id(current, d_index, next_d_index, 2); */
 		if (var_name)
 			search_and_expand(ht, &current, var_name, d_index);
 		else
@@ -194,7 +188,6 @@ void	perform_variable_exp(t_data *data)
 		else if (current->type != simple_quote && (!current->prev
 					|| current->prev->type != l_io_redirect
 					|| current->prev->length == 1))
-			// ie n'est pas dans le limiteur d'un here_doc
 			parse_current_tk(data->env, current);
 		current = current->next;
 	}
