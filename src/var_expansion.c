@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   var_expansion.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:12:06 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/24 11:32:29 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/26 17:47:18 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,7 @@ int	is_exit_status(t_ht_hash_table *ht, t_token_list *current,
 		check_next_token(&current, current->length - ft_strlen(dollar_start)
 				- 1);
 		free(dollar_start);
+		free(value);
 		return (1);
 	}
 	return (0);
