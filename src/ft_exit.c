@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 00:57:49 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/26 21:02:11 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/26 23:29:15 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,9 +126,9 @@ int	ft_exit(t_cmd *cmd, t_cmd *first)
 		arg = cmd->val.args[1];
 	if (!arg)
 	{
-		free_cmds(&first, true);
-		if	(cmd->pid == -1)
+		if (cmd->pid == -1)
 			write(STDERR_FILENO, "exit\n", 5);
+		free_cmds(&first, true);
 		exit(g_exit_status);
 	}
 	check_if_numeric(cmd, first);

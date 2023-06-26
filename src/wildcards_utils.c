@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcards_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:34:40 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/24 11:34:05 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/26 23:38:02 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,20 +52,7 @@ void	insert_filenames(t_token_list **first, t_token_list **current,
 		current_f = current_f->next;
 	}
 	tk_del_one(first, tmp);
-
 	free_filenames(filenames);
-	/* t_filename *curr;
-	curr = *filenames;
-	while (*filenames)
-	{
-		curr = *filenames;
-		*filenames = (*filenames)->next;
-		if (*filenames)
-			curr->next = (*filenames)->next;
-		free(curr->filename);
-		free(curr);
-	} */
-	//free_filenames(filenames); // POURQUOI CA MARCHE PAS
 }
 
 void	free_and_null(char *prefix, char *suffix)
