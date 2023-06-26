@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 20:57:20 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/26 19:06:13 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/26 20:52:12 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,12 @@ void	save_in_out(int *in, int *out)
 	*out = dup(STDOUT_FILENO);
 }
 
-void close_std()
-{
-	close(STDIN_FILENO);
-	close(STDOUT_FILENO);
-	close(STDERR_FILENO);
-}
+// void close_std()
+// {
+// 	close(STDIN_FILENO);
+// 	close(STDOUT_FILENO);
+// 	close(STDERR_FILENO);
+// }
 
 int	try_to_exec_builtins(t_cmd *cmd, t_cmd *first, bool is_child)
 {
@@ -82,8 +82,8 @@ int	try_to_exec_builtins(t_cmd *cmd, t_cmd *first, bool is_child)
 		if (!dup_cmd_file(cmd))
 			return (reset_files(old_in, old_out));
 	}
-	else if (is_child && foo == &ft_exit)
-		close_std();
+	// else if (is_child && foo == &ft_exit)
+	// 	close_std();
 	// else if (foo == &ft_exit)
 	
 	// 	close(STDOUT_FILENO);
