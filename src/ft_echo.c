@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 18:31:24 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/26 18:36:54 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/26 19:03:23 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,20 +39,20 @@ int	ft_echo(t_cmd *cmd, t_cmd *first)
 		i++;
 		end[0] = '\0';
 	}
-	while (cmd->val.args[i])
+	while (cmd->val.args[i] && ret >= 0)
 	{
         ret = write(1, cmd->val.args[i], ft_strlen(cmd->val.args[i]));
-		//ret = printf("%s", cmd->val.args[i]);
 		i++;
 		if (ret >= 0 && cmd->val.args[i])
             ret = write(1, " ", 1);
-			//ret = printf(" ");
 	}
-	/* if (ret >= 0)
-		ret = printf("%s", end); */
     if (ret >= 0)
-        ret = write(1, end, 1);
-	else if (ret < 0)
+	{
+		ret = write(1, end, ft_strlen(end));
+	}
+	if (ret < 0)
+	{
 		return (write_error(cmd));
+	}
 	return (EXIT_OK);
 }

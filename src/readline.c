@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 22:15:52 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/24 12:24:18 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/26 19:08:21 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,6 @@ void	read_lines(t_data *data)
 		free_parsing_data(data);
 	free_cmds(&cmd, true);
 	free(input);
-	write(STDERR_FILENO, "exit\n", 1);
+	write(STDERR_FILENO, "exit\n", ft_strlen("exit\n"));
 	// printf("exit\n");
 }
