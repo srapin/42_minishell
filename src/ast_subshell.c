@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:09:03 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/24 10:32:36 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/26 21:50:49 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,11 @@ void	set_subshell(t_cmd *current_cmd, t_token_list **curr_tk)
 	char 	*subshell_cmd;
 	char *mini_path = ht_search(current_cmd->env, "MINISHELL_PATH");
 	
+	if (!mini_path)
+	{
+		// write(STDERR_FILENO, "minishell : \n", );
+		mini_path = ft_strdup("minishell");
+	}
 	if (!current_cmd)
 		return ;
 	subshell_cmd = get_subshell_command(curr_tk);

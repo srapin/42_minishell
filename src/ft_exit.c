@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 00:57:49 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/24 13:01:07 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/26 21:02:11 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ void	check_if_numeric(t_cmd *cmd, t_cmd *first)
 	{
 		if (!ft_isdigit(arg[i]))
 		{
-			write(STDERR_FILENO, "exit\n", 5);
+			if	(cmd->pid == -1)
+				write(STDERR_FILENO, "exit\n", 5);
 			write(STDERR_FILENO, "minishell : exit : ", ft_strlen("minishell : exit : "));
 			write(STDERR_FILENO, arg, ft_strlen(arg));
 			write(STDERR_FILENO,  ": numeric argument required\n", ft_strlen(" : numeric argument required\n"));
@@ -79,7 +80,8 @@ int	check_long_overflow(t_cmd *cmd, t_cmd *first)
 	initial_nb = is_numeric(arg);
 	if (initial_nb == -1)
 	{
-		write(STDERR_FILENO, "exit\n", 5);
+		if	(cmd->pid == -1)
+			write(STDERR_FILENO, "exit\n", 5);
 		write(STDERR_FILENO, "minishell : exit : ", ft_strlen("minishell : exit : "));
 		write(STDERR_FILENO, arg, ft_strlen(arg));
 		write(STDERR_FILENO,  ": numeric argument required\n", ft_strlen(" : numeric argument required\n"));
@@ -90,7 +92,8 @@ int	check_long_overflow(t_cmd *cmd, t_cmd *first)
 	}
 	if (cmd->val.args[2])
 	{
-		write(STDERR_FILENO, "exit\n", 5);
+		if (cmd->pid == -1)
+			write(STDERR_FILENO, "exit\n", 5);
 		write(STDERR_FILENO, "minishell : exit : too many arguments\n", ft_strlen("minishell : exit : too many arguments\n"));
 		
 		// write(STDERR_FILENO,  ": numeric argument required\n", ft_strlen(" : numeric argument required\n"));
@@ -99,7 +102,8 @@ int	check_long_overflow(t_cmd *cmd, t_cmd *first)
 	}
 	exit_status = (unsigned char)initial_nb;
 	free_cmds(&first, true);
-	write(STDERR_FILENO, "exit\n", 5);
+	if	(cmd->pid == -1)
+		write(STDERR_FILENO, "exit\n", 5);
 	exit(exit_status);
 }
 
@@ -117,13 +121,14 @@ int	ft_exit(t_cmd *cmd, t_cmd *first)
 	char *arg;
 
 	arg = NULL;
+	// write(STDERR_FILENO, "lol\n", 5);
 	if (cmd)
 		arg = cmd->val.args[1];
 	if (!arg)
 	{
 		free_cmds(&first, true);
-		write(STDERR_FILENO, "exit\n", 5);
-		// printf("exit\n");
+		if	(cmd->pid == -1)
+			write(STDERR_FILENO, "exit\n", 5);
 		exit(g_exit_status);
 	}
 	check_if_numeric(cmd, first);
