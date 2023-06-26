@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 02:12:27 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/26 22:35:18 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/26 22:58:21 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,9 +138,9 @@ t_cmd	*parse_and_execute(t_data *data)
 	if (wstatus)
 	{
 		g_exit_status = wstatus % 256; // ou juste g_exit_status = SYNTAX_ERROR
-		//free_tokens(data->first); // car sinon est free que dans le process enfant
-		//*(data->first) = NULL;
-		//data->first = NULL;
+		free_tokens(data->first); // car sinon est free que dans le process enfant
+		// *(data->first) = NULL;
+		data->first = NULL;
 		return (NULL);
 	}
 	perform_variable_exp(data);
