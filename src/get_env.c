@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_env.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/20 04:16:54 by hlesny            #+#    #+#             */
-/*   Updated: 2023/06/26 19:19:13 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/27 19:40:28 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,12 @@ void	set_shell_level(t_ht_hash_table *ht)
 	}
 }
 
-void insert_path_to_minishell(char *exec_name, t_ht_hash_table *ht)
+void	insert_path_to_minishell(char *exec_name, t_ht_hash_table *ht)
 {
-	char *mini_path;
+	char	*mini_path;
 
 	if (ht_search(ht, "MINISHELL_PATH"))
-		return;
+		return ;
 	if (ft_strnstr(exec_name, ".", 1))
 	{
 		exec_name++;
@@ -74,24 +74,22 @@ t_ht_hash_table	*ht_get_env(char **envp, char *exec_name)
 		while (envp[i][j] && envp[i][j] != '=')
 			j++;
 		ht_insert_item(ht, ft_substr(envp[i], 0, j), ft_substr(envp[i], j + 1,
-					ft_strlen(envp[i])));
+				ft_strlen(envp[i])));
 		i++;
 	}
 	if (!ht_search(ht, "SHLVL"))
 		ht_insert_item(ht, ft_strdup("SHLVL"), ft_strdup("0"));
 	else
 		set_shell_level(ht);
-	insert_path_to_minishell(exec_name ,ht);
-	
+	insert_path_to_minishell(exec_name, ht);
 	return (ht);
 }
 
-
 t_ht_hash_table	*get_minimal_env(char *exec_name)
 {
-	size_t size;
-	char *pwd;
-	t_ht_hash_table *ht;
+	size_t			size;
+	char			*pwd;
+	t_ht_hash_table	*ht;
 
 	ht = ht_new(HT_INITIAL_SIZE);
 	size = GETCWD_INITIAL_BUF_SIZE;
@@ -111,6 +109,6 @@ t_ht_hash_table	*get_minimal_env(char *exec_name)
 	ht_insert_item(ht, ft_strdup("SHLVL"), ft_strdup("1"));
 	ht_insert_item(ht, ft_strdup("PWD"), pwd);
 	ht_insert_item(ht, ft_strdup("_"), ft_strdup("/usr/bin/env"));
-	insert_path_to_minishell(exec_name ,ht);
+	insert_path_to_minishell(exec_name, ht);
 	return (ht);
 }

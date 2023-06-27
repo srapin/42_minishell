@@ -6,20 +6,19 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 00:57:49 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/27 16:52:38 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/27 19:28:02 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-/* Returns the number in a long long if the later is in the interval [0,
-	LONG_LONG_MAX].
-Returns -1 in case it exceeds LONG_LONG_MAX.
-The number sent as argument has to be a positive integer*/
+/* Returns the number in a long long type variable if the later
+is in the interval [-LONG LONG MIN, LONG_LONG_MAX].
+Returns -1 in case it exceeds LONG_LONG_MAX, or LONG LONG MIN. */
 long long	is_numeric(char *str_nb)
 {
 	int					i;
-	int 				sign;
+	int					sign;
 	unsigned long long	nb;
 
 	i = 0;
@@ -36,8 +35,8 @@ long long	is_numeric(char *str_nb)
 		nb = nb * 10 + (str_nb[i] - '0');
 		i++;
 	}
-	if ((sign > 0 && nb > LLONG_MAX) 
-		|| (sign < 0 && nb > (unsigned long long)LLONG_MAX + 1))
+	if ((sign > 0 && nb > LLONG_MAX) || (sign < 0
+			&& nb > (unsigned long long)LLONG_MAX + 1))
 		return (-1);
 	return (sign * nb);
 }
@@ -49,25 +48,37 @@ void	check_if_numeric(t_cmd *cmd, t_cmd *first)
 
 	i = 0;
 	arg = cmd->val.args[1];
-	if (arg[i] && (arg[i] == '-'  || arg[i] == '+'))
+	if (arg[i] && (arg[i] == '-' || arg[i] == '+'))
 		i++;
 	while (arg[i])
 	{
 		if (!ft_isdigit(arg[i]))
 		{
-			if	(cmd->pid == -1)
+			if (cmd->pid == -1)
 				write(STDERR_FILENO, "exit\n", 5);
-			write(STDERR_FILENO, "minishell : exit : ", ft_strlen("minishell : exit : "));
+			write(STDERR_FILENO, "minishell : exit : ",
+				ft_strlen("minishell : exit : "));
 			write(STDERR_FILENO, arg, ft_strlen(arg));
-			write(STDERR_FILENO,  ": numeric argument required\n", ft_strlen(" : numeric argument required\n"));
-			
-			// printf("minishell : exit : %s : numeric argument required\n", arg);
-			// ecrire sur STDERR
+			write(STDERR_FILENO, ": numeric argument required\n",
+				ft_strlen(" : numeric argument required\n"));
 			free_cmds(&first, true);
 			exit(NOT_A_NUM);
 		}
 		i++;
 	}
+}
+
+void	invalid_first_arg(t_cmd *cmd, t_cmd *first, char *arg)
+{
+	if (cmd->pid == -1)
+		write(STDERR_FILENO, "exit\n", 5);
+	write(STDERR_FILENO, "minishell : exit : ",
+		ft_strlen("minishell : exit : "));
+	write(STDERR_FILENO, arg, ft_strlen(arg));
+	write(STDERR_FILENO, ": numeric argument required\n",
+		ft_strlen(" : numeric argument required\n"));
+	free_cmds(&first, true);
+	exit(NOT_A_NUM);
 }
 
 int	check_long_overflow(t_cmd *cmd, t_cmd *first)
@@ -79,25 +90,13 @@ int	check_long_overflow(t_cmd *cmd, t_cmd *first)
 	arg = cmd->val.args[1];
 	initial_nb = is_numeric(arg);
 	if (initial_nb == -1)
-	{
-		if	(cmd->pid == -1)
-			write(STDERR_FILENO, "exit\n", 5);
-		write(STDERR_FILENO, "minishell : exit : ", ft_strlen("minishell : exit : "));
-		write(STDERR_FILENO, arg, ft_strlen(arg));
-		write(STDERR_FILENO,  ": numeric argument required\n", ft_strlen(" : numeric argument required\n"));
-		// printf("minishell : exit : %s : numeric argument required\n", arg);
-		// ecrire sur STDERR
-		free_cmds(&first, true);
-		exit(NOT_A_NUM);
-	}
+		invalid_first_arg(cmd, first, arg);
 	if (cmd->val.args[2])
 	{
 		if (cmd->pid == -1)
 			write(STDERR_FILENO, "exit\n", 5);
-		write(STDERR_FILENO, "minishell : exit : too many arguments\n", ft_strlen("minishell : exit : too many arguments\n"));
-		
-		// write(STDERR_FILENO,  ": numeric argument required\n", ft_strlen(" : numeric argument required\n"));
-		// printf("minishell : exit : too many arguments\n"); // ecrire sur STDERR
+		write(STDERR_FILENO, "minishell : exit : too many arguments\n",
+			ft_strlen("minishell : exit : too many arguments\n"));
 		return (1);
 	}
 	exit_status = (unsigned char)initial_nb;
@@ -113,15 +112,14 @@ Si le premier argument n'est pas numerique,
 Si non, il analyse le nomnre d'arguments.
 Si trop d'arguments sont donnés (ie plus qu'un),
 il affiche une erreur et retourne 1, sans exit le shell.
-Sinon, il retourne l'argument donné, modulo 255.
+Sinon, il retourne l'argument donné, modulo 256.
 */
 int	ft_exit(t_cmd *cmd, t_cmd *first)
 {
-	unsigned char exit_status;
-	char *arg;
+	unsigned char	exit_status;
+	char			*arg;
 
 	arg = NULL;
-	// write(STDERR_FILENO, "lol\n", 5);
 	if (cmd)
 		arg = cmd->val.args[1];
 	if (!arg)
@@ -133,5 +131,5 @@ int	ft_exit(t_cmd *cmd, t_cmd *first)
 	}
 	check_if_numeric(cmd, first);
 	exit_status = check_long_overflow(cmd, first);
-	return (exit_status); // si n'a pas exit avant
+	return (exit_status);
 }

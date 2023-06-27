@@ -37,7 +37,7 @@ int	count_cmds_linked_by_pipe(t_cmd *first_cmd)
 
 bool	dup_cmd_file(t_cmd *cmd)
 {
-	bool flag;
+	bool	flag;
 
 	flag = open_cmd_files(cmd);
 	if (flag && cmd->red.in_fd > -1)

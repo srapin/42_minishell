@@ -46,13 +46,12 @@ bool	replace_fd(t_file *f_s, int *to_rep, bool out)
 		new_fd = f_s->fd;
 	else if (f_s->name)
 	{
-		if (out && access(f_s->name,F_OK) != 0)
+		if (out && access(f_s->name, F_OK) != 0)
 			new_fd = open(f_s->name, f_s->flag, S_IRWXU);
 		else
 			new_fd = open(f_s->name, f_s->flag);
 		if (new_fd < 0)
 		{
-			// new_fd = open(f_s->name, f_s->flag, S_IRWXU);
 			err_mess = ft_strjoin("minishell: ", f_s->name);
 			perror(err_mess);
 			safe_close(to_rep);
@@ -89,6 +88,5 @@ bool	open_cmd_files(t_cmd *cmd)
 			flag = replace_fd(tmp_file, &(cmd->red.in_fd), false);
 		tmp_lst = tmp_lst->next;
 	}
-	
 	return (flag);
 }

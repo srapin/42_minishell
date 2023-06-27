@@ -3,23 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   ast_set_cmd_args.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:03:43 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/24 10:51:42 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/27 18:33:46 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-
 
 void	split_not_merged_no_quotes(t_cmd **curr_cmd, t_token_list *curr_tk,
 		int *i)
 {
 	int		wht_pos;
 	int		p_wht_pos;
-	// char	*tmp;
 	char	*substr;
 	char	*buffer;
 
@@ -28,27 +25,16 @@ void	split_not_merged_no_quotes(t_cmd **curr_cmd, t_token_list *curr_tk,
 	buffer = NULL;
 	while (wht_pos != -1)
 	{
-		//tmp = buffer;
 		substr = ft_substr(curr_tk->content, p_wht_pos, wht_pos - p_wht_pos);
 		set_buffer(&buffer, substr);
-		//buffer = ft_strjoin(tmp, substr);
-		// free(substr);
-		// substr = NULL;
 		reassess_buffer(curr_cmd, &buffer, i);
-		// if (*buffer)
-		// {
-		// 	(*curr_cmd)->val.args[*i] = ft_strdup(buffer);
-		// 	(*i)++;
-		// 	free(buffer);
-		// 	buffer = NULL;
-		// }
 		skip_whitespaces_reassess_indexes(curr_tk->content,
-		&wht_pos, &p_wht_pos);
+			&wht_pos, &p_wht_pos);
 	}
 	if ((size_t) p_wht_pos < curr_tk->length)
 	{
 		(*curr_cmd)->val.args[*i] = ft_substr(curr_tk->content,
-		p_wht_pos, curr_tk->length);
+				p_wht_pos, curr_tk->length);
 		(*i)++;
 	}
 }
@@ -67,17 +53,8 @@ void	split_merged_no_quotes(t_cmd **curr_cmd, t_word_data *wd, char **buffer,
 		substr = ft_substr(wd->content, p_wht_pos, wht_pos - p_wht_pos);
 		set_buffer(buffer, substr);
 		reassess_buffer(curr_cmd, buffer, i);
-		// if (*buffer)
-		// {
-		// 	(*curr_cmd)->val.args[*i] = ft_strdup(*buffer);
-		// 	(*i)++;
-		// 	free(*buffer);
-		// 	*buffer = NULL;
-		// }
-		//whitespaces_skip_assess(wd, &wht_pos, &p_wht_pos);
 		skip_whitespaces_reassess_indexes(wd->content,
-											&wht_pos,
-											&p_wht_pos);
+			&wht_pos, &p_wht_pos);
 	}
 	if (wht_pos == -1)
 	{
@@ -125,7 +102,8 @@ Dès que tombe sur une succession de whitespaces en parsant le token
 	le garde dans un buffer et passe au mot suivant
     sinon, cherche la position du premier whitespace,
 	garde le sous-mot jusqu'a l'index dans un buffer,
-    join ce buffer avec le buffer du/des mots précédents si ce dernier buffer est non nul,
+    join ce buffer avec le buffer du/des mots précédents
+	si ce dernier buffer est non nul,
     puis ajoute à la liste d'arguments de la commande.
     ensuite, recherche s'il y a un autre whitespace qui suit :
         si non, garde la fin du mot dans un buffer et passe au mot suivant
@@ -185,4 +163,3 @@ void	set_command_attributs(t_cmd **current, t_token_list **first_tk,
 	if (args_count)
 		(*current)->val.value = ft_strdup((*current)->val.args[0]);
 }
-

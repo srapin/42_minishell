@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 02:05:40 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/23 22:44:15 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/27 18:47:42 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,26 +16,21 @@ void	launch_process(t_cmd **cmd, t_cmd *first, int *pip_tab, bool need_pip)
 {
 	if (need_pip)
 		safe_pipe(pip_tab);
-	else 
+	else
 		reset_pip_tab(pip_tab);
 	if (first && !first->red.next_cmd)
 	{
 		if (try_to_exec_builtins(*cmd, first, false) >= 0)
 		{
-			(*cmd)->pid	= -1;
+			(*cmd)->pid = -1;
 			return ;
 		}
 	}
-	//dprintf(1, "launch process =%s}\n", (*cmd)->val.value);
 	(*cmd)->pid = fork();
 	if ((*cmd)->pid < 0)
 		fail_process();
 	if ((*cmd)->pid == 0)
-	{
-		//dprintf(2, "MYPID %d\n", getpid());
-		//sleep(10000);
 		child_process(*cmd, first, pip_tab);
-	}
 	if ((*cmd)->pid > 0)
 		parent_process(cmd, pip_tab);
 }

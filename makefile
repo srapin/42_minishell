@@ -1,8 +1,7 @@
 NAME = minishell
-NAME_BONUS = minishell_bonus # ???
+NAME_BONUS = minishell_bonus
 
 CC = cc
-#CFLAGS = -Wall -Wextra -Werror -g3 -g
 CFLAGS = -g3 -g -Wall -Wextra -Werror
 
 FILES = ast \
@@ -13,7 +12,6 @@ FILES = ast \
 		ast_utils \
 		ast_subshell \
 		ast_heredocs \
-		cmd_private\
 		cmd \
 		common_process\
 		del_quotes_group_words \
@@ -24,15 +22,22 @@ FILES = ast \
 		file_struct_pub\
 		free_tokens \
 		free_cmds \
+		free_cmds_utils \
 		ft_cd \
+		ft_cd_utils \
+		ft_cd_path_utils \
 		ft_echo \
 		ft_env \
 		ft_exit \
 		ft_export \
+		ft_export_print \
+		ft_export_utils \
 		ft_unset \
 		ft_pwd \
 		get_env \
 		hash_table \
+		ht_hash_function_utils \
+		ht_hash_function_utils2 \
 		ht_search_modify \
 		ht_insert \
 		ht_delete \
@@ -59,14 +64,9 @@ FILES = ast \
 		wildcards_second_sort \
 		wildcards_second_sort_utils
 
-#PARSING_FILES = 	ast \
-					ast_heredocs
-
-
 SRCS_DIR = src
-#PARSING_DIR = $(SRCS_DIR)/parsing
 
-SRCS = $(addprefix $(SRCS_DIR)/, $(addsuffix .c, $(FILES)))#:$(addprefix $(PARSING_DIR)/, $(addsuffix .c, $(PARSING_FILES)))
+SRCS = $(addprefix $(SRCS_DIR)/, $(addsuffix .c, $(FILES)))
 
 OBJS_DIR = obj
 OBJS = ${patsubst ${SRCS_DIR}/%.c, ${OBJS_DIR}/%.o, ${SRCS}}

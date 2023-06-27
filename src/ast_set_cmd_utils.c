@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_set_cmd_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:06:08 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/23 15:06:55 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/27 18:35:17 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,5 +76,5 @@ void	whitespaces_skip_assess(t_word_data *wd, int *wht_pos, int *p_wht_pos)
 		(*wht_pos)++;
 	*p_wht_pos = *wht_pos;
 	*wht_pos = get_whtsp_pos(wd->content,
-								*p_wht_pos);
+			*p_wht_pos);
 }

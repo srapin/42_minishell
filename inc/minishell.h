@@ -36,12 +36,8 @@
 #include "struct.h"
 #include "pub.h"
 
-//#include "hash_table.h"
-//#include "defines.h"
-//#include "tokens.h"
-
 extern int g_exit_status;
-#define EXIT_SIG_INT = 130;
+# define EXIT_SIG_INT = 130;
 # define GETCWD_INITIAL_BUF_SIZE    50 /* Initial buffer size for getcwd()'s call*/
 
 // parsing
@@ -55,10 +51,10 @@ extern int g_exit_status;
 
 // builtins
 # define CD_TOO_MANY_ARGS           1
-# define INVALID_VAR_ID             1 // "not a valid identifier"'s export error message
-# define CANNOT_ACCESS_DIR          1 // chdir error 
+# define INVALID_VAR_ID             1
+# define CANNOT_ACCESS_DIR          1
 # define HOME_NOT_SET               1
-# define NOT_A_NUM                  2 // "numeric argument required" error in exit()
+# define NOT_A_NUM                  2
 
 
 /* -------------------------- HASH TABLE ---------------------------*/
@@ -85,64 +81,61 @@ int	is_prime(int nb);
 /* ---------------------- TOKENS STREAM -------------------------*/
 
 t_token_list    *tk_new_elem(char *t_stream, size_t t_len, int t_type, int is_quote);
-void            tk_add(t_token_list **first, t_token_list *new); // add at the end
-void            tk_add_word_in_list(t_token_list **current, char *content); // add after the current
+void            tk_add(t_token_list **first, t_token_list *new);
+void            tk_add_word_in_list(t_token_list **current, char *content);
 void            tk_del_one(t_token_list **first, t_token_list *to_del);
 
 /* ------------------------- EXEC -------------------------------*/
 
-void    exec_cmds(t_cmd *cmd);
-void    malloc_error();
-int     (*get_builtins_foo(char *str))(t_cmd *, t_cmd *);
+void    		exec_cmds(t_cmd *cmd);
+void    		malloc_error();
+int     		(*get_builtins_foo(char *str))(t_cmd *, t_cmd *);
+
 //common_process
-void	parent_process(t_cmd **cmd, int pipe_tab[2]);
-void	child_process(t_cmd *cmd, t_cmd *first, int pipe_tab[2]);
-void	fail_process(void);
+void			parent_process(t_cmd **cmd, int pipe_tab[2]);
+void			child_process(t_cmd *cmd, t_cmd *first, int pipe_tab[2]);
+void			fail_process(void);
 
-void    sigint_during_cmd_exec(int sig);
-void    sigint_next_prompt(int sig);
-// void handle_sigquit(int sig);
-// void handle_sigquit2(int sig);
+// signals
+void    		sigint_during_cmd_exec(int sig);
+void    		sigint_next_prompt(int sig);
+
 //exec_cmd
-void    exec_cmds(t_cmd *first_cmd); //to div
-
-int     try_to_exec_builtins(t_cmd *cmd, t_cmd *first, bool is_child);
-
-//heredoc
-// void heredoc(t_cmd *cmd)t_token_list
+void    		exec_cmds(t_cmd *first_cmd);
+int     		try_to_exec_builtins(t_cmd *cmd, t_cmd *first, bool is_child);
 
 //next
-bool    check_ret(t_cmd *cmd, int ret);
-void	wait_childs(t_cmd *cmd);
+bool    		check_ret(t_cmd *cmd, int ret);
+void			wait_childs(t_cmd *cmd);
 
 //safer
-void reset_pip_tab(int pip_tab[2]);
-bool	check_acces(t_cmd *cmd, t_cmd *first);
-void safe_close_cmd_fd(t_cmd *cmd);
-void	safe_pipe(int pipe_tab[2]);
-void	safe_close(int *fd);
+void 			reset_pip_tab(int pip_tab[2]);
+bool			check_acces(t_cmd *cmd, t_cmd *first);
+void 			safe_close_cmd_fd(t_cmd *cmd);
+void			safe_pipe(int pipe_tab[2]);
+void			safe_close(int *fd);
 
 //tools
-bool	ft_strisequal(char *s1, char *s2);
-void	free_tab(char **tab);
-void	add_slash(char **paths);
-char	**get_path(t_cmd *cmd);
+bool			ft_strisequal(char *s1, char *s2);
+void			free_tab(char **tab);
+void			add_slash(char **paths);
+char			**get_path(t_cmd *cmd);
 //complete
-void link_cmds_with_redirections(t_cmd *cmd, t_cmd *next);
-void link_cmds_with_ctrls_op(t_cmd *cmd, t_cmd *next, ctrl_op c);
+void 			link_cmds_with_redirections(t_cmd *cmd, t_cmd *next);
+void 			link_cmds_with_ctrls_op(t_cmd *cmd, t_cmd *next, ctrl_op c);
 
 
-int count_cmds_linked_by_pipe(t_cmd *first_cmd);
-void	safe_pipe(int pipe_tab[2]);
-void	fail_process(void);
+int 			count_cmds_linked_by_pipe(t_cmd *first_cmd);
+void			safe_pipe(int pipe_tab[2]);
+void			fail_process(void);
 //to test
-bool open_cmd_files(t_cmd * cmd);
-void	parent_process(t_cmd **cmd, int pipe_tab[2]);
-void safe_close_cmd_fd(t_cmd *cmd);
-bool dup_cmd_file(t_cmd *cmd);
+bool 			open_cmd_files(t_cmd * cmd);
+void			parent_process(t_cmd **cmd, int pipe_tab[2]);
+void 			safe_close_cmd_fd(t_cmd *cmd);
+bool 			dup_cmd_file(t_cmd *cmd);
 
 
-// ------------ Parsing ------------------
+/* ------------------- PARSING ----------------------*/
 
 void            read_lines(t_data *data);
 t_ht_hash_table *ht_get_env(char **envp, char *exec_name);
@@ -219,18 +212,27 @@ t_list          *init_export_history(t_ht_hash_table *ht);
 void            free_tokens(t_token_list **first);
 char            **hash_map_to_tab(t_ht_hash_table *ht);
 
-// builtins
+/* ------------------------- BUILTINS ---------------------------- */
+
 int				ft_echo(t_cmd *cmd, t_cmd *first);
 int             ft_env(t_cmd *cmd, t_cmd *first);
 int             ft_export(t_cmd *cmd, t_cmd *first);
+void	search_and_insert(t_list **head, t_list *elem);
 int             ft_unset(t_cmd *cmd, t_cmd *first);
 int             is_in_export_history(t_list *export_hist, char *var_name);
 void            del_from_export_history(t_list **export_hist, char *var_name);
+void			print_export_history(t_ht_hash_table *ht, t_list *export_hist);
 int             ft_cd(t_cmd *cmd, t_cmd *first);
+char			*get_full_path(t_ht_hash_table *env, char *arg_path);
+char			*replace_prev_or_actual_dir(char *path);
+void			set_path(char **path, char *before, char *after);
+void			curr_dir(char **path, int i);
 int             ft_pwd(t_cmd *cmd, t_cmd *first);
 char            **get_pwd(t_ht_hash_table *env);
 void            update_pwd(t_ht_hash_table *env, char *new_pwd);
 int             ft_exit(t_cmd *cmd, t_cmd *first);
+
+/* --------------------- FREE DATA -----------------------------*/
 
 void            free_parsing_data(t_data *data);
 void            free_pwd(t_ht_hash_table *env);
@@ -238,7 +240,10 @@ void            free_cmd(t_cmd **cmd);
 void            free_cmds(t_cmd **cmd, bool common);
 void	        ft_lstfree(t_list **lst,void free_foo(void *));
 void			free_merged_words(t_word_data *wd);
-
+void			call_free_fs(void *p);
+void			free_red(t_redirect *red);
+void			free_file_struct(t_file *file_struct);
+void			free_cmd_value(t_cmd_value *val);
 
 // to del
 void            print_ht(t_ht_hash_table *ht);

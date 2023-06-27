@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_simple_command.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:02:23 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/26 21:50:55 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/27 18:36:04 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,21 +18,18 @@ void	update_redirect(t_cmd *cmd, t_token_list *current)
 	t_file	*file;
 
 	file = create_file_struct_with_filename(current->next->content);
-	if (current->type == l_io_redirect) // '<'
+	if (current->type == l_io_redirect)
 	{
 		file->flag = O_RDONLY;
 		add_in_redir_with_file_struct(cmd, file);
-		// printf("added new infile : %s\n", current->next->content);
 	}
 	else
 	{
-		if (current->length == 1) // '>'
+		if (current->length == 1)
 			file->flag = O_WRONLY | O_CREAT | O_TRUNC;
-		else // '>>'
+		else
 			file->flag = O_WRONLY | O_CREAT | O_APPEND;
 		add_out_redir_with_file_struct(cmd, file);
-		// printf("added new outfile : %s\n", current->next->content);
-		// printf("added new outfile : %s\n", file->name);
 	}
 }
 

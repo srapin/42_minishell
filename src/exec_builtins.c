@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_builtins.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 20:57:20 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/27 17:42:01 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/27 18:46:04 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +53,6 @@ void	save_in_out(int *in, int *out)
 	*in = dup(STDIN_FILENO);
 	*out = dup(STDOUT_FILENO);
 }
-
-// void close_std()
-// {
-// 	close(STDIN_FILENO);
-// 	close(STDOUT_FILENO);
-// 	close(STDERR_FILENO);
-// }
 
 int	try_to_exec_builtins(t_cmd *cmd, t_cmd *first, bool is_child)
 {

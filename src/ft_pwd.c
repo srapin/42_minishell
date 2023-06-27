@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 00:59:44 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/26 21:11:41 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/27 19:38:28 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,9 @@
 
 /* Quel que soit le nombre d'arguments donnés, il printera dans
 tous les cas le chemin absolu vers le dossier courant */
-// quels cas d'erreur à gérer ?????
 char	**get_pwd(t_ht_hash_table *env)
 {
-	static char	*pwd; 
+	static char	*pwd;
 
 	if (!pwd)
 		pwd = ft_strdup(ht_search(env, "PWD"));

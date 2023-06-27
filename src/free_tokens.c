@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/10 17:29:36 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/26 22:24:40 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/27 18:59:50 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ void	free_tokens(t_token_list **first)
 		current = current->next;
 		free(tmp->content);
 		free_merged_words(tmp->merged_words);
-		//ft_lstclear(&tmp->before_exp);
 		free(tmp);
 		tmp = NULL;
 	}
@@ -63,7 +62,7 @@ void	free_parsing_data(t_data *data)
 		ht_del_hash_table(data->env);
 	if (data->exp_history)
 		ft_lstfree(&data->exp_history, free);
-	if  (data->files)
+	if (data->files)
 		ft_lstfree(&data->files, free);
 	data->env = NULL;
 	data->exp_history = NULL;

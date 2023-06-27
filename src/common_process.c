@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   common_process.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 01:02:42 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/27 17:39:20 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/27 18:44:29 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,6 @@ void	parent_process(t_cmd **cmd, int pipe_tab[2])
 void	print_err(t_cmd *cmd)
 {
 	char	*mess;
-
-	//dprintf(1, "print_err=%s}\n", cmd->val.value);
 
 	mess = ft_strjoin("minishell: ", cmd->val.value);
 	perror(mess);
@@ -62,7 +60,6 @@ void	child_process(t_cmd *cmd, t_cmd *first, int pipe_tab[2])
 	char	**args;
 	char	**env;
 
-	//dprintf(1, "child proc, val =%s}\n", cmd->val.value);
 	if (pipe_tab[0] > -1)
 	{
 		safe_close(&(pipe_tab[0]));

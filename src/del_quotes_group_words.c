@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:13:44 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/27 03:22:10 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/27 18:45:53 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ Enleve les quotes de début et de fin, et remplace le token <quote> par <word>
 */
 void	delete_quotes(t_data *data)
 {
-	// char			*content_tmp;
 	t_token_list	*current;
 
 	if (!data->first || !(*(data->first)))
@@ -77,9 +76,7 @@ Apres avoir enlevé les quotes, groupe deux <word> qui se suivent
 void	group_words(t_data *data)
 {
 	t_token_list	*current;
-	// char			*content_tmp;
 
-	//t_token_list    *current2;
 	if (!data->first)
 		return ;
 	current = *(data->first);
@@ -95,7 +92,7 @@ void	group_words(t_data *data)
 				current = current->next;
 		}
 		else if (current->type == word && current->next
-				&& current->next->type == word)
+			&& current->next->type == word)
 			set_merged_words(&current);
 		else if (current->type == whitespace)
 			del_whitespace(data, &current);

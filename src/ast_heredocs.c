@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ast_heredocs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 23:24:33 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/24 12:11:22 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/27 18:30:19 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-char	*random_filename()
+char	*random_filename(void)
 {
 	static size_t	files_count;
 	char			*count;
@@ -39,8 +39,8 @@ int	is_limiter(char *line, char *limiter)
 	i = 0;
 	while (line[i] && limiter[i] && line[i] == limiter[i])
 		i++;
-	if (!limiter[i]) // ie a parcouru tout le limiter
-		return (1);  // est le limiter
+	if (!limiter[i])
+		return (1);
 	return (0);
 }
 
@@ -85,12 +85,11 @@ void	hd_expand(t_ht_hash_table *ht, t_token_list **t_list)
 					var_name = ft_substr(current->content, dollar_index + 1,
 							current->length - dollar_index - k);
 				}
-				if (k + dollar_index <= current->length) // ie valid_name() == 1
+				if (k + dollar_index <= current->length)
 					expand(ht, &current, var_name, dollar_index);
 			}
 			else
 				expand(ht, &current, ft_strdup(dollar_start + 1), dollar_index);
-			//////dprintf(1, "fin de while, ok ici\n");
 			free(dollar_start);
 			dollar_start = NULL;
 			dollar_start = next_dollar_start;
@@ -103,23 +102,20 @@ void	hd_expand(t_ht_hash_table *ht, t_token_list **t_list)
 /* variable expansions,
 	reusing functions used in the main parsing but without checking syntax 
 Attention ! On expand la variable meme si elle est entre single quotes */
-void	hd_perform_expand(t_ht_hash_table *ht, char **str) // char* ou char ** ?
+void	hd_perform_expand(t_ht_hash_table *ht, char **str)
 {
-	size_t len;
-	char *tmp;
-	char *tmp2;
-	t_token_list *t_list;
-	t_token_list **first;
+	size_t			len;
+	char			*tmp;
+	char			*tmp2;
+	t_token_list	*t_list;
+	t_token_list	**first;
 
 	if (!str || !(*str)[0])
-		// str existe forcément (sinon serait sorti du while (readline()))
 		return ;
 	len = ft_strlen(*str);
 	first = tokenise(assign_type(*str, len), len, *str);
 	t_list = *first;
 	hd_expand(ht, &t_list);
-
-	/* Join all the tokens' contents*/
 	tmp = NULL;
 	while (t_list)
 	{
@@ -129,7 +125,6 @@ void	hd_perform_expand(t_ht_hash_table *ht, char **str) // char* ou char ** ?
 		tmp = tmp2;
 		t_list = t_list->next;
 	}
-
 	free(*str);
 	*str = tmp;
 	free_tokens(first);
@@ -143,14 +138,12 @@ void	get_here_doc_content(t_ht_hash_table *ht, int fd, char *limiter,
 	hd_content = readline("> ");
 	while (hd_content && !is_limiter(hd_content, limiter))
 	{
-		if (!quotes) // if quotes in limiter,don't expand user's input
+		if (!quotes)
 			hd_perform_expand(ht, &hd_content);
-		// vérifier que hd_content est bien modifié après l'appel !
 		if (write(fd, hd_content, ft_strlen(hd_content)) == -1)
-			perror("write "); // return ? jpense pas
+			perror("write ");
 		if (write(fd, "\n", 1) == -1)
 			perror("write ");
-			// non ? car readline() retire le \n de fin
 		free(hd_content);
 		hd_content = readline("> ");
 	}
@@ -184,8 +177,6 @@ int	set_quotes(t_token_list *current)
 3) expand variables if needed (ie if there were quotes in the limiter or not)
 4) replace the initial tokens "<<" "LIM" by "<" "heredoc_file_path" in the token list   
 */
-
-// void	set_hd_filenames(t_ht_hash_table *ht, t_token_list *current)
 void	set_hd_filenames(t_token_list *current, t_data *data)
 {
 	char	*file_name;
@@ -196,14 +187,8 @@ void	set_hd_filenames(t_token_list *current, t_data *data)
 		{
 			file_name = random_filename();
 			ft_lstadd_back(&(data->files), ft_lstnew(file_name));
-			// current->length = 1;
-			// free(current->next->content);
 			tk_add_word_in_list(&current, file_name);
-			// free(file_name);
 		}
-		// ie est un here doc
-		// current->next->content = file_name;
-		// current->next->length = ft_strlen(file_name);
 		current = current->next;
 	}
 }
@@ -217,38 +202,31 @@ void	set_here_doc(t_ht_hash_table *ht, t_token_list *current)
 
 	limiter = current->next->content;
 	file_name = current->content;
-	fd = open(file_name, O_WRONLY | O_TRUNC | O_CREAT, 0600); //  | O_EXCL
-	// //////dprintf(1, "in set hd, %s, %s %i\n", limiter, file_name, fd);
+	fd = open(file_name, O_WRONLY | O_TRUNC | O_CREAT, 0600);
 	if (fd == -1)
 	{
 		perror("open ");
 		// return ?
 	}
-	/* Sets the quotes variable,
-		which indicates whether or not to expand the user's input (aka the heredoc content)*/
 	quotes = set_quotes(current);
 	get_here_doc_content(ht, fd, limiter, quotes);
-	/* Give prompt back to user and write the heredoc content to the file*/
 	close(fd);
 }
 
 void	hd_sigint(int i)
 {
-	// //////dprintf(1, "sig press \n");
-	(void) i;
+	(void)i;
 	g_exit_status = 130;
 	// A VOIR PAS SUR
-		close(STDIN_FILENO);
-		close(STDOUT_FILENO);
-		close(STDERR_FILENO);
-	}
+	close(STDIN_FILENO);
+	close(STDOUT_FILENO);
+	close(STDERR_FILENO);
+}
 
 void	hd_child_process(t_data *data)
 {
 	t_token_list	*current;
 
-	//t_token_list *first;
-	//first = current;
 	current = *(data->first);
 	g_exit_status = 0;
 	signal(SIGINT, hd_sigint);
@@ -262,10 +240,6 @@ void	hd_child_process(t_data *data)
 		current = current->next;
 	}
 	free_parsing_data(data);
-	/* free_pwd(ht);
-	ht_del_hash_table(ht);
-	free_tokens(&first);
-	ft_lstfree(&exp_hist, free); */
 	exit(g_exit_status);
 }
 
@@ -284,9 +258,7 @@ bool	hd_parent_process(int pid, t_token_list *current)
 		}
 		current = current->next;
 	}
-	//////dprintf(1, "%i\n", status);
 	return (!(WIFEXITED(status) && WEXITSTATUS(status)));
-	// return (true);
 }
 
 /* Gives the prompt back to the user for here_doc contents, 
@@ -295,27 +267,15 @@ bool	set_here_docs(t_data *data)
 {
 	t_token_list	*first;
 	int				pid;
-	// int				status;
 
-	//t_token_list	*current;
-	//current = *first;
 	first = *(data->first);
-	// set_hd_filenames(ht, current);
 	set_hd_filenames(first, data);
-	// //////dprintf(1, "heyyyy\n");
 	pid = fork();
 	if (pid < 0)
 		fail_process();
 	else if (pid == 0)
-	{
-		////dprintf(1, "hd child proc \n");
-		// hd_child_process(ht, first, exp_hist);
 		hd_child_process(data);
-	}
 	else
-	{
 		return (hd_parent_process(pid, first));
-		// wait(&status);
-	}
 	return (true);
 }

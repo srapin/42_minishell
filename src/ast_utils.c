@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:08:36 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/23 15:10:19 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/27 18:39:02 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,11 @@ t_cmd	*init_new_cmd(t_data *data)
 	cmd->filenames = data->files;
 	init_redirections(&(cmd->red));
 	cmd->val.value = NULL;
- 	cmd->val.args = NULL;
- 	cmd->val.path = NULL;
-	cmd->ctrl = pointvirgule;	
- 	cmd->next = NULL;
- 	cmd->pid = -1;
+	cmd->val.args = NULL;
+	cmd->val.path = NULL;
+	cmd->ctrl = pointvirgule;
+	cmd->next = NULL;
+	cmd->pid = -1;
 	return (cmd);
 }
 

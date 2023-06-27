@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 21:44:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/27 03:28:52 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/27 18:40:17 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	set_ctrl_op(t_data *data, t_token_list **current_tk,
 	if (*current_tk && is_a_ctrl_op(*current_tk))
 	{
 		(*pipeline_start_cmd)->ctrl = ((*current_tk)->type == and_tk)
-			* and+((*current_tk)->type == or_tk) * or;
+			* and + ((*current_tk)->type == or_tk) * or ;
 		(*pipeline_start_cmd)->next = init_new_cmd(data);
 		*pipeline_start_cmd = (*pipeline_start_cmd)->next;
 		if (!(*pipeline_start_cmd))
@@ -60,8 +60,7 @@ t_cmd	*get_ast(t_data *data)
 	t_cmd			*pipeline_start_cmd;
 	t_cmd			*current_cmd;
 
-	t_cmd *test; // est-ce que cette variable est utile ?
-
+	t_cmd			*test; // est-ce que cette variable est utile ?
 	ast = malloc(sizeof(t_cmd *));
 	/* if (!ast && malloc_error(data,
 				...)) (avec malloc_error qui retourne tjr 1, 
@@ -95,7 +94,6 @@ t_cmd	*get_ast(t_data *data)
 			pipeline_start_tk = NULL;
 		}
 	}
-	/* free_tokens(data->first); */
 	test = *ast;
 	free(ast);
 	return (test);
