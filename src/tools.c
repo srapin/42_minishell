@@ -6,11 +6,11 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 23:01:51 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/21 02:48:57 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/27 20:37:56 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "minishell.h"
 
 bool	ft_strisequal(char *s1, char *s2)
 {

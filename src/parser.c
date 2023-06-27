@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 02:12:27 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/27 16:29:29 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/27 20:37:56 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "minishell.h"
 
 /*
 Parser : part of our Command Line Interpreter that calls the lexical scanner to retrieve tokens.

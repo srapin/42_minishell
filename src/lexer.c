@@ -6,11 +6,11 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 00:40:45 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/24 11:24:43 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/27 20:37:56 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "minishell.h"
 
 /*
 Breaks the input down into individual words or tokens based on whitespace separation 

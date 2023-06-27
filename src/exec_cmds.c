@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmds.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 02:05:40 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/27 19:58:14 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/27 20:37:56 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "minishell.h"
 
 void	launch_process(t_cmd **cmd, t_cmd *first, int *pip_tab, bool need_pip)
 {

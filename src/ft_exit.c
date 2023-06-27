@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 00:57:49 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/27 19:28:02 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/27 20:37:56 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "minishell.h"
 
 /* Returns the number in a long long type variable if the later
 is in the interval [-LONG LONG MIN, LONG_LONG_MAX].

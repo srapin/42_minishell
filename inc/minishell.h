@@ -37,6 +37,7 @@
 #include "pub.h"
 
 extern int g_exit_status;
+
 # define EXIT_SIG_INT = 130;
 # define GETCWD_INITIAL_BUF_SIZE    50 /* Initial buffer size for getcwd()'s call*/
 
@@ -99,6 +100,7 @@ void			fail_process(void);
 // signals
 void    		sigint_during_cmd_exec(int sig);
 void    		sigint_next_prompt(int sig);
+void			hd_sigint(int i);
 
 //exec_cmd
 void    		exec_cmds(t_cmd *first_cmd);

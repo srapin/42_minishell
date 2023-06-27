@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ht_insert.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 17:25:42 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/27 19:56:28 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/27 20:37:56 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "minishell.h"
 
 size_t	ht_hash(const char *key, const int prime_factor,
 		const size_t num_buckets)

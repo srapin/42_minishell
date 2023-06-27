@@ -6,12 +6,12 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:50:05 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/27 19:26:27 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/27 20:37:56 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
-#include "../inc/minishell.h"
+#include "minishell.h"
 
 
 // oid wait_for_childs(t_data    *d)

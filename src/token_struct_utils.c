@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   token_struct_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:14:54 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/27 14:58:56 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/27 20:37:56 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "minishell.h"
 
 t_token_list	*tk_new_elem(char *t_stream, size_t t_len, int t_type,
 		int is_quote)
