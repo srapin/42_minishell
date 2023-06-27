@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:09:03 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/28 01:32:57 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/28 01:34:52 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	assess_parentheses(t_token_list *current_tk, int *open_parentheses)
 		(*open_parentheses)++;
 	else if (current_tk->type == r_parenthesis)
 		(*open_parentheses)--;
-	else if (!(*open_parentheses))
+	if (!(*open_parentheses))
 		return (0);
 	return (1);
 }
@@ -60,11 +60,13 @@ char	*get_subshell_command(t_token_list **curr_tk)
 	subshell_cmd = NULL;
 	while (current_tk)
 	{
-		/* if (current_tk->type == l_parenthesis)
+		if (current_tk->type == l_parenthesis)
 			open_parentheses++;
 		if (current_tk->type == r_parenthesis)
 			open_parentheses--;
 		if (!open_parentheses)
+			break ;
+		/* if (!assess_parentheses(current_tk, &open_parentheses))
 			break ; */
 		tmp = subshell_cmd;
 		subshell_cmd = ft_strjoin(tmp, current_tk->content);
