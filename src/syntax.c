@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 22:34:18 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/28 00:53:05 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/28 01:33:58 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,9 @@ corresponding exit status (ie 2 for syntax error)
 
 void	display_se(t_data *data, char *token)
 {
+	(void) data;
 	printf("Syntax error near unexpected token `%s\'\n", token);
-	free_parsing_data(data);
 	free(token);
-	//exit(SYNTAX_ERROR);
 }
 
 int	check_first(t_data *data, t_token_list **first)

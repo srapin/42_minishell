@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:17:34 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/28 00:39:21 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/28 01:24:49 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,34 +68,28 @@ int	sc_check_parentheses(t_data *data, t_token_list **current,
 		curr = (*current)->next;
 		while (curr && curr->type == whitespace)
 			curr = curr->next;
-		printf("est ici\n");
 		(*parentheses_count)++;
 		/* *current = (*current)->next;
 		while (*current && (*current)->type == whitespace)
 			*current = (*current)->next; */
 		if (curr && (curr)->type == r_parenthesis)
 		{
-			printf("ici 1\n");
 			display_se(data, ft_strdup(")"));
 			return (SYNTAX_ERROR);
 		}
-		else if (curr && (curr)->type == l_parenthesis)
-			(*parentheses_count)++;
+		/* else if (curr && (curr)->type == l_parenthesis)
+			(*parentheses_count)++; */
 		else if (!(curr))
 		{
 			printf("Syntax error : Missing closing parenthesis\n");
 			free_parsing_data(data);
 			return (SYNTAX_ERROR);
-			//exit(SYNTAX_ERROR);
 		}
-		//(*current) = (*current)->next;
 	}
 	else if ((*current)->type == r_parenthesis)
 	{
-		printf("est la\n");
 		if (!(*parentheses_count))
 		{
-			printf("ici 2\n");
 			display_se(data, ft_strdup(")"));
 			return (SYNTAX_ERROR);
 		}

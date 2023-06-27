@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 02:12:27 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/28 00:43:33 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/28 01:29:16 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,39 @@ int	check_for_syntax(t_data *data)
 	return (1);
 }
 
+void    print_ast(t_cmd *ast)
+{
+    t_cmd *current_pipeline;
+    t_cmd *current_simple_cmd;
+
+    current_pipeline = ast;
+    while (current_pipeline)
+    {
+        current_simple_cmd = current_pipeline;
+        while (current_simple_cmd)
+        {
+            printf("command : \n");
+            printf("\tname : %s. empty string ? %d\n\targs : \n", current_simple_cmd->val.value, *current_simple_cmd->val.value == '\0');
+            for (int i = 0; current_simple_cmd->val.args[i]; i++)
+                printf("\t\targ %d : %s\n", i, current_simple_cmd->val.args[i]);
+            printf("Pipe ? ");
+            if (current_simple_cmd->red.next_cmd)
+                printf("Yes\n");
+            else 
+                printf("No\n");
+            
+            current_simple_cmd = current_simple_cmd->red.next_cmd;
+        }
+        if (current_pipeline->ctrl == and)
+            printf("control_op = '&&' \n");
+        else if (current_pipeline->ctrl == or)
+            printf("control_op = '||' \n");
+        else
+            printf("control_op = ';' \n");
+        current_pipeline = current_pipeline->next;
+    }
+}
+
 t_cmd	*parse_and_execute(t_data *data)
 {
 	t_cmd	*ast;
@@ -85,6 +118,7 @@ t_cmd	*parse_and_execute(t_data *data)
 	perform_wildcard_exp(data);
 	if (set_here_docs(data))
 		ast = get_ast(data);
+	//print_ast(ast);
 	free_tokens(data->first);
 	data->first = NULL;
 	exec_cmds(ast);
