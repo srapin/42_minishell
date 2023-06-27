@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 01:02:42 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/27 20:37:56 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/27 22:49:59 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,40 +26,30 @@ void	parent_process(t_cmd **cmd, int pipe_tab[2])
 	(*cmd)->red.in_fd = pipe_tab[0];
 }
 
-void	print_err(t_cmd *cmd)
-{
-	char	*mess;
-
-	mess = ft_strjoin("minishell: ", cmd->val.value);
-	perror(mess);
-	free(mess);
-}
-
-void	reset_defaults_signals(void)
-{
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
-}
-
-void	not_found(t_cmd *cmd, t_cmd *first)
-{
-	print_err(cmd);
-	free_cmds(&first, true);
-	exit(CMD_NOT_FOUND);
-}
-
-void	failed_to_open_files(t_cmd *first)
-{
-	free_cmds(&first, true);
-	exit(CMD_NOT_FOUND);
-}
-
-void	child_process(t_cmd *cmd, t_cmd *first, int pipe_tab[2])
+void	launch_execve(t_cmd *cmd, t_cmd *first)
 {
 	char	*path;
 	char	**args;
 	char	**env;
 
+	path = cmd->val.path;
+	env = hash_map_to_tab(cmd->env);
+	args = cmd->val.args;
+	cmd->val.args = NULL;
+	cmd->val.path = NULL;
+	free_cmds(&first, true);
+	signal(SIGQUIT, SIG_DFL);
+	execve(path, args, env);
+	signal(SIGQUIT, SIG_IGN);
+	free(path);
+	free_tab(env);
+	free_tab(args);
+	perror("exceve failed : abort");
+	exit(CMD_NOT_FOUND);
+}
+
+void	child_process(t_cmd *cmd, t_cmd *first, int pipe_tab[2])
+{
 	if (pipe_tab[0] > -1)
 	{
 		safe_close(&(pipe_tab[0]));
@@ -75,22 +65,7 @@ void	child_process(t_cmd *cmd, t_cmd *first, int pipe_tab[2])
 	}
 	try_to_exec_builtins(cmd, first, true);
 	if (check_acces(cmd, first))
-	{
-		path = cmd->val.path;
-		env = hash_map_to_tab(cmd->env);
-		args = cmd->val.args;
-		cmd->val.args = NULL;
-		cmd->val.path = NULL;
-		free_cmds(&first, true);
-		signal(SIGQUIT, SIG_DFL);
-		execve(path, args, env);
-		signal(SIGQUIT, SIG_IGN);
-		free(path);
-		free_tab(env);
-		free_tab(args);
-		perror("exceve failed : abort");
-		exit(CMD_NOT_FOUND);
-	}
+		launch_execve(cmd, first);
 	not_found(cmd, first);
 }
 

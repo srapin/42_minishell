@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:08:36 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/27 18:39:02 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/27 22:27:52 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	add_to_cmd_list(t_cmd **last, t_cmd *new)
 }
 
 /* Determine if the current token is a control operator, ie a "&&" or a "||" */
-int	is_a_ctrl_op(t_token_list *current)
+int	is_a_t_ctrl_op(t_token_list *current)
 {
 	if (current->type == and_tk)
 		return (1);

@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "../inc/priv.h"
+// #include "../inc/priv.h"
 
 void	init_file_struct_with_filename(t_file *file_struct, char *filename)
 {

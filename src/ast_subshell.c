@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:09:03 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/27 22:27:25 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/27 23:18:24 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ met à jour cette commande avec les tokens que l'on lit :
 	met à jour l'attribut t_redirect de t_cmd
     -> Sinon, met à jour le nom et les arguments de la commande.
 Dès que tombe sur un opérateur de controle :
-    -> Met à jour l'attribut ctrl_op de la variable t_cmd actuelle.
+    -> Met à jour l'attribut t_ctrl_op de la variable t_cmd actuelle.
     -> Ajoute la variable t_cmd actuelle à la liste de commandes.
     -> Déclare et initialise une nouvelle variable t_cmd.
    

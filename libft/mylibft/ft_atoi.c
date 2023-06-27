@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 07:48:14 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/20 04:59:35 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/27 22:32:13 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	ft_atoi(const char *nptr)
 			neg = -neg;
 		i++;
 	}
-	while (nptr[i] && ft_isdigit(nptr[i])) // && number <= __INT_MAX__
+	while (nptr[i] && ft_isdigit(nptr[i]))
 	{
 		number = number * 10 + (nptr[i] - 48);
 		i++;

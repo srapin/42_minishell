@@ -14,6 +14,7 @@ FILES = ast \
 		ast_heredocs \
 		cmd \
 		common_process\
+		deal_with_error\
 		del_quotes_group_words \
 		del_quotes_group_words_utils \
 		exec_cmds \
@@ -48,6 +49,7 @@ FILES = ast \
 		redir_pub \
 		readline \
 		safer\
+		safer_tools\
 		syntax \
 		syntax_simple_command \
 		syntax_pipeline \
@@ -86,9 +88,9 @@ LIBFT = $(LIBFT_DIR)/libft.a
 INCLUDES_DIR = inc
 INCLUDES_FILES =lib.h \
 				minishell.h \
-				priv.h\
-				pub.h\
 				struct.h
+				# priv.h\
+				# pub.h\
 
 INCLUDES = $(addprefix $(INCLUDES_DIR)/, $(INCLUDES_FILES))
 
