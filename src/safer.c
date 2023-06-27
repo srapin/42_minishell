@@ -51,11 +51,7 @@ bool	basic_check_access(t_cmd *cmd)
 		errno = ENOENT;
 		return false;
 	}
-	if (is_dir(cmd->val.value))
-	{
-		errno = EISDIR;
-		return false;
-	}
+	
 	return true;
 }
 
@@ -100,6 +96,11 @@ bool	check_acces(t_cmd *cmd, t_cmd *first )
 		i++;
 	}
 	free_tab(paths);
+	if (is_dir(cmd->val.value))
+	{
+		errno = EISDIR;
+		return false;
+	}
 	if (look_like_a_cmd(cmd))
 		cmd_not_found(cmd, first);
 	if (access(cmd->val.value, X_OK) != 0)

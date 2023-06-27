@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 01:02:42 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/27 17:39:20 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/27 19:05:46 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ void	child_process(t_cmd *cmd, t_cmd *first, int pipe_tab[2])
 	char	**args;
 	char	**env;
 
-	//dprintf(1, "child proc, val =%s}\n", cmd->val.value);
 	if (pipe_tab[0] > -1)
 	{
 		safe_close(&(pipe_tab[0]));
