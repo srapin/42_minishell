@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:13:13 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/27 04:06:25 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/27 17:23:56 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,39 @@ void	parse_and_expand_wildcards(t_data *data, DIR *dir)
 	}
 }
 
+void 	print_error(char *error, char *dir_name)
+{
+	char	*mess;
+	mess = ft_strjoin(error, dir_name);
+	perror(mess);
+	free(mess);
+	mess = NULL;
+}
+
+int 	need_to_expand(t_token_list *current)
+{
+	char 	*wildcard_start;
+	size_t 	wildcard_index;
+
+	while (current)
+	{
+		wildcard_start = ft_strchr(current->content, '*');
+		if (wildcard_start)
+		{
+			wildcard_index = current->length - ft_strlen(wildcard_start);
+			while (wildcard_start && is_in_quotes(current, wildcard_index))
+			{
+				wildcard_start = ft_strchr(wildcard_start + 1, '*');
+				wildcard_index = current->length - ft_strlen(wildcard_start);
+			}
+			if (wildcard_start)
+				return (1);
+		}
+		current = current->next;
+	}
+	return (0);
+}
+
 /*
 Une fois qu'a choppé les prefix et suffix,
 	fait un premier tri dans la liste des d_name
@@ -102,16 +135,18 @@ void	perform_wildcard_exp(t_data *data)
 
 	if (!(*data->first))
 		return ;
+	if (!need_to_expand(*data->first))
+		return ;
 	current_dir = *get_pwd(data->env);
 	if (!current_dir)
 		return ; // ?
 	dir = opendir(current_dir);
 	if (!dir)
 	{
-		perror("opendir ");
+		print_error("minishell : opendir : ", current_dir);
 		return ;
 	}
 	parse_and_expand_wildcards(data, dir);
 	if (closedir(dir) == -1)
-		perror("closedir ");
+		print_error("minishell : closedir : ", current_dir);
 }

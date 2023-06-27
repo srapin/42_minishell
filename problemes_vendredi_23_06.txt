@@ -18,7 +18,7 @@ bash: /mnt/nfs/homes/hlesny: Is a directory
 
 
 
-
+Lancer un programme qui segfaut dans minishell ne remonte aucune erreur
 
 
 
