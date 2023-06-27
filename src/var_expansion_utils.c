@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   var_expansion_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:26:43 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/27 04:09:25 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/27 15:08:52 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,12 @@ void	update_tk_content(t_token_list **current, char *before_key, char *value,
 	tmp = ft_strjoin(before_key, value);
 	(*current)->content = ft_strjoin(tmp, after_value);
 	(*current)->length = ft_strlen((*current)->content);
+	if (!(*(*current)->content))
+	{
+		free(*current);
+		*current = NULL;
+		return ;
+	}
 	/* if (!(*(*current)->content))
 	{
 		if (!(*current)->next && !(*current)->prev)

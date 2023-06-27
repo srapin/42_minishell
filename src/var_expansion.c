@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   var_expansion.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:12:06 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/27 04:00:54 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/27 15:16:42 by Helene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,13 +82,6 @@ void	expand(t_ht_hash_table *ht, t_token_list **current, char *var,
 	search_and_expand(ht, current, var, dollar_index);
 }
 
-/* 
-$$$$?
-dollar_start = $$$$?
-i = 4
-dollar_start[i] = '?'
-dollar_index = 5 - 
-*/
 int	is_exit_status(t_ht_hash_table *ht, t_token_list *current,
 		char *dollar_start)
 {
@@ -124,8 +117,27 @@ int	is_exit_status(t_ht_hash_table *ht, t_token_list *current,
 	return (0);
 }
 
+void 	del_empty_token(t_token_list **current)
+{
+	t_token_list 	*tmp;
+	
+	if (*(*current)->content)
+		return ;
+	tmp = *current;
+	
+	if (tmp->prev)
+		tmp->prev->next = tmp->next;
+	if (tmp->next)
+		tmp->next->prev = tmp->prev;
+	// if (*first == tmp)
+	// 	*first = tmp->next;
+	*current = tmp->next;
+	free(tmp->content);
+	free(tmp);
+	tmp = NULL;
+}
 
-void	parse_current_tk(t_ht_hash_table *ht, t_token_list **current)
+void	parse_current_tk(t_ht_hash_table *ht, t_token_list **first, t_token_list **current)
 {
 	char	*next_d_start;
 	char	*d_start;
@@ -133,6 +145,7 @@ void	parse_current_tk(t_ht_hash_table *ht, t_token_list **current)
 	size_t	next_d_index;
 	size_t	d_index;
 
+	(void) first;
 	d_start = ft_strdup(ft_strchr((*current)->content, '$'));
 	if (is_exit_status(ht, *current, d_start))
 		return ;
@@ -152,6 +165,9 @@ void	parse_current_tk(t_ht_hash_table *ht, t_token_list **current)
 	}
 	free(d_start);
 	d_start = NULL;
+	*current = (*current)->next;
+	if ((*current)->prev && !(*current)->prev->content)
+		tk_del_one(first, (*current)->prev); //del_empty_token(current);
 }
 
 void	perform_variable_exp(t_data *data)
@@ -176,8 +192,8 @@ void	perform_variable_exp(t_data *data)
 		else if (current->type != simple_quote && (!current->prev
 					|| current->prev->type != l_io_redirect
 					|| current->prev->length == 1))
-			parse_current_tk(data->env, &current);
-		if (current)
+			parse_current_tk(data->env, data->first, &current);
+		else
 			current = current->next;
 	}
 }
