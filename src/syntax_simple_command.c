@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:17:34 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/26 22:27:05 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/27 02:05:17 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,12 @@ void	sc_check_parentheses(t_data *data, t_token_list **current,
 			*current = (*current)->next;
 		if (*current && (*current)->type == r_parenthesis)
 			display_se(data, ft_strdup(")"));
+		else if (!(*current))
+		{
+			printf("Syntax error : Missing closing parenthesis\n");
+			free_parsing_data(data);
+			exit(SYNTAX_ERROR);	
+		}
 	}
 	else if ((*current)->type == r_parenthesis)
 	{
