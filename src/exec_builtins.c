@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 20:57:20 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/26 20:52:12 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/27 17:42:01 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,22 +76,15 @@ int	try_to_exec_builtins(t_cmd *cmd, t_cmd *first, bool is_child)
 		return (ret);
 	if (!is_child)
 	{
-		////dprintf(1, "heyy");
 		if (foo != &ft_exit)
 			save_in_out(&old_in, &old_out);
 		if (!dup_cmd_file(cmd))
 			return (reset_files(old_in, old_out));
 	}
-	// else if (is_child && foo == &ft_exit)
-	// 	close_std();
-	// else if (foo == &ft_exit)
-	
-	// 	close(STDOUT_FILENO);
 	ret = foo(cmd, first);
 	if (is_child)
 		quit_builtins_child(first, ret);
 	g_exit_status = ret;
-	// //dprintf(1, "g_exit_status = %d\n",  g_exit_status);
 	reset_files(old_in, old_out);
 	return (ret);
 }

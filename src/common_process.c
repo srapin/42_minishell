@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 01:02:42 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/27 01:40:07 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/27 17:39:20 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,21 +79,21 @@ void	child_process(t_cmd *cmd, t_cmd *first, int pipe_tab[2])
 	try_to_exec_builtins(cmd, first, true);
 	if (check_acces(cmd, first))
 	{
-		//dprintf(1, "after check access\n");
 		path = cmd->val.path;
 		env = hash_map_to_tab(cmd->env);
 		args = cmd->val.args;
 		cmd->val.args = NULL;
 		cmd->val.path = NULL;
 		free_cmds(&first, true);
+		signal(SIGQUIT, SIG_DFL);
 		execve(path, args, env);
+		signal(SIGQUIT, SIG_IGN);
 		free(path);
 		free_tab(env);
 		free_tab(args);
 		perror("exceve failed : abort");
 		exit(CMD_NOT_FOUND);
 	}
-	// dprintf(1, "cmd not found\n");
 	not_found(cmd, first);
 }
 
