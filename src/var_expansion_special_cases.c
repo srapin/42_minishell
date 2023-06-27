@@ -6,12 +6,11 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 20:38:59 by hlesny            #+#    #+#             */
-/*   Updated: 2023/06/27 20:39:37 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/27 23:49:25 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 int	is_exit_status(t_ht_hash_table *ht, t_token_list *current,
 		char *dollar_start)
@@ -37,7 +36,7 @@ int	is_exit_status(t_ht_hash_table *ht, t_token_list *current,
 				current->length);
 		update_tk_content(&current, before_key, value, after_value);
 		check_next_token(&current, current->length - ft_strlen(dollar_start)
-				- 1);
+			- 1);
 		free(dollar_start);
 		free(value);
 		return (1);
@@ -45,10 +44,10 @@ int	is_exit_status(t_ht_hash_table *ht, t_token_list *current,
 	return (0);
 }
 
-void 	check_for_empty_content(t_token_list **first, t_token_list **current)
+void	check_for_empty_content(t_token_list **first, t_token_list **current)
 {
 	t_token_list	*tmp;
-	
+
 	if ((*current) && !(*current)->content)
 	{
 		tmp = *current;

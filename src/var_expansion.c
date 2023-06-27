@@ -6,11 +6,22 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:12:06 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/27 22:09:34 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/27 23:48:00 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+int	check_for_exit_status(t_ht_hash_table *ht, t_token_list *current,
+	char **d_start, char *next_d_start)
+{
+	if (is_exit_status(ht, current, *d_start))
+	{
+		*d_start = next_d_start;
+		return (1);
+	}
+	return (0);
+}
 
 void	get_expanded_token(t_ht_hash_table *ht,
 		t_token_list **current, char *d_start)
@@ -25,11 +36,8 @@ void	get_expanded_token(t_ht_hash_table *ht,
 		d_index = (*current)->length - ft_strlen(d_start);
 		next_d_start = ft_strdup(ft_strchr(d_start + 1, '$'));
 		next_d_index = (*current)->length - ft_strlen(next_d_start);
-		if (is_exit_status(ht, *current, d_start))
-		{
-			d_start = next_d_start;
-			continue;
-		}
+		if (check_for_exit_status(ht, *current, &d_start, next_d_start))
+			continue ;
 		var_name = get_var_name(*current, next_d_start, d_index, next_d_index);
 		if (var_name)
 			search_and_expand(ht, current, var_name, d_index);

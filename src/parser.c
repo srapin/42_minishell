@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 02:12:27 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/27 23:12:58 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/28 00:43:33 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,10 @@ int	check_for_syntax(t_data *data)
 {
 	int		wstatus;
 
-	wstatus = ft_syntax(data);
+	wstatus = check_syntax(data);
 	if (wstatus)
 	{
-		g_exit_status = wstatus % 256;
+		g_exit_status = wstatus;
 		free_tokens(data->first);
 		data->first = NULL;
 		return (0);
