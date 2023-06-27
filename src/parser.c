@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 02:12:27 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/27 15:07:00 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/27 16:29:29 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,11 +143,15 @@ t_cmd	*parse_and_execute(t_data *data)
 		return (NULL);
 	}
 	perform_variable_exp(data);
+	if (!(*data->first))
+	{
+		free(data->first);
+		data->first = NULL;
+		return (NULL);
+	}
 	delete_quotes(data);
 	group_words(data);
 	perform_wildcard_exp(data);
-	if (!(*data->first))
-		return (NULL);
 	if (set_here_docs(data))
 		ast = get_ast(data);
 	// else

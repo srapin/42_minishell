@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   var_expansion_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:26:43 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/27 15:08:52 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/27 16:20:20 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void	update_tk_content(t_token_list **current, char *before_key, char *value,
 		char *after_value)
 {
 	char			*tmp;
-	//t_token_list 	*tk_tmp;
 
 	free((*current)->content);
 	tmp = ft_strjoin(before_key, value);
@@ -24,32 +23,9 @@ void	update_tk_content(t_token_list **current, char *before_key, char *value,
 	(*current)->length = ft_strlen((*current)->content);
 	if (!(*(*current)->content))
 	{
-		free(*current);
-		*current = NULL;
-		return ;
+		free((*current)->content);
+		(*current)->content = NULL;
 	}
-	/* if (!(*(*current)->content))
-	{
-		if (!(*current)->next && !(*current)->prev)
-		{
-			free_merged_words((*current)->merged_words);
-			free((*current)->content);
-			(*current)->content = NULL;
-			free(*current);
-			*current = NULL;
-			return ;
-		}
-		tk_tmp = *current;
-		*current = (*current)->next;
-		if ((*current)->prev->prev)
-			(*current)->prev->prev->next = *current;
-		if (*current)
-			(*current)->prev = (*current)->prev->prev;
-		free(tk_tmp->content);
-		free_merged_words(tk_tmp->merged_words);
-		free(tk_tmp);
-		tk_tmp = NULL;
-	} */
 	free(before_key);
 	free(after_value);
 	free(tmp);
@@ -98,7 +74,6 @@ void	remove_char(t_token_list *current, size_t index)
 	}
 	free(current->content);
 	current->content = ft_strjoin(before, after);
-	//dprintf(1, "content = %s\n", current->content);
 	current->length--;
 	free(before);
 	free(after);

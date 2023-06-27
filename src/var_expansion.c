@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   var_expansion.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:12:06 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/27 15:16:42 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/27 16:19:17 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,8 @@ int	is_exit_status(t_ht_hash_table *ht, t_token_list *current,
 	(void) ht;
 	if (!(*dollar_start))
 	{
-		free(dollar_start);
-		return (1); // ou 0, change r car va rien expand dans tous les cas
+		//free(dollar_start);
+		return (0);
 	}
 	while (dollar_start[i] && dollar_start[i] == '$')
 		i++;
@@ -165,9 +165,16 @@ void	parse_current_tk(t_ht_hash_table *ht, t_token_list **first, t_token_list **
 	}
 	free(d_start);
 	d_start = NULL;
-	*current = (*current)->next;
-	if ((*current)->prev && !(*current)->prev->content)
-		tk_del_one(first, (*current)->prev); //del_empty_token(current);
+	if ((*current) && !(*current)->content)
+	{
+		t_token_list	*tmp;
+
+		tmp = *current;
+		(*current) = (*current)->next;
+		tk_del_one(first, tmp); //del_empty_token(current);
+	}
+	else
+		*current = (*current)->next;
 }
 
 void	perform_variable_exp(t_data *data)

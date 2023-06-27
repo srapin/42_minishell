@@ -9,15 +9,31 @@ exceve failed : abort: Permission denied
 
 
 
+$ "$HOME"
+exceve failed : abort: Permission denied
+--------- devrait avoir :
+bash-5.1$ "$HOME"
+bash: /mnt/nfs/homes/hlesny: Is a directory
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 bash-5.1$ $SFJOF
 bash-5.1$
-
-
-
-
-
-
-
 
 bash-5.1$ $""
 bash: : command not found

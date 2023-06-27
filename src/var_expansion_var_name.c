@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   var_expansion_var_name.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:27:44 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/24 11:32:53 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/27 16:18:56 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,6 @@ char	*set_var_name(t_token_list *current, size_t dollar_index,
 	k = 1;
 	if (exp_case == 1)
 		k = 2;
-	/* var_name = set_var_name(current, dollar_index,
-			next_dollar_index,exp_case); */
 	if (exp_case == 0)
 		var_name = ft_substr(current->content, dollar_index + 1,
 				next_dollar_index - dollar_index - 1);
@@ -74,12 +72,6 @@ char	*get_valid_id(t_token_list *current, size_t dollar_index,
 	if (exp_case == 1)
 		k = 2;
 	var_name = set_var_name(current, dollar_index, next_dollar_index, exp_case);
-	/* if (exp_case == 0)
-		var_name = ft_substr(current->content, dollar_index + 1,
-				next_dollar_index + 1);
-	else
-		var_name = ft_substr(current->content, dollar_index + 1, current->length
-				- dollar_index - k); */
 	while (k + dollar_index <= current->length && !valid_name(var_name))
 	{
 		free(var_name);
