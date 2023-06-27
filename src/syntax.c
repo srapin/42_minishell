@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2023/06/27 22:06:06 by hlesny           ###   ########.fr       */
+/*   Created: 2023/06/27 22:34:18 by srapin            #+#    #+#             */
+/*   Updated: 2023/06/27 22:34:21 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ Prints the syntax error while specifying the token
 Then frees all data structures and returns the 
 corresponding exit status (ie 2 for syntax error)
 */
+
 void	display_se(t_data *data, char *token)
 {
 	printf("Syntax error near unexpected token `%s\'\n", token);

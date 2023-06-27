@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 22:20:56 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/27 22:27:52 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/27 22:56:42 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ void			fail_process(void);
 void			sigint_during_cmd_exec(int sig);
 void			sigint_next_prompt(int sig);
 void			hd_sigint(int i);
-
+void			reset_defaults_signals(void);
 //exec_cmd
 void			exec_cmds(t_cmd *first_cmd);
 int				try_to_exec_builtins(t_cmd *cmd, t_cmd *first, bool is_child);
@@ -151,18 +151,26 @@ bool			ft_strisequal(char *s1, char *s2);
 void			free_tab(char **tab);
 void			add_slash(char **paths);
 char			**get_path(t_cmd *cmd);
-//complete
+int				is_dir(const char *path);
+bool			value_is_not_null(t_cmd *cmd);
+bool			look_like_a_cmd(t_cmd *cmd);
+
 void			link_cmds_with_redirections(t_cmd *cmd, t_cmd *next);
 void			link_cmds_with_ctrls_op(t_cmd *cmd, t_cmd *next, t_ctrl_op c);
 
 int				count_cmds_linked_by_pipe(t_cmd *first_cmd);
 void			safe_pipe(int pipe_tab[2]);
 void			fail_process(void);
-//to test
+
 bool			open_cmd_files(t_cmd *cmd);
 void			parent_process(t_cmd **cmd, int pipe_tab[2]);
 void			safe_close_cmd_fd(t_cmd *cmd);
 bool			dup_cmd_file(t_cmd *cmd);
+
+void			not_found(t_cmd *cmd, t_cmd *first);
+void			failed_to_open_files(t_cmd *first);
+void			cmd_not_found(t_cmd *cmd, t_cmd *first);
+bool			try_to_find_path(t_cmd *cmd);
 
 /* ------------------- PARSING ----------------------*/
 

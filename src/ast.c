@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 21:44:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/27 20:37:56 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/27 22:27:52 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,10 @@ void	set_pipe(t_data *data, t_token_list **current_tk, t_cmd **current_cmd)
 	}
 }
 
-int	set_ctrl_op(t_data *data, t_token_list **current_tk,
+int	set_t_ctrl_op(t_data *data, t_token_list **current_tk,
 		t_token_list **pipeline_start_tk, t_cmd **pipeline_start_cmd)
 {
-	if (*current_tk && is_a_ctrl_op(*current_tk))
+	if (*current_tk && is_a_t_ctrl_op(*current_tk))
 	{
 		(*pipeline_start_cmd)->ctrl = ((*current_tk)->type == and_tk)
 			* and + ((*current_tk)->type == or_tk) * or ;
@@ -87,7 +87,7 @@ t_cmd	*get_ast(t_data *data)
 			set_simple_command(current_cmd, data->first, &current_tk);
 			set_pipe(data, &current_tk, &current_cmd);
 		}
-		if (!set_ctrl_op(data, &current_tk, &pipeline_start_tk,
+		if (!set_t_ctrl_op(data, &current_tk, &pipeline_start_tk,
 				&pipeline_start_cmd))
 		{
 			current_cmd->ctrl = pointvirgule;
