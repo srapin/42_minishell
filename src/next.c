@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:50:05 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/24 11:28:34 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/27 19:26:27 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,20 @@ void	wait_childs(t_cmd *origin)
 		if (WIFEXITED(status))
 			f_status = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status)) 
+		{
+			// errno = 	WTERMSIG(status);
+			// perror("");
+			// strerror(WTERMSIG(status)));
+			printf("procces stop with sig %d\n", WTERMSIG(status));
             f_status = WTERMSIG(status) + 128;// + 128;
+		}
 		else if (WIFSTOPPED(status))
+		{
+			// strerror(WSTOPSIG(status));
+			
+			printf("procces stop with sig %d\n", WTERMSIG(status));
             f_status = WSTOPSIG(status) + 128;
+		}
 	}
 	// if (WIFEXITED(status) && __WIFSIGNALED(status))
 	// 	g_exit_status = WEXITSTATUS(status);
