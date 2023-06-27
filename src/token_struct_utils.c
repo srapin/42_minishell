@@ -6,11 +6,11 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:14:54 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/27 20:26:45 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/27 22:08:33 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "minishell.h"
 
 t_token_list	*tk_new_elem(char *t_stream, size_t t_len, int t_type,
 		int is_quote)

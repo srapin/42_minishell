@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "minishell.h"
 
 void	safe_close(int *fd)
 {
@@ -40,18 +40,18 @@ void safe_close_cmd_fd(t_cmd *cmd)
 int is_dir(const char *path)
 {
     struct stat path_stat;
+	ft_memset(&path_stat, 0, sizeof(struct stat));
     stat(path, &path_stat);
     return S_ISDIR(path_stat.st_mode);
 }
 
-bool	basic_check_access(t_cmd *cmd)
+bool	value_is_not_null(t_cmd *cmd)
 {
 	if (!cmd->val.value || !cmd->val.value[0])
 	{
 		errno = ENOENT;
 		return false;
 	}
-	
 	return true;
 }
 
@@ -80,7 +80,7 @@ bool	check_acces(t_cmd *cmd, t_cmd *first )
 	char	**paths;
 
 	i = 0;
-	if (!basic_check_access(cmd))
+	if (!value_is_not_null(cmd))
 		return (false);
 	paths = get_path(cmd);
 	while (paths && paths[i] && cmd->val.value)
@@ -105,7 +105,7 @@ bool	check_acces(t_cmd *cmd, t_cmd *first )
 		cmd_not_found(cmd, first);
 	if (access(cmd->val.value, X_OK) != 0)
 		return (false);
-	(void) first	;
+	(void) first;
 	cmd->val.path = ft_strdup(cmd->val.value);
 	return (true);
 }

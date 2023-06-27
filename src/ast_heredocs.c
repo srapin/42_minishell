@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ast_heredocs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 23:24:33 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/27 19:57:45 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/27 20:41:32 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "minishell.h"
 
 char	*random_filename(void)
 {
@@ -213,22 +213,13 @@ void	set_here_doc(t_ht_hash_table *ht, t_token_list *current)
 	close(fd);
 }
 
-void	hd_sigint(int i)
-{
-	(void)i;
-	g_exit_status = 130;
-	// A VOIR PAS SUR
-	close(STDIN_FILENO);
-	close(STDOUT_FILENO);
-	close(STDERR_FILENO);
-}
 
 void	hd_child_process(t_data *data)
 {
 	t_token_list	*current;
 
 	current = *(data->first);
-	g_exit_status = 0;
+	g_exit_status = EXIT_OK;
 	signal(SIGINT, hd_sigint);
 	while (current && g_exit_status != 130)
 	{

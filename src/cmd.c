@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "minishell.h"
 #include "../inc/priv.h"
 
 void	mask_and_free_for_exec(t_cmd *cmd, t_cmd *first)
