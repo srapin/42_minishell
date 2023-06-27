@@ -57,6 +57,8 @@ FILES = ast \
 		var_expansion \
 		var_expansion_var_name \
 		var_expansion_utils \
+		var_expansion_utils2 \
+		var_expansion_special_cases \
 		wildcards \
 		wildcards_utils \
 		wildcards_first_sort \

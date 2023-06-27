@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_struct_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:14:54 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/27 14:58:56 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/27 20:26:45 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	tk_add(t_token_list **first, t_token_list *new)
 	t_token_list	*current;
 
 	if (!first)
-		return ; // ?
+		return ;
 	if (!*first)
 		*first = new;
 	else
@@ -70,18 +70,16 @@ void	tk_del_one(t_token_list **first, t_token_list *to_del)
 	current = NULL;
 }
 
-// adds a token <word> of content char *content after the *current
+/* adds a token <word> of content char *content after the *current */
 void	tk_add_word_in_list(t_token_list **current, char *content)
 {
-	t_token_list *initial_current_next;
-	t_token_list *new;
+	t_token_list	*initial_current_next;
+	t_token_list	*new;
 
 	initial_current_next = (*current)->next;
 	new = tk_new_elem(content, ft_strlen(content), word, 0);
-
 	(*current)->next = new;
 	new->next = initial_current_next;
-
 	if (initial_current_next)
 		initial_current_next->prev = new;
 	new->prev = (*current);

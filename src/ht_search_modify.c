@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ht_search_modify.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 17:22:28 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/24 11:23:31 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/27 20:02:16 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-
-// static t_ht_item	HT_DELETED_ITEM = {NULL, NULL};
 
 int	ft_strcmp(const char *s1, const char *s2)
 {
@@ -26,13 +24,13 @@ int	ft_strcmp(const char *s1, const char *s2)
 
 /* Searchs the key in the hash map, and replaces its value by the new_value.
 Returns 1 in case of success
-Returns 0 in case the key isn't in the hash map. */
+Returns 0 in case the key isn't in the hash map. 
+char *new-value has already been malloc-ed here*/
 int	ht_modify_value(t_ht_hash_table *ht, const char *key, char *new_value)
-	// new_value est deja malloc ici
 {
-	size_t attempts;
-	size_t index;
-	t_ht_item *current;
+	size_t		attempts;
+	size_t		index;
+	t_ht_item	*current;
 
 	attempts = 1;
 	index = ht_get_hash(key, ht->size, 0);
@@ -44,7 +42,7 @@ int	ht_modify_value(t_ht_hash_table *ht, const char *key, char *new_value)
 			if (!ft_strcmp(current->key, key))
 			{
 				free(current->value);
-				current->value = (char *)new_value; // new_value est deja malloc
+				current->value = (char *)new_value;
 				return (1);
 			}
 		}
@@ -66,7 +64,7 @@ char	*ht_search(t_ht_hash_table *ht, const char *key)
 	current = ht->items[index];
 	while (current)
 	{
-		if (current->key || current->value) // (current != &HT_DELETED_ITEM)
+		if (current->key || current->value)
 		{
 			if (!ft_strcmp(current->key, key))
 				return (current->value);

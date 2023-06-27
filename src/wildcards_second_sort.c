@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 01:36:57 by hlesny            #+#    #+#             */
-/*   Updated: 2023/06/27 16:43:23 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/27 21:06:07 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	parse_current_filename(t_filename **filenames, t_filename **current_f,
 	size_t		i;
 	int			next_wcard_index;
 	char		*filename_pos;
-	char 		*to_find;
+	char		*to_find;
 	t_filename	*tmp;
 
 	i = prefix_len + 1;
@@ -30,8 +30,9 @@ int	parse_current_filename(t_filename **filenames, t_filename **current_f,
 		{
 			to_find = ft_substr(current->content, i, next_wcard_index - i);
 			filename_pos = ft_search_str_in_str(filename_pos,
-				to_find);
-			free(to_find);to_find = NULL;
+					to_find);
+			free(to_find);
+			to_find = NULL;
 			if (!filename_pos)
 			{
 				tmp = *current_f;
@@ -62,11 +63,11 @@ Sinon : en continuant dans le mot originel,
 	si tombe sur un autre '*' : si ce qui suit est non vide :
     Si a entièrement parcouru le d_name précédemment, supprime le d_name 
     Sinon,
-	itère à nouveau sur le d_name jusqu'a trouver la première apparition de la string recherchée,
+	itère à nouveau sur le d_name jusqu'a trouver la 
+	première apparition de la string recherchée,
     ou jusqu'à ce que la fin du d_name soit reached.
-Etc...    int i;
+Etc...    
 
-prefix
 Sous chaine entre deux '*' : 
     taille de la sous chaine : next_wcard_index - (curr_wcard_index + 1)
     index du debut de la sous chaine : curr_wcard_index + 1

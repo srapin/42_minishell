@@ -74,9 +74,9 @@ size_t              ht_get_hash(const char *key, const size_t num_buckets, size_
 
 // ------ temporaire : a mettre dans la libft ici
 
-long    ft_pow(long a, long b);
-int	next_prime(int nb);
-int	is_prime(int nb);
+long    		ft_pow(long a, long b);
+int				next_prime(int nb);
+int				is_prime(int nb);
 
 /* ---------------------- TOKENS STREAM -------------------------*/
 
@@ -158,6 +158,8 @@ void            perform_variable_exp(t_data *data);
 int             valid_name(char *name);
 void	        check_next_token(t_token_list **curr, size_t dollar_index);
 void            expand(t_ht_hash_table *ht, t_token_list **current, char *var, size_t dollar_index);
+void			search_and_expand(t_ht_hash_table *ht, t_token_list **current,
+				char *var, size_t dollar_index);
 char	        *get_var_name(t_token_list *current, char *next_d_start, size_t d_index,
 		        size_t next_d_index);
 void	        remove_char(t_token_list *current, size_t index);
@@ -165,6 +167,9 @@ int	            is_only_dollars(char *str);
 char	        *get_next_d_start(char *d_start);
 void	        update_tk_content(t_token_list **current, char *before_key, char *value,
 		        char *after_value);
+void 			check_for_empty_content(t_token_list **first, t_token_list **current);
+int				is_exit_status(t_ht_hash_table *ht, t_token_list *current,
+					char *dollar_start);
 
 void            delete_quotes(t_data *data);
 void	        rm_quotes_token(t_token_list *current);
@@ -217,7 +222,7 @@ char            **hash_map_to_tab(t_ht_hash_table *ht);
 int				ft_echo(t_cmd *cmd, t_cmd *first);
 int             ft_env(t_cmd *cmd, t_cmd *first);
 int             ft_export(t_cmd *cmd, t_cmd *first);
-void	search_and_insert(t_list **head, t_list *elem);
+void			search_and_insert(t_list **head, t_list *elem);
 int             ft_unset(t_cmd *cmd, t_cmd *first);
 int             is_in_export_history(t_list *export_hist, char *var_name);
 void            del_from_export_history(t_list **export_hist, char *var_name);

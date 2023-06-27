@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:26:43 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/27 16:20:20 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/27 20:28:26 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ char	*get_next_d_start(char *d_start)
 	i = 0;
 	while (d_start[i] && d_start[i] == '$')
 		i++;
-	next_d_start = ft_strdup(ft_strchr(d_start + i, '$')); // malloc a proteger
+	next_d_start = ft_strdup(ft_strchr(d_start + i, '$'));
 	return (next_d_start);
 }
 

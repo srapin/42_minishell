@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   wildcards_first_sort_utils.c                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:31:52 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/23 15:33:00 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/27 20:46:56 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 int	is_a_hidden_dir(struct dirent *dir_content)
 {
@@ -46,8 +45,10 @@ void	add_filename(t_filename **filenames, char *new)
 }
 
 /*
-Renvoie NULL si le nom du directory stream donne en argument ne commence pas par prefix,
-et pointe vers le charactere suivant la fin du prefix dans la string dans le cas contraire
+Renvoie NULL si le nom du directory stream donne
+en argument ne commence pas par prefix,
+et pointe vers le charactere suivant la fin du
+prefix dans la string dans le cas contraire
 */
 char	*search_from_start(char *d_name, char *prefix)
 {
@@ -79,7 +80,7 @@ char	*search_from_end(char *d_name, char *suffix)
 		i--;
 		j--;
 	}
-	if (j >= 0) // ie n'a pas parcouru tout le suffix
+	if (j >= 0)
 		return (NULL);
 	return (d_name);
 }

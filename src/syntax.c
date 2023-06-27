@@ -5,11 +5,10 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2023/06/27 17:56:45 by hlesny           ###   ########.fr       */
+/*   Created: 2023/06/27 20:23:12 by hlesny            #+#    #+#             */
+/*   Updated: 2023/06/27 20:23:47 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../inc/minishell.h"
 
@@ -93,5 +92,5 @@ int	ft_syntax(t_data *data)
 	else if (WIFSTOPPED(wstatus))
 		return (WSTOPSIG(wstatus) + 128);
 	else
-		return (0); // ? 
+		return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:27:44 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/27 16:18:56 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/27 20:32:03 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,19 +25,14 @@ void	check_next_token(t_token_list **curr, size_t dollar_index)
 		&& is_only_dollars(current->content))
 	{
 		if (current->next && (current->next->type == simple_quote
-			|| current->next->type == double_quote))
-			{
-				dollars_count = ft_strlen(current->content);
-				if (dollars_count && dollars_count % 2)
-					remove_char(current, 0);
-			}
+				|| current->next->type == double_quote))
+		{
+			dollars_count = ft_strlen(current->content);
+			if (dollars_count && dollars_count % 2)
+				remove_char(current, 0);
+		}
 		current = current->next;
 	}
-	//*curr = current;
-	
-	// if ((*current)->next && ((*current)->next->type == simple_quote
-	// 		|| (*current)->next->type == double_quote))
-	// 	remove_char(*current, dollar_index);
 }
 
 char	*set_var_name(t_token_list *current, size_t dollar_index,
@@ -58,7 +53,8 @@ char	*set_var_name(t_token_list *current, size_t dollar_index,
 	return (var_name);
 }
 
-/* Returns NULL in case no valid identifier follows the '$' at the given <dollar_index> index
+/* Returns NULL in case no valid identifier follows the '$' 
+at the given <dollar_index> index
 Case 0 : is followed by another dollar sign (ie next_dollar_index != -1)
 Case 1 : is inside double quotes
 Case 2 : not followed by another dollar sign, and not in quotes */

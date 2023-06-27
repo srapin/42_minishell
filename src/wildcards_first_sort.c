@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/20 22:50:42 by hlesny            #+#    #+#             */
-/*   Updated: 2023/06/27 02:19:34 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/27 20:49:43 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,6 @@ t_filename	*check_prefix_suffix(DIR *dir, char *prefix, char *suffix)
 	dir_content = readdir(dir);
 	while (dir_content)
 	{
-		// if (prefix && *prefix != '.' && is_a_hidden_dir(dir_content))
-		// 	;
 		curr_filename = search_from_start(dir_content->d_name, prefix);
 		if (curr_filename)
 		{
@@ -80,8 +78,8 @@ t_filename	*check_suffix(DIR *dir, char *suffix)
 
 t_filename	*parse_current_dir(DIR *dir, char *prefix, char *suffix)
 {
-	size_t			prefix_len;
-	size_t			suffix_len;
+	size_t	prefix_len;
+	size_t	suffix_len;
 
 	prefix_len = ft_strlen(prefix);
 	suffix_len = ft_strlen(suffix);
@@ -101,21 +99,16 @@ DIR *dir, char *
 Note : readdir() renvoie NULL si il n'y a plus d'entité de directory à lire.
 */
 t_filename	*first_sort(DIR *dir, char *prefix, char *suffix)
-// prefix and suffix indexes in the big (aka merged, final) word
 {
-	size_t prefix_len;
-	size_t suffix_len;
-	// struct dirent *dir_content;
+	size_t	prefix_len;
+	size_t	suffix_len;
 
 	if (!prefix || !suffix)
 		return (NULL);
-
 	prefix_len = ft_strlen(prefix);
 	suffix_len = ft_strlen(suffix);
-
 	if (!prefix_len && !suffix_len)
 		return (return_entire_dir_content(dir));
-
 	if (prefix_len == 2 && prefix[0] == '.' && prefix[1] == '.')
 		return (NULL);
 	return (parse_current_dir(dir, prefix, suffix));

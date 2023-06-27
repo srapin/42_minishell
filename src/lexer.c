@@ -3,81 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/29 00:40:45 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/24 11:24:43 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/27 20:04:43 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-
-/*
-Breaks the input down into individual words or tokens based on whitespace separation 
-and handling special characters and quotes. 
-The output of this phase is a stream of tokens that represent the different 
-parts of the command.
-*/
-// tabulation sur le terminal : ctrl + v + tab
-
-/*
-The parser scans input and breaks it down to tokens. 
-A token consists of one or more characters (letters, digits, symbols),
-	and represents a single unit of input. 
-For example, a token can be a variable name, a keyword, a number,
-	or an arithmetic operator.
-The parser then takes these tokens, groups them together,
-	and creates an Abstract Syntax Tree, or AST.
-The parser takes the AST and passes it to the executor,
-	which reads the AST and executes the parsed command.
-*/
-
-/*
-Get units of different tokens, defined in tokens.h
-We end up with something like :
-io_redirect ('<') -> word (infile) -> word (command)
--> word (arg 1) -> '|' -> ... -> '&&' -> ...
-
-*/
-/*
-Les quotes ne suppriment pas les espaces ; elles permennent, entre autres,
-de considérer tout ce qui est dans les quotes comme un unique mot.
-Deux mots entre quotes NON séparés par un/des whitespaces ne sont en réalité qu'un seul
-mot, les whitespaces étant nécessaires pour distinguer deux mots.
-Et les espaces sont ce qui permet de distinguer deux mots.
-Pour ce qui est de distinguer deux opérateurs ou un mot et un opérateur,
-	aucun espace 
-n'est nécessaire (leurs différents types d'opérateur/mot suffisent à faire la distinction)
-
------------------------------------
-
-UN WHITESPACE DANS DES QUOTES DEVIENT UN MOT (ie token <word> et non pas <whitespace>)
-
-Si commence par lire un single quote : double quotes are treated literally within single quotes
--> lit jusqu'au deuxieme single quote
-
-Ne peut pas avoir une paire de single quotes dans une paire de singles quotes, 
-mais peut avoir une paire de double quotes dans une paire de double quotes
-
-!!! Double quotes can be wrapped around single or double quotes. 
-Single quotes have no special meaning within double quotes.
-'in file "quote"' -> in file "quote"
-"in file "quote"" -> in file "quote"
-not allowed : single quotes inside single quotes
-    'in file 'quote'' -> will be parsed as the word <in file 'quote'>, 
-    PAR CONTRE : 'in file' quote'' sera parsed as TWO words : <in file> et < quote\0>
-
-*/
-
-/*
-Si deux mots (ou deux tokens quote) ne sont séparés par rien,
-	deviennent un seul mot. 
-! here_doc : le limiteur peut etre entouré de quotes,
-	et il faut garder en mémoire si c'est le cas ou non
-Meme si le limiteur du here_doc est entre quotes,
-	ne doit PAS expandre de variables (ie le(s) $ reste(nt) tel(s) quel(s))
-
-*/
 
 void	merge_token_quotes(t_token_list **tk_list, char *input,
 		t_token *token_stream, size_t *i)
@@ -95,18 +28,17 @@ void	merge_token_quotes(t_token_list **tk_list, char *input,
 	if ((*i) < stream_len)
 		(*i)++;
 	tk_add(tk_list, tk_new_elem(&input[j], (*i) - j, current,
-				(current == simple_quote) + (current == double_quote) * 2));
+			(current == simple_quote) + (current == double_quote) * 2));
 }
 
 void	merge_single_tokens(t_token_list **tk_list, char *input,
 		t_token *token_stream, size_t stream_len)
 {
 	size_t	i;
-	int	j;
-	int	current;
+	int		j;
+	int		current;
 
 	i = 0;
-	j = 0;
 	while (i < stream_len)
 	{
 		current = token_stream[i].type;
@@ -117,7 +49,7 @@ void	merge_single_tokens(t_token_list **tk_list, char *input,
 			i++;
 		}
 		else if (i < stream_len && (current == simple_quote
-					|| current == double_quote))
+				|| current == double_quote))
 			merge_token_quotes(tk_list, input, token_stream, &i);
 		else if (i < stream_len)
 		{
@@ -132,7 +64,6 @@ void	merge_single_tokens(t_token_list **tk_list, char *input,
 t_token_list	**tokenise(t_token *token_stream, size_t stream_len,
 		char *input)
 {
-	// int				current;
 	t_token_list	*tk_list;
 	t_token_list	**first;
 
@@ -174,7 +105,7 @@ int	set_token_operator(t_token *token, char input)
 
 t_token	*assign_type(char *input, size_t stream_len)
 {
-	size_t		i;
+	size_t	i;
 	t_token	*token_stream;
 
 	i = 0;

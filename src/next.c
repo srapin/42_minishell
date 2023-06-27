@@ -3,48 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   next.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:50:05 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/27 19:26:27 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/27 20:12:02 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "../inc/minishell.h"
-
-
-// oid wait_for_childs(t_data    *d)
-// {
-//     int    i;
-//     int    w;
-//     int status;
-
-//     i = 0;
-//     status = 0;
-//     while (i < d->cmds_nb && d->pid[i])
-//     {
-//         w = waitpid(d->pid[i], &status, WUNTRACED | WCONTINUED);
-//         if (w == -1) {
-//             perror("waitpid");
-//             //exit(EXIT_FAILURE);
-//         }
-//         if (WIFEXITED(status)) {
-//             printf("exited, status=%d\n", WEXITSTATUS(status));
-//             status = WEXITSTATUS(status);
-//         } else if (WIFSIGNALED(status)) {
-//             printf("killed by signal %d\n", WTERMSIG(status));
-//             status = WTERMSIG(status);
-//         } else if (WIFSTOPPED(status)) {
-//             printf("stopped by signal %d\n", WSTOPSIG(status));
-//             WSTOPSIG(status);
-//         } else if (WIFCONTINUED(status)) {
-//             printf("continued\n");
-//         }
-//         i ++;
-//     }
-//     keep_exit_status(status);
-// }
 
 void	wait_childs(t_cmd *origin)
 {
@@ -54,7 +20,6 @@ void	wait_childs(t_cmd *origin)
 	t_cmd *cmd;
 
 	cmd = origin;
-	
 	ret = g_exit_status;
 	f_status = g_exit_status;
 	status = 0;
@@ -72,25 +37,16 @@ void	wait_childs(t_cmd *origin)
 			f_status = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status)) 
 		{
-			// errno = 	WTERMSIG(status);
-			// perror("");
-			// strerror(WTERMSIG(status)));
 			printf("procces stop with sig %d\n", WTERMSIG(status));
             f_status = WTERMSIG(status) + 128;// + 128;
 		}
 		else if (WIFSTOPPED(status))
-		{
-			// strerror(WSTOPSIG(status));
-			
+		{			
 			printf("procces stop with sig %d\n", WTERMSIG(status));
             f_status = WSTOPSIG(status) + 128;
 		}
 	}
-	// if (WIFEXITED(status) && __WIFSIGNALED(status))
-	// 	g_exit_status = WEXITSTATUS(status);
-
 	g_exit_status = f_status;
-	// return ((WIFEXITED(status) && WEXITSTATUS(status))); // WIFSTOPPED
 }
 
 bool check_ret(t_cmd *cmd, int ret)
