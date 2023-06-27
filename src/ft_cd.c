@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 01:12:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/27 04:36:51 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/27 17:29:24 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ void 	print_chdir_error(char *dir)
 {
 	char	*mess;
 	
-	mess = ft_strjoin("minishell : ", dir);
+	mess = ft_strjoin("minishell : cd : ", dir);
 	perror(mess);
 	free(mess);
 }

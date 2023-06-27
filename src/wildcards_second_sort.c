@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 01:36:57 by hlesny            #+#    #+#             */
-/*   Updated: 2023/06/27 02:53:04 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/27 16:43:23 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ int	parse_current_filename(t_filename **filenames, t_filename **current_f,
 	size_t		i;
 	int			next_wcard_index;
 	char		*filename_pos;
+	char 		*to_find;
 	t_filename	*tmp;
 
 	i = prefix_len + 1;
@@ -27,9 +28,10 @@ int	parse_current_filename(t_filename **filenames, t_filename **current_f,
 		next_wcard_index = get_next_wcard_index(current, i);
 		if (next_wcard_index >= 0)
 		{
+			to_find = ft_substr(current->content, i, next_wcard_index - i);
 			filename_pos = ft_search_str_in_str(filename_pos,
-												ft_substr(current->content, i,
-														next_wcard_index - i));
+				to_find);
+			free(to_find);to_find = NULL;
 			if (!filename_pos)
 			{
 				tmp = *current_f;

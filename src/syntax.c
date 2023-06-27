@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2023/06/26 22:06:28 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/27 17:56:45 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ void	check_syntax(t_data *data)
 {
 	int	parentheses_count;
 
-	/* dprintf(1, "syntax\n"); */
 	parentheses_count = 0;
 	if (!data || !(data->first) || !(*(data->first)))
 		return ;
@@ -72,7 +71,6 @@ void	check_syntax(t_data *data)
 		exit(SYNTAX_ERROR);
 	}
 	free_parsing_data(data);
-	//dprintf(1, "syntax\n pid = %d\n", getpid());
 	exit(EXIT_SUCCESS);
 }
 
@@ -95,7 +93,5 @@ int	ft_syntax(t_data *data)
 	else if (WIFSTOPPED(wstatus))
 		return (WSTOPSIG(wstatus) + 128);
 	else
-		return (0); // ? b
-//	return (WIFEXITED(wstatus) && WEXITSTATUS(wstatus)); // marche pas ienb a modifier
-//	return (wstatus);
+		return (0); // ? 
 }
