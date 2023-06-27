@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 22:20:56 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/28 00:47:00 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/28 01:12:47 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,9 +73,11 @@ t_file			*create_file_struct_with_filename(char *filename);
 t_file			*create_file_struct_with_fd(int fd);
 
 //red
-void			add_in_redir_with_file_struct(t_cmd *cmd, t_file *file_struct);
-void			add_out_redir_with_file_struct(t_cmd *cmd, t_file *file_struct);
-void			add_err_redir_with_file_struct(t_cmd *cmd, t_file *file_struct);
+// void			add_in_redir_with_file_struct(t_cmd *cmd, t_file *file_struct);
+// void			add_out_redir_with_file_struct(t_cmd *cmd, t_file *file_struct);
+// void			add_err_redir_with_file_struct(t_cmd *cmd, t_file *file_struct);
+void			add_redir_with_file_struct(t_cmd *cmd, t_file *file_struct);
+
 void			init_redirections(t_redirect *red);
 t_redirect		*create_redir(void);
 

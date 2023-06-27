@@ -6,11 +6,11 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:34:40 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/28 00:22:37 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/28 01:32:57 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "minishell.h"
 
 void	print_error_wildcard_opendir(char *error, char *dir_name)
 {

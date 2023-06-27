@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   readline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 22:15:52 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/27 22:08:26 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/28 01:32:57 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "minishell.h"
 
 int	only_whitespaces(char *str)
 {

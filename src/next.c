@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   next.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:50:05 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/27 22:08:01 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/28 01:32:57 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "minishell.h"
 
 void	wait_childs(t_cmd *origin)
 {

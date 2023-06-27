@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 16:39:50 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/27 20:37:56 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/28 01:32:57 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	free_red(t_redirect *red)
 {
-	ft_lstfree(&(red->out_list), call_free_fs);
-	ft_lstfree(&(red->in_list), call_free_fs);
+	ft_lstfree(&(red->files), call_free_fs);
+	// ft_lstfree(&(red->in_list), call_free_fs);
 }
 
 void	free_common(t_cmd *cmd)

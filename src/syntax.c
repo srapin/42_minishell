@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 22:34:18 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/28 00:53:05 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/28 01:32:57 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,22 +83,22 @@ int	check_syntax(t_data *data)
 
 int	ft_syntax(t_data *data)
 {
-	pid_t	pid;
-	int		wstatus;
+	// pid_t	pid;
+	// int		wstatus;
 
-	pid = fork();
-	if (pid == -1)
-		perror("fork ");
-	if (pid == 0)
-		check_syntax(data);
-	if (waitpid(pid, &wstatus, 0) == -1)
-		perror("wait ");
-	if (WIFEXITED(wstatus))
-		return (WEXITSTATUS(wstatus));
-	else if (WIFSIGNALED(wstatus))
-		return (WTERMSIG(wstatus) + 128);
-	else if (WIFSTOPPED(wstatus))
-		return (WSTOPSIG(wstatus) + 128);
-	else
-		return (0);
+	// pid = fork();
+	// if (pid == -1)
+	// 	perror("fork ");
+	// if (pid == 0)
+	check_syntax(data);
+	// if (waitpid(pid, &wstatus, 0) == -1)
+	// 	perror("wait ");
+	// if (WIFEXITED(wstatus))
+	// 	return (WEXITSTATUS(wstatus));
+	// else if (WIFSIGNALED(wstatus))
+	// 	return (WTERMSIG(wstatus) + 128);
+	// else if (WIFSTOPPED(wstatus))
+	// 	return (WSTOPSIG(wstatus) + 128);
+	// else
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:03:15 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/27 22:30:14 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/28 01:11:39 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,14 +114,16 @@ typedef struct s_file
 	char				*name;
 	int					fd;
 	int					flag;
+	bool				out;
 }						t_file;
 
 typedef struct cmd		t_cmd;
 
-typedef struct redirect
+typedef struct s_redirect
 {
-	t_list				*in_list;
-	t_list				*out_list;
+	// t_list				*in_list;
+	// t_list				*out_list;
+	t_list				*files;
 	t_cmd				*next_cmd;
 	int					in_fd;
 	int					out_fd;

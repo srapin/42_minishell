@@ -36,7 +36,7 @@ t_file	*create_file_struct_with_filename(char *filename)
 	return (file_struct);
 }
 
-bool	replace_fd(t_file *f_s, int *to_rep, bool out)
+bool	replace_fd(t_file *f_s, int *to_rep)
 {
 	int		new_fd;
 	char	*err_mess;
@@ -46,7 +46,7 @@ bool	replace_fd(t_file *f_s, int *to_rep, bool out)
 		new_fd = f_s->fd;
 	else if (f_s->name)
 	{
-		if (out && access(f_s->name, F_OK) != 0)
+		if (f_s->out && access(f_s->name, F_OK) != 0)
 			new_fd = open(f_s->name, f_s->flag, S_IRWXU);
 		else
 			new_fd = open(f_s->name, f_s->flag);
@@ -78,23 +78,53 @@ bool	open_cmd_files(t_cmd *cmd)
 	t_list	*tmp_lst;
 	t_file	*tmp_file;
 	bool	flag;
+	int		*to_rep;
 
 	flag = true;
-	tmp_lst = cmd->red.out_list;
+	tmp_lst = cmd->red.files;
 	while (tmp_lst && flag)
 	{
 		tmp_file = tmp_lst->content;
+		if(tmp_file->out)
+			to_rep = &(cmd->red.out_fd);
+		else
+			to_rep = &(cmd->red.in_fd);
+
 		if (tmp_file)
-			flag = replace_fd(tmp_file, &(cmd->red.out_fd), true);
+			flag = replace_fd(tmp_file, to_rep);
 		tmp_lst = tmp_lst->next;
 	}
-	tmp_lst = cmd->red.in_list;
-	while (tmp_lst && flag)
-	{
-		tmp_file = tmp_lst->content;
-		if (tmp_file)
-			flag = replace_fd(tmp_file, &(cmd->red.in_fd), false);
-		tmp_lst = tmp_lst->next;
-	}
+	// if (!flag)
+	// {
+	// 	safe_close(&(cmd->red.out_fd));
+	// 	safe_close(&(cmd->red.in_fd));
+	// }
 	return (flag);
 }
+
+
+// bool	open_cmd_files(t_cmd *cmd)
+// {
+// 	t_list	*tmp_lst;
+// 	t_file	*tmp_file;
+// 	bool	flag;
+
+// 	flag = true;
+// 	tmp_lst = cmd->red.out_list;
+// 	while (tmp_lst && flag)
+// 	{
+// 		tmp_file = tmp_lst->content;
+// 		if (tmp_file)
+// 			flag = replace_fd(tmp_file, &(cmd->red.out_fd), true);
+// 		tmp_lst = tmp_lst->next;
+// 	}
+// 	tmp_lst = cmd->red.in_list;
+// 	while (tmp_lst && flag)
+// 	{
+// 		tmp_file = tmp_lst->content;
+// 		if (tmp_file)
+// 			flag = replace_fd(tmp_file, &(cmd->red.in_fd), false);
+// 		tmp_lst = tmp_lst->next;
+// 	}
+// 	return (flag);
+// }
