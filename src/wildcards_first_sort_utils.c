@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:31:52 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/27 20:46:56 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/27 23:07:59 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ char	*search_from_end(char *d_name, char *suffix)
 	return (d_name);
 }
 
-t_filename	*return_entire_dir_content(DIR *dir)
+t_filename	*return_entire_dir_content(char *current_dir, DIR *dir)
 {
 	t_filename		*filenames;
 	struct dirent	*dir_content;
@@ -100,5 +100,7 @@ t_filename	*return_entire_dir_content(DIR *dir)
 			add_filename(&filenames, dir_content->d_name);
 		dir_content = readdir(dir);
 	}
+	if (closedir(dir) == -1)
+		print_error_wildcard_opendir("minishell : closedir : ", current_dir);
 	return (filenames);
 }

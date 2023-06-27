@@ -6,16 +6,26 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:34:40 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/27 02:33:30 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/27 22:32:41 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+void	print_error_wildcard_opendir(char *error, char *dir_name)
+{
+	char	*mess;
+
+	mess = ft_strjoin(error, dir_name);
+	perror(mess);
+	free(mess);
+	mess = NULL;
+}
 
 void	free_filenames(t_filename **filenames)
 {
-	t_filename *curr;
+	t_filename	*curr;
+
 	curr = *filenames;
 	while (*filenames)
 	{
@@ -29,8 +39,8 @@ void	free_filenames(t_filename **filenames)
 }
 
 /*
-Replaces current->content (ie the current token's content) with the associated files/directories names,
-		
+Replaces current->content (ie the current token's content) 
+with the associated files/directories names,	
 in case the wildcard search revealed itself successful
 */
 void	insert_filenames(t_token_list **first, t_token_list **current,
@@ -39,8 +49,7 @@ void	insert_filenames(t_token_list **first, t_token_list **current,
 	t_token_list	*tmp;
 	t_filename		*current_f;
 
-	// ie si probleme de malloc ou alors que n'a trouvé aucun filename correspondant
-	if (!filenames || !(*filenames)) //  || !(*filenames)->filename
+	if (!filenames || !(*filenames))
 		return ;
 	if (!(*filenames)->filename)
 	{
@@ -52,7 +61,6 @@ void	insert_filenames(t_token_list **first, t_token_list **current,
 	while (current_f)
 	{
 		tk_add_word_in_list(current, current_f->filename);
-		//printf("%s inserted\n", (*filenames)->filename);
 		*current = (*current)->next;
 		current_f = current_f->next;
 	}
@@ -70,7 +78,7 @@ void	free_and_null(char *prefix, char *suffix)
 
 int	is_in_quotes(t_token_list *current, size_t index)
 {
-	size_t			length;
+	size_t		length;
 	t_word_data	*current_w;
 
 	if (!(current->merged_words))

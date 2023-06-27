@@ -6,13 +6,14 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/20 22:50:42 by hlesny            #+#    #+#             */
-/*   Updated: 2023/06/27 20:49:43 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/27 23:11:06 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_filename	*check_prefix_suffix(DIR *dir, char *prefix, char *suffix)
+t_filename	*check_prefix_suffix(char *current_dir, DIR *dir,
+			char *prefix, char *suffix)
 {
 	char			*curr_filename;
 	struct dirent	*dir_content;
@@ -33,10 +34,12 @@ t_filename	*check_prefix_suffix(DIR *dir, char *prefix, char *suffix)
 		}
 		dir_content = readdir(dir);
 	}
+	if (closedir(dir) == -1)
+		print_error_wildcard_opendir("minishell : closedir : ", current_dir);
 	return (filenames);
 }
 
-t_filename	*check_prefix(DIR *dir, char *prefix)
+t_filename	*check_prefix(char *current_dir, DIR *dir, char *prefix)
 {
 	char			*curr_filename;
 	struct dirent	*dir_content;
@@ -53,10 +56,12 @@ t_filename	*check_prefix(DIR *dir, char *prefix)
 			add_filename(&filenames, dir_content->d_name);
 		dir_content = readdir(dir);
 	}
+	if (closedir(dir) == -1)
+		print_error_wildcard_opendir("minishell : closedir : ", current_dir);
 	return (filenames);
 }
 
-t_filename	*check_suffix(DIR *dir, char *suffix)
+t_filename	*check_suffix(char *current_dir, DIR *dir, char *suffix)
 {
 	char			*curr_filename;
 	struct dirent	*dir_content;
@@ -73,10 +78,13 @@ t_filename	*check_suffix(DIR *dir, char *suffix)
 			add_filename(&filenames, dir_content->d_name);
 		dir_content = readdir(dir);
 	}
+	if (closedir(dir) == -1)
+		print_error_wildcard_opendir("minishell : closedir : ", current_dir);
 	return (filenames);
 }
 
-t_filename	*parse_current_dir(DIR *dir, char *prefix, char *suffix)
+t_filename	*parse_current_dir(char *current_dir, DIR *dir,
+			char *prefix, char *suffix)
 {
 	size_t	prefix_len;
 	size_t	suffix_len;
@@ -84,11 +92,11 @@ t_filename	*parse_current_dir(DIR *dir, char *prefix, char *suffix)
 	prefix_len = ft_strlen(prefix);
 	suffix_len = ft_strlen(suffix);
 	if (prefix_len && suffix_len)
-		return (check_prefix_suffix(dir, prefix, suffix));
+		return (check_prefix_suffix(current_dir, dir, prefix, suffix));
 	else if (prefix_len)
-		return (check_prefix(dir, prefix));
+		return (check_prefix(current_dir, dir, prefix));
 	else
-		return (check_suffix(dir, suffix));
+		return (check_suffix(current_dir, dir, suffix));
 }
 
 /*
@@ -98,18 +106,27 @@ IL S'AGIT DU PREMIER TRI
 DIR *dir, char *
 Note : readdir() renvoie NULL si il n'y a plus d'entité de directory à lire.
 */
-t_filename	*first_sort(DIR *dir, char *prefix, char *suffix)
+t_filename	*first_sort(t_data *data, char *prefix, char *suffix)
 {
+	char	*current_dir;
+	DIR		*dir;
 	size_t	prefix_len;
 	size_t	suffix_len;
 
+	current_dir = *get_pwd(data->env);
+	if (!current_dir)
+		return (NULL);
+	dir = opendir(current_dir);
+	if (!dir)
+	{
+		print_error_wildcard_opendir("minishell : opendir : ", current_dir);
+		return (NULL);
+	}
 	if (!prefix || !suffix)
 		return (NULL);
 	prefix_len = ft_strlen(prefix);
 	suffix_len = ft_strlen(suffix);
 	if (!prefix_len && !suffix_len)
-		return (return_entire_dir_content(dir));
-	if (prefix_len == 2 && prefix[0] == '.' && prefix[1] == '.')
-		return (NULL);
-	return (parse_current_dir(dir, prefix, suffix));
+		return (return_entire_dir_content(current_dir, dir));
+	return (parse_current_dir(current_dir, dir, prefix, suffix));
 }

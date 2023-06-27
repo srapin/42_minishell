@@ -6,11 +6,40 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 01:36:57 by hlesny            #+#    #+#             */
-/*   Updated: 2023/06/27 21:06:07 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/27 23:15:51 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	assess_filename(t_filename **filenames, char *filename_pos,
+	t_filename **current_f)
+{
+	t_filename	*tmp;
+
+	if (!filename_pos)
+	{
+		tmp = *current_f;
+		*current_f = (*current_f)->next;
+		del_filename(filenames, tmp);
+		return (0);
+	}
+	return (1);
+}
+
+char	*get_filename_pos(t_token_list *current, char *f_pos,
+		int next_wcard_index, int i)
+{
+	char	*to_find;
+	char	*filename_pos;
+
+	to_find = ft_substr(current->content, i, next_wcard_index - i);
+	filename_pos = ft_search_str_in_str(f_pos,
+			to_find);
+	free(to_find);
+	to_find = NULL;
+	return (filename_pos);
+}
 
 int	parse_current_filename(t_filename **filenames, t_filename **current_f,
 		t_token_list *current, size_t prefix_len)
@@ -18,8 +47,6 @@ int	parse_current_filename(t_filename **filenames, t_filename **current_f,
 	size_t		i;
 	int			next_wcard_index;
 	char		*filename_pos;
-	char		*to_find;
-	t_filename	*tmp;
 
 	i = prefix_len + 1;
 	filename_pos = (*current_f)->filename + prefix_len;
@@ -28,18 +55,10 @@ int	parse_current_filename(t_filename **filenames, t_filename **current_f,
 		next_wcard_index = get_next_wcard_index(current, i);
 		if (next_wcard_index >= 0)
 		{
-			to_find = ft_substr(current->content, i, next_wcard_index - i);
-			filename_pos = ft_search_str_in_str(filename_pos,
-					to_find);
-			free(to_find);
-			to_find = NULL;
-			if (!filename_pos)
-			{
-				tmp = *current_f;
-				*current_f = (*current_f)->next;
-				del_filename(filenames, tmp);
+			filename_pos = get_filename_pos(current, filename_pos,
+					next_wcard_index, i);
+			if (!assess_filename(filenames, filename_pos, current_f))
 				return (0);
-			}
 			i = next_wcard_index + 1;
 			while (current->content[i] && current->content[i] == '*'
 				&& !is_in_quotes(current, i))

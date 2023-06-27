@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcards.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:13:13 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/27 20:37:56 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/27 23:14:48 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,8 @@
 // retourne la string suivant le dernier '*' non contenu dans des quotes
 char	*get_suffix(t_token_list *current)
 {
-	int		i;
-	// t_word_data	*wd;
+	int	i;
 
-	// wd = current->merged_words;
 	i = current->length - 1;
 	while (i >= 0)
 	{
@@ -29,7 +27,7 @@ char	*get_suffix(t_token_list *current)
 	return (NULL);
 }
 
-void	expand_wildcards_in_current(t_data *data, DIR *dir,
+void	expand_wildcards_in_current(t_data *data,
 		t_token_list **current)
 {
 	char		*prefix;
@@ -51,7 +49,7 @@ void	expand_wildcards_in_current(t_data *data, DIR *dir,
 		{
 			prefix = ft_substr((*current)->content, 0, wildcard_index);
 			suffix = get_suffix(*current);
-			filenames = first_sort(dir, prefix, suffix);
+			filenames = first_sort(data, prefix, suffix);
 			second_sort(&filenames, *current, prefix);
 			free_and_null(prefix, suffix);
 			insert_filenames(data->first, current, &filenames);
@@ -59,11 +57,25 @@ void	expand_wildcards_in_current(t_data *data, DIR *dir,
 	}
 }
 
-void	parse_and_expand_wildcards(t_data *data, DIR *dir)
+/*
+Une fois qu'a get les prefix et suffix,
+	fait un premier tri dans la liste des d_name
+pour trouver ceux ayant des prefixes et suffixes identiques.
+Une fois qu'a fait ce premier tri, itère sur chaque 
+d_name qui matchait, 
+et essayant cette fois ci de trouver des matchs pour les 
+wildcards a l'interieur du mot (s'il y en a)
+Si on arrive au dernier index du current d_name sans etre
+arrivé à la fin du mot,
+	alors supprime ce d_name
+de la liste de d_name résultant du premier tri.
+*/
+void	perform_wildcard_exp(t_data *data)
 {
 	t_token_list	*current;
-	// t_filename		*filenames;
 
+	if (!(*data->first))
+		return ;
 	current = *(data->first);
 	while (current)
 	{
@@ -80,73 +92,7 @@ void	parse_and_expand_wildcards(t_data *data, DIR *dir)
 				current = current->next;
 			continue ;
 		}
-		expand_wildcards_in_current(data, dir, &current);
+		expand_wildcards_in_current(data, &current);
 		current = current->next;
 	}
-}
-
-void 	print_error(char *error, char *dir_name)
-{
-	char	*mess;
-	mess = ft_strjoin(error, dir_name);
-	perror(mess);
-	free(mess);
-	mess = NULL;
-}
-
-int 	need_to_expand(t_token_list *current)
-{
-	char 	*wildcard_start;
-	size_t 	wildcard_index;
-
-	while (current)
-	{
-		wildcard_start = ft_strchr(current->content, '*');
-		if (wildcard_start)
-		{
-			wildcard_index = current->length - ft_strlen(wildcard_start);
-			while (wildcard_start && is_in_quotes(current, wildcard_index))
-			{
-				wildcard_start = ft_strchr(wildcard_start + 1, '*');
-				wildcard_index = current->length - ft_strlen(wildcard_start);
-			}
-			if (wildcard_start)
-				return (1);
-		}
-		current = current->next;
-	}
-	return (0);
-}
-
-/*
-Une fois qu'a choppé les prefix et suffix,
-	fait un premier tri dans la liste des d_name
-pour trouver ceux ayant des prefixes et suffixes identiques.
-Une fois qu'a fait ce premier tri, itère sur chaque d_name qui matchait, 
-et essayant cette fois ci de trouver des matchs pour les wildcards a l'interieur du mot (s'il y en a)
-Si on arrive au dernier index du current d_name sans etre arrivé à la fin du mot,
-	alors supprime ce d_name
-de la liste de d_name résultant du premier tri.
-*/
-void	perform_wildcard_exp(t_data *data)
-{
-	char *current_dir;
-	DIR *dir;
-
-	if (!(*data->first))
-		return ;
-	if (!need_to_expand(*data->first))
-		return ;
-	current_dir = *get_pwd(data->env);
-	if (!current_dir)
-		return ; // ?
-	dir = opendir(current_dir);
-	if (!dir)
-	{
-		print_error("minishell : opendir : ", current_dir);
-		return ;
-	}
-	parse_and_expand_wildcards(data, dir);
-	if (closedir(dir) == -1)
-		print_error("minishell : closedir : ", current_dir);
 }

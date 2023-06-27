@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:09:03 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/27 18:42:53 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/27 22:27:25 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ Dès que tombe sur un opérateur de controle :
 char	*get_subshell_command(t_token_list **curr_tk)
 {
 	int				open_parentheses;
-	char 			*subshell_cmd;
-	char 			*tmp;
+	char			*subshell_cmd;
+	char			*tmp;
 	t_token_list	*current_tk;
 
 	open_parentheses = 1;
@@ -68,9 +68,10 @@ char	*get_subshell_command(t_token_list **curr_tk)
 
 void	set_subshell(t_cmd *current_cmd, t_token_list **curr_tk)
 {
-	char 	*subshell_cmd;
-	char *mini_path = ht_search(current_cmd->env, "MINISHELL_PATH");
-	
+	char	*subshell_cmd;
+	char	*mini_path;
+
+	mini_path = ht_search(current_cmd->env, "MINISHELL_PATH");
 	if (!mini_path)
 		mini_path = ft_strdup("minishell");
 	if (!current_cmd)
