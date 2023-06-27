@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 22:38:37 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/28 00:22:37 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/28 00:56:39 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	not_found(t_cmd *cmd, t_cmd *first)
 void	failed_to_open_files(t_cmd *first)
 {
 	// if (errno == ENOENT)
-	g_exit_status =	NO_FILE_OR_DIR;
+	// g_exit_status =	NO_FILE_OR_DIR;
 	if (errno == 13)
 		g_exit_status = NO_FILE_OR_DIR;
 	else if (errno == EISDIR)
@@ -61,7 +61,7 @@ void	cmd_not_found(t_cmd *cmd, t_cmd *first)
 	// else if (errno == EISDIR || errno == 13)
 	// 	g_exit_status = CMD_NOT_EXECUTABLE;
 	// else
-	g_exit_status = CMD_NOT_FOUND;	
+	// g_exit_status = CMD_NOT_FOUND;	
 	if (errno == ENOENT)
 		g_exit_status =	CMD_NOT_FOUND;
 	else if (errno == 13)
