@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 22:20:56 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/27 23:18:14 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/27 23:21:03 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,14 +219,15 @@ t_word_data		*new_word_data(t_token_list *token);
 void			add_word_data(t_word_data **first, t_word_data *to_add);
 
 void			perform_wildcard_exp(t_data *data);
-t_filename		*first_sort(DIR *dir, char *prefix, char *suffix);
+void			print_error_wildcard_opendir(char *error, char *dir_name);
+t_filename		*first_sort(t_data *data, char *prefix, char *suffix);
 void			second_sort(t_filename **filenames, t_token_list *current,
 					char *prefix);
 int				is_in_quotes(t_token_list *current, size_t index);
 void			free_and_null(char *prefix, char *suffix);
 void			insert_filenames(t_token_list **first, t_token_list **current,
 					t_filename **filenames);
-t_filename		*return_entire_dir_content(DIR *dir);
+t_filename		*return_entire_dir_content(char *current_dir, DIR *dir);
 char			*search_from_end(char *d_name, char *suffix);
 char			*search_from_start(char *d_name, char *prefix);
 void			add_filename(t_filename **filenames, char *new);
