@@ -36,6 +36,14 @@ void safe_close_cmd_fd(t_cmd *cmd)
 	safe_close(&(cmd->red.out_fd));
 }
 
+
+int is_dir(const char *path)
+{
+    struct stat path_stat;
+    stat(path, &path_stat);
+    return S_ISDIR(path_stat.st_mode);
+}
+
 bool	basic_check_access(t_cmd *cmd)
 {
 	if (!cmd->val.value || !cmd->val.value[0])
@@ -43,7 +51,7 @@ bool	basic_check_access(t_cmd *cmd)
 		errno = ENOENT;
 		return false;
 	}
-	if (ft_strisequal(cmd->val.value, "/") || ft_strisequal(cmd->val.value, "."))
+	if (is_dir(cmd->val.value))
 	{
 		errno = EISDIR;
 		return false;
@@ -78,9 +86,6 @@ bool	check_acces(t_cmd *cmd, t_cmd *first )
 	i = 0;
 	if (!basic_check_access(cmd))
 		return (false);
-	// if (ft_strisequal(cmd->val.value, "."))
-	
-	//  || (ft_strisequal(cmd->val.value, "/"))
 	paths = get_path(cmd);
 	while (paths && paths[i] && cmd->val.value)
 	{
@@ -95,12 +100,11 @@ bool	check_acces(t_cmd *cmd, t_cmd *first )
 		i++;
 	}
 	free_tab(paths);
-	// //dprintf(1, "after while");
 	if (look_like_a_cmd(cmd))
 		cmd_not_found(cmd, first);
 	if (access(cmd->val.value, X_OK) != 0)
 		return (false);
-	
+	(void) first	;
 	cmd->val.path = ft_strdup(cmd->val.value);
 	return (true);
 }
