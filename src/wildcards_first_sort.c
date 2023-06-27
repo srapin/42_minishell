@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/20 22:50:42 by hlesny            #+#    #+#             */
-/*   Updated: 2023/06/27 02:11:10 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/27 02:19:34 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,16 +82,9 @@ t_filename	*parse_current_dir(DIR *dir, char *prefix, char *suffix)
 {
 	size_t			prefix_len;
 	size_t			suffix_len;
-	// char			*curr_filename;
-	// struct dirent	*dir_content;
-	t_filename		*filenames;
 
-	filenames = ft_calloc(sizeof(t_filename), 1);
-	if (!filenames)
-		return (NULL);
 	prefix_len = ft_strlen(prefix);
 	suffix_len = ft_strlen(suffix);
-	// dir_content = readdir(dir);
 	if (prefix_len && suffix_len)
 		return (check_prefix_suffix(dir, prefix, suffix));
 	else if (prefix_len)

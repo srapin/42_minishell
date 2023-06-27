@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:34:40 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/26 23:38:02 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/27 02:33:30 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,14 @@ void	insert_filenames(t_token_list **first, t_token_list **current,
 	t_token_list	*tmp;
 	t_filename		*current_f;
 
-	if (!filenames || !(*filenames) || !(*filenames)->filename)
 	// ie si probleme de malloc ou alors que n'a trouvé aucun filename correspondant
-		return ; // ?
+	if (!filenames || !(*filenames)) //  || !(*filenames)->filename
+		return ;
+	if (!(*filenames)->filename)
+	{
+		free(*filenames);
+		return ;
+	}
 	current_f = (*filenames);
 	tmp = (*current);
 	while (current_f)

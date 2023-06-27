@@ -3,24 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   wildcards_second_sort.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 01:36:57 by hlesny            #+#    #+#             */
-/*   Updated: 2023/06/24 11:41:58 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/27 02:53:04 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	parse_current_filename(t_filename **filenames, t_filename *current_f,
+int	parse_current_filename(t_filename **filenames, t_filename **current_f,
 		t_token_list *current, size_t prefix_len)
 {
 	size_t		i;
-	int		next_wcard_index;
-	char	*filename_pos;
+	int			next_wcard_index;
+	char		*filename_pos;
+	t_filename	*tmp;
 
 	i = prefix_len + 1;
-	filename_pos = current_f->filename + prefix_len;
+	filename_pos = (*current_f)->filename + prefix_len;
 	while (i < current->length)
 	{
 		next_wcard_index = get_next_wcard_index(current, i);
@@ -31,8 +32,10 @@ void	parse_current_filename(t_filename **filenames, t_filename *current_f,
 														next_wcard_index - i));
 			if (!filename_pos)
 			{
-				del_filename(filenames, current_f);
-				break ;
+				tmp = *current_f;
+				*current_f = (*current_f)->next;
+				del_filename(filenames, tmp);
+				return (0);
 			}
 			i = next_wcard_index + 1;
 			while (current->content[i] && current->content[i] == '*'
@@ -40,8 +43,9 @@ void	parse_current_filename(t_filename **filenames, t_filename *current_f,
 				i++;
 		}
 		else
-			break ;
+			return (1);
 	}
+	return (1);
 }
 
 /*
@@ -70,15 +74,15 @@ void	second_sort(t_filename **filenames, t_token_list *current, char *prefix)
 	size_t		prefix_len;
 	t_filename	*current_f;
 
-	if (!filenames)
+	if (!filenames || !(*filenames))
 		return ;
-	if (!(*filenames))
+	if (!(*filenames)->filename)
 		return ;
 	prefix_len = ft_strlen(prefix);
 	current_f = (*filenames);
 	while (current_f)
 	{
-		parse_current_filename(filenames, current_f, current, prefix_len);
-		current_f = current_f->next;
+		if (parse_current_filename(filenames, &current_f, current, prefix_len))
+			current_f = current_f->next;
 	}
 }

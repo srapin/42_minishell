@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   var_expansion_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:26:43 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/23 22:38:10 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/27 04:09:25 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,35 @@
 void	update_tk_content(t_token_list **current, char *before_key, char *value,
 		char *after_value)
 {
-	char	*tmp;
+	char			*tmp;
+	//t_token_list 	*tk_tmp;
 
 	free((*current)->content);
 	tmp = ft_strjoin(before_key, value);
 	(*current)->content = ft_strjoin(tmp, after_value);
 	(*current)->length = ft_strlen((*current)->content);
+	/* if (!(*(*current)->content))
+	{
+		if (!(*current)->next && !(*current)->prev)
+		{
+			free_merged_words((*current)->merged_words);
+			free((*current)->content);
+			(*current)->content = NULL;
+			free(*current);
+			*current = NULL;
+			return ;
+		}
+		tk_tmp = *current;
+		*current = (*current)->next;
+		if ((*current)->prev->prev)
+			(*current)->prev->prev->next = *current;
+		if (*current)
+			(*current)->prev = (*current)->prev->prev;
+		free(tk_tmp->content);
+		free_merged_words(tk_tmp->merged_words);
+		free(tk_tmp);
+		tk_tmp = NULL;
+	} */
 	free(before_key);
 	free(after_value);
 	free(tmp);

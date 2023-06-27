@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:12:06 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/27 00:20:15 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/27 04:00:54 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,26 +39,14 @@ void	search_and_expand(t_ht_hash_table *ht, t_token_list **current,
 {
 	char	*before_key;
 	char	*after_value;
-	// char	*tmp;
 
 	char *value; /* ne pas le free ! car est malloc dans la hash_map,
 		et peut en re avoir besoin dans une autre commande*/
 	before_key = ft_substr((*current)->content, 0, dollar_index);
-	/* if (*var == '?') // expand_last_exit_status(current)
-	{
-		value = ft_itoa(g_exit_status);
-		after_value = ft_substr((*current)->content, dollar_index + 2,
-				(*current)->length);
-	} */
-	//else
-	//{
-		value = ht_search(ht, var);
-		after_value = ft_substr((*current)->content, dollar_index
-				+ ft_strlen(var) + 1, (*current)->length);
-	//}
+	value = ht_search(ht, var);
+	after_value = ft_substr((*current)->content, dollar_index
+			+ ft_strlen(var) + 1, (*current)->length);
 	update_tk_content(current, before_key, value, after_value);
-	/* if (*var == '?')
-		free(value); */
 }
 
 /*
@@ -137,7 +125,7 @@ int	is_exit_status(t_ht_hash_table *ht, t_token_list *current,
 }
 
 
-void	parse_current_tk(t_ht_hash_table *ht, t_token_list *current)
+void	parse_current_tk(t_ht_hash_table *ht, t_token_list **current)
 {
 	char	*next_d_start;
 	char	*d_start;
@@ -145,19 +133,19 @@ void	parse_current_tk(t_ht_hash_table *ht, t_token_list *current)
 	size_t	next_d_index;
 	size_t	d_index;
 
-	d_start = ft_strdup(ft_strchr(current->content, '$'));
-	if (is_exit_status(ht, current, d_start))
+	d_start = ft_strdup(ft_strchr((*current)->content, '$'));
+	if (is_exit_status(ht, *current, d_start))
 		return ;
 	while (d_start && *d_start)
 	{
-		d_index = current->length - ft_strlen(d_start);
+		d_index = (*current)->length - ft_strlen(d_start);
 		next_d_start = ft_strdup(ft_strchr(d_start + 1, '$'));
-		next_d_index = current->length - ft_strlen(next_d_start);
-		var_name = get_var_name(current, next_d_start, d_index, next_d_index);
+		next_d_index = (*current)->length - ft_strlen(next_d_start);
+		var_name = get_var_name(*current, next_d_start, d_index, next_d_index);
 		if (var_name)
-			search_and_expand(ht, &current, var_name, d_index);
+			search_and_expand(ht, current, var_name, d_index);
 		else
-			check_next_token(&current, d_index);
+			check_next_token(current, d_index);
 		free(d_start);
 		d_start = next_d_start;
 		free(var_name);
@@ -188,7 +176,8 @@ void	perform_variable_exp(t_data *data)
 		else if (current->type != simple_quote && (!current->prev
 					|| current->prev->type != l_io_redirect
 					|| current->prev->length == 1))
-			parse_current_tk(data->env, current);
-		current = current->next;
+			parse_current_tk(data->env, &current);
+		if (current)
+			current = current->next;
 	}
 }

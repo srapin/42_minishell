@@ -9,6 +9,16 @@ exceve failed : abort: Permission denied
 
 
 
+bash-5.1$ $SFJOF
+bash-5.1$
+
+
+
+
+
+
+
+
 bash-5.1$ $""
 bash: : command not found
 bash-5.1$ $9

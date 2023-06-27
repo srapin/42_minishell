@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   del_quotes_group_words.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:13:44 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/24 10:56:18 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/27 03:22:10 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,9 @@ void	delete_quotes(t_data *data)
 	current = *(data->first);
 	while (current)
 	{
-		if (current->type == l_parenthesis)
+		if (!current->content)
+			current = current->next;
+		else if (current->type == l_parenthesis)
 		{
 			while (current && current->type != r_parenthesis)
 				current = current->next;
@@ -83,7 +85,9 @@ void	group_words(t_data *data)
 	current = *(data->first);
 	while (current)
 	{
-		if (current->type == l_parenthesis)
+		if (!current->content)
+			current = current->next;
+		else if (current->type == l_parenthesis)
 		{
 			while (current && current->type != r_parenthesis)
 				current = current->next;

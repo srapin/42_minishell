@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:13:13 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/26 23:51:18 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/27 04:06:25 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	expand_wildcards_in_current(t_data *data, DIR *dir,
 		wildcard_index = (*current)->length - ft_strlen(wildcard_start);
 		while (wildcard_start && is_in_quotes(*current, wildcard_index))
 		{
-			wildcard_start = ft_strchr(wildcard_start, '*');
+			wildcard_start = ft_strchr(wildcard_start + 1, '*');
 			wildcard_index = (*current)->length - ft_strlen(wildcard_start);
 		}
 		if (wildcard_start)
@@ -67,6 +67,11 @@ void	parse_and_expand_wildcards(t_data *data, DIR *dir)
 	current = *(data->first);
 	while (current)
 	{
+		if (!current->content)
+		{
+			current = current->next;
+			continue ;
+		}
 		if (current->type == l_parenthesis)
 		{
 			while (current && current->type != r_parenthesis)
@@ -95,6 +100,8 @@ void	perform_wildcard_exp(t_data *data)
 	char *current_dir;
 	DIR *dir;
 
+	if (!(*data->first))
+		return ;
 	current_dir = *get_pwd(data->env);
 	if (!current_dir)
 		return ; // ?

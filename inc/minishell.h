@@ -237,6 +237,7 @@ void            free_pwd(t_ht_hash_table *env);
 void            free_cmd(t_cmd **cmd);
 void            free_cmds(t_cmd **cmd, bool common);
 void	        ft_lstfree(t_list **lst,void free_foo(void *));
+void			free_merged_words(t_word_data *wd);
 
 
 // to del

@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 02:12:27 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/27 01:56:49 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/27 03:47:26 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,6 +146,8 @@ t_cmd	*parse_and_execute(t_data *data)
 	delete_quotes(data);
 	group_words(data);
 	perform_wildcard_exp(data);
+	if (!(*data->first))
+		return (NULL);
 	if (set_here_docs(data))
 		ast = get_ast(data);
 	// else

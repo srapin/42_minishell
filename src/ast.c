@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 21:44:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/23 15:29:54 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/27 03:28:52 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ t_cmd	*get_ast(t_data *data)
 	t_cmd			*current_cmd;
 
 	t_cmd *test; // est-ce que cette variable est utile ?
+
 	ast = malloc(sizeof(t_cmd *));
 	/* if (!ast && malloc_error(data,
 				...)) (avec malloc_error qui retourne tjr 1, 

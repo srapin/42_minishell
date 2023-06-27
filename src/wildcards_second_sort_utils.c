@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcards_second_sort_utils.c                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:33:51 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/23 15:34:08 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/27 03:03:35 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	*ft_search_str_in_str(char *s, char *to_find)
 	{
 		if (s[i] == to_find[j])
 		{
-			while (s[i] == to_find[j])
+			while (s[i] && to_find[j] && s[i] == to_find[j])
 			{
 				i++;
 				j++;
@@ -61,6 +61,14 @@ void	del_filename(t_filename **first, t_filename *to_del)
 	t_filename	*current;
 
 	current = (*first);
+	if (*first == to_del)
+	{
+		*first = (*first)->next;
+		free(to_del->filename);
+		free(to_del);
+		to_del = NULL;
+		return ;
+	}
 	while (current->next && current->next != to_del)
 		current = current->next;
 	if (!current->next)
