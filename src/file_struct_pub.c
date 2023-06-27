@@ -53,6 +53,14 @@ bool	replace_fd(t_file *f_s, int *to_rep, bool out)
 		if (new_fd < 0)
 		{
 			err_mess = ft_strjoin("minishell: ", f_s->name);
+			if (errno == ENOENT)
+				g_exit_status =	CMD_NOT_FOUND;
+			else if (errno == 13)
+				g_exit_status = NO_FILE_OR_DIR;
+			else if (errno == EISDIR)
+				g_exit_status = CMD_NOT_EXECUTABLE;
+			else
+				g_exit_status = CMD_NOT_FOUND;	
 			perror(err_mess);
 			safe_close(to_rep);
 			free(err_mess);

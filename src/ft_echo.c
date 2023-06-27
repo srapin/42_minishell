@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 18:31:24 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/27 21:18:57 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/28 00:22:37 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,14 @@ int	write_error(t_cmd *cmd)
 	char	*err_mess;
 
 	err_mess = ft_strjoin("minishell: ", cmd->val.value);
+	if (errno == ENOENT)
+		g_exit_status =	CMD_NOT_FOUND;
+	else if (errno == 13)
+		g_exit_status = NO_FILE_OR_DIR;
+	else if (errno == EISDIR)
+		g_exit_status = CMD_NOT_EXECUTABLE;
+	else
+		g_exit_status = NO_FILE_OR_DIR;
 	perror(err_mess);
 	free(err_mess);
 	return (EXIT_FAILURE);

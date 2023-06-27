@@ -60,18 +60,6 @@ bool look_like_a_cmd(t_cmd *cmd)
 	return (!(ft_strnstr(cmd->val.value, "./", 2)) && !ft_strnstr(cmd->val.value, "/", 1));
 }
 
-// void cmd_not_found(t_cmd *cmd, t_cmd*first)
-// {
-// 	char	*mess;
-// 	char *tmp;
-// 	tmp = ft_strjoin("minishell: ", cmd->val.value);
-// 	mess = ft_strjoin(tmp, ": command not found\n");
-// 	write(STDERR_FILENO, mess, ft_strlen(mess));
-// 	free(tmp);
-// 	free(mess);
-// 	free_cmds(&first, true);
-// 	exit(CMD_NOT_FOUND);
-// }
 
 bool	check_acces(t_cmd *cmd, t_cmd *first )
 {

@@ -3,20 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   wildcards_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:34:40 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/27 22:32:41 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/28 00:22:37 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../inc/minishell.h"
 
 void	print_error_wildcard_opendir(char *error, char *dir_name)
 {
 	char	*mess;
 
 	mess = ft_strjoin(error, dir_name);
+	if (errno == ENOENT)
+		g_exit_status =	CMD_NOT_FOUND;
+	else if (errno == 13)
+		g_exit_status = NO_FILE_OR_DIR;
+	else if (errno == EISDIR)
+		g_exit_status = CMD_NOT_EXECUTABLE;
+	else
+		g_exit_status = NO_FILE_OR_DIR;	
 	perror(mess);
 	free(mess);
 	mess = NULL;
