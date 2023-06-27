@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 01:12:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/26 21:18:23 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/27 04:36:51 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,7 @@ void	curr_dir(char **path, int i)
 
 	before = ft_substr(*path, 0, i);
 	after = ft_substr(*path, i + 2, ft_strlen(*path));
-	// printf("before set_path, path = %s\n", *path);
 	set_path(path, before, after);
-	// printf("after set_path, path = %s\n", *path);
 }
 
 /* Deletes the '..' or '../', along with the <dir_name>/ that 
@@ -100,13 +98,9 @@ void	del_slashes(char **path)
 	}
 }
 
-/* Parses the path, removes and replaces any occurence of './' and '../' */
 char	*replace_prev_or_actual_dir(char *path)
 {
 	int		i;
-	// int		j;
-	// char	*before;
-	// char	*after;
 
 	i = 0;
 	if (path[0] && path[0] == '/' && path[1] && path[1] == '/' && !path[2])
@@ -145,10 +139,18 @@ int	go_to_home(t_cmd *cmd)
 		return (CANNOT_ACCESS_DIR);
 	}
 	if (!ht_modify_value(cmd->env, "PWD", full_path))
-	// ie si PWD n'est dans l'env
 		ht_insert_item(cmd->env, ft_strdup("PWD"), full_path);
 	update_pwd(cmd->env, full_path);
 	return (EXIT_OK);
+}
+
+void 	print_chdir_error(char *dir)
+{
+	char	*mess;
+	
+	mess = ft_strjoin("minishell : ", dir);
+	perror(mess);
+	free(mess);
 }
 
 char	*cd_move_to(t_cmd *cmd)
@@ -156,9 +158,9 @@ char	*cd_move_to(t_cmd *cmd)
 	char	*full_path;
 	char	*tmp;
 
-	if (cmd->val.args[1][0] == '/') // chemin absolu)
+	if (cmd->val.args[1][0] == '/')
 		full_path = ft_strdup(cmd->val.args[1]);
-	else // chemin relatif
+	else
 	{
 		tmp = ft_strdup(cmd->val.args[1]);
 		if (ft_strcmp(*get_pwd(cmd->env), "/")) // ie $PWD != "/"
@@ -172,7 +174,8 @@ char	*cd_move_to(t_cmd *cmd)
 	}
 	if (chdir(full_path) == -1)
 	{
-		perror("chdir ");
+		print_chdir_error(cmd->val.args[1]);
+		//perror("chdir ");
 		free(full_path);
 		full_path = NULL;
 		return (NULL);
@@ -184,12 +187,10 @@ void	set_pwd(t_cmd *cmd, char *full_path)
 {
 	char	*tmp;
 	char 	*oldpwd;
-	// char	*pwd;
 
 	tmp = ft_strdup(full_path);
 	free(full_path);
 	full_path = replace_prev_or_actual_dir(tmp);
-	// free(tmp); pourquoi ce free() fait tout couiller ??
 	if (ft_strlen(full_path) > 1 && full_path[ft_strlen(full_path) - 1] == '/'
 		&& full_path[1] != '/')
 	{
@@ -212,10 +213,8 @@ Returns 0 IF directory is successfully changed
 int	ft_cd(t_cmd *cmd, t_cmd *first)
 {
 	char	*full_path;
-	// char	*tmp;
 
 	(void) first;
-	// tmp = NULL;
 	full_path = NULL;
 	if (!cmd->val.args[1])
 		return (go_to_home(cmd));

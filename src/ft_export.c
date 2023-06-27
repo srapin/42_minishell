@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 23:25:02 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/26 20:49:20 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/27 04:24:51 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,6 +248,8 @@ int	export_with_value(t_cmd *cmd, char *var_name, int i, int j)
 				ft_strlen(cmd->val.args[i]));
 		if (!ht_modify_value(cmd->env, var_name, var_value))
 			ht_insert_item(cmd->env, var_name, var_value);
+		else
+			free(var_name);
 	}
 	else
 	{
