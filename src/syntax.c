@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 22:34:18 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/28 06:42:10 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/28 07:52:44 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,13 @@ void	display_custom_se(bool quotes)
 	if (quotes == false)
 	{
 		if (write(STDERR_FILENO,
-			"Syntax error : Missing closing parenthesis\n", 43) == -1)
+				"Syntax error : Missing closing parenthesis\n", 43) == -1)
 			perror("write");
 	}
 	else
 	{
 		if (write(STDERR_FILENO,
-			"Syntax error : Missing closing quote\n", 37) == -1)
+				"Syntax error : Missing closing quote\n", 37) == -1)
 			perror("write");
 	}
 }
@@ -38,8 +38,8 @@ void	display_se(t_data *data, char *token)
 {
 	char	*mess;
 	char	*tmp;
+
 	(void)data;
-	
 	tmp = ft_strjoin("Syntax error near unexpected token `", token);
 	mess = ft_strjoin(tmp, "\'\n");
 	if (write(STDERR_FILENO, mess, ft_strlen(mess)) == -1)
@@ -109,7 +109,6 @@ int	check_syntax(t_data *data)
 		return (SYNTAX_ERROR);
 	if (parentheses_count)
 	{
-		//printf("Syntax error : Missing closing parenthesis\n");
 		display_custom_se(false);
 		return (SYNTAX_ERROR);
 	}
