@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_heredocs_get_input.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 06:11:55 by hlesny            #+#    #+#             */
-/*   Updated: 2023/06/28 06:12:04 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/28 07:44:18 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,10 @@ void	hd_perform_expand(t_ht_hash_table *ht, char **str)
 	}
 	free(*str);
 	*str = tmp;
-	free_tokens(first);
+	if (tmp)
+		free_tokens(first);
+	else
+		free(first);
 }
 
 void	get_here_doc_content(t_ht_hash_table *ht, int fd, char *limiter,
