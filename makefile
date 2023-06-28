@@ -19,8 +19,8 @@ FILES = ast \
 		del_quotes_group_words_utils \
 		exec_cmds \
 		exec_builtins \
-		file_struct_priv\
-		file_struct_pub\
+		file_struct_else\
+		file_struct_init\
 		free_tokens \
 		free_cmds \
 		free_cmds_utils \
