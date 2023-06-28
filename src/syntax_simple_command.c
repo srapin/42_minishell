@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:17:34 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/28 02:35:10 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/28 02:44:27 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,12 @@ int	check_io_redirect(t_data *data, t_token_list **op)
 
 int	sc_check_quotes(t_data *data, t_token_list **current)
 {
+	(void)data;
 	if ((*current)->type == simple_quote
 		&& ((*current)->content[(*current)->length - 1] != '\''
 			|| (*current)->length == 1))
 	{
 		printf("Syntax error : Missing closing quote\n");
-		free_parsing_data(data);
 		return (SYNTAX_ERROR);
 	}
 	else if ((*current)->type == double_quote
@@ -53,7 +53,6 @@ int	sc_check_quotes(t_data *data, t_token_list **current)
 			|| (*current)->length == 1))
 	{
 		printf("Syntax error : Missing closing quote\n");
-		free_parsing_data(data);
 		return (SYNTAX_ERROR);
 	}
 	return (0);
@@ -78,7 +77,6 @@ int	sc_check_parentheses(t_data *data, t_token_list **current,
 		else if (!(curr))
 		{
 			printf("Syntax error : Missing closing parenthesis\n");
-			free_parsing_data(data);
 			return (SYNTAX_ERROR);
 		}
 	}

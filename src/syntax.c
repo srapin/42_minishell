@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 22:34:18 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/28 02:28:20 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/28 02:43:43 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ int	check_syntax(t_data *data)
 	if (parentheses_count)
 	{
 		printf("Syntax error : Missing closing parenthesis\n");
-		free_parsing_data(data);
 		return (SYNTAX_ERROR);
 	}
 	return (EXIT_SUCCESS);
