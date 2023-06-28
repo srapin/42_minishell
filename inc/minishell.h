@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 22:20:56 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/28 05:30:24 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/28 05:53:46 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,6 +196,8 @@ void			display_se(t_data *data, char *token);
 
 void			perform_variable_exp(t_data *data);
 int				valid_name(char *name);
+int				check_for_exit_status(t_token_list *current,
+				char **d_start, char *next_d_start);
 void			check_next_token(t_token_list **curr, size_t dollar_index);
 void			expand(t_ht_hash_table *ht, t_token_list **current, char *var,
 					size_t dollar_index);

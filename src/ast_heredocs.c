@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 23:24:33 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/28 05:49:36 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/28 05:52:53 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ int	is_limiter(char *line, char *limiter)
 	}
 } */
 
-/* void	get_expanded_token(t_ht_hash_table *ht,
+void	hd_get_expanded_token(t_ht_hash_table *ht,
 		t_token_list **current, char *d_start)
 {
 	char			*next_d_start;
@@ -117,15 +117,13 @@ int	is_limiter(char *line, char *limiter)
 		var_name = get_var_name(*current, next_d_start, d_index, next_d_index);
 		if (var_name)
 			search_and_expand(ht, current, var_name, d_index);
-		else
-			check_next_token(current, d_index);
 		free(d_start);
 		d_start = next_d_start;
 		free(var_name);
 	}
 	free(d_start);
 	d_start = NULL;
-} */
+}
 
 void	hd_expand(t_ht_hash_table *ht, t_token_list **t_list)
 {
