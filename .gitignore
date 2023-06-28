@@ -1,10 +1,18 @@
-todo_parsing.txt
-tofix_parsing.txt
-tocheck_parsing.txt
 
-todo_builtins.txt
 
 todo_exec.txt
 
 obj/*.o
 minishell
+
+truc.c
+
+todo_exec.txt
+tofix.txt
+ignore_readline_axel.txt
+left_to_norm.txt
+tokens.h
+pub.h
+priv.h
+defines.h
+hash_table.h 
