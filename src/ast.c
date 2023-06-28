@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 21:44:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/28 03:41:32 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/28 08:00:30 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	set_pipe(t_data *data, t_token_list **current_tk, t_cmd **current_cmd)
 		if (!(*current_cmd)->red.next_cmd)
 		{
 			perror("malloc ");
-			// free and return. Quel exit status ?
+			return ;
 		}
 		*current_cmd = (*current_cmd)->red.next_cmd;
 		*current_tk = (*current_tk)->next;
@@ -44,7 +44,8 @@ int	set_t_ctrl_op(t_data *data, t_token_list **current_tk,
 		if (!(*pipeline_start_cmd))
 		{
 			perror("malloc ");
-			// free en cascade. Quel exit status ?
+			*pipeline_start_tk = NULL;
+			return (0);
 		}
 		*pipeline_start_tk = (*current_tk)->next;
 		return (1);
