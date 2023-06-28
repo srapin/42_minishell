@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2023/06/28 06:19:04 by hlesny            #+#    #+#              #
+#    Updated: 2023/06/28 06:19:05 by hlesny           ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 NAME = minishell
 NAME_BONUS = minishell_bonus
 
@@ -12,6 +24,8 @@ FILES = ast \
 		ast_utils \
 		ast_subshell \
 		ast_heredocs \
+		ast_heredocs_get_input \
+		ast_heredocs_utils \
 		cmd \
 		common_process\
 		deal_with_error\

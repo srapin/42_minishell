@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/28 04:31:02 by hlesny            #+#    #+#             */
-/*   Updated: 2023/06/28 04:39:54 by hlesny           ###   ########.fr       */
+/*   Created: 2023/06/28 06:10:47 by hlesny            #+#    #+#             */
+/*   Updated: 2023/06/28 06:13:03 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,71 +32,49 @@ char	*random_filename(void)
 	return (filename);
 }
 
-int	is_limiter(char *line, char *limiter)
+int	set_quotes(t_token_list *current)
 {
-	int	i;
+	int			quotes;
+	t_word_data	*wd;
 
-	i = 0;
-	while (line[i] && limiter[i] && line[i] == limiter[i])
-		i++;
-	if (!limiter[i])
-		return (1);
-	return (0);
+	quotes = 0;
+	if (!current->next->merged_words)
+		quotes = (current->next->quotes > 0);
+	else
+	{
+		quotes = 0;
+		wd = current->next->merged_words;
+		while (wd && !quotes)
+		{
+			if (wd->quotes > 0)
+				quotes = 1;
+			wd = wd->next;
+		}
+	}
+	return (quotes);
 }
 
-
-
-void	hd_expand(t_ht_hash_table *ht, t_token_list **t_list)
+/*
+1) create a temporary file (in /tmp)
+2) using readline(), rewrite the user's input 
+in that file
+3) expand variables if needed (ie if there were 
+   quotes in the limiter or not)
+4) replace the initial tokens "<<" "LIM" by "<" "heredoc_file_path" 
+   in the token list   
+*/
+void	set_hd_filenames(t_token_list *current, t_data *data)
 {
-	char			*next_dollar_start;
-	char			*dollar_start;
-	size_t			next_dollar_index;
-	size_t			dollar_index;
-	t_token_list	*current;
-	int				k;
-	char			*var_name;
+	char	*file_name;
 
-	current = *t_list;
 	while (current)
 	{
-		while (current && current->type == whitespace)
-			current = current->next;
-		if (!current)
-			break ;
-		dollar_start = ft_strdup(ft_strchr(current->content, '$'));
-		while (dollar_start && *dollar_start)
+		if (current->type == l_io_redirect && current->length == 2)
 		{
-			dollar_index = current->length - ft_strlen(dollar_start);
-			next_dollar_start = ft_strdup(ft_strchr(dollar_start + 1, '$'));
-			next_dollar_index = current->length - ft_strlen(next_dollar_start);
-			if (next_dollar_start && *next_dollar_start)
-				expand(ht, &current, ft_substr(current->content, dollar_index
-					+ 1, next_dollar_index - dollar_index - 1),
-					dollar_index);
-			else if (current->type == double_quote
-					|| current->type == simple_quote)
-			{
-				k = 2;
-				var_name = ft_substr(current->content, dollar_index + 1,
-						current->length - dollar_index - k);
-				while (k + dollar_index <= current->length
-					&& !valid_name(var_name))
-				{
-					free(var_name);
-					k++;
-					var_name = ft_substr(current->content, dollar_index + 1,
-							current->length - dollar_index - k);
-				}
-				if (k + dollar_index <= current->length)
-					expand(ht, &current, var_name, dollar_index);
-			}
-			else
-				expand(ht, &current, ft_strdup(dollar_start + 1), dollar_index);
-			free(dollar_start);
-			dollar_start = NULL;
-			dollar_start = next_dollar_start;
+			file_name = random_filename();
+			ft_lstadd_back(&(data->files), ft_lstnew(file_name));
+			tk_add_word_in_list(&current, file_name);
 		}
-		free(dollar_start);
 		current = current->next;
 	}
 }

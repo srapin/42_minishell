@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 20:38:59 by hlesny            #+#    #+#             */
-/*   Updated: 2023/06/28 05:49:20 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/28 06:16:36 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,9 @@ int	is_exit_status(t_token_list *current, char *d_start)
 	char	*before_key;
 	size_t	dollar_index;
 
-	i = 1; // =0;
+	i = 1;
 	if (!(*d_start))
 		return (0);
-	/* while (d_start[i] && d_start[i] == '$')
-		i++; */
 	if (d_start[i] && d_start[i] == '?')
 	{
 		dollar_index = current->length - ft_strlen(d_start + i) - 1;
