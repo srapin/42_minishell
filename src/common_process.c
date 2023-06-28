@@ -3,55 +3,70 @@
 /*                                                        :::      ::::::::   */
 /*   common_process.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/23 00:44:39 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/10 21:44:48 by Helene           ###   ########.fr       */
+/*   Created: 2023/06/21 01:02:42 by srapin            #+#    #+#             */
+/*   Updated: 2023/06/28 01:32:57 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
-
+#include "minishell.h"
 
 void	parent_process(t_cmd **cmd, int pipe_tab[2])
 {
-	char **test = hash_map_to_tab((*cmd)->env);
-	
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, SIG_IGN);
 	safe_close(&(pipe_tab[1]));
 	if (!cmd || !(*cmd))
-		return;
+		return ;
 	safe_close_cmd_fd(*cmd);
-	//if ((*cmd)->red.in_type == fd && ((t_file *) ((*cmd)->red.in_content))->sep)
-		//close
 	*cmd = (*cmd)->red.next_cmd;
-	//dprintf(STDOUT_FILENO, "parent pro %s\n", (*cmd)->val.value);
 	if (!cmd || !(*cmd))
-		return;
+		return ;
 	(*cmd)->red.in_fd = pipe_tab[0];
 }
 
-void	child_process(t_cmd *cmd, int pipe_tab[2], int *to_free)
+void	launch_execve(t_cmd *cmd, t_cmd *first)
 {
-	char	**paths;
+	char	*path;
+	char	**args;
+	char	**env;
 
+	path = cmd->val.path;
+	env = hash_map_to_tab(cmd->env);
+	args = cmd->val.args;
+	cmd->val.args = NULL;
+	cmd->val.path = NULL;
+	free_cmds(&first, true);
+	signal(SIGQUIT, SIG_DFL);
+	execve(path, args, env);
+	signal(SIGQUIT, SIG_IGN);
+	free(path);
+	free_tab(env);
+	free_tab(args);
+	perror("exceve failed : abort");
+	exit(CMD_NOT_FOUND);
+}
+
+void	child_process(t_cmd *cmd, t_cmd *first, int pipe_tab[2])
+{
 	if (pipe_tab[0] > -1)
 	{
 		safe_close(&(pipe_tab[0]));
 		cmd->red.out_fd = pipe_tab[1];
 	}
-	dprintf(1, "in child proc outfile name = %s\n", ((t_file *)(cmd->red.out_list)->content)->name   );
-	dup_cmd_file(cmd);
-	// dprintf(1, "child_proc");
-	paths = get_path(cmd);
-	if (check_acces(paths, cmd))
+	reset_defaults_signals();
+	if (!dup_cmd_file(cmd))
+		failed_to_open_files(first);
+	if (!cmd->val.value)
 	{
-	 	execve(cmd->val.path, cmd->val.args, cmd->val.env);
+		free_cmds(&first, true);
+		exit(EXIT_SUCCESS);
 	}
-	perror("cmd not found");
-	free_tab(paths);
-	free_tab(cmd->val.args);
-	free(to_free);
-	exit(EXIT_FAILURE);
+	try_to_exec_builtins(cmd, first, true);
+	if (check_acces(cmd, first))
+		launch_execve(cmd, first);
+	not_found(cmd, first);
 }
 
 void	fail_process(void)

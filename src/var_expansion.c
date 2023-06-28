@@ -3,134 +3,89 @@
 /*                                                        :::      ::::::::   */
 /*   var_expansion.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:12:06 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/10 22:07:57 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/28 05:51:11 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/*
-The parameter name or symbol can be enclosed in braces, 
-which are optional except for positional parameters with more than one digit 
-or when parameter is a name and is followed by a character that could be 
-interpreted as part of the name. 
-The matching closing brace shall be determined by counting brace levels, 
-skipping over enclosed quoted strings, and command substitutions.
-
-If the parameter is not enclosed in braces, and is a name, the expansion shall use
-the longest valid name (see XBD Name), whether or not the variable represented 
-by that name exists. Otherwise, the parameter is a single-character symbol, 
-and behavior is unspecified if that character is neither a digit nor one of 
-the special parameters (see Special Parameters).
-
-If a parameter expansion occurs inside double-quotes:
-    Pathname expansion shall not be performed on the results of the expansion.
-    Field splitting shall not be performed on the results of the expansion.
-*/
-
-/*
-Dans le cas export a="coucou $b", export b=test, echo "$a", ne doit expand que a lors du parsing
--> en effet, lors d'un appel a export, l'expansion de variables est egalement faite 
--> dans l'exemple ci dessus, si tape dans cet ordre, alors a="coucou ", car b n'est au moment la
-pas une variable d'env, et donc $b=NULL.
-si b etait exporte avant a, alors on aurait a="coucou test"
-
--> dans tous les cas, n'a qu'a expand qu'au "premier niveau" lors du parsing, 
-du fait du fonctionnement du builtin export
-*/
-
-char    *get_last_exit_status(void)
+int	check_for_exit_status(t_token_list *current,
+	char **d_start, char *next_d_start)
 {
-    return (ft_itoa(55)); // juste pour que ca compile
+	if (is_exit_status(current, *d_start))
+	{
+		*d_start = next_d_start;
+		return (1);
+	}
+	return (0);
 }
 
-void    expand(t_ht_hash_table *ht, t_token_list **current, char *var, size_t dollar_index) 
+void	get_expanded_token(t_ht_hash_table *ht,
+		t_token_list **current, char *d_start)
 {
-    char *value; // ne pas le free ! car est malloc dans la hash_map, et peut en re avoir besoin dans une autre commande
-    char *before_key;
-    char *after_value;
-    
-    if (!var) // le malloc de ft_substr() n'a pas fonctionné
-        return ;
-    
-    /* Pas sure à 100% de ça, à revérifier */
-    if (!(*var)) // ie rien ne suit le '$'
-    {
-        if ((*current)->next && (*current)->next->type == simple_quote 
-            || (*current)->next->type == double_quote)
-            remove_char(*current, dollar_index);
-        return ;
-    }
-    
-    //printf("var = %s\ndollar index = %zu\n", var, dollar_index);
+	char			*next_d_start;
+	char			*var_name;
+	size_t			next_d_index;
+	size_t			d_index;
 
-    before_key = ft_substr((*current)->content, 0, dollar_index);
-    if (*var == '?') // expand_last_exit_status(current)
-    {
-        value = get_last_exit_status(); // le mettre direct dans l'env ?
-        after_value = ft_substr((*current)->content, dollar_index + 2, (*current)->length);
-    }
-    else
-    {
-        value = ht_search(ht, var);
-        // if (!value)
-        //     printf("ht_search returned NULL\n\n");
-        after_value = ft_substr((*current)->content, dollar_index + ft_strlen(var) + 1, 
-            (*current)->length);
-    }
-    
-    
-    //printf("before key = %s\n", before_key);
-    //printf("after key = %s\n", after_value);
-    
-    
-    free((*current)->content);
-    (*current)->content = ft_strjoin(ft_strjoin(before_key, value), after_value);
-    (*current)->length = ft_strlen((*current)->content);
-    free(var);
-    free(before_key);
-    free(after_value);
+	while (d_start && *d_start)
+	{
+		d_index = (*current)->length - ft_strlen(d_start);
+		next_d_start = ft_strdup(ft_strchr(d_start + 1, '$'));
+		next_d_index = (*current)->length - ft_strlen(next_d_start);
+		if (check_for_exit_status(*current, &d_start, next_d_start))
+			continue ;
+		var_name = get_var_name(*current, next_d_start, d_index, next_d_index);
+		if (var_name)
+			search_and_expand(ht, current, var_name, d_index);
+		else
+			check_next_token(current, d_index);
+		free(d_start);
+		d_start = next_d_start;
+		free(var_name);
+	}
+	free(d_start);
+	d_start = NULL;
 }
 
-
-
-void    perform_variable_exp(t_ht_hash_table *ht, t_token_list **first)
+void	parse_current_tk(t_ht_hash_table *ht, t_token_list **first,
+		t_token_list **current)
 {
-    char            *next_dollar_start;
-    char            *dollar_start;
-    size_t          next_dollar_index;
-    size_t          dollar_index;
-    t_token_list    *current;
-    
-    current = *first;
-    while (current)
-    {
-        //printf("current->content = %s\n", current->content);
-        //printf("current->length = %zu\n", current->length);
-        if (current->type != simple_quote && (!current->prev 
-            || current->prev->type != l_io_redirect || current->prev->length == 1)) // ie n'est pas dans le limiteur d'un here_doc
-        {
-            dollar_start = ft_strchr(current->content, '$');
-            while (dollar_start)
-            {
-                dollar_index = current->length - ft_strlen(dollar_start);
-                //printf("dollar start = %s\n", dollar_start);
-                //printf("dollar index = %zu\n", dollar_index);
-                // ne delete les quotes et merge les mots qu'apres l'expansion de variables
-                next_dollar_start = ft_strchr(dollar_start + 1, '$');
-                next_dollar_index = current->length - ft_strlen(next_dollar_start);
-                if (next_dollar_start)
-                    expand(ht, &current, ft_substr(current->content, dollar_index + 1, next_dollar_index - dollar_index - 1), dollar_index);
-                else if (current->type == double_quote)
-                    expand(ht, &current, ft_substr(current->content, dollar_index + 1, current->length - dollar_index - 2), dollar_index);    
-                else
-                    expand(ht, &current, ft_strdup(dollar_start + 1), dollar_index);
-                dollar_start = next_dollar_start;
-            }
-        }
-        current = current->next;
-    }
+	char			*d_start;
+
+	(void)first;
+	d_start = ft_strdup(ft_strchr((*current)->content, '$'));
+	get_expanded_token(ht, current, d_start);
+	check_for_empty_content(first, current);
+}
+
+void	perform_variable_exp(t_data *data)
+{
+	t_token_list	*current;
+
+	current = *(data->first);
+	while (current)
+	{
+		while (current && current->type == whitespace)
+			current = current->next;
+		if (!current)
+			break ;
+		if (current->type == l_parenthesis)
+		{
+			while (current && current->type != r_parenthesis)
+				current = current->next;
+			if (current)
+				current = current->next;
+			continue ;
+		}
+		else if (current->type != simple_quote && (!current->prev
+				|| current->prev->type != l_io_redirect
+				|| current->prev->length == 1))
+			parse_current_tk(data->env, data->first, &current);
+		else
+			current = current->next;
+	}
 }

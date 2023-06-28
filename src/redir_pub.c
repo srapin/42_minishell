@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_pub.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:11:02 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/10 22:22:15 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/28 07:36:20 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,48 +17,31 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/priv.h"
-#include "../inc/minishell.h"
-//todo
-void add_in_redir_with_file_struct(t_cmd *cmd, t_file *file_struct)
+#include "minishell.h"
+
+void	add_redir_with_file_struct(t_cmd *cmd, t_file *file_struct)
 {
-	t_list *lst;
+	t_list	*lst;
+
 	lst = ft_lstnew(file_struct);
-	ft_lstadd_back(&(cmd->red.in_list), lst);
+	ft_lstadd_back(&(cmd->red.files), lst);
 }
 
-void add_out_redir_with_file_struct(t_cmd *cmd, t_file *file_struct)
+void	init_redirections(t_redirect *red)
 {
-	t_list *lst;
-	lst = ft_lstnew(file_struct);
-	ft_lstadd_back(&(cmd->red.out_list), lst);
-	//dprintf(1, "in add_in_redir_with_file_struct : command name = %s\n", cmd->val.value);
-	dprintf(1, "in adding red at end file name = %s\n", ((t_file *)(cmd->red.out_list)->content)->name);
-}
-
-// void add_err_redir_with_file_struct(t_cmd *cmd, t_file *file_struct)
-// {
-// 	cmd->red.err_type = fd;
-// 	cmd->red.err_content = file_struct;
-// 	if (file_struct->fd > -1)
-// 		cmd->red.err_fd = file_struct->fd;
-// }
-
-void init_redirections(t_redirect *red)
-{
-	dprintf(1, "init_red\n");
-	red->in_list = NULL;
-	red->out_list = NULL;
+	red->files = NULL;
 	red->in_fd = -1;
 	red->out_fd = -1;
 	red->next_cmd = NULL;
 }
 
-t_redirect *create_redir()
+t_redirect	*create_redir(void)
 {
-	t_redirect *red;
+	t_redirect	*red;
 
-	red = malloc(sizeof(red));
+	red = malloc(sizeof(t_redirect));
+	if (!red)
+		return (NULL);
 	init_redirections(red);
-	return red;
+	return (red);
 }

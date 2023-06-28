@@ -5,14 +5,43 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
+			"name": "(gdb) Attach",
+			"type": "cppdbg",
+			"request": "attach",
+			"program": "enter program name, for example ${workspaceFolder}/a.out",
+			"MIMode": "gdb",
+			"setupCommands": [
+				{
+					"description": "Enable pretty-printing for gdb",
+					"text": "-enable-pretty-printing",
+					"ignoreFailures": true
+				},
+				{
+					"description": "Set Disassembly Flavor to Intel",
+					"text": "-gdb-set disassembly-flavor intel",
+					"ignoreFailures": true
+				},
+				{   
+					"description":"In this mode GDB will be attached to both processes after a call to fork() or vfork().",
+                    "text": "-gdb-set detach-on-fork off",
+                    "ignoreFailures": true
+                },
+                {   
+					"description": "The new process is debugged after a fork. The parent process runs unimpeded.",
+                    "text": "-gdb-set follow-fork-mode child",
+                    "ignoreFailures": true
+                }
+			]
+		},
+		{
 			"name": "(lldb) Lancer",
 			"type": "cppdbg",
 			"request": "launch",
 			"program": "${workspaceFolder}/minishell",
-			"args": ["echo \"lol$\n l\""], // echo salut\"toi\" && (echo $PWD || echo lol_\"$PATH\") | echo *t // < in < in2 echo hello >out1 | cat && sleep 1 | ls
+			"args": ["$a\" lol\""], // echo salut\"toi\" && (echo $PWD || echo lol_\"$PATH\") | echo *t // < in < in2 echo hello >out1 | cat && sleep 1 | ls
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}",
-			"environment": [],
+			"environment": [{"name" : "a", "value": "     un test "}],
 			"externalConsole": false,
 			"MIMode": "lldb"
 		},
@@ -37,7 +66,7 @@
 					"description": "Set Disassembly Flavor to Intel",
 					"text": "-gdb-set disassembly-flavor intel",
 					"ignoreFailures": true
-				}
+				},
 			]
 		}
 

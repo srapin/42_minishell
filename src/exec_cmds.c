@@ -5,56 +5,55 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/11 22:47:25 by srapin            #+#    #+#             */
-/*   Updated: 2023/05/13 02:12:22y srapin           ###   ########.fr       */
+/*   Created: 2023/06/21 02:05:40 by srapin            #+#    #+#             */
+/*   Updated: 2023/06/28 01:32:57 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "minishell.h"
 
-void exec_cmds(t_cmd *first_cmd)
+void	launch_process(t_cmd **cmd, t_cmd *first, int *pip_tab, bool need_pip)
 {
-	int		nb_cmds;
-	int 	i;
-	int		pip_tab[2];
-	int		*pid;
-	t_cmd *cmd;
-	t_cmd *next;
-	t_cmd *ret_cmd;
-	int ret;
+	if (need_pip)
+		safe_pipe(pip_tab);
+	else
+		reset_pip_tab(pip_tab);
+	if (first && !first->red.next_cmd)
+	{
+		if (try_to_exec_builtins(*cmd, first, false) >= 0)
+		{
+			(*cmd)->pid = -1;
+			return ;
+		}
+	}
+	(*cmd)->pid = fork();
+	if ((*cmd)->pid < 0)
+		fail_process();
+	if ((*cmd)->pid == 0)
+		child_process(*cmd, first, pip_tab);
+	if ((*cmd)->pid > 0)
+		parent_process(cmd, pip_tab);
+}
+
+void	exec_cmds(t_cmd *first_cmd)
+{
+	int			nb_cmds;
+	int			pip_tab[2];
+	t_cmd		*cmd;
+	t_cmd		*next;
+	t_cmd		*ret_cmd;
 
 	cmd = first_cmd;
-	//dprintf(1, "coucou test\n");
-	dprintf(1, "in exec, first command name = %s\n", cmd->val.value);
-	
-	while(cmd)
+	while (cmd)
 	{
-		i = 0;
-		nb_cmds = count_cmds(cmd);
-		pid = malloc(nb_cmds * sizeof(int));
+		nb_cmds = count_cmds_linked_by_pipe(cmd);
 		next = cmd->next;
 		ret_cmd = cmd;
-		while(i < nb_cmds)
-		{
-			dprintf(1, "in exec while file name = %s\n", ((t_file *)(cmd->red.out_list)->content)->name);
-			if (i < nb_cmds - 1)
-				safe_pipe(pip_tab);
-			else
-				reset_pip_tab(pip_tab);
-			// if (cmd->red.in_type == fd && ((t_file *) (cmd->red.in_content))->sep)
-			// 	heredoc(cmd); //faire ca ailleurs
-			pid[i] = fork();
-			if (pid[i] < 0)
-				fail_process();
-			if (pid[i] == 0)
-				child_process(cmd, pip_tab, pid);
-				// exit(0);
-			if (pid[i] > 0)
-				parent_process(&cmd, pip_tab);
-			i++;
-		}
-		ret = wait_childs(nb_cmds, pid);
-		while (!check_ret(ret_cmd, ret))
+		while (nb_cmds-- > 0)
+			launch_process(&cmd, first_cmd, pip_tab, nb_cmds);
+		wait_childs(ret_cmd);
+		signal(SIGINT, sigint_during_cmd_exec);
+		while (!check_ret(ret_cmd, g_exit_status))
 		{
 			cmd = next;
 			if (cmd)

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   tools.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Helene <Helene@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 23:01:51 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/10 21:04:58 by Helene           ###   ########.fr       */
+/*   Updated: 2023/06/28 05:24:14 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "minishell.h"
 
 bool	ft_strisequal(char *s1, char *s2)
 {
@@ -29,7 +29,7 @@ void	free_tab(char **tab)
 {
 	int	i;
 
-	if (!tab) // rajouté par ln. utils ?
+	if (!tab)
 		return ;
 	i = 0;
 	while (tab[i])
@@ -56,33 +56,33 @@ void	add_slash(char **paths)
 			while (paths[++i])
 				free(paths[i]);
 			free_tab(paths);
+			return ;
 		}
 		i++;
 	}
 }
 
-
-
 char	**get_path(t_cmd *cmd)
 {
 	int		i;
 	char	**paths;
-	// dprintf(1, "if get peth");
-	cmd->val.env = hash_map_to_tab(cmd->env);
+	char	**env;
 
+	env = hash_map_to_tab(cmd->env);
 	i = 0;
 	paths = NULL;
-	if (!(cmd->val.env))
+	if (!env)
 		perror("envp recuparation prob");
-	while ((cmd->val.env)[i])
+	while (env[i])
 	{
-		if (!ft_strncmp((cmd->val.env)[i], "PATH=", 5))
+		if (!ft_strncmp(env[i], "PATH=", 5))
 		{
-			paths = ft_split((cmd->val.env)[i] + 5 * sizeof(char), ':');
+			paths = ft_split(env[i] + 5 * sizeof(char), ':');
 			break ;
 		}
 		i++;
 	}
 	add_slash(paths);
+	free_tab(env);
 	return (paths);
 }
