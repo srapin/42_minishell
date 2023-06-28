@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 19:32:17 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/28 01:32:57 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/28 02:39:29 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,7 @@ int	main(int argc, char **argv, char **envp)
 	rl_outstream = stderr;
 	initialise_data(&data);
 	signal(SIGINT, sigint_next_prompt);
-	/* si trop d arg bash regrade que premier
-	if (argc > 2)
-	{
-		printf("error : too many arguments\n");
-		return (0);
-	} */
+	signal(SIGQUIT, SIG_IGN);
 	if (!envp || !envp[0])
 		hash_map = get_minimal_env(argv[0]);
 	else
