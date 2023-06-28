@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 22:34:18 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/28 03:05:32 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/28 06:42:10 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,34 @@ Then frees all data structures and returns the
 corresponding exit status (ie 2 for syntax error)
 */
 
+void	display_custom_se(bool quotes)
+{
+	if (quotes == false)
+	{
+		if (write(STDERR_FILENO,
+			"Syntax error : Missing closing parenthesis\n", 43) == -1)
+			perror("write");
+	}
+	else
+	{
+		if (write(STDERR_FILENO,
+			"Syntax error : Missing closing quote\n", 37) == -1)
+			perror("write");
+	}
+}
+
 void	display_se(t_data *data, char *token)
 {
+	char	*mess;
+	char	*tmp;
 	(void)data;
-	printf("Syntax error near unexpected token `%s\'\n", token);
+	
+	tmp = ft_strjoin("Syntax error near unexpected token `", token);
+	mess = ft_strjoin(tmp, "\'\n");
+	if (write(STDERR_FILENO, mess, ft_strlen(mess)) == -1)
+		perror("write");
+	free(tmp);
+	free(mess);
 	free(token);
 }
 
@@ -85,30 +109,9 @@ int	check_syntax(t_data *data)
 		return (SYNTAX_ERROR);
 	if (parentheses_count)
 	{
-		printf("Syntax error : Missing closing parenthesis\n");
+		//printf("Syntax error : Missing closing parenthesis\n");
+		display_custom_se(false);
 		return (SYNTAX_ERROR);
 	}
 	return (EXIT_SUCCESS);
 }
-
-/* int	ft_syntax(t_data *data)
-{
-		pid_t	pid;
-		int		wstatus;
-
-		pid = fork();
-		if (pid == -1)
-			perror("fork ");
-		if (pid == 0)
-	check_syntax(data);
-		if (waitpid(pid, &wstatus, 0) == -1)
-			perror("wait ");
-		if (WIFEXITED(wstatus))
-			return (WEXITSTATUS(wstatus));
-		else if (WIFSIGNALED(wstatus))
-			return (WTERMSIG(wstatus) + 128);
-		else if (WIFSTOPPED(wstatus))
-			return (WSTOPSIG(wstatus) + 128);
-		else
-	return (0);
-} */

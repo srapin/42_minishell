@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 22:20:56 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/28 06:18:13 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/28 06:43:12 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,6 +186,7 @@ t_token_list	**tokenise(t_token *token_stream, size_t stream_len,
 t_cmd			*parse_and_execute(t_data *data);
 
 int				ft_syntax(t_data *data);
+void			display_custom_se(bool quotes);
 int				check_syntax(t_data *data);
 int				check_pipelines(t_data *data, int *parentheses_count);
 int				check_control_op(t_data *data, t_token_list **current);
