@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 22:34:18 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/28 01:35:31 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/28 02:28:20 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ corresponding exit status (ie 2 for syntax error)
 
 void	display_se(t_data *data, char *token)
 {
-	(void) data;
+	(void)data;
 	printf("Syntax error near unexpected token `%s\'\n", token);
 	free(token);
 }
@@ -31,7 +31,7 @@ int	check_first(t_data *data, t_token_list **first)
 	t_token_list	*current;
 
 	if (!first || !*first)
-		return(EXIT_OK);
+		return (EXIT_OK);
 	current = (*first);
 	while (current && current->type == whitespace)
 		current = current->next;
@@ -67,7 +67,7 @@ int	check_syntax(t_data *data)
 	parentheses_count = 0;
 	if (!data || !(data->first) || !(*(data->first)))
 		return (EXIT_OK);
-	if(check_first(data, data->first))
+	if (check_first(data, data->first))
 		return (SYNTAX_ERROR);
 	if (check_pipelines(data, &parentheses_count))
 		return (SYNTAX_ERROR);
@@ -75,29 +75,29 @@ int	check_syntax(t_data *data)
 	{
 		printf("Syntax error : Missing closing parenthesis\n");
 		free_parsing_data(data);
-		return(SYNTAX_ERROR);
+		return (SYNTAX_ERROR);
 	}
-	return(EXIT_SUCCESS);
+	return (EXIT_SUCCESS);
 }
 
-int	ft_syntax(t_data *data)
+/* int	ft_syntax(t_data *data)
 {
-	// pid_t	pid;
-	// int		wstatus;
+		pid_t	pid;
+		int		wstatus;
 
-	// pid = fork();
-	// if (pid == -1)
-	// 	perror("fork ");
-	// if (pid == 0)
+		pid = fork();
+		if (pid == -1)
+			perror("fork ");
+		if (pid == 0)
 	check_syntax(data);
-	// if (waitpid(pid, &wstatus, 0) == -1)
-	// 	perror("wait ");
-	// if (WIFEXITED(wstatus))
-	// 	return (WEXITSTATUS(wstatus));
-	// else if (WIFSIGNALED(wstatus))
-	// 	return (WTERMSIG(wstatus) + 128);
-	// else if (WIFSTOPPED(wstatus))
-	// 	return (WSTOPSIG(wstatus) + 128);
-	// else
+		if (waitpid(pid, &wstatus, 0) == -1)
+			perror("wait ");
+		if (WIFEXITED(wstatus))
+			return (WEXITSTATUS(wstatus));
+		else if (WIFSIGNALED(wstatus))
+			return (WTERMSIG(wstatus) + 128);
+		else if (WIFSTOPPED(wstatus))
+			return (WSTOPSIG(wstatus) + 128);
+		else
 	return (0);
-}
+} */

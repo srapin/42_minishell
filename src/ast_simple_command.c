@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_simple_command.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:02:23 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/28 01:32:57 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/28 02:31:08 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void	update_redirect(t_cmd *cmd, t_token_list *current)
 	{
 		file->flag = O_RDONLY;
 		file->out = false;
-		// add_in_redir_with_file_struct(cmd, file);
 	}
 	else
 	{
@@ -31,7 +30,6 @@ void	update_redirect(t_cmd *cmd, t_token_list *current)
 		else
 			file->flag = O_WRONLY | O_CREAT | O_APPEND;
 		file->out = true;
-		// add_out_redir_with_file_struct(cmd, file);
 	}
 	add_redir_with_file_struct(cmd, file);
 }

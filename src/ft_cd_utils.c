@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 19:00:28 by hlesny            #+#    #+#             */
-/*   Updated: 2023/06/28 01:32:57 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/28 02:32:21 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,20 +21,16 @@ void	prev_dir(char **path, int *i)
 	char	*before;
 	char	*after;
 
-	if ((!(*path)[*i + 2] || (*path)[*i + 2] == '/')) // '..' ou '../'
+	if ((!(*path)[*i + 2] || (*path)[*i + 2] == '/'))
 	{
-		if (*i - 2 >= 0) // ie n'est pas à la racine
+		if (*i - 2 >= 0)
 		{
-			/* détermine l'index du précédent '/' 
-            (par ex le premier '/' de "cd ./dir1/..") */
 			j = *i - 2;
-				/* ie l'index de l'élément précédant le '/' 
-                précédant le premier '.' */
 			while (j >= 0 && (*path)[j] != '/')
 				j--;
 			before = ft_substr(*path, 0, j + 1);
 		}
-		else // ie est à la racine -> supprime alors juste '..' (ou '../')
+		else
 			before = ft_strdup("/");
 		after = ft_substr(*path, *i + 3, ft_strlen(*path));
 		if (*i - 2 >= 0)
@@ -78,9 +74,8 @@ char	*replace_prev_or_actual_dir(char *path)
 		return (path);
 	while (path[i])
 	{
-		if (path[i] == '.' && path[i - 1] == '/') // '.' ou './'
+		if (path[i] == '.' && path[i - 1] == '/')
 		{
-			// simply deletes the '.' or './'
 			if ((!path[i + 1] || path[i + 1] == '/'))
 				curr_dir(&path, i);
 			else if (path[i + 1] && path[i + 1] == '.')

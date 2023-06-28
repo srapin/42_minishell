@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcards_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:34:40 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/28 01:32:57 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/28 02:29:11 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,13 @@ void	print_error_wildcard_opendir(char *error, char *dir_name)
 
 	mess = ft_strjoin(error, dir_name);
 	if (errno == ENOENT)
-		g_exit_status =	CMD_NOT_FOUND;
+		g_exit_status = CMD_NOT_FOUND;
 	else if (errno == 13)
 		g_exit_status = NO_FILE_OR_DIR;
 	else if (errno == EISDIR)
 		g_exit_status = CMD_NOT_EXECUTABLE;
 	else
-		g_exit_status = NO_FILE_OR_DIR;	
+		g_exit_status = NO_FILE_OR_DIR;
 	perror(mess);
 	free(mess);
 	mess = NULL;
