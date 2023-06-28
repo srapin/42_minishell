@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:02:23 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/28 02:53:12 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/28 02:58:33 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ void	get_attributs(t_cmd *current_cmd, t_token_list **curr_tk,
 	while (current_tk && current_tk->type != and_tk
 		&& current_tk->type != or_tk)
 	{
-		if (current_tk->type == l_io_redirect || current_tk->type == r_io_redirect)
+		if (current_tk->type == l_io_redirect
+			|| current_tk->type == r_io_redirect)
 		{
 			update_redirect(current_cmd, current_tk);
 			current_tk = current_tk->next->next;
@@ -74,7 +75,6 @@ void	set_simple_command(t_cmd *current_cmd, t_token_list **first_tk,
 	args_count = 0;
 	current_tk = *curr_tk;
 	cmd_start_tk = *curr_tk;
-	
 	get_attributs(current_cmd, &current_tk, &args_count, &subshell);
 	/* while (current_tk && current_tk->type != and_tk
 		&& current_tk->type != or_tk)
