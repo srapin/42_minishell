@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 06:11:55 by hlesny            #+#    #+#             */
-/*   Updated: 2023/06/28 07:44:18 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/28 07:51:44 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ void	hd_expand(t_ht_hash_table *ht, t_token_list **t_list)
 Attention ! On expand la variable meme si elle est entre single quotes */
 void	hd_perform_expand(t_ht_hash_table *ht, char **str)
 {
-	size_t			len;
 	char			*tmp;
 	char			*tmp2;
 	t_token_list	*t_list;
@@ -81,8 +80,7 @@ void	hd_perform_expand(t_ht_hash_table *ht, char **str)
 
 	if (!str || !(*str)[0])
 		return ;
-	len = ft_strlen(*str);
-	first = tokenise(assign_type(*str, len), len, *str);
+	first = tokenise(assign_type(*str, ft_strlen(*str)), ft_strlen(*str), *str);
 	t_list = *first;
 	hd_expand(ht, &t_list);
 	tmp = NULL;
