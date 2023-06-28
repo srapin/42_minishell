@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 00:57:49 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/28 01:32:57 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/28 05:22:59 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ int	check_long_overflow(t_cmd *cmd, t_cmd *first)
 		return (1);
 	}
 	exit_status = (unsigned char)initial_nb;
-	if (cmd->pid == -1)
+	if (cmd && cmd->pid == -1)
 		write(STDERR_FILENO, "exit\n", 5);
 	free_cmds(&first, true);
 	exit(exit_status);
@@ -124,7 +124,7 @@ int	ft_exit(t_cmd *cmd, t_cmd *first)
 		arg = cmd->val.args[1];
 	if (!arg)
 	{
-		if (cmd->pid == -1)
+		if (cmd && cmd->pid == -1)
 			write(STDERR_FILENO, "exit\n", 5);
 		free_cmds(&first, true);
 		exit(g_exit_status);

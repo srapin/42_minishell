@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ht_delete.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 17:29:43 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/28 04:29:13 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/28 05:00:26 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	ht_delete(t_ht_hash_table *ht, const char *key)
 			ht_del_item(current);
 			ht->items[index] = &ht_deleted_item;
 			ht->count--;
-			//return ;
+			return ;
 		}
 		index = ht_get_hash(key, ht->size, attempts);
 		current = ht->items[index];

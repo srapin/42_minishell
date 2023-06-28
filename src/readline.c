@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 22:15:52 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/28 01:32:57 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/28 04:57:49 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,15 +61,9 @@ void	read_lines(t_data *data)
 			input = readline("$ ");
 			continue ;
 		}
-		if (input && input[1] == 4)
-			ft_exit(NULL, NULL);
 		add_history(input);
-		if (only_whitespaces(input))
-		{
-			input = readline("$ ");
-			continue ;
-		}
-		lexe_parse_execute(data, input);
+		if (!only_whitespaces(input))
+			lexe_parse_execute(data, input);
 		input = readline("$ ");
 	}
 	if (!cmd)
