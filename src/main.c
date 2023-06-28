@@ -6,11 +6,11 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 19:32:17 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/28 02:39:29 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/28 03:39:34 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../inc/minishell.h"
 
 void	exec_command(t_data *data, char *command)
 {
