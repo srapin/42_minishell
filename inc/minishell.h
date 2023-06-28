@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 22:20:56 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/28 04:43:19 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/28 05:30:24 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,6 +239,8 @@ void			del_filename(t_filename **first, t_filename *to_del);
 void			free_filenames(t_filename **filenames);
 
 bool			set_here_docs(t_data *data);
+void			parse_current_tk(t_ht_hash_table *ht, t_token_list **first,
+				t_token_list **current);
 
 t_cmd			*get_ast(t_data *data);
 void			set_simple_command(t_cmd *current_cmd,

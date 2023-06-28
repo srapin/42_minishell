@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 23:24:33 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/28 04:41:25 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/28 05:49:36 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	is_limiter(char *line, char *limiter)
 	return (0);
 }
 
-void	hd_expand(t_ht_hash_table *ht, t_token_list **t_list)
+/* void	hd_expand(t_ht_hash_table *ht, t_token_list **t_list)
 {
 	char			*next_dollar_start;
 	char			*dollar_start;
@@ -96,6 +96,49 @@ void	hd_expand(t_ht_hash_table *ht, t_token_list **t_list)
 		}
 		free(dollar_start);
 		current = current->next;
+	}
+} */
+
+/* void	get_expanded_token(t_ht_hash_table *ht,
+		t_token_list **current, char *d_start)
+{
+	char			*next_d_start;
+	char			*var_name;
+	size_t			next_d_index;
+	size_t			d_index;
+
+	while (d_start && *d_start)
+	{
+		d_index = (*current)->length - ft_strlen(d_start);
+		next_d_start = ft_strdup(ft_strchr(d_start + 1, '$'));
+		next_d_index = (*current)->length - ft_strlen(next_d_start);
+		if (check_for_exit_status(*current, &d_start, next_d_start))
+			continue ;
+		var_name = get_var_name(*current, next_d_start, d_index, next_d_index);
+		if (var_name)
+			search_and_expand(ht, current, var_name, d_index);
+		else
+			check_next_token(current, d_index);
+		free(d_start);
+		d_start = next_d_start;
+		free(var_name);
+	}
+	free(d_start);
+	d_start = NULL;
+} */
+
+void	hd_expand(t_ht_hash_table *ht, t_token_list **t_list)
+{
+	t_token_list	*current;
+
+	current = *(t_list);
+	while (current)
+	{
+		while (current && current->type == whitespace)
+			current = current->next;
+		if (!current)
+			break ;
+		parse_current_tk(ht, t_list, &current);
 	}
 }
 

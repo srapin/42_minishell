@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 19:12:06 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/28 03:42:10 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/28 05:43:23 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,8 @@ void	parse_current_tk(t_ht_hash_table *ht, t_token_list **first,
 
 	(void)first;
 	d_start = ft_strdup(ft_strchr((*current)->content, '$'));
-	if (is_exit_status(*current, d_start))
-		return ;
+	/* if (is_exit_status(*current, d_start))
+		return ; */
 	get_expanded_token(ht, current, d_start);
 	check_for_empty_content(first, current);
 }
