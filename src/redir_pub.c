@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_pub.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:11:02 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/28 02:56:12 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/28 07:36:20 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ t_redirect	*create_redir(void)
 	t_redirect	*red;
 
 	red = malloc(sizeof(t_redirect));
+	if (!red)
+		return (NULL);
 	init_redirections(red);
 	return (red);
 }
