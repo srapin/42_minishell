@@ -51,7 +51,6 @@ bool	check_acces(t_cmd *cmd, t_cmd *first)
 		cmd_not_found(cmd, first);
 	if (access(cmd->val.value, X_OK) != 0)
 		return (false);
-	(void)first;
 	cmd->val.path = ft_strdup(cmd->val.value);
 	return (true);
 }
