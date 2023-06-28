@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 22:34:18 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/28 02:43:43 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/28 03:04:21 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,30 @@ void	display_se(t_data *data, char *token)
 	free(token);
 }
 
+int	check_first_and_or(t_data *data, t_token_list *current)
+{
+	int				type;
+
+	type = current->type;
+	if (type == and_tk)
+	{
+		if (current->length >= 2)
+			display_se(data, ft_strdup("&&"));
+		else
+			display_se(data, ft_strdup("&"));
+		return (SYNTAX_ERROR);
+	}
+	else if (type == or_tk)
+	{
+		if (current->length >= 2)
+			display_se(data, ft_strdup("||"));
+		else
+			display_se(data, ft_strdup("|"));
+		return (SYNTAX_ERROR);
+	}
+	return (0);
+}
+
 int	check_first(t_data *data, t_token_list **first)
 {
 	int				type;
@@ -38,7 +62,7 @@ int	check_first(t_data *data, t_token_list **first)
 	if (!current)
 		return (EXIT_OK);
 	type = current->type;
-	if (type == and_tk)
+	/* if (type == and_tk)
 	{
 		if ((*first)->length >= 2)
 			display_se(data, ft_strdup("&&"));
@@ -51,7 +75,9 @@ int	check_first(t_data *data, t_token_list **first)
 			display_se(data, ft_strdup("||"));
 		display_se(data, ft_strdup("|"));
 		return (SYNTAX_ERROR);
-	}
+	} */
+	if (check_first_and_or(data, current))
+		return (SYNTAX_ERROR);
 	else if (type == r_parenthesis)
 	{
 		display_se(data, ft_strdup(")"));
