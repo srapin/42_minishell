@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:17:34 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/28 02:44:27 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/28 03:15:26 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,28 +58,34 @@ int	sc_check_quotes(t_data *data, t_token_list **current)
 	return (0);
 }
 
-int	sc_check_parentheses(t_data *data, t_token_list **current,
-		int *parentheses_count)
+int	sc_check_l_parenthesis(t_data *data, t_token_list **current,
+	int *parentheses_count)
 {
 	t_token_list	*curr;
 
-	if ((*current)->type == l_parenthesis)
+	curr = (*current)->next;
+	while (curr && curr->type == whitespace)
+		curr = curr->next;
+	(*parentheses_count)++;
+	if (curr && (curr)->type == r_parenthesis)
 	{
-		curr = (*current)->next;
-		while (curr && curr->type == whitespace)
-			curr = curr->next;
-		(*parentheses_count)++;
-		if (curr && (curr)->type == r_parenthesis)
-		{
-			display_se(data, ft_strdup(")"));
-			return (SYNTAX_ERROR);
-		}
-		else if (!(curr))
-		{
-			printf("Syntax error : Missing closing parenthesis\n");
-			return (SYNTAX_ERROR);
-		}
+		display_se(data, ft_strdup(")"));
+		return (SYNTAX_ERROR);
 	}
+	else if (!(curr))
+	{
+		printf("Syntax error : Missing closing parenthesis\n");
+		return (SYNTAX_ERROR);
+	}
+	return (0);
+}
+
+int	sc_check_parentheses(t_data *data, t_token_list **current,
+		int *parentheses_count)
+{
+	if ((*current)->type == l_parenthesis
+		&& sc_check_l_parenthesis(data, current, parentheses_count))
+		return (SYNTAX_ERROR);
 	else if ((*current)->type == r_parenthesis)
 	{
 		if (!(*parentheses_count))

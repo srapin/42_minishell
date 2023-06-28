@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_set_cmd_args.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:03:43 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/28 01:32:57 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/28 03:40:30 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,12 +133,11 @@ void	set_cmd_args(t_cmd **curr_cmd, t_token_list *curr_tk, int *i)
 	get_args_from_merged_words(curr_cmd, curr_tk, i);
 }
 
-void	set_command_attributs(t_cmd **current, t_token_list **first_tk,
+void	set_command_attributs(t_cmd **current,
 		t_token_list *current_tk, int args_count)
 {
 	int	i;
 
-	(void) first_tk;
 	i = 0;
 	if (!args_count)
 		return ;

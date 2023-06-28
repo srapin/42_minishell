@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 23:24:33 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/28 02:48:15 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/28 04:41:25 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,7 +215,6 @@ void	set_here_doc(t_ht_hash_table *ht, t_token_list *current)
 	get_here_doc_content(ht, fd, limiter, quotes);
 	close(fd);
 }
-
 
 void	hd_child_process(t_data *data)
 {

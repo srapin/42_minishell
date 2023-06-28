@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 22:20:56 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/28 01:12:47 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/28 03:42:02 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,8 +210,7 @@ void			update_tk_content(t_token_list **current, char *before_key,
 					char *value, char *after_value);
 void			check_for_empty_content(t_token_list **first,
 					t_token_list **current);
-int				is_exit_status(t_ht_hash_table *ht, t_token_list *current,
-					char *dollar_start);
+int				is_exit_status(t_token_list *current, char *dollar_start);
 
 void			delete_quotes(t_data *data);
 void			rm_quotes_token(t_token_list *current);
@@ -242,11 +241,11 @@ void			free_filenames(t_filename **filenames);
 bool			set_here_docs(t_data *data);
 
 t_cmd			*get_ast(t_data *data);
-void			set_simple_command(t_cmd *current_cmd, t_token_list **first_tk,
+void			set_simple_command(t_cmd *current_cmd,
 					t_token_list **curr_tk);
 void			set_subshell(t_cmd *current_cmd, t_token_list **curr_tk);
 int				get_words_count(t_token_list *current);
-void			set_command_attributs(t_cmd **current, t_token_list **first_tk,
+void			set_command_attributs(t_cmd **current,
 					t_token_list *current_tk, int args_count);
 int				get_whtsp_pos(char *str, int whtsp_pos);
 void			whitespaces_skip_assess(t_word_data *wd, int *wht_pos,

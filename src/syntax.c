@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 22:34:18 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/28 03:04:21 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/28 03:05:32 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,20 +62,6 @@ int	check_first(t_data *data, t_token_list **first)
 	if (!current)
 		return (EXIT_OK);
 	type = current->type;
-	/* if (type == and_tk)
-	{
-		if ((*first)->length >= 2)
-			display_se(data, ft_strdup("&&"));
-		display_se(data, ft_strdup("&"));
-		return (SYNTAX_ERROR);
-	}
-	else if (type == or_tk)
-	{
-		if ((*first)->length >= 2)
-			display_se(data, ft_strdup("||"));
-		display_se(data, ft_strdup("|"));
-		return (SYNTAX_ERROR);
-	} */
 	if (check_first_and_or(data, current))
 		return (SYNTAX_ERROR);
 	else if (type == r_parenthesis)

@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:02:23 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/28 02:58:33 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/28 03:41:06 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,7 @@ void	get_attributs(t_cmd *current_cmd, t_token_list **curr_tk,
 	*curr_tk = current_tk;
 }
 
-void	set_simple_command(t_cmd *current_cmd, t_token_list **first_tk,
-		t_token_list **curr_tk)
+void	set_simple_command(t_cmd *current_cmd, t_token_list **curr_tk)
 {
 	int				subshell;
 	int				args_count;
@@ -99,6 +98,6 @@ void	set_simple_command(t_cmd *current_cmd, t_token_list **first_tk,
 	} */
 	current_cmd->red.next_cmd = NULL;
 	if (!subshell)
-		set_command_attributs(&current_cmd, first_tk, cmd_start_tk, args_count);
+		set_command_attributs(&current_cmd, cmd_start_tk, args_count);
 	*curr_tk = current_tk;
 }

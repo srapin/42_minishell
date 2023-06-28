@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ht_delete.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 17:29:43 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/28 01:32:57 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/28 04:29:13 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ void	ht_delete(t_ht_hash_table *ht, const char *key)
 	size_t				index;
 	size_t				load;
 	t_ht_item			*current;
+	static t_ht_item	ht_deleted_item = {NULL, NULL};
 
 	load = ht->count * 100 / ht->size;
 	if (load < 10)
@@ -63,13 +64,12 @@ void	ht_delete(t_ht_hash_table *ht, const char *key)
 	current = ht->items[index];
 	while (current != NULL)
 	{
-		if ((current->key || current->value) && !ft_strcmp(current->key, key))
+		if (current != &ht_deleted_item && !ft_strcmp(current->key, key))
 		{
 			ht_del_item(current);
-			ht->items[index]->key = NULL;
-			ht->items[index]->value = NULL;
+			ht->items[index] = &ht_deleted_item;
 			ht->count--;
-			return ;
+			//return ;
 		}
 		index = ht_get_hash(key, ht->size, attempts);
 		current = ht->items[index];

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_pipeline.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:22:29 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/28 01:32:57 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/28 03:34:25 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int	check_pipelines(t_data *data, int *parentheses_count)
 	{
 		if ((current->type == and_tk || (current->type) == or_tk)
 			&& current->type > 1 && check_control_op(data, &current))
-				return (SYNTAX_ERROR);
+			return (SYNTAX_ERROR);
 		else
 		{
 			if (check_first(data, &current))
@@ -85,9 +85,10 @@ int	check_pipelines(t_data *data, int *parentheses_count)
 			{
 				if (current->type == or_tk && current->length == 1
 					&& check_pipe(data, &current))
-						return (SYNTAX_ERROR);
-				else if (check_simple_command(data, &current, parentheses_count))
-						return (SYNTAX_ERROR);
+					return (SYNTAX_ERROR);
+				else if (check_simple_command(data,
+						&current, parentheses_count))
+					return (SYNTAX_ERROR);
 			}
 		}
 	}

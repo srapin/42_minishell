@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 21:44:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/28 01:35:02 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/28 03:41:32 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,52 +49,35 @@ int	set_t_ctrl_op(t_data *data, t_token_list **current_tk,
 		*pipeline_start_tk = (*current_tk)->next;
 		return (1);
 	}
+	*pipeline_start_tk = NULL;
 	return (0);
 }
 
 t_cmd	*get_ast(t_data *data)
 {
-	t_token_list	*pipeline_start_tk;
-	t_token_list	*current_tk;
-	t_cmd			**ast;
-	t_cmd			*pipeline_start_cmd;
+	t_token_list	*p_start_tk;
+	t_token_list	*curr_tk;
+	t_cmd			*ast;
+	t_cmd			*p_start_cmd;
 	t_cmd			*current_cmd;
 
-	t_cmd			*test; // est-ce que cette variable est utile ?
-	ast = malloc(sizeof(t_cmd *));
-	/* if (!ast && malloc_error(data,
-				...)) (avec malloc_error qui retourne tjr 1, 
-	comme ca economise 3 lignes ici)*/
+	ast = init_new_cmd(data);
 	if (!ast)
-	{
-		malloc_error();
 		return (NULL);
-	}
-	*ast = init_new_cmd(data);
-	if (!*ast)
-		return (NULL);
-	pipeline_start_tk = *(data->first);
-	pipeline_start_cmd = *ast;
-	while (pipeline_start_tk)
+	p_start_tk = *(data->first);
+	p_start_cmd = ast;
+	while (p_start_tk)
 	{
-		current_tk = pipeline_start_tk;
-		current_cmd = pipeline_start_cmd;
-		/* tant que n'est ni un '&&' ni un '||', ie peut avoir des pipes,
-			mais ne touche ici pas à la variable next de t_cmd */
-		while (current_tk && current_tk->type != and_tk
-			&& (current_tk->type != or_tk || current_tk->length == 1))
+		curr_tk = p_start_tk;
+		current_cmd = p_start_cmd;
+		while (curr_tk && curr_tk->type != and_tk
+			&& (curr_tk->type != or_tk || curr_tk->length == 1))
 		{
-			set_simple_command(current_cmd, data->first, &current_tk);
-			set_pipe(data, &current_tk, &current_cmd);
+			set_simple_command(current_cmd, &curr_tk);
+			set_pipe(data, &curr_tk, &current_cmd);
 		}
-		if (!set_t_ctrl_op(data, &current_tk, &pipeline_start_tk,
-				&pipeline_start_cmd))
-		{
-			current_cmd->ctrl = pointvirgule;
-			pipeline_start_tk = NULL;
-		}
+		if (!set_t_ctrl_op(data, &curr_tk, &p_start_tk, &p_start_cmd))
+				current_cmd->ctrl = pointvirgule;
 	}
-	test = *ast;
-	free(ast);
-	return (test);
+	return (ast);
 }

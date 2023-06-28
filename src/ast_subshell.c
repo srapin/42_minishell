@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:09:03 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/28 02:40:23 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/28 03:07:15 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,6 @@ char	*get_subshell_command(t_token_list **curr_tk)
 	subshell_cmd = NULL;
 	while (current_tk)
 	{
-		/* if (current_tk->type == l_parenthesis)
-			open_parentheses++;
-		if (current_tk->type == r_parenthesis)
-			open_parentheses--;
-		if (!open_parentheses)
-			break ; */
 		if (!assess_parentheses(current_tk, &open_parentheses))
 			break ;
 		tmp = subshell_cmd;

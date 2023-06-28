@@ -6,7 +6,7 @@ Parsing :
 void	hd_expand(t_ht_hash_table *ht, t_token_list **t_list)
 void	set_command_attributs(t_cmd **current, t_token_list **first_tk,
 		t_token_list *current_tk, int args_count)
-void	set_simple_command(t_cmd *current_cmd, t_token_list **first_tk,
+void	set_simple_command(t_cmd *current_cmd,
 		t_token_list **curr_tk)
 char	*get_subshell_command(t_token_list **curr_tk)
 t_cmd	*get_ast(t_data *data)
@@ -26,17 +26,12 @@ void	wait_childs(t_cmd *origin)
 
 ----------------------------------------------------------------------------------------
 
-ft_cd_utils.c : push avec les commentaires sur le git perso, puis les enlever quand push sur l'intra
-
 Verifier les possibles valeurs de retour d'erreur de pwd et unset 
-
-
 
 verifier que ht_delete marche encore bien corrctement (j'ai tej la statique HT_DELETED_ITEM, flemme qu'on nous mette faux pour ca)
 
-
 Ecrire les erreurs de syntaxe sur STDERR 
-
+Quand fait juste `./`, n'ecrit pas "is a directory"
 
 
 
