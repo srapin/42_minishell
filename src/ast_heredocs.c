@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_heredocs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/02 23:24:33 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/28 01:32:57 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/28 02:48:15 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,8 @@ void	hd_expand(t_ht_hash_table *ht, t_token_list **t_list)
 			next_dollar_index = current->length - ft_strlen(next_dollar_start);
 			if (next_dollar_start && *next_dollar_start)
 				expand(ht, &current, ft_substr(current->content, dollar_index
-							+ 1, next_dollar_index - dollar_index - 1),
-						dollar_index);
+					+ 1, next_dollar_index - dollar_index - 1),
+					dollar_index);
 			else if (current->type == double_quote
 					|| current->type == simple_quote)
 			{
@@ -173,9 +173,12 @@ int	set_quotes(t_token_list *current)
 
 /*
 1) create a temporary file (in /tmp)
-2) using readline(), rewrite the user's input in that file
-3) expand variables if needed (ie if there were quotes in the limiter or not)
-4) replace the initial tokens "<<" "LIM" by "<" "heredoc_file_path" in the token list   
+2) using readline(), rewrite the user's input 
+in that file
+3) expand variables if needed (ie if there were 
+   quotes in the limiter or not)
+4) replace the initial tokens "<<" "LIM" by "<" "heredoc_file_path" 
+   in the token list   
 */
 void	set_hd_filenames(t_token_list *current, t_data *data)
 {

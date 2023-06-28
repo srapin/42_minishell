@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:02:23 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/28 02:31:08 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/28 02:53:12 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,26 +34,30 @@ void	update_redirect(t_cmd *cmd, t_token_list *current)
 	add_redir_with_file_struct(cmd, file);
 }
 
-void	get_attribut(t_cmd *current_cmd, t_token_list **curr_tk,
+void	get_attributs(t_cmd *current_cmd, t_token_list **curr_tk,
 		int *args_count, int *subshell)
 {
 	t_token_list	*current_tk;
 
 	current_tk = *curr_tk;
-	if (current_tk->type == l_io_redirect || current_tk->type == r_io_redirect)
+	while (current_tk && current_tk->type != and_tk
+		&& current_tk->type != or_tk)
 	{
-		update_redirect(current_cmd, current_tk);
-		current_tk = current_tk->next->next;
-	}
-	else if (current_tk->type == l_parenthesis)
-	{
-		*subshell = 1;
-		set_subshell(current_cmd, &current_tk);
-	}
-	else
-	{
-		*args_count += get_words_count(current_tk);
-		current_tk = current_tk->next;
+		if (current_tk->type == l_io_redirect || current_tk->type == r_io_redirect)
+		{
+			update_redirect(current_cmd, current_tk);
+			current_tk = current_tk->next->next;
+		}
+		else if (current_tk->type == l_parenthesis)
+		{
+			*subshell = 1;
+			set_subshell(current_cmd, &current_tk);
+		}
+		else
+		{
+			*args_count += get_words_count(current_tk);
+			current_tk = current_tk->next;
+		}
 	}
 	*curr_tk = current_tk;
 }
@@ -70,7 +74,9 @@ void	set_simple_command(t_cmd *current_cmd, t_token_list **first_tk,
 	args_count = 0;
 	current_tk = *curr_tk;
 	cmd_start_tk = *curr_tk;
-	while (current_tk && current_tk->type != and_tk
+	
+	get_attributs(current_cmd, &current_tk, &args_count, &subshell);
+	/* while (current_tk && current_tk->type != and_tk
 		&& current_tk->type != or_tk)
 	{
 		if (current_tk->type == l_io_redirect
@@ -89,8 +95,8 @@ void	set_simple_command(t_cmd *current_cmd, t_token_list **first_tk,
 			args_count += get_words_count(current_tk);
 			current_tk = current_tk->next;
 		}
-		//get_attribut(current_cmd, &current_tk, &args_count, &subshell);
-	}
+		//get_attributs(current_cmd, &current_tk, &args_count, &subshell);
+	} */
 	current_cmd->red.next_cmd = NULL;
 	if (!subshell)
 		set_command_attributs(&current_cmd, first_tk, cmd_start_tk, args_count);
