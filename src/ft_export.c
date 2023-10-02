@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/25 23:25:02 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/28 01:32:57 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/28 15:40:00 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ int	export_with_value(t_cmd *cmd, char *var_name, int i, int j)
 	var_value = NULL;
 	if (valid_name(var_name))
 	{
-		if (is_in_export_history(cmd->export_history, var_name))
-			del_from_export_history(&cmd->export_history, var_name);
+		if (is_in_export_history(*cmd->export_history, var_name))
+			del_from_export_history(cmd->export_history, var_name);
 		var_value = ft_substr(cmd->val.args[i], j + 1,
 				ft_strlen(cmd->val.args[i]));
 		if (!ht_modify_value(cmd->env, var_name, var_value))
@@ -65,8 +65,8 @@ int	export_without_value(t_cmd *cmd, char *var_name, int i)
 {
 	if (valid_name(var_name))
 	{
-		if (!is_in_export_history(cmd->export_history, var_name))
-			ft_lstadd_back(&(cmd->export_history),
+		if (!is_in_export_history(*cmd->export_history, var_name))
+			ft_lstadd_back(cmd->export_history,
 				ft_lstnew(ft_strdup(var_name)));
 	}
 	else
@@ -111,7 +111,7 @@ int	ft_export(t_cmd *cmd, t_cmd *first)
 	exit_status = EXIT_OK;
 	if (!cmd->val.args[i])
 	{
-		print_export_history(cmd->env, cmd->export_history);
+		print_export_history(cmd->env, *cmd->export_history);
 		return (EXIT_OK);
 	}
 	while (cmd->val.args[i])

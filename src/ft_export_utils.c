@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 19:31:24 by hlesny            #+#    #+#             */
-/*   Updated: 2023/06/28 01:32:57 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/28 13:58:17 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,6 @@ int	valid_name(char *name)
 	return (1);
 }
 
-t_list	*init_export_history(t_ht_hash_table *ht)
-{
-	t_list	*first;
-
-	(void) ht;
-	first = ft_lstnew(ft_strdup("OLDPWD"));
-	return (first);
-}
-
 void	lst_del_first(t_list **export_hist, t_list *current)
 {
 	*export_hist = (*export_hist)->next;
@@ -57,7 +48,7 @@ void	del_from_export_history(t_list **export_hist, char *var_name)
 
 	current = *export_hist;
 	if (!ft_strcmp(current->content, var_name))
-		lst_del_first(export_hist, current);
+		return (lst_del_first(export_hist, current));
 	while (current->next)
 	{
 		if (!ft_strcmp(current->next->content, var_name))

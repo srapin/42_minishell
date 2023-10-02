@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 01:12:19 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/28 01:32:57 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/28 14:20:46 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,6 @@ char	*cd_move_to(t_cmd *cmd)
 	else
 	{
 		tmp = ft_strdup(cmd->val.args[1]);
-		if (ft_strcmp(*get_pwd(cmd->env), "/"))
-		{
-			free(tmp);
-			tmp = ft_strjoin("/", cmd->val.args[1]);
-		}
 		full_path = get_full_path(cmd->env, tmp);
 		free(tmp);
 		tmp = NULL;

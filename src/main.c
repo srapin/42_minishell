@@ -6,11 +6,11 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 19:32:17 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/28 03:39:34 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/28 14:01:51 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "minishell.h"
 
 void	exec_command(t_data *data, char *command)
 {
@@ -47,7 +47,7 @@ int	main(int argc, char **argv, char **envp)
 		hash_map = ht_get_env(envp, argv[0]);
 	if (!hash_map)
 		return (1);
-	exp_hist = init_export_history(hash_map);
+	exp_hist = NULL;
 	data.env = hash_map;
 	data.exp_history = exp_hist;
 	if (argc == 1)

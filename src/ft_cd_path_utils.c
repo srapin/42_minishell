@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd_path_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 19:08:53 by hlesny            #+#    #+#             */
-/*   Updated: 2023/06/28 01:32:57 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/28 15:45:50 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,20 @@ Néanmoins, des './' ou '../' peuvent encore être présents
 */
 char	*get_full_path(t_ht_hash_table *env, char *arg_path)
 {
-	char	*pwd;
+	char	pwd[PATH_MAX];
+	char	*tmp;
+	char	*final_pwd;
 
-	pwd = *get_pwd(env);
-	return (ft_strjoin(pwd, arg_path));
+	(void)env;
+	if (!getcwd(pwd, PATH_MAX))
+	{
+		perror("getcwd");
+		return (NULL);
+	}
+	tmp = ft_strjoin(pwd, "/");
+	final_pwd = ft_strjoin(tmp, arg_path);
+	free(tmp);
+	return (final_pwd);
 }
 
 void	set_path(char **path, char *before, char *after)

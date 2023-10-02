@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 16:39:50 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/28 02:50:59 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/28 15:39:02 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	free_common(t_cmd *cmd)
 		return ;
 	free_pwd(cmd->env);
 	ht_del_hash_table(cmd->env);
-	ft_lstfree(&(cmd->export_history), free);
+	ft_lstfree((cmd->export_history), free);
 	ft_lstfree(&(cmd->filenames), free);
 }
 

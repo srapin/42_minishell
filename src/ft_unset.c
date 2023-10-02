@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 21:52:36 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/28 01:32:57 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/28 15:40:10 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ int	ft_unset(t_cmd *cmd, t_cmd *first)
 	{
 		if (ht_search(cmd->env, cmd->val.args[i]))
 			ht_delete(cmd->env, cmd->val.args[i]);
-		if (is_in_export_history(cmd->export_history, cmd->val.args[i]))
-			del_from_export_history(&cmd->export_history, cmd->val.args[i]);
+		if (is_in_export_history(*cmd->export_history, cmd->val.args[i]))
+			del_from_export_history(cmd->export_history, cmd->val.args[i]);
 		i++;
 	}
 	return (EXIT_OK);

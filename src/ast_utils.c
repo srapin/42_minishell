@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 15:08:36 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/28 01:32:57 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/28 15:38:54 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_cmd	*init_new_cmd(t_data *data)
 		return (NULL);
 	}
 	cmd->env = data->env;
-	cmd->export_history = data->exp_history;
+	cmd->export_history = &data->exp_history;
 	cmd->filenames = data->files;
 	init_redirections(&(cmd->red));
 	cmd->val.value = NULL;

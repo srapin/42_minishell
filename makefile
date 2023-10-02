@@ -6,15 +6,14 @@
 #    By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/28 06:19:04 by hlesny            #+#    #+#              #
-#    Updated: 2023/06/28 06:19:05 by hlesny           ###   ########.fr        #
+#    Updated: 2023/06/28 15:45:18 by hlesny           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
-NAME_BONUS = minishell_bonus
 
 CC = cc
-CFLAGS = -g3 -g -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror
 
 FILES = ast \
 		ast_simple_command \
@@ -89,22 +88,13 @@ SRCS = $(addprefix $(SRCS_DIR)/, $(addsuffix .c, $(FILES)))
 OBJS_DIR = obj
 OBJS = ${patsubst ${SRCS_DIR}/%.c, ${OBJS_DIR}/%.o, ${SRCS}}
 
-SRCS_DIR_BONUS = src_bonus
-SRCS_BONUS = $(addprefix $(SRCS_DIR_BONUS)/, $(addsuffix .c, $(FILES)))
-
-OBJS_DIR_BONUS = obj_bonus
-OBJS_BONUS = ${patsubst ${SRCS_DIR_BONUS}/%.c, ${OBJS_DIR_BONUS}/%.o, ${SRCS_BONUS}}
-
 LIBFT_DIR = ./libft
 LIBFT = $(LIBFT_DIR)/libft.a
-
 
 INCLUDES_DIR = inc
 INCLUDES_FILES =lib.h \
 				minishell.h \
 				struct.h
-				# priv.h\
-				# pub.h\
 
 INCLUDES = $(addprefix $(INCLUDES_DIR)/, $(INCLUDES_FILES))
 
@@ -114,35 +104,17 @@ export LIBRARY_PATH = $(LIBFT_DIR)
 all: $(NAME)
 
 $(NAME): $(LIBFT) $(OBJS)
-	rm -rf $(OBJS_DIR_BONUS)
 	$(CC) $(OBJS) $(LIBFT) $(CFLAGS) -o $@ -lreadline
 
 ${OBJS_DIR}/%.o: ${SRCS_DIR}/%.c $(INCLUDES)
 	@mkdir -p $(OBJS_DIR)
 	$(CC) $(CFLAGS) -o $@ -c $<
 
-bonus : $(NAME_BONUS)
-
-$(NAME_BONUS) : $(LIBFT) $(OBJS_BONUS)
-	$(CC) $(OBJS_BONUS) $(LIBFT) $(CFLAGS) -o $@
-	rm -rf $(OBJS_DIR)
-
-${OBJS_DIR_BONUS}/%.o: ${SRCS_DIR_BONUS}/%.c $(INCLUDES)
-	@mkdir -p $(OBJS_DIR_BONUS)
-	$(CC)  -o $@ -c $<
-
-leaks :
-	valgrind --suppressions=ignore_readline.txt --leak-check=full --show-leak-kinds=all \
-	--track-origins=yes --track-fds=yes --trace-children=yes ./$(NAME) 
-
-
 clean: cleanlibs
 	rm -rf $(OBJS_DIR)
-	rm -rf $(OBJS_DIR_BONUS)
 
 fclean: clean
 	rm -f $(NAME)
-	rm -f $(NAME_BONUS)
 
 re: clean all
 

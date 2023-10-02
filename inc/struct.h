@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/23 00:03:15 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/28 02:41:55 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/28 15:38:43 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ typedef struct cmd
 	t_cmd_value			val;
 	t_redirect			red;
 	t_ht_hash_table		*env;
-	t_list				*export_history;
+	t_list				**export_history;
 	t_list				*filenames;
 	int					pid;
 	t_ctrl_op			ctrl;

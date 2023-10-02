@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 00:59:44 by Helene            #+#    #+#             */
-/*   Updated: 2023/06/28 01:32:57 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/28 13:12:46 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,20 @@
 
 /* Quel que soit le nombre d'arguments donnés, il printera dans
 tous les cas le chemin absolu vers le dossier courant */
+
 char	**get_pwd(t_ht_hash_table *env)
 {
 	static char	*pwd;
 
+	(void)env;
 	if (!pwd)
-		pwd = ft_strdup(ht_search(env, "PWD"));
+	{
+		pwd = ft_calloc(sizeof(char), PATH_MAX + 1);
+		if (!pwd)
+			perror("malloc");
+		if (!getcwd(pwd, PATH_MAX))
+			perror("getcwd");
+	}
 	return (&pwd);
 }
 

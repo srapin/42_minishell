@@ -73,6 +73,11 @@ bool	open_cmd_files(t_cmd *cmd)
 			to_rep = &(cmd->red.in_fd);
 		if (tmp_file)
 			flag = replace_fd(tmp_file, to_rep);
+		if (!flag)
+		{
+			safe_close(&(cmd->red.out_fd));
+			safe_close(&(cmd->red.in_fd));
+		}
 		tmp_lst = tmp_lst->next;
 	}
 	return (flag);

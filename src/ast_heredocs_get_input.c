@@ -6,7 +6,7 @@
 /*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 06:11:55 by hlesny            #+#    #+#             */
-/*   Updated: 2023/06/28 07:51:44 by srapin           ###   ########.fr       */
+/*   Updated: 2023/06/28 13:12:46 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,7 @@
 
 int	is_limiter(char *line, char *limiter)
 {
-	int	i;
-
-	i = 0;
-	while (line[i] && limiter[i] && line[i] == limiter[i])
-		i++;
-	if (!limiter[i])
-		return (1);
-	return (0);
+	return (limiter && ft_strisequal(line, limiter));
 }
 
 void	hd_get_expanded_token(t_ht_hash_table *ht,

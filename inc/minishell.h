@@ -6,7 +6,7 @@
 /*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 22:20:56 by srapin            #+#    #+#             */
-/*   Updated: 2023/06/28 06:43:12 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/28 13:53:17 by hlesny           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -266,7 +266,6 @@ void			reassess_buffer(t_cmd **curr_cmd, char **buffer, int *i);
 int				is_a_t_ctrl_op(t_token_list *current);
 void			add_to_cmd_list(t_cmd **last, t_cmd *new);
 t_cmd			*init_new_cmd(t_data *data);
-t_list			*init_export_history(t_ht_hash_table *ht);
 void			free_tokens(t_token_list **first);
 char			**hash_map_to_tab(t_ht_hash_table *ht);
 

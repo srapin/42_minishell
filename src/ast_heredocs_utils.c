@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ast_heredocs_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hlesny <hlesny@student.42.fr>              +#+  +:+       +#+        */
+/*   By: srapin <srapin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/28 06:10:47 by hlesny            #+#    #+#             */
-/*   Updated: 2023/06/28 06:13:03 by hlesny           ###   ########.fr       */
+/*   Updated: 2023/06/28 13:12:46 by srapin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ char	*random_filename(void)
 	static size_t	files_count;
 	char			*count;
 	char			*filename;
+	int				tmp_fd;
 
 	count = ft_itoa(files_count);
 	filename = ft_strjoin("/tmp/here_doc_tmp_", count);
@@ -28,6 +29,8 @@ char	*random_filename(void)
 		count = ft_itoa(files_count);
 		filename = ft_strjoin("/tmp/here_doc_tmp_", count);
 	}
+	tmp_fd = open(filename, O_CREAT, S_IRWXU);
+	safe_close(&tmp_fd);
 	free(count);
 	return (filename);
 }
